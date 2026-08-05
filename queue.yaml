@@ -471,7 +471,7 @@ items:
     notes_url: null
 
   - id: WRITE-ENGINE-INC1
-    title: "Run Task 8 live smoke, then land Write Engine Increment-1 (draft PRs #232 + AddIns #49)"
+    title: "Land Write Engine Increment-1 -- Task 8 smoke PASSED; merge PRs #232 + AddIns #49"
     projects: [bimpossible, addins]
     status: in_flight
     owner_gate: false
@@ -486,9 +486,11 @@ items:
         ref: "BIMpossible PR#232 draft 'Write Engine Increment 1 - typed values (Integer/Double) on instance parameters', head 449b072, 6 files/+295, all backend (Tasks 1-3), CI green on its 2026-07-27 run"
       - kind: pr
         ref: "AddIns PR#49 draft 'Write Engine Increment 1 - ApplyOne writes Integer + unit-aware Double (instance-only)' -- the C# half (Tasks 4-7), 4 commits on feat/write-engine-increment1 tip 68673c8"
+      - kind: log
+        ref: "01_BuildLog/2026-08-04__write-engine-increment1-live-smoke_RESULTS.md -- Task 8 executed live, 8/8 cases PASS incl. the SS3.3 conversion-direction case at factor 10763.91 (2500 kVA staged -> internal ConvertToInternalUnits-exact -> palette 2500.00 kVA); every Increment-1 edit_log status round-tripped; owner decision #2 (blank-reads-as-0) evidence-confirmed by case 3"
     verification:
       level: verified
-      by: "PROMOTED blocked_dep -> in_flight 2026-08-04: draft PR#232 exists and is the Increment-1 build (first flagged by the 2026-08-04 cloud re-derivation, re-confirmed live on this rig). The Roadmap's 'no code task executed' claim (§3) is now stale. UNBLOCKED 2026-08-04 evening: the blocked_by edge to P13-T4-REFUSAL is cleared -- both refusal paths were proven live (01_BuildLog/2026-08-04__T4-refusal-paths_RESULTS.md), which was the Roadmap's stated precondition for merging this. PR#232 is now free to finish and merge on its own merits. CORRECTED 2026-08-04 (was wrongly single-repo): this is LOCKSTEP CROSS-REPO. Both code halves are already BUILT and sitting in draft PRs -- backend Tasks 1-3 in #232, Add-Ins Tasks 4-7 in AddIns #49. The one thing left before either can merge is the build plan's Task 8, 'Live smoke test (required before calling Increment 1 done)', which needs the unmerged Add-Ins build deployed to the Revit slot AND #232's migration applied locally, then REAL typed parameter writes against a live model. That is a deploy-unmerged-code + live-write step, so it wants an explicit owner go-ahead, not a drive-by. SMOKE ATTEMPTED AND STOPPED 2026-08-04: the Add-Ins feat build was deployed and immediately regressed the live tooling, because feat/write-engine-increment1 forked at 1366569 and never caught up -- it was missing d1040b7 (pane header + compact pairing panel; the owner hit this instantly, could not paste a sync key) AND 19c5ddd (the RE-1 fix, so the abandoned-request defect was silently back in the deployed binary). Fully restored from main and proven: PendingRequestQueue present + the 3 fields d1040b7 adds (_signOutBtn/_pickerRow/_activeModelLabel) present in the deployed DLL. HARD PRECONDITION for any retry: rebase BOTH feat branches onto their main first and confirm the rebased branch contains 19c5ddd + d1040b7; deploy to Revit 2026 ONLY, not all four slots."
+      by: "PROMOTED blocked_dep -> in_flight 2026-08-04: draft PR#232 exists and is the Increment-1 build (first flagged by the 2026-08-04 cloud re-derivation, re-confirmed live on this rig). The Roadmap's 'no code task executed' claim (§3) is now stale. UNBLOCKED 2026-08-04 evening: the blocked_by edge to P13-T4-REFUSAL is cleared -- both refusal paths were proven live (01_BuildLog/2026-08-04__T4-refusal-paths_RESULTS.md), which was the Roadmap's stated precondition for merging this. TASK 8 SMOKE PASSED 2026-08-04 (second attempt, via integration branches smoke/write-engine-inc1 = main + feat in BOTH repos after the first attempt's stale-branch deploy incident -- see the results log's Environment notes). 8/8 cases: integer applied (0->42), Double+unit conversion CORRECT at factor 10763.91 (palette 2500.00 kVA, internal ConvertToInternalUnits-exact), unset-numeric skip_drift exactly as owner decision #2 predicts, malformed refused, group-separated refused (LooksGroupSeparated held), re-apply drift-skipped (no duplicate write), ElementId bucket intact post-rename, value_type-mismatch refused. WHAT REMAINS to close this item: (1) land the down_revision re-chain (9c9a59a39d64: b24de6f81c35 -> 1f7f44253c51) on feat/write-engine-increment1 -- without it the single-head guard fails post-#243; (2) rebase/merge main into both feat branches (the smoke ran integration branches; the PR branches themselves are still stale); (3) merge #232 + AddIns #49 LOCKSTEP; (4) owner: sync-vs-discard the two local edits in the open Winchester model (42 circuits + 2500 kVA -- the 42 trips a real panel-schedule-template warning, an argument for discard)."
       at: 2026-08-04
     live_check:
       - "gh pr view 232 --repo YourBIMpossible/BIMpossible --json state,isDraft; gh pr view 49 --repo YourBIMpossible/BIMpossible-AddIns --json state,isDraft"
@@ -499,10 +501,10 @@ items:
   - id: WRITE-ENGINE-SHIPVEHICLE
     title: "Decide Write Engine ship vehicle -- own phase/wave or Phase 13 sub-increment"
     projects: [bimpossible]
-    status: blocked_dep
+    status: blocked_owner
     owner_gate: true
     unblocks: []
-    blocked_by: [WRITE-ENGINE-INC1]
+    blocked_by: []
     effort: S
     risk: 1
     evidence:
@@ -510,7 +512,7 @@ items:
         ref: "BIMpossible_ProductionRoadmap_2026-07-26.md §3 -- design ratified 2026-07-25, ship vehicle undecided"
     verification:
       level: claimed
-      by: "Owner decision, adopted from the 2026-08-04 cloud re-derivation (its WE-2): whether Increment-1 ships as its own tracked phase/wave or as a Phase 13 sub-increment. Sensibly decided once Increment-1 is landable and the refusal paths are proven -- hence blocked_dep with owner_gate."
+      by: "Owner decision, adopted from the 2026-08-04 cloud re-derivation (its WE-2): whether Increment-1 ships as its own tracked phase/wave or as a Phase 13 sub-increment. PROMOTED blocked_dep -> blocked_owner 2026-08-04 evening: both former evidence dependencies are now met (refusal paths proven live AND Task 8 smoke passed 8/8), so this is purely an owner call now. Per the Phase-numbering hard rules, whichever vehicle is chosen must claim a frozen number, never reassign one."
       at: 2026-08-04
     live_check: []
     source: "BIMpossible_ProductionRoadmap_2026-07-26.md §3; 2026-08-04 cloud derivation"

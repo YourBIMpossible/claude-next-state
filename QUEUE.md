@@ -20,6 +20,9 @@ no items yet — run `init` to derive.)
 [OD-DECISIONS] Decide OD3 (fire-alarm schedule owner) and OD4 (OSS reuse triage)
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-04 · BIMpossible_ProductionRoadmap_2026-07-26
 
+[WRITE-ENGINE-SHIPVEHICLE] Decide Write Engine ship vehicle -- own phase/wave or Phase 13 sub-increment
+       unblocks 0 · S · bimpossible · CLAIMED 2026-08-04 · BIMpossible_ProductionRoadmap_2026-07-26
+
 ## Landed — not verified live
 
 [OPS-SYNTH-AUDIT-HARDEN] Harden synthetic-concurrency-audit tooling: env-guard seeding, loopback-check host, fix schedule
@@ -59,7 +62,7 @@ no items yet — run `init` to derive.)
 
 ## In flight
 
-[WRITE-ENGINE-INC1] Run Task 8 live smoke, then land Write Engine Increment-1 (draft PRs #232 + AddIns #49)
+[WRITE-ENGINE-INC1] Land Write Engine Increment-1 -- Task 8 smoke PASSED; merge PRs #232 + AddIns #49
        unblocks 1 · L · bimpossible+addins · VERIFIED 2026-08-04 · BIMpossible PR#232 draft 'Write Engine Increment 1 - typed v
 
 [ADDINS-PANE-PR45] Land Add-Ins PR#45 -- Assistant pane header dock fix (branch checked out locally)
@@ -69,9 +72,6 @@ no items yet — run `init` to derive.)
        unblocks 0 · S · workspace · VERIFIED 2026-08-04 · 2026-08-04__ProductionQueue_Session_Find
 
 ## Blocked elsewhere
-
-[WRITE-ENGINE-SHIPVEHICLE] Decide Write Engine ship vehicle -- own phase/wave or Phase 13 sub-increment
-       unblocks 0 · S · bimpossible · CLAIMED 2026-08-04 · BIMpossible_ProductionRoadmap_2026-07-26
 
 [P3-10B-DOORS] Build Doors schedule slice once the 3.10a pipeline runs live
        unblocks 0 · M · bimpossible · CLAIMED 2026-08-04 · BIMpossible_PHASE-STATUS.md Phase 3.10b 
