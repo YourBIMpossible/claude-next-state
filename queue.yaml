@@ -461,6 +461,31 @@ items:
     source: "BIMpossible_PHASE-STATUS.md Phase 3.10b note; build session 2026-08-04"
     notes_url: null
 
+  - id: WARM-ORIGIN-DOORGAP
+    title: "Warm-time origin gap: ~197 instances of one single-swing door family on mv 90 cache no origin"
+    projects: [bimpossible]
+    status: ready
+    owner_gate: false
+    unblocks: []
+    blocked_by: []
+    effort: S
+    risk: 1
+    evidence:
+      - kind: log
+        ref: "01_BuildLog/2026-08-04__doors-join-increment1_RESULTS.md, 'Follow-ups (logged, not built)' item 2 -- surfaced by the Phase 3.10b doors probe, NOT caused by it"
+      - kind: db
+        ref: "mv 90 shipped-path E2E 2026-08-04: no_location 58.2% of 620 doors, vs 14.4% of 611 on mv 742. The gap is family-scoped -- other door families on the SAME model version do cache origins"
+      - kind: code
+        ref: "backend/aec/geometry_fetch.py:179 fetch_equipment_origins (reads one AEC DM OriginComponent per instance; absent component -> origins[ext]=None); backend/aec/geometry_fetch.py:242 _instance_filter; backend/aec/room_geometry_warm.py:202 ensure_category_origins_warm (backfills ElementCache.origin_x/y/z)"
+    verification:
+      level: claimed
+      by: "NOT STARTED. Separate defect in the warm/ingestion layer that the doors join merely exposed -- explicitly out of scope of P3-10B-DOORS, which shipped clean (PR#253, 751155f). Doors with a NULL origin_x land in the join's no_location state instead of pair; the join code is not at fault. FIRST STEP IS A DIAGNOSTIC, NOT A FIX: re-run the origins page query for category Doors against mv 90's element group and determine which of two it is -- (a) those ~197 uniqueIds are ABSENT from the result set, meaning the instance-only clause in _instance_filter excludes them (fix is in the filter, small); or (b) they are PRESENT with a null/missing OriginComponent, meaning AEC DM genuinely has no origin for that family and the fix is a fallback derivation from the geometry slice / bbox, the S3 path rooms already use (real feature, larger). These are materially different fixes -- do not pick one before the diagnostic runs. Prior art worth reading first: the 2026-07-15 id-space bug in the same function (keyed by AEC DM native element[\"id\"] instead of externalElementId) produced a superficially similar symptom -- zero origin rows despite shipped code."
+      at: 2026-08-05
+    live_check:
+      - "Count NULL origins on mv 90: SELECT count(*) FROM element_cache WHERE model_version_id=90 AND category='Doors' AND origin_x IS NULL;"
+    source: "Doors Increment-1 build session 2026-08-04; owner decision 2026-08-05 to track it as its own ticket rather than reopen P3-10B-DOORS"
+    notes_url: null
+
   - id: P3-6-SPATIAL
     title: "Build Phase 3.6 Spatial Relationship Engine v1 (architecturally unblocked)"
     projects: [bimpossible]
