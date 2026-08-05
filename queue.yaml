@@ -19,8 +19,8 @@ schema_version: 1
 reconciled:
   bimpossible:
     at: 2026-08-04
-    commit: 2eb20c3
-    pr: 241
+    commit: 08a1f03
+    pr: 244
   addins:
     at: 2026-08-04
     commit: 19c5ddd
@@ -33,9 +33,9 @@ reconciled:
 items:
 
   - id: P3-10A-GOLIVE
-    title: "Supervised owner flag-flip: go-live Cross-Model Room Join (Phase 3.10a)"
+    title: "Cross-Model Room Join LIVE -- rollout flag DELETED, path unconditional (PR#244)"
     projects: [bimpossible]
-    status: blocked_owner
+    status: live
     owner_gate: true
     unblocks: [P3-10B-DOORS]
     blocked_by: []
@@ -52,7 +52,7 @@ items:
         ref: "2026-08-04 live read (docker exec, single var): BIMPOSSIBLE_PHASE3_10_ENABLED is UNSET in the running backend; aec/router.py:323 defaults it to '0', so the gate is CLOSED"
     verification:
       level: verified
-      by: "PROMOTED claimed -> verified 2026-08-04: the live_check was actually run instead of trusting the ledger. room_footprint_cache holds 1239 rows, matching the ledger's '1,239 footprints' from the 2026-07-15 warm run EXACTLY -- the warm pipeline really did run and its output is still there. The gate flag BIMPOSSIBLE_PHASE3_10_ENABLED is unset (router.py:323 => default '0' => OFF), confirming the textbook landed-not-live posture. NOTE the ledger's '14,873 origins' does NOT correspond to level_band_cache (19 rows = per-level bands, a different thing); that number lives in another table and was not probed. Evidence gathered on the LOCAL stack -- the owner still confirms against whatever host they intend to flip, and only the owner flips it (.env is human-only)."
+      by: "LIVE 2026-08-04 evening. Owner reframed the go-live: dev deployment with zero clients, so the supervised-flip ceremony WAS the production-only blocker -- decision: DELETE the flag, make the path unconditional (also resolves the flag-naming complaint by removing the name). PR#244 squash fa865d6: gate removed at router.py, path self-limits by category/grain/cache-presence; the stale-room 304-bypass is now a TESTED contract (new companion test) instead of a comment; backend rebuilt and healthy. END-TO-END LIVE PROOF through the real code path (run_linked_room_join, real DB): correct negative on Winchester ELEC (no_arch_source -- its project has no arch footprints), correct positives in the Experiement-27 footprint project: 40/40 Lighting Fixtures resolved (exact/fallback/no_room mix), exact element carries Linked Room Name=ASSEMBLY LINE, Number=1263. Warm-gap rooms excluded honestly (no level_elevation => excluded, never mis-banded to 0.0)."
       at: 2026-08-04
     live_check:
       - "docker exec <backend> python -c \"...SELECT COUNT(*) FROM room_footprint_cache...\"; and read BIMPOSSIBLE_PHASE3_10_ENABLED (expect unset/0 until the owner flips it)."
@@ -315,9 +315,9 @@ items:
     notes_url: null
 
   - id: SEC-DEP-EXEC
-    title: "Dependabot PR triage EXECUTED: closed 201+235, park-noted 200, merged 139/179/180; 237 pending"
+    title: "Dependabot PR triage EXECUTED: closed 201+235, parked 200, merged 179/180/237 (redis smoked); 139 auto-merging"
     projects: [bimpossible]
-    status: landed
+    status: live
     owner_gate: false
     unblocks: []
     blocked_by: []
@@ -432,12 +432,12 @@ items:
     notes_url: null
 
   - id: P3-10B-DOORS
-    title: "Build Doors schedule slice once the 3.10a pipeline runs live"
+    title: "Build Doors schedule slice -- UNBLOCKED: 3.10a runs live"
     projects: [bimpossible]
-    status: blocked_dep
+    status: ready
     owner_gate: false
     unblocks: []
-    blocked_by: [P3-10A-GOLIVE]
+    blocked_by: []
     effort: M
     risk: 1
     evidence:
