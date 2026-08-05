@@ -48,7 +48,7 @@ no items yet — run `init` to derive.)
 [P7-REVITLINK-MULTIUSER] Scale RevitLink to multi-user (RE-1 defect now fixed; RE-2 capacity limit remains)
        unblocks 0 · M · bimpossible+addins · VERIFIED 2026-08-04 · Add-Ins PR#46
 
-[P3-10B-DOORS] Build Doors schedule slice -- UNBLOCKED: 3.10a runs live
+[P3-10B-DOORS] Build Doors from/to room slice -- D0 PROBE PASSED (0 ambiguous / 782 doors), build-ready
        unblocks 0 · M · bimpossible · CLAIMED 2026-08-04 · BIMpossible_PHASE-STATUS.md Phase 3.10b 
 
 [P3-6-SPATIAL] Build Phase 3.6 Spatial Relationship Engine v1 (architecturally unblocked)

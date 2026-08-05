@@ -432,7 +432,7 @@ items:
     notes_url: null
 
   - id: P3-10B-DOORS
-    title: "Build Doors schedule slice -- UNBLOCKED: 3.10a runs live"
+    title: "Build Doors from/to room slice -- D0 PROBE PASSED (0 ambiguous / 782 doors), build-ready"
     projects: [bimpossible]
     status: ready
     owner_gate: false
@@ -445,7 +445,7 @@ items:
         ref: "BIMpossible_PHASE-STATUS.md Phase 3 sub-phase notes, Phase 3.10b row"
     verification:
       level: claimed
-      by: "Candidate design empirically validated 2026-07-13 (100% clean 2-way ties on real Revit door families); zero production code. Correctly waiting on 3.10a's warm pipeline actually running live before building on top of it -- do not start early. Re-confirmed 2026-08-04: no delta touches it."
+      by: "D0 PROBE EXECUTED 2026-08-04 (01_BuildLog/2026-08-04__doors-room-tie-probe_RESULTS.md; scripts merged via PR#250): the from/to design HOLDS on real data -- ZERO ambiguous cases across 782 doors in two arch models at a door-appropriate cap. Ties are exact (0.108/0.108 ft clusters); sample pairs read like a floor plan (KITCHEN|SERVERY, TOILET|CORRIDOR). Build requirements proven by the probe: (1) door-specific fallback cap ~0.5 ft -- the MEP 3.0 ft cap collapses 2-way 67.5%->11.3%; (2) level banding mandatory; (3) tie semantics INVERT for doors (tie = the from/to answer, not ambiguous) -- check _FALLBACK_TIE_EPSILON_FT 0.01 vs observed tie spread during build; (4) 1-single is a CORRECT product answer (From: X -> To: --) tracking arch room coverage, not failure. Handoff's ~1-hour estimate stands: variant resolution on the existing pipeline, origins/footprints/bands all proven for Doors. From/to DIRECTION (which side is which) needs door facing -- out of scope, cheap ordering rule for now."
       at: 2026-08-04
     live_check: []
     source: "BIMpossible_PHASE-STATUS.md Phase 3.10b note"
