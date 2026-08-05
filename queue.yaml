@@ -432,9 +432,9 @@ items:
     notes_url: null
 
   - id: P3-10B-DOORS
-    title: "Doors room-pair slice BUILT -- Increment 1 in draft PR#253, awaiting checks + merge"
+    title: "Doors room-pair slice LIVE on main -- Increment 1 merged (PR#253); direction is Increment 2"
     projects: [bimpossible]
-    status: in_flight
+    status: live
     owner_gate: false
     unblocks: []
     blocked_by: []
@@ -442,7 +442,7 @@ items:
     risk: 1
     evidence:
       - kind: pr
-        ref: "BIMpossible PR#253 'feat(3.10b): doors resolve to the room PAIR they separate' -- draft, opened 2026-08-04 from claude/phase3-10b-doors (commit 825ab63); one production file, backend/aec/cross_model_join.py, plus 17 pure tests"
+        ref: "BIMpossible PR#253 'feat(3.10b): doors resolve to the room PAIR they separate' -- MERGED 2026-08-05T07:08:08Z, squash commit 751155f on main (branch claude/phase3-10b-doors deleted); one production file, backend/aec/cross_model_join.py, plus 17 pure tests; all 7 checks green pre-merge"
       - kind: log
         ref: "01_BuildLog/2026-08-04__doors-join-increment1_RESULTS.md (workspace main) -- full histograms, the containment-vs-edge-distance defect and its measured fix, the no_location breakdown"
       - kind: run
@@ -453,10 +453,11 @@ items:
         ref: "BIMpossible_PHASE-STATUS.md Phase 3 sub-phase notes, Phase 3.10b row"
     verification:
       level: verified
-      by: "BUILT 2026-08-04. Shipped: Doors in _PHASE3_10_IN_SCOPE_CATEGORIES (buys prewarm/etag/router plumbing free), _DOOR_FALLBACK_CAP_FT 0.5, resolve_linked_rooms_for_doors + pair/single states, category dispatch in assemble_and_resolve, _merge_door_room_columns writing 4 columns on every row. No frontend change needed -- column discovery scans the generic parameters map. TWO probe assumptions were corrected by the build, both measured: (1) NO tie epsilon -- membership within the 0.5 ft cap IS the adjacency test the probe validated, an epsilon on top would rest on nothing; (2) scoring is BOUNDARY-native, never the MEP containment short-circuit. The probe could not see (2): it scored each door only against rooms from its own model version, while _load_room_pool unions all 3 arch models (958 rooms). A coarse shell room in another model that strictly CONTAINS a door scored 0.0 and outvoted the two rooms it separates -- 70 of 523 doors went 3-way ambiguous. Edge-distance scoring takes that to 3; pairs 349->355, singles 95->156. Columns are A/B not From/To: direction needs door facing/flip, not ingested -- Increment 2. Item closes (in_flight->live) when PR#253 merges."
-      at: 2026-08-04
+      by: "BUILT 2026-08-04. Shipped: Doors in _PHASE3_10_IN_SCOPE_CATEGORIES (buys prewarm/etag/router plumbing free), _DOOR_FALLBACK_CAP_FT 0.5, resolve_linked_rooms_for_doors + pair/single states, category dispatch in assemble_and_resolve, _merge_door_room_columns writing 4 columns on every row. No frontend change needed -- column discovery scans the generic parameters map. TWO probe assumptions were corrected by the build, both measured: (1) NO tie epsilon -- membership within the 0.5 ft cap IS the adjacency test the probe validated, an epsilon on top would rest on nothing; (2) scoring is BOUNDARY-native, never the MEP containment short-circuit. The probe could not see (2): it scored each door only against rooms from its own model version, while _load_room_pool unions all 3 arch models (958 rooms). A coarse shell room in another model that strictly CONTAINS a door scored 0.0 and outvoted the two rooms it separates -- 70 of 523 doors went 3-way ambiguous. Edge-distance scoring takes that to 3; pairs 349->355, singles 95->156. Columns are A/B not From/To: direction needs door facing/flip, not ingested -- Increment 2. CLOSED 2026-08-05: PR#253 squash-merged to main as 751155f, all required checks green. Open follow-ups tracked in the build log, NOT in this item: (1) Increment 2 From/To direction, needs facing/flip at warm time; (2) warm-time origin gap, 197 instances of one single-swing door family on mv 90; (3) 3 residual ambiguous doors on mv 742, baseline only. Note the shipped path is still behind BIMPOSSIBLE_PHASE3_10_ENABLED, which is UNSET in the running backend -- merged is not yet user-visible."
+      at: 2026-08-05
     live_check:
-      - "gh pr view 253 --repo YourBIMpossible/BIMpossible --json state,mergedAt"
+      - "gh pr view 253 --repo YourBIMpossible/BIMpossible --json state,mergedAt  # expect MERGED"
+      - "git -C F:\\AI-Dev\\BIMpossible log origin/main --oneline -1 751155f  # squash commit present on main"
     source: "BIMpossible_PHASE-STATUS.md Phase 3.10b note; build session 2026-08-04"
     notes_url: null
 
