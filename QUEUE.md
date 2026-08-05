@@ -19,7 +19,7 @@ no items yet — run `init` to derive.)
 
 ## Landed — not verified live
 
-[OPS-RESIDENCY-DOC] Ratify + publish the data residency/retention policy (DRAFT written 2026-08-04)
+[OPS-RESIDENCY-DOC] Data residency/retention policy PUBLISHED -- /data-policy page live, bs-5 closed
        unblocks 1 · S · bimpossible · CLAIMED 2026-08-04 · BIMpossible_ProgramPlan_2026-05-25.md §C
 
 [OPS-SYNTH-AUDIT-HARDEN] Harden synthetic-concurrency-audit tooling: env-guard seeding, loopback-check host, fix schedule
@@ -54,9 +54,6 @@ no items yet — run `init` to derive.)
 [P3-6-SPATIAL] Build Phase 3.6 Spatial Relationship Engine v1 (architecturally unblocked)
        unblocks 0 · M · bimpossible · CLAIMED 2026-08-04 · BIMpossible_PHASE-STATUS.md Phase 3 sub-
 
-[ARCH-FIRM-PARAM-NEUTRALITY] De-couple firm parameters: backend alias layer + define the BIMP_ shared-parameter set
-       unblocks 0 · L · bimpossible+addins · VERIFIED 2026-08-04 · BIMpossible #248
-
 ## In flight
 
 [ADDINS-PANE-PR45] Land Add-Ins PR#45 -- Assistant pane header dock fix (branch checked out locally)
@@ -77,6 +74,9 @@ no items yet — run `init` to derive.)
 
 [OPS-CLIENT-DATA-REMEDIATION] Client-data remediation: 39 cached models, PDF sets, DB cache -- PARKED with triggers
        unblocks 0 · L · bimpossible+workspace · VERIFIED 2026-08-04 · 2026-08-04 FIRST RUN of database/maintenance/2026-08-05__aud
+
+[ARCH-FIRM-PARAM-NEUTRALITY] De-couple firm parameters: backend alias layer + BIMP_ set -- PARKED for future work
+       unblocks 0 · L · bimpossible+addins · VERIFIED 2026-08-04 · BIMpossible #248
 
 [OPS-HOSTING-MIGRATION] Migrate hosting from home PC to a cheap cloud VPS (staged path toward AWS/GCP)
        unblocks 0 · L · bimpossible · VERIFIED 2026-08-04 · design-docs/2026-07-27__hosting-migratio

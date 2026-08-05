@@ -87,7 +87,7 @@ items:
     notes_url: "00_Strategy/design-docs/2026-07-25__phase13-T4_apply-bimpossible-changes_PLAN.md"
 
   - id: OPS-RESIDENCY-DOC
-    title: "Ratify + publish the data residency/retention policy (DRAFT written 2026-08-04)"
+    title: "Data residency/retention policy PUBLISHED -- /data-policy page live, bs-5 closed"
     projects: [bimpossible]
     status: landed
     owner_gate: true
@@ -100,7 +100,7 @@ items:
         ref: "BIMpossible_ProgramPlan_2026-05-25.md, Commercial Launch Prerequisites checklist item 3 (bs-5)"
     verification:
       level: claimed
-      by: "TERMS RATIFIED by owner 2026-08-04 (all 4 business commitments chosen and baked into the doc): (1) region = 'currently self-hosted in the US, migrating to US cloud infra' -- true now, stays true post-migration, no walk-back; (2) active data retained for life of account; (3) off-boarding deletion within 60 days; (4) backups purge on the same 60-day timeline. Document is no longer a DRAFT of open questions -- it is content-complete. ONLY mechanical remainders: fill a support email in SS4, copy to a client-facing location (closes bs-5), and a post-migration wording tighten (no re-notify needed). Owner-gated on those final publish steps."
+      by: "TERMS RATIFIED by owner 2026-08-04 (all 4 business commitments chosen and baked into the doc): (1) region = 'currently self-hosted in the US, migrating to US cloud infra' -- true now, stays true post-migration, no walk-back; (2) active data retained for life of account; (3) off-boarding deletion within 60 days; (4) backups purge on the same 60-day timeline. Document is no longer a DRAFT of open questions -- it is content-complete. PUBLISHED 2026-08-04: client-facing page authored at BIMpossible Site/site/src/pages/data-policy.astro, astro build GREEN (9 pages, up from 8), rendered HTML verified to carry the region wording, 60-day terms, contact address and the AI-opt-in section. Support address = hello@yourbimpossible.com, the address ALREADY published on the site contact page -- one inbox to monitor rather than a second that could go unwatched. Commercial Launch Prereq item 3 / bs-5 is CONTENT-COMPLETE. Two small remainders, neither blocking: the site is NOT a git repo (nothing version-controls this page yet) and it must be deployed for the page to be reachable publicly; post-migration, tighten SS1 'migrating to' -> 'hosted in' (no client re-notify needed, the claim is true before and after)."
       at: 2026-08-04
     live_check:
       - "Confirm the DRAFT's [OWNER DECIDES] blocks are resolved and the file moved to a client-facing location before marking bs-5 closed."
@@ -662,9 +662,9 @@ items:
     notes_url: null
 
   - id: ARCH-FIRM-PARAM-NEUTRALITY
-    title: "De-couple firm parameters: backend alias layer + define the BIMP_ shared-parameter set"
+    title: "De-couple firm parameters: backend alias layer + BIMP_ set -- PARKED for future work"
     projects: [bimpossible, addins]
-    status: ready
+    status: parked
     owner_gate: false
     unblocks: []
     blocked_by: []
