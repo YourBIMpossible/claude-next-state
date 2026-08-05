@@ -499,9 +499,9 @@ items:
     notes_url: "00_Strategy/design-docs/2026-07-26__write-engine-increment1_typed-values-instance_build-plan.md"
 
   - id: WRITE-ENGINE-SHIPVEHICLE
-    title: "Decide Write Engine ship vehicle -- own phase/wave or Phase 13 sub-increment"
+    title: "Write Engine ship vehicle DECIDED: Phase 13 sub-increment (platform track reserved for later)"
     projects: [bimpossible]
-    status: blocked_owner
+    status: live
     owner_gate: true
     unblocks: []
     blocked_by: []
@@ -509,13 +509,16 @@ items:
     risk: 1
     evidence:
       - kind: doc
-        ref: "BIMpossible_ProductionRoadmap_2026-07-26.md §3 -- design ratified 2026-07-25, ship vehicle undecided"
+        ref: "BIMpossible_PHASE-STATUS.md row 13.1 (placed 2026-08-04 AM): 'ships as a Phase 13 sub-increment, not its own phase (owner decision)'"
+      - kind: doc
+        ref: "00_Strategy/2026-08-04__Row13-1_ShipVehicle_Update_PASTE-READY.md -- paste-ready row update reflecting Increment 1 SHIPPED (this session); owner owes the paste"
     verification:
-      level: claimed
-      by: "Owner decision, adopted from the 2026-08-04 cloud re-derivation (its WE-2): whether Increment-1 ships as its own tracked phase/wave or as a Phase 13 sub-increment. PROMOTED blocked_dep -> blocked_owner 2026-08-04 evening: both former evidence dependencies are now met (refusal paths proven live AND Task 8 smoke passed 8/8), so this is purely an owner call now. Per the Phase-numbering hard rules, whichever vehicle is chosen must claim a frozen number, never reassign one."
+      level: verified
+      by: "DECIDED by the owner 2026-08-04, confirmed THREE independent ways that all converge: (a) row 13.1 placed in the owner-maintained ledger this morning; (b) owner's in-chat 'proceed with your recommendation' on the Phase-13-sub-increment recommendation this evening; (c) a concurrent session's store edit recording the same verdict (merged here, not overwritten). Substance: the write-engine bundle ships as a PHASE 13 SUB-INCREMENT -- the code shipped inside Phase 13's own tables/command/ledger, and Task 8 validated it through Phase 13's apply path. An own phase/wave is explicitly RESERVED for a future broader typed-write platform initiative if one is ever split out; that would be a NEW item claiming a NEW frozen number, never a renumber of this. Owner action remaining: paste the drafted row-13.1 update (the placed row still says 'deliberately unmerged'; Increment 1 SHIPPED tonight)."
       at: 2026-08-04
-    live_check: []
-    source: "BIMpossible_ProductionRoadmap_2026-07-26.md §3; 2026-08-04 cloud derivation"
+    live_check:
+      - "grep -c 'SHIPPED' BIMpossible_PHASE-STATUS.md row 13.1 area -- confirms the paste happened; until then the ledger row is stale-but-known."
+    source: "BIMpossible_PHASE-STATUS.md row 13.1; owner decision in-chat 2026-08-04; 2026-08-04 cloud derivation"
     notes_url: null
 
   - id: OPS-REDIS-P5

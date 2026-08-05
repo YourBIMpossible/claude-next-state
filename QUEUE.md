@@ -20,9 +20,6 @@ no items yet — run `init` to derive.)
 [OD-DECISIONS] Decide OD3 (fire-alarm schedule owner) and OD4 (OSS reuse triage)
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-04 · BIMpossible_ProductionRoadmap_2026-07-26
 
-[WRITE-ENGINE-SHIPVEHICLE] Decide Write Engine ship vehicle -- own phase/wave or Phase 13 sub-increment
-       unblocks 0 · S · bimpossible · CLAIMED 2026-08-04 · BIMpossible_ProductionRoadmap_2026-07-26
-
 ## Landed — not verified live
 
 [OPS-SYNTH-AUDIT-HARDEN] Harden synthetic-concurrency-audit tooling: env-guard seeding, loopback-check host, fix schedule
@@ -91,6 +88,9 @@ no items yet — run `init` to derive.)
 
 [WRITE-ENGINE-INC1] Write Engine Increment-1 -- SHIPPED: Task 8 smoke passed, #232 + AddIns #49 merged lockstep
        unblocks 1 · L · bimpossible+addins · VERIFIED 2026-08-04 · BIMpossible PR#232 draft 'Write Engine Increment 1 - typed v
+
+[WRITE-ENGINE-SHIPVEHICLE] Write Engine ship vehicle DECIDED: Phase 13 sub-increment (platform track reserved for later)
+       unblocks 0 · S · bimpossible · VERIFIED 2026-08-04 · BIMpossible_PHASE-STATUS.md row 13.1; ow
 
 [RE-WIZ-POLL-2] Fix wizard provisioning poll: retry transient HTTP errors like its sibling loop does
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-04 · BIMpossible PR#239
