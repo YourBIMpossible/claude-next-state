@@ -87,10 +87,10 @@ items:
     notes_url: "00_Strategy/design-docs/2026-07-25__phase13-T4_apply-bimpossible-changes_PLAN.md"
 
   - id: OPS-RESIDENCY-DOC
-    title: "Write and publish a data residency/retention policy"
+    title: "Ratify + publish the data residency/retention policy (DRAFT written 2026-08-04)"
     projects: [bimpossible]
-    status: ready
-    owner_gate: false
+    status: landed
+    owner_gate: true
     unblocks: [OPS-LAUNCH]
     blocked_by: []
     effort: S
@@ -100,21 +100,22 @@ items:
         ref: "BIMpossible_ProgramPlan_2026-05-25.md, Commercial Launch Prerequisites checklist item 3 (bs-5)"
     verification:
       level: claimed
-      by: "ProgramPlan checklist item, not started per any ledger row found. Minimum content named: hosting region(s), retention period, deletion on off-boarding, no third-party sharing without consent. Re-confirmed 2026-08-04: no delta touches it."
+      by: "DRAFT WRITTEN 2026-08-04: 00_Strategy/2026-08-04__Data_Residency_and_Retention_Policy_DRAFT.md. Security-posture + what-is-stored + no-third-party-sharing sections are filled from verified stack facts. Three [OWNER DECIDES] blocks remain because they are BUSINESS commitments an agent must not invent: (1) publish a US-region claim only AFTER the hosting migration lands, or defer publication until then (recommended); (2) retention windows + off-boarding deletion SLA; (3) deletion-request channel + response SLA. NOT publishable until ratified -- a draft is not a policy, so the ProgramPlan item 3/bs-5 stays OPEN until the owner ratifies + moves it client-facing."
       at: 2026-08-04
-    live_check: []
-    source: "BIMpossible_ProgramPlan_2026-05-25.md §Commercial Launch Prerequisites"
+    live_check:
+      - "Confirm the DRAFT's [OWNER DECIDES] blocks are resolved and the file moved to a client-facing location before marking bs-5 closed."
+    source: "BIMpossible_ProgramPlan_2026-05-25.md §Commercial Launch Prerequisites; 00_Strategy/2026-08-04__Data_Residency_and_Retention_Policy_DRAFT.md"
     notes_url: null
 
   - id: OPS-TENANCY-DOC
-    title: "Document and verify the multi-tenant data-isolation strategy"
+    title: "Write the multi-tenant data-isolation strategy doc (audit's required TEST already shipped in PR#243)"
     projects: [bimpossible]
     status: ready
-    owner_gate: false
+    owner_gate: true
     unblocks: [OPS-LAUNCH]
     blocked_by: []
-    effort: M
-    risk: 3
+    effort: S
+    risk: 1
     evidence:
       - kind: doc
         ref: "BIMpossible_ProgramPlan_2026-05-25.md, Commercial Launch Prerequisites checklist item 1 (bs-1)"
@@ -124,7 +125,7 @@ items:
         ref: "02_Reference/Audit and Scan Info/weekly-full-audit_2026-07-27.md §2(1) SEC-MEMBERSHIP-1; §4 required test"
     verification:
       level: verified
-      by: "2026-07-27 weekly audit found a concrete, live instance of exactly this gap: get_firm_id()'s silent static-firm fallback disagreed with require_active_membership()'s strict 403 the moment real OAuth-login membership-linking went live (7dc41c8) -- already caused one real incident (Phase 13's first live Save 403'd for this reason). PR#231 bounded the fallback to single-tenancy (denies once 2+ firm_domains are registered) as an owner-decided interim mitigation, NOT the full documented+verified isolation strategy this item still scopes. The audit's own §4 names the exact remaining test: seed two firm_domain rows + an unlinked user, call an endpoint via each resolver, assert they agree or the discrepancy is an explicit documented design point. That test does not exist yet. Re-confirmed 2026-08-04: no delta touches it."
+      by: "AUDIT-REQUIRED TEST NOW EXISTS: backend/tests/test_membership_firm_resolution_agreement.py (5 tests, landed with PR#243) is exactly the SS4 test the 2026-07-27 audit demanded -- it pins BOTH the deny-once-multi-tenant behavior and the unchanged single-tenant fallback for an unlinked user (read directly this session, docstring cites SEC-MEMBERSHIP-1). So the ENGINEERING half of this item is DONE. What remains is purely the owner-authored data-isolation STRATEGY DOCUMENT (Commercial Launch Prereq item 1/bs-1) -- a narrative clients read, not code. Effort downgraded M->S; risk 3->1 (the live scope-leak risk is closed in code, only the write-up remains)."
       at: 2026-08-04
     live_check:
       - "grep firm_id scoping across backend query paths; confirm no cross-firm query is reachable without a firm filter. Run the get_firm_id() vs require_active_membership() agreement test the 2026-07-27 audit specifies."
@@ -314,9 +315,9 @@ items:
     notes_url: null
 
   - id: SEC-DEP-EXEC
-    title: "Execute Dependabot PR triage: close 201+235, merge 139/179/180, 237 solo, park 200"
+    title: "Dependabot PR triage EXECUTED: closed 201+235, park-noted 200, merged 139/179/180; 237 pending"
     projects: [bimpossible]
-    status: ready
+    status: landed
     owner_gate: false
     unblocks: []
     blocked_by: []

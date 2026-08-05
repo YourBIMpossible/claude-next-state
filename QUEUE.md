@@ -22,19 +22,22 @@ no items yet — run `init` to derive.)
 
 ## Landed — not verified live
 
+[OPS-RESIDENCY-DOC] Ratify + publish the data residency/retention policy (DRAFT written 2026-08-04)
+       unblocks 1 · S · bimpossible · CLAIMED 2026-08-04 · BIMpossible_ProgramPlan_2026-05-25.md §C
+
 [OPS-SYNTH-AUDIT-HARDEN] Harden synthetic-concurrency-audit tooling: env-guard seeding, loopback-check host, fix schedule
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-04 · BIMpossible PR#239
+
+[SEC-DEP-EXEC] Dependabot PR triage EXECUTED: closed 201+235, park-noted 200, merged 139/179/180; 237 pending
+       unblocks 0 · S · bimpossible · VERIFIED 2026-08-04 · gh pr list 2026-08-04
 
 [DOC-LEDGER-HYGIENE] Retire stale NEXT.md: superseded banner applied, commit pending
        unblocks 0 · S · bimpossible+workspace · VERIFIED 2026-08-04 · 2026-08-04: SUPERSEDED banner applied to 00_Strategy/NEXT.md
 
 ## Next up
 
-[OPS-RESIDENCY-DOC] Write and publish a data residency/retention policy
-       unblocks 1 · S · bimpossible · CLAIMED 2026-08-04 · BIMpossible_ProgramPlan_2026-05-25.md §C
-
-[OPS-TENANCY-DOC] Document and verify the multi-tenant data-isolation strategy
-       unblocks 1 · M · bimpossible · VERIFIED 2026-08-04 · BIMpossible PR#231
+[OPS-TENANCY-DOC] Write the multi-tenant data-isolation strategy doc (audit's required TEST already shipped in PR#243)
+       unblocks 1 · S · bimpossible · VERIFIED 2026-08-04 · BIMpossible PR#231
 
 [P3-8-SLICE23] Build Phase 3.8 slices 2-3 -- is_draft reader gating + ACC sync endpoint
        unblocks 1 · M · bimpossible · CLAIMED 2026-08-04 · slice 1 migrations e6f7a8b9c0d1
@@ -44,9 +47,6 @@ no items yet — run `init` to derive.)
 
 [OPS-DEPLOY-RUNBOOK] Walk the deploy/rollback runbook draft on the prod host; fill VERIFY blanks
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-04 · BIMpossible_ProductionRoadmap_2026-07-26
-
-[SEC-DEP-EXEC] Execute Dependabot PR triage: close 201+235, merge 139/179/180, 237 solo, park 200
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-04 · gh pr list 2026-08-04
 
 [ADDINS-HYGIENE] Add-Ins hygiene: finish Glass rollout, dedupe 3 conformance PRs (secret-scan gate now added)
        unblocks 0 · M · addins · VERIFIED 2026-08-04 · Add-Ins #10
