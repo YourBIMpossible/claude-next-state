@@ -100,7 +100,7 @@ items:
         ref: "BIMpossible_ProgramPlan_2026-05-25.md, Commercial Launch Prerequisites checklist item 3 (bs-5)"
     verification:
       level: claimed
-      by: "DRAFT WRITTEN 2026-08-04: 00_Strategy/2026-08-04__Data_Residency_and_Retention_Policy_DRAFT.md. Security-posture + what-is-stored + no-third-party-sharing sections are filled from verified stack facts. Three [OWNER DECIDES] blocks remain because they are BUSINESS commitments an agent must not invent: (1) publish a US-region claim only AFTER the hosting migration lands, or defer publication until then (recommended); (2) retention windows + off-boarding deletion SLA; (3) deletion-request channel + response SLA. NOT publishable until ratified -- a draft is not a policy, so the ProgramPlan item 3/bs-5 stays OPEN until the owner ratifies + moves it client-facing."
+      by: "TERMS RATIFIED by owner 2026-08-04 (all 4 business commitments chosen and baked into the doc): (1) region = 'currently self-hosted in the US, migrating to US cloud infra' -- true now, stays true post-migration, no walk-back; (2) active data retained for life of account; (3) off-boarding deletion within 60 days; (4) backups purge on the same 60-day timeline. Document is no longer a DRAFT of open questions -- it is content-complete. ONLY mechanical remainders: fill a support email in SS4, copy to a client-facing location (closes bs-5), and a post-migration wording tighten (no re-notify needed). Owner-gated on those final publish steps."
       at: 2026-08-04
     live_check:
       - "Confirm the DRAFT's [OWNER DECIDES] blocks are resolved and the file moved to a client-facing location before marking bs-5 closed."
