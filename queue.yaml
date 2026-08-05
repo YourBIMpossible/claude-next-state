@@ -632,3 +632,31 @@ items:
     live_check: []
     source: "BIMpossible_ProgramPlan_2026-05-25.md §Commercial Launch Prerequisites"
     notes_url: null
+
+  - id: OPS-CLIENT-DATA-REMEDIATION
+    title: "Client-data remediation: 39 cached models, PDF sets, DB cache -- PARKED with triggers"
+    projects: [bimpossible, workspace]
+    status: parked
+    owner_gate: true
+    unblocks: []
+    blocked_by: []
+    effort: L
+    risk: 3
+    evidence:
+      - kind: doc
+        ref: "BIMpossible/decision-log/2026-08-05__client-data-remediation.md (another session); 00_Strategy/2026-08-05__client-data-deidentification_PLAN.md; Invoke-ClientDataDeidentification.ps1"
+      - kind: run
+        ref: "2026-08-04 FIRST RUN of database/maintenance/2026-08-05__audit-client-data-in-db.sql: 13 columns / 89,497 rows match. NEW finding: CPMC (a real healthcare org) is in model_index.model_name -- the code repo was clean of it, the DB was never checked. ~99% is re-warmable cache; ~59 rows are judgment (named_deliverables 36, edit_log/staged_change/change_set 20, assistant_conversations 3)"
+      - kind: run
+        ref: "2026-08-04 element_cache spans 39 DISTINCT models, not 3 -- most unidentifiable from URN alone; the pattern audit only caught models whose NAMES matched known strings"
+      - kind: commit
+        ref: ".tools/state f5103d5 + workspace edits: all artifacts THIS session produced were de-identified (T4 log, write-engine smoke log, row-13.1 draft, PHASE-STATUS, queue.yaml, 3 memory files); residual scan CLEAN"
+    verification:
+      level: verified
+      by: "PARKED 2026-08-04 by owner: 'We need to be using these experimental models. There will be a time when all of this must happen. It simply cannot be today.' Deferral is sound -- the product has NO technical dependency on client data (tests assert string literals only; the de-id rename is behavior-neutral), so nothing compounds architecturally by waiting. TWO TOOLING GAPS FOUND + one already fixed: (a) F:/AI-Dev/.tools/state is outside both RepoRoot paths the bulk script scans -- it would be silently missed (handled manually, script needs the path added); (b) 'SLAC-LSCC' WITHOUT a trailing hyphen is absent from the map, so -Verify can report PASSED while that form survives. STILL OPEN from the other session: delete the quarantine folder, rule on 3 remaining client PDF sets, decide the S&L_ prefix (firm-identifying, possibly load-bearing), 14 db dumps / 833MB gitignored retain pre-clean rows."
+      at: 2026-08-04
+    live_check:
+      - "TRIGGERS -- act when ANY fires: (1) first demo to anyone external (a prospect sees whatever is on screen); (2) BEFORE the hosting migration copies ~89k client-derived cache rows to the DigitalOcean droplet; (3) BEFORE the first real customer data lands in the DB -- after that a blanket cache flush is no longer safe and separation becomes surgical."
+      - "Interim discipline (costs nothing): remediation doc Rule 3 -- new client-derived material gets a decision-log entry, never a silent add."
+    source: "decision-log/2026-08-05__client-data-remediation.md; DB audit first run 2026-08-04"
+    notes_url: null

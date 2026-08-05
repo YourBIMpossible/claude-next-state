@@ -72,6 +72,9 @@ no items yet — run `init` to derive.)
 [OPS-REDIS-P5] Flip WEB_CONCURRENCY>1 with redis leader-lock (Wave C-1 Phase 5)
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-04 · docker/REDIS-CUTOVER.md; 2026-08-04 clou
 
+[OPS-CLIENT-DATA-REMEDIATION] Client-data remediation: 39 cached models, PDF sets, DB cache -- PARKED with triggers
+       unblocks 0 · L · bimpossible+workspace · VERIFIED 2026-08-04 · 2026-08-04 FIRST RUN of database/maintenance/2026-08-05__aud
+
 [OPS-HOSTING-MIGRATION] Migrate hosting from home PC to a cheap cloud VPS (staged path toward AWS/GCP)
        unblocks 0 · L · bimpossible · VERIFIED 2026-08-04 · design-docs/2026-07-27__hosting-migratio
 
