@@ -432,23 +432,32 @@ items:
     notes_url: null
 
   - id: P3-10B-DOORS
-    title: "Build Doors from/to room slice -- D0 PROBE PASSED (0 ambiguous / 782 doors), build-ready"
+    title: "Doors room-pair slice BUILT -- Increment 1 in draft PR#253, awaiting checks + merge"
     projects: [bimpossible]
-    status: ready
+    status: in_flight
     owner_gate: false
     unblocks: []
     blocked_by: []
     effort: M
     risk: 1
     evidence:
+      - kind: pr
+        ref: "BIMpossible PR#253 'feat(3.10b): doors resolve to the room PAIR they separate' -- draft, opened 2026-08-04 from claude/phase3-10b-doors (commit 825ab63); one production file, backend/aec/cross_model_join.py, plus 17 pure tests"
+      - kind: log
+        ref: "01_BuildLog/2026-08-04__doors-join-increment1_RESULTS.md (workspace main) -- full histograms, the containment-vs-edge-distance defect and its measured fix, the no_location breakdown"
+      - kind: run
+        ref: "Verify-Local-CI.ps1 -SkipFrontend in the worktree AFTER the boundary-scoring change: GREEN -- 3202 passed/79 skipped (DB lane), 2151/221 (pure), 4 (assistant contract)"
+      - kind: db
+        ref: "Shipped-path E2E through assemble_and_resolve on the live cache 2026-08-04: mv 742 (611 doors) pair 58.1% / single 25.5% / no_location 14.4% / no_room 1.5% / ambiguous 0.5%; mv 90 (620 doors) no_location 58.2% / single 23.7% / pair 13.2% / no_room 4.8% / ambiguous 0"
       - kind: doc
         ref: "BIMpossible_PHASE-STATUS.md Phase 3 sub-phase notes, Phase 3.10b row"
     verification:
-      level: claimed
-      by: "D0 PROBE EXECUTED 2026-08-04 (01_BuildLog/2026-08-04__doors-room-tie-probe_RESULTS.md; scripts merged via PR#250): the from/to design HOLDS on real data -- ZERO ambiguous cases across 782 doors in two arch models at a door-appropriate cap. Ties are exact (0.108/0.108 ft clusters); sample pairs read like a floor plan (KITCHEN|SERVERY, TOILET|CORRIDOR). Build requirements proven by the probe: (1) door-specific fallback cap ~0.5 ft -- the MEP 3.0 ft cap collapses 2-way 67.5%->11.3%; (2) level banding mandatory; (3) tie semantics INVERT for doors (tie = the from/to answer, not ambiguous) -- check _FALLBACK_TIE_EPSILON_FT 0.01 vs observed tie spread during build; (4) 1-single is a CORRECT product answer (From: X -> To: --) tracking arch room coverage, not failure. Handoff's ~1-hour estimate stands: variant resolution on the existing pipeline, origins/footprints/bands all proven for Doors. From/to DIRECTION (which side is which) needs door facing -- out of scope, cheap ordering rule for now."
+      level: verified
+      by: "BUILT 2026-08-04. Shipped: Doors in _PHASE3_10_IN_SCOPE_CATEGORIES (buys prewarm/etag/router plumbing free), _DOOR_FALLBACK_CAP_FT 0.5, resolve_linked_rooms_for_doors + pair/single states, category dispatch in assemble_and_resolve, _merge_door_room_columns writing 4 columns on every row. No frontend change needed -- column discovery scans the generic parameters map. TWO probe assumptions were corrected by the build, both measured: (1) NO tie epsilon -- membership within the 0.5 ft cap IS the adjacency test the probe validated, an epsilon on top would rest on nothing; (2) scoring is BOUNDARY-native, never the MEP containment short-circuit. The probe could not see (2): it scored each door only against rooms from its own model version, while _load_room_pool unions all 3 arch models (958 rooms). A coarse shell room in another model that strictly CONTAINS a door scored 0.0 and outvoted the two rooms it separates -- 70 of 523 doors went 3-way ambiguous. Edge-distance scoring takes that to 3; pairs 349->355, singles 95->156. Columns are A/B not From/To: direction needs door facing/flip, not ingested -- Increment 2. Item closes (in_flight->live) when PR#253 merges."
       at: 2026-08-04
-    live_check: []
-    source: "BIMpossible_PHASE-STATUS.md Phase 3.10b note"
+    live_check:
+      - "gh pr view 253 --repo YourBIMpossible/BIMpossible --json state,mergedAt"
+    source: "BIMpossible_PHASE-STATUS.md Phase 3.10b note; build session 2026-08-04"
     notes_url: null
 
   - id: P3-6-SPATIAL
