@@ -62,9 +62,6 @@ no items yet — run `init` to derive.)
 
 ## In flight
 
-[WRITE-ENGINE-INC1] Land Write Engine Increment-1 -- Task 8 smoke PASSED; merge PRs #232 + AddIns #49
-       unblocks 1 · L · bimpossible+addins · VERIFIED 2026-08-04 · BIMpossible PR#232 draft 'Write Engine Increment 1 - typed v
-
 [ADDINS-PANE-PR45] Land Add-Ins PR#45 -- Assistant pane header dock fix (branch checked out locally)
        unblocks 0 · S · addins · VERIFIED 2026-08-04 · Add-Ins PR#45 'fix(revitlink): dock Assistant pane header to
 
@@ -91,6 +88,9 @@ no items yet — run `init` to derive.)
 
 [P13-T4-REFUSAL] Live-test Apply-Changes refusal paths -- non-cloud file, expired pane pairing
        unblocks 2 · S · bimpossible+addins · VERIFIED 2026-08-04 · addins main cfb4cc1
+
+[WRITE-ENGINE-INC1] Write Engine Increment-1 -- SHIPPED: Task 8 smoke passed, #232 + AddIns #49 merged lockstep
+       unblocks 1 · L · bimpossible+addins · VERIFIED 2026-08-04 · BIMpossible PR#232 draft 'Write Engine Increment 1 - typed v
 
 [RE-WIZ-POLL-2] Fix wizard provisioning poll: retry transient HTTP errors like its sibling loop does
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-04 · BIMpossible PR#239
