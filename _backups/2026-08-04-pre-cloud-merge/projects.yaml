@@ -1,0 +1,128 @@
+# /next — project registry
+#
+# Hand-edited. One entry per project. The skill reads this to know what exists,
+# where it lives, and how to probe it live.
+#
+# `active: true`  -> appears on the bare portfolio board
+# `active: false` -> known but not tracked; excluded from the board and from `all`
+#
+# Adding a project: copy an entry, set key/path/aliases, set active. Nothing in the
+# skill needs to change. See README.md.
+
+schema_version: 1
+
+projects:
+
+  # ---- production line -------------------------------------------------------
+
+  - key: bimpossible
+    name: BIMpossible (web platform)
+    aliases: [bimp, web, platform]
+    path: F:\AI-Dev\BIMpossible
+    origin: https://github.com/YourBIMpossible/BIMpossible.git
+    active: true
+    companions: [addins]           # lockstep partner — items routinely span both
+    ledgers:
+      - F:\AI-Dev\BIMpossible_Workspace\00_Strategy\BIMpossible_PHASE-STATUS.md
+      - F:\AI-Dev\BIMpossible_Workspace\00_Strategy\BIMpossible_WAVE-STATUS.md
+    live_state: F:\AI-Dev\BIMpossible_Workspace\00_Strategy\BIMpossible_STATE-LIVE.md
+    audit_dir: F:\AI-Dev\BIMpossible_Workspace\02_Reference\Audit Reports
+    build_log: F:\AI-Dev\BIMpossible_Workspace\01_BuildLog
+    notes: >
+      STATE-LIVE.md is auto-generated ~06:00 daily by system\Update-LiveState.ps1 and holds
+      deterministic git facts only — prefer it over re-deriving them, but never over a live probe.
+      PHASE-STATUS and WAVE-STATUS are owner-maintained: read them, never write them.
+
+  - key: addins
+    name: BIMpossible Add-Ins (Revit, C#)
+    aliases: [add-ins, revit, revitlink]
+    path: F:\AI-Dev\Add-Ins
+    origin: https://github.com/YourBIMpossible/BIMpossible-AddIns.git
+    active: true
+    companions: [bimpossible]
+    ledgers: []
+    audit_dir: F:\AI-Dev\Add-Ins\audits
+    decision_log: F:\AI-Dev\Add-Ins\decision-log
+    notes: >
+      No phase ledger of its own — its status lives in BIMpossible's phase rows plus its own
+      audits/ and decision-log/. Ships to four %APPDATA% Revit slots; "merged" is not "deployed"
+      and neither is "live". Two TFMs — build both before believing a static claim.
+
+  - key: workspace
+    name: BIMpossible Workspace (strategy, ledgers, build log)
+    aliases: [ws, strategy, ledgers]
+    path: F:\AI-Dev\BIMpossible_Workspace
+    origin: https://github.com/YourBIMpossible/BIMpossible_Workspace.git
+    active: true
+    companions: []
+    notes: >
+      Docs repo. Tracked mainly for ledger staleness — a stale ledger is itself a queue item.
+
+  - key: dashboard
+    name: AI-Dev Dashboard
+    aliases: [dash]
+    path: F:\AI-Dev\Dashboard
+    origin: https://github.com/YourBIMpossible/ai-dev-dashboard.git
+    active: true
+    companions: []
+    notes: >
+      Renders progress.phases[] from BIMpossible_PHASE-STATUS.md — downstream of the workspace
+      ledgers, so ledger staleness surfaces here as wrong published status.
+      NOTE: F:\AI-Dev\Dashboard-auto shares this same origin. Two working copies of one repo —
+      confirm which is canonical before trusting either; flagged as possible sprawl.
+
+  # ---- side tracks -----------------------------------------------------------
+
+  - key: ai-server
+    name: AI-Server (local LLM inference platform)
+    aliases: [server, ollama, inference]
+    path: F:\AI-Dev\AI-Server
+    origin: https://github.com/YourBIMpossible/AI-Server.git
+    active: true
+    companions: []
+    notes: >
+      Spec lives in its own CLAUDE.md + PROGRAM_PLAN.md. Related to BIMpossible Phase 14
+      (local inference) but gates nothing on the production line.
+
+  - key: families
+    name: Families by BIMpossible
+    aliases: [fam]
+    path: F:\AI-Dev\Families by BIMpossible
+    origin: https://github.com/YourBIMpossible/Families-by-BIMpossible.git
+    active: true
+    companions: []
+
+  - key: pc-monitor
+    name: PC-Monitor
+    aliases: [monitor]
+    path: F:\AI-Dev\PC-Monitor
+    origin: null                   # local only, branch: master
+    active: true
+    companions: []
+
+  # ---- known, not tracked ----------------------------------------------------
+
+  - key: ai-brain-data
+    name: AI-Brain-Data
+    path: F:\AI-Dev\AI-Brain-Data
+    origin: null
+    active: false
+
+  - key: laundry
+    name: Laundry Gig
+    path: F:\AI-Dev\Laundry Gig
+    origin: https://github.com/YourBIMpossible/lazy-laundry-app.git
+    active: false
+
+  - key: revit-ocr
+    name: Revit-OCR
+    path: F:\AI-Dev\Revit-OCR
+    origin: null
+    active: false
+    notes: Not a repo. Evaluated as a selective tool, not a pipeline.
+
+  - key: bim-site
+    name: BIMpossible Site
+    path: F:\AI-Dev\BIMpossible Site
+    origin: null
+    active: false
