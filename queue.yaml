@@ -660,3 +660,29 @@ items:
       - "Interim discipline (costs nothing): remediation doc Rule 3 -- new client-derived material gets a decision-log entry, never a silent add."
     source: "decision-log/2026-08-05__client-data-remediation.md; DB audit first run 2026-08-04"
     notes_url: null
+
+  - id: ARCH-FIRM-PARAM-NEUTRALITY
+    title: "De-couple firm parameters: backend alias layer + define the BIMP_ shared-parameter set"
+    projects: [bimpossible, addins]
+    status: ready
+    owner_gate: false
+    unblocks: []
+    blocked_by: []
+    effort: L
+    risk: 2
+    evidence:
+      - kind: doc
+        ref: "02_Reference/2026-08-04__SL-Parameter-Coupling-MAP.md -- full read-only survey: ~207 production occurrences / 50 files / ~130 distinct names (backend 142 in 21 modules, AddIns 45 in 21 files deduped, frontend ~20)"
+      - kind: pr
+        ref: "BIMpossible #248 (bc81b5f) + AddIns #52 (9ce43c9), both MERGED 2026-08-04 -- the principle is now WRITTEN and enforceable in both CLAUDE.md files, with the AddIns exception list exhaustive"
+      - kind: run
+        ref: "2026-08-04 grep across both CLAUDE.md + 00_Strategy: principle was previously UNDOCUMENTED (1 incidental hit) -- which is why the count grew unchecked"
+    verification:
+      level: verified
+      by: "Owner principle held since day one, enforced nowhere until 2026-08-04. STEP 1 DONE (docs merged both repos; interim rule = no new firm-literal reads in business logic). REMAINING, in order: (2) backend alias layer -- port the shape of frontend/app/lib/clients/clientRules.ts server-side and move the 142 literals into it as data; that file's own header states the shape 'mirrors a future per-firm backend row, so Phase A.2 is a storage/transport swap - not a redesign', i.e. the design is already decided and documented, never executed. (3) define the BIMP_ shared-parameter set and wire Conformance/DeliverableParameterInstaller.cs -- it ALREADY creates a GUID-based BIMP_IsDeliverable and binds it via BindingMap/GroupTypeId.IdentityData, with ZERO callers, so step 3 is mostly deciding WHICH parameters, not building machinery. Tests follow mechanically once production reads through the alias layer (they assert string literals only)."
+      at: 2026-08-04
+    live_check:
+      - "grep -rc 'S&L_' backend --include=*.py | grep -v /tests/ -- expect the 142 to shrink as the alias layer lands; the CLAUDE.md rule should hold it flat meanwhile."
+      - "Latent defect found in the survey: discipline_field_probe.py probes BOTH 'S&L_SoilBearing' and 'S&L_Soil_Bearing'. One almost certainly does not exist in the SPF -- a probe for a non-existent name returns a silent false NOT-PRESENT. Check against the real SPF."
+    source: "02_Reference/2026-08-04__SL-Parameter-Coupling-MAP.md; owner statement 2026-08-04; PRs #248 / AddIns #52"
+    notes_url: "02_Reference/2026-08-04__SL-Parameter-Coupling-MAP.md"

@@ -54,6 +54,9 @@ no items yet — run `init` to derive.)
 [P3-6-SPATIAL] Build Phase 3.6 Spatial Relationship Engine v1 (architecturally unblocked)
        unblocks 0 · M · bimpossible · CLAIMED 2026-08-04 · BIMpossible_PHASE-STATUS.md Phase 3 sub-
 
+[ARCH-FIRM-PARAM-NEUTRALITY] De-couple firm parameters: backend alias layer + define the BIMP_ shared-parameter set
+       unblocks 0 · L · bimpossible+addins · VERIFIED 2026-08-04 · BIMpossible #248
+
 ## In flight
 
 [ADDINS-PANE-PR45] Land Add-Ins PR#45 -- Assistant pane header dock fix (branch checked out locally)
