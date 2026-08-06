@@ -27,7 +27,7 @@ reconciled:
     pr: 53
   workspace:
     at: '2026-08-06'
-    commit: 0f2ce8e
+    commit: aa90996
 
 # Work items.
     pr: 18
@@ -364,7 +364,7 @@ items:
   notes_url:
 
 - id: ADDINS-HYGIENE
-  title: "Add-Ins hygiene: finish Glass rollout, dedupe 3 conformance PRs (secret-scan gate now added)"
+  title: "Add-Ins hygiene: finish Glass rollout (conformance-PR dedup DONE 2026-08-04)"
   projects: [addins]
   status: ready
   owner_gate: false
@@ -374,7 +374,7 @@ items:
   risk: 2
   evidence:
   - kind: pr
-    ref: "Add-Ins #10 (feat/conformance-adapters, open non-draft), #31 (feat/conformance-plan3-report, draft HELD), #43 (docs/conformance-design, draft) -- all 3 re-confirmed open via gh pr list 2026-08-04"
+    ref: "Add-Ins #10 MERGED 2026-08-04 (squash, main 94b21ab -- Plans 1+2 conformance core+adapters); #43 CLOSED (docs superseded, content in #10); #31 (feat/conformance-plan3-report) remains the ONLY open conformance PR: draft HELD, plan doc predates Plans 1+2 execution and needs reconciling before build -- verified gh pr view 2026-08-06"
   - kind: commit
     ref: "Add-Ins main 13f1a45 'Passes 1-4 -- functionality, Glass, honest controls, definition-of-done, ship-set deploy (#40)' -- Glass rollout partially landed already"
   - kind: doc
@@ -383,8 +383,8 @@ items:
     ref: "Add-Ins PR#46 (merged 2026-07-27T15:12:50Z) -- SEC-ADDINS-NOSCAN-1 (=WSR14): gating gitleaks job added in security-scan.yml, local full-history run over all 442 commits found no leaks before enabling"
   verification:
     level: verified
-    by: "3 open conformance PRs re-confirmed live 2026-08-04 (gh pr list). Glass UI direction ratified 2026-07-25 per decision-log; PR#40 shows some rollout already merged, so 'finish' is accurate. Secret-scan gate CLOSED as of PR#46. Remaining scope: Glass rollout + conformance-PR dedup. Also open but tracked separately: PR#45 pane-header fix (ADDINS-PANE-PR45) and 5 Add-Ins dependabot PRs (#48, #17, #16, #15 + setup-python) not yet triaged."
-    at: 2026-08-04
+    by: "Conformance dedup CLOSED 2026-08-04: #10 merged, #43 closed, #31 is the deliberate Plan-3 park (memory: setup-conformance-engine-design). Post-merge follow-ups live on the PR#10 record + memory: no redeploy yet (Core changed -> all seven add-ins together, glass-alerts slot constraint), compiled ConformanceDiagnosticCommand never clicked in Revit (live check was script-equivalent). Glass UI direction ratified 2026-07-25 per decision-log; PR#40 shows some rollout already merged, so 'finish' is accurate. Secret-scan gate CLOSED as of PR#46. Remaining scope: Glass rollout only. Also open but tracked separately: PR#45 pane-header fix (ADDINS-PANE-PR45) and 5 Add-Ins dependabot PRs (#48, #17, #16, #15 + setup-python) not yet triaged."
+    at: 2026-08-06
   live_check:
   - "gh pr list --repo YourBIMpossible/BIMpossible-AddIns --search 'conformance in:title,head'"
   source: "BIMpossible_ProductionRoadmap_2026-07-26.md §2 item 6; weekly-full-audit_2026-07-27.md SEC-ADDINS-NOSCAN-1; Add-Ins PR#46; gh pr list (verified live)"
@@ -1043,3 +1043,44 @@ items:
   - "Compare (Get-FileHash \"$env:APPDATA/Autodesk/Revit/Addins/2026/BIMpossible.RevitLink.dll\").Hash against the newest entry in Add-Ins decision-log/*runtime-slot-handoff.md"
   source: "Add-Ins decision-log/2026-07-25__runtime-slot-handoff.md; direct hash probe 2026-08-06"
   notes_url: "decision-log/2026-07-25__runtime-slot-handoff.md"
+
+- id: SEC-AUDIT-HASHCHAIN
+  title: "Tamper-evident hash-chain for audit tables -- deferred, gated on trigger"
+  projects: [bimpossible]
+  status: parked
+  owner_gate: true
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 2
+  evidence:
+  - kind: doc
+    ref: "00_Strategy/2026-08-06__Multi-Tenant_Data-Isolation_Strategy_DRAFT.md §7 item 4 -- cites this as deliberately deferred"
+  verification:
+    level: claimed
+    by: "WANDER, found while documenting the 2026-08-05/06 session arc on 2026-08-06 -- not built, queued per closeout rules. Full design (deferred sealer worker, not inline hashing; canonical serializer as the highest-risk piece; contiguous sealing with a grace period and an explicit void record for Postgres id-gaps and rolled-back transactions; a verify endpoint that reports first divergence; anchoring the daily chain tip OUTSIDE the database, without which DB write access lets anyone rewrite history and recompute to match) was scoped in an earlier pass of this session but deliberately not started. Gate is a trigger condition, not owner bandwidth: a second person gets DB write access, OR a client/contract/insurer asks how tampering is prevented, OR other firms go live with seeded admins. Estimate ~2-3 days with tests once triggered; anchoring the daily tip is a separate owner decision that determines whether any of it is worth having."
+    at: '2026-08-06'
+  live_check: []
+  source: "memory project_audit-log-hash-chain-deferred (full design)"
+  notes_url:
+
+- id: OPS-CLIENTDATA-REMEDIATION
+  title: "Client-data remediation: quarantine delete, PDF triage, de-ID pass, DB audit"
+  projects: [bimpossible]
+  status: blocked_owner
+  owner_gate: true
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 3
+  evidence:
+  - kind: doc
+    ref: "decision-log/2026-08-05__client-data-remediation.md -- Open Items checklist, all 4 unchecked as of 2026-08-05"
+  verification:
+    level: claimed
+    by: "WANDER, found while documenting the 2026-08-05/06 session arc on 2026-08-06 -- not actioned, queued per closeout rules (none of the four items are mine to decide or execute). Real client project data -- a 456-page HCAI hospital submittal set, real Revit models from 3 client projects, ~2.6GB of client PDFs across 4 projects, ~46 tracked code-repo files with real model filenames/panel designations -- was used as dev/test feedstock; two prior partial scrubs (2026-05-25, 2026-06-17) missed source comments, test fixtures, specs, and the PDF library. A quarantine move, one doc de-identified, and a de-identification plan+script exist, but the pass has not been applied. Git history deliberately NOT rewritten -- would force-push 3 repos and, given this surfaced from a live IP-ownership/confidentiality question, would look like destroying evidence rather than documenting it. Four owner-only opens: delete the quarantine folder, decide the 3 remaining client PDF sets, apply the de-identification pass (CI must stay green), audit the live DB + backups."
+    at: '2026-08-05'
+  live_check:
+  - "Test-Path 'F:\\AI-Dev\\BIMpossible\\_to_delete\\2026-08-05__client-data-quarantine' -- should be False once the owner deletes it"
+  source: "decision-log/2026-08-05__client-data-remediation.md; memory project_client-data-remediation-2026-08-05"
+  notes_url: "decision-log/2026-08-05__client-data-remediation.md"

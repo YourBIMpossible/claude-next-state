@@ -72,8 +72,8 @@ no items yet — run `init` to derive.)
 [PROVIDER-REGISTRY-272] Land PR#272 -- open the key registry to 9 providers, stop dropping unpriced models
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-06 · BIMpossible #272 OPEN, NON-DRAFT, head feat/provider-open-re
 
-[ADDINS-HYGIENE] Add-Ins hygiene: finish Glass rollout, dedupe 3 conformance PRs (secret-scan gate now added)
-       unblocks 0 · M · addins · VERIFIED 2026-08-04 · Add-Ins #10 (feat/conformance-adapters, open non-draft), #31
+[ADDINS-HYGIENE] Add-Ins hygiene: finish Glass rollout (conformance-PR dedup DONE 2026-08-04)
+       unblocks 0 · M · addins · VERIFIED 2026-08-06 · #10 MERGED (main 94b21ab), #43 CLOSED, #31 = deliberate Plan-3 park
 
 [ARCH-BIMP-PARAMSET] Define the BIMP_ shared-parameter set and give DeliverableParameterInstaller its first caller
        unblocks 0 · M · addins · CLAIMED 2026-08-06 · Conformance/DeliverableParameterInstaller.cs -- already crea
