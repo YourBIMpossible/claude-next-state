@@ -20,6 +20,9 @@ no items yet — run `init` to derive.)
 [FE-3-10-FLAG] Rebuild the frontend with NEXT_PUBLIC_BIMPOSSIBLE_PHASE3_10_ENABLED=1 so room-join and door columns are visible
        unblocks 1 · S · bimpossible · VERIFIED 2026-08-06 · frontend/Dockerfile:34-35 on origin/main -- ARG NEXT_PUBLIC_
 
+[OPS-TENANCY-DOC] Write the multi-tenant data-isolation strategy doc (audit's required TEST already shipped in PR#243)
+       unblocks 1 · S · bimpossible · VERIFIED 2026-08-06 · BIMpossible_ProgramPlan_2026-05-25.md, Commercial Launch Pre
+
 [P7-SYNC-GOLIVE] Supervised owner flag-flip: go-live Revit Link sync re-enable (Phase 7 step 2)
        unblocks 0 · S · bimpossible+addins · CLAIMED 2026-08-04 · BIMpossible#187 (2936c32f) + AddIns#11 (be4d6a8f), lockstep,
 
@@ -54,9 +57,6 @@ no items yet — run `init` to derive.)
 [POST-268-FOLLOWUPS] Land the three post-#268 tenancy follow-up PRs: #269 auth exemptions, #270 relay defer, #271 test-infra
        unblocks 2 · M · bimpossible · VERIFIED 2026-08-06 · BIMpossible #269 (draft, claude/auth-identity-exemptions), #
 
-[OPS-TENANCY-DOC] Write the multi-tenant data-isolation strategy doc (audit's required TEST already shipped in PR#243)
-       unblocks 1 · S · bimpossible · VERIFIED 2026-08-04 · BIMpossible_ProgramPlan_2026-05-25.md, Commercial Launch Pre
-
 [P3-8-SLICE23] Build Phase 3.8 slices 2-3 -- is_draft reader gating + ACC sync endpoint
        unblocks 1 · M · bimpossible · CLAIMED 2026-08-04 · BIMpossible_PHASE-STATUS.md Phase 3 sub-phase notes, Phase 3
 
@@ -65,6 +65,9 @@ no items yet — run `init` to derive.)
 
 [OPS-DEPLOY-RUNBOOK] Walk the deploy/rollback runbook draft on the prod host; fill VERIFY blanks
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-04 · Carried-open finding across multiple audit cycles, per BIMpo
+
+[ADDINS-SLOT-LEDGER] Runtime-slot handoff ledger is stale: deploys are landing without a ledger entry
+       unblocks 0 · S · addins · VERIFIED 2026-08-06 · Add-Ins decision-log/2026-07-25__runtime-slot-handoff.md -- 
 
 [PROVIDER-REGISTRY-272] Land PR#272 -- open the key registry to 9 providers, stop dropping unpriced models
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-06 · BIMpossible #272 OPEN, NON-DRAFT, head feat/provider-open-re

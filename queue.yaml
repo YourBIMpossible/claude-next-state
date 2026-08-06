@@ -111,7 +111,7 @@ items:
 - id: OPS-TENANCY-DOC
   title: "Write the multi-tenant data-isolation strategy doc (audit's required TEST already shipped in PR#243)"
   projects: [bimpossible]
-  status: ready
+  status: blocked_owner
   owner_gate: true
   unblocks: [OPS-LAUNCH]
   blocked_by: []
@@ -124,10 +124,12 @@ items:
     ref: "BIMpossible PR#231 (ff42ac3) -- SEC-MEMBERSHIP-1 finding + partial fix, merged 2026-07-27"
   - kind: doc
     ref: "02_Reference/Audit and Scan Info/weekly-full-audit_2026-07-27.md §2(1) SEC-MEMBERSHIP-1; §4 required test"
+  - kind: doc
+    ref: "DRAFT WRITTEN 2026-08-06: 00_Strategy/2026-08-06__Multi-Tenant_Data-Isolation_Strategy_DRAFT.md (workspace repo, commit aa90996 on docs/2026-08-06-session-paper-trail). Engineering half complete, all code claims read from origin/main@a2ea120; remaining work is owner-only -- three [OWNER DECIDES] blocks + ratification checklist in the doc's Sec 8."
   verification:
     level: verified
-    by: "AUDIT-REQUIRED TEST NOW EXISTS: backend/tests/test_membership_firm_resolution_agreement.py (5 tests, landed with PR#243) is exactly the SS4 test the 2026-07-27 audit demanded -- it pins BOTH the deny-once-multi-tenant behavior and the unchanged single-tenant fallback for an unlinked user (read directly this session, docstring cites SEC-MEMBERSHIP-1). So the ENGINEERING half of this item is DONE. What remains is purely the owner-authored data-isolation STRATEGY DOCUMENT (Commercial Launch Prereq item 1/bs-1) -- a narrative clients read, not code. Effort downgraded M->S; risk 3->1 (the live scope-leak risk is closed in code, only the write-up remains)."
-    at: 2026-08-04
+    by: "ENGINEERING HALF DONE 2026-08-06, status ready -> blocked_owner: only ratification remains (hub entitlement per firm, cache re-verify policy, business-language commitments). || AUDIT-REQUIRED TEST NOW EXISTS: backend/tests/test_membership_firm_resolution_agreement.py (5 tests, landed with PR#243) is exactly the SS4 test the 2026-07-27 audit demanded -- it pins BOTH the deny-once-multi-tenant behavior and the unchanged single-tenant fallback for an unlinked user (read directly this session, docstring cites SEC-MEMBERSHIP-1). So the ENGINEERING half of this item is DONE. What remains is purely the owner-authored data-isolation STRATEGY DOCUMENT (Commercial Launch Prereq item 1/bs-1) -- a narrative clients read, not code. Effort downgraded M->S; risk 3->1 (the live scope-leak risk is closed in code, only the write-up remains)."
+    at: '2026-08-06'
   live_check:
   - "grep firm_id scoping across backend query paths; confirm no cross-firm query is reachable without a firm filter. Run the get_firm_id() vs require_active_membership() agreement test the 2026-07-27 audit specifies."
   source: "BIMpossible_ProgramPlan_2026-05-25.md §Commercial Launch Prerequisites; weekly-full-audit_2026-07-27.md SEC-MEMBERSHIP-1; BIMpossible PR#231"
@@ -1018,3 +1020,26 @@ items:
   live_check: []
   source: "01_BuildLog/2026-08-05__hub-tenancy-migration-BLOCKED_HANDOFF.md; memory pending-prod-verifications"
   notes_url:
+
+- id: ADDINS-SLOT-LEDGER
+  title: "Runtime-slot handoff ledger is stale: deploys are landing without a ledger entry"
+  projects: [addins]
+  status: ready
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: doc
+    ref: "Add-Ins decision-log/2026-07-25__runtime-slot-handoff.md -- last modified 2026-07-25, records deployed hash 7360B902..."
+  - kind: run
+    ref: "2026-08-06 Get-FileHash on %APPDATA%/Autodesk/Revit/Addins/2026/BIMpossible.RevitLink.dll -- SHA256 5268AEFA..., 2554880 bytes, mtime 2026-08-04 21:10:58. Does not match the ledger's recorded hash, and no ledger entry exists for it."
+  verification:
+    level: verified
+    by: "WANDER, found while pre-flighting P13-T4-REFUSAL on 2026-08-06 -- not fixed, queued per closeout rules. The ledger's own standing rule 1 requires an entry per deploy; at least one deploy (2026-08-04, almost certainly the refusal-path test build) landed in the shared 2026 slot without one. That ledger is the ONLY coordination mechanism for a single %APPDATA% slot shared by every Revit version and every parallel session, so a stale ledger means the next session cannot tell what is deployed without hashing it by hand. The ledger also documents two traps worth keeping: the deployed DLL's mtime is NOT the deploy time, and computer-use open_application spawns a SECOND Revit instance rather than fronting the running one, after which both instances lock the deploy DLLs. Fix is one appended entry plus a habit, not a code change."
+    at: 2026-08-06
+  live_check:
+  - "Compare (Get-FileHash \"$env:APPDATA/Autodesk/Revit/Addins/2026/BIMpossible.RevitLink.dll\").Hash against the newest entry in Add-Ins decision-log/*runtime-slot-handoff.md"
+  source: "Add-Ins decision-log/2026-07-25__runtime-slot-handoff.md; direct hash probe 2026-08-06"
+  notes_url: "decision-log/2026-07-25__runtime-slot-handoff.md"
