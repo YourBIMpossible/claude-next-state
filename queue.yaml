@@ -42,9 +42,13 @@ reconciled:
   # #22 #23 #25 #26 #29 #30 #31 #32 #33, #24 already handled prior pass). PR#25 (tenancy strategy
   # doc) and PR#26/#33 (backup resilience plan + verified restore drill) are the load-bearing ones
   # for OPS-TENANCY-DOC and OPS-BACKUP-RESTORE-DRILL respectively -- both reconciled this pass.
+  # Second pass same day: delta da35d34..2196bfb walked (1 commit, PR#5 -- /next skill+store
+  # versioning, previously landed pending this exact merge). WS-NEXT-VERSIONING promoted
+  # landed->live; .tools/state/* now tracked on workspace main. No other items in this 1-commit
+  # delta.
   workspace:
     at: '2026-08-07'
-    commit: da35d34
+    commit: 2196bfb
     pr: 33
 
 # Work items.
@@ -446,7 +450,7 @@ items:
 - id: WS-NEXT-VERSIONING
   title: "Version /next skill + store + session docs into workspace repo (branch + draft PR)"
   projects: [workspace]
-  status: landed
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -455,14 +459,17 @@ items:
   evidence:
   - kind: doc
     ref: "2026-08-04__ProductionQueue_Session_Findings.md §3 -- cloud session produced the files; placed on the rig + reconciled 2026-08-04 (this session)"
+  - kind: pr
+    ref: "Workspace PR#5 MERGED 2026-08-07 -- squash commit 2196bfb on main, confirmed via git merge-base --is-ancestor and git log da35d34..origin/main. .tools/state/{DESIGN.md,QUEUE.md,README.md,projects.yaml,queue.yaml} now present on origin/main per git ls-tree. Remote branch claude/production-items-skill-vbv68f deleted post-merge; local worktree + branch also removed."
   verification:
     level: verified
-    by: "PROMOTED to landed 2026-08-06 (reconcile). Half-closed by a route the item did not anticipate: the /next skill landed on workspace main via DIRECT commit 5f18a32 (3 files), OUTSIDE PR#5, which is still an OPEN draft. Residual gap, which is why this is landed and not live: `.tools/state` is still NOT tracked on workspace main, so the item store itself is unversioned; and the skill copy on main can now silently drift from the canonical one at C:\\Users\\Zeria\\.claude\\skills\\next\\. || DONE this session 2026-08-04: commit 204f35a on claude/production-items-skill-vbv68f, pushed, draft PR#5 open (gitleaks clean). Item closes (landed->live) when PR#5 merges to workspace main. NOTE: the committed .tools/state seed predates this evidence line — the canonical store at F:\\AI-Dev\\.tools\\state is authoritative."
-    at: '2026-08-06'
+    by: "PROMOTED to live 2026-08-07 (reconcile, second pass same day). PR#5 merged (2196bfb), closing the residual gap the prior verification named: .tools/state is now tracked on workspace main (git ls-tree confirms all 5 files). Before merging, PR#5's README.md was corrected per review feedback -- a top banner now marks the checked-in copy as a dated 2026-08-04 seed, not the live canonical store, and the Version-history section was reworded to match. That addresses the 'silent drift' concern the prior verification flagged by disclosing the drift instead of eliminating it: drift is by design here, the canonical store stays F:\\AI-Dev\\.tools\\state, versioned independently. Deliberately did NOT refresh the seed's data to match current canonical state -- reviewed and accepted as expected, disclosed drift, not a defect. || PROMOTED to landed 2026-08-06 (reconcile). Half-closed by a route the item did not anticipate: the /next skill landed on workspace main via DIRECT commit 5f18a32 (3 files), OUTSIDE PR#5, which was still an OPEN draft at that time. || DONE 2026-08-04: commit 204f35a on claude/production-items-skill-vbv68f, pushed, draft PR#5 open (gitleaks clean)."
+    at: '2026-08-07'
   live_check:
-  - "gh pr list --repo YourBIMpossible/BIMpossible_Workspace --head claude/production-items-skill-vbv68f --state all"
+  - "git -C F:\\AI-Dev\\BIMpossible_Workspace ls-tree -r --name-only origin/main -- .tools/state  # expect 5 files"
+  - "head -8 F:\\AI-Dev\\BIMpossible_Workspace\\.tools\\state\\README.md  # expect the dated-seed banner"
   source: "2026-08-04__ProductionQueue_Session_Findings.md §3"
-  notes_url:
+  notes_url: "https://github.com/YourBIMpossible/BIMpossible_Workspace/pull/5"
 
 - id: P3-10B-DOORS
   title: "Doors room-pair slice LIVE on main -- Increment 1 merged (PR#253); direction is Increment 2"

@@ -4,7 +4,7 @@
 
 Generated 2026-08-07 (full sync — all three projects reconciled to current). Ranked by critical path (transitive `unblocks` cone), tiebreak: owner-gated+S effort, then effort, then risk, then id. Full algorithm: `~/.claude/skills/next/reference/item-model.md`.
 
-Scope: `all`. Watermarks: `bimpossible` = 2026-08-07 @ `e1a793f` PR#293 · `addins` = 2026-08-07 @ `7bdfa68` PR#53 · `workspace` = 2026-08-07 @ `da35d34` PR#33. (ai-server/dashboard/families/pc-monitor: no items yet — run `init` to derive.)
+Scope: `all`. Watermarks: `bimpossible` = 2026-08-07 @ `e1a793f` PR#293 · `addins` = 2026-08-07 @ `7bdfa68` PR#53 · `workspace` = 2026-08-07 @ `2196bfb` PR#33. (ai-server/dashboard/families/pc-monitor: no items yet — run `init` to derive.)
 
 ## Blocked on you
 
@@ -81,9 +81,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-07 @ `e1a793f` PR#293 · `addi
 
 [PROVIDER-REGISTRY-272] Provider key registry opened to 9 providers -- MERGED, not yet deployed
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-06 · BIMpossible #272 (79e9de5, squash) -- MERGED 2026-08-06; bac
-
-[WS-NEXT-VERSIONING] Version /next skill + store + session docs into workspace repo (branch + draft PR)
-       unblocks 0 · S · workspace · VERIFIED 2026-08-06 · 2026-08-04__ProductionQueue_Session_Findings.md §3 -- cloud 
 
 [DEP-JSYAML-282] Dependabot js-yaml 4.3.0 -> 4.3.1 merged (GHSA-5p4m-2wfm-xmqj, dev-only transitive)
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · BIMpossible #282 MERGED 2026-08-07T02:30:12Z, squash commit 
@@ -205,3 +202,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-07 @ `e1a793f` PR#293 · `addi
 
 [P3-10B-DOORS] Doors room-pair slice LIVE on main -- Increment 1 merged (PR#253); direction is Increment 2
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-06 · BIMpossible PR#253 'feat(3.10b): doors resolve to the room P
+
+[WS-NEXT-VERSIONING] Version /next skill + store + session docs into workspace repo (branch + draft PR)
+       unblocks 0 · S · workspace · VERIFIED 2026-08-07 · Workspace PR#5 MERGED, squash 2196bfb on main -- .tools/state/*
