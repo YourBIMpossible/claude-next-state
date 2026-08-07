@@ -905,7 +905,7 @@ items:
 - id: SEC-ASSIST-FIRMVIEW
   title: "Merge #278 -- scope the assistant briefing's firm-view count to the caller's firm"
   projects: [bimpossible]
-  status: ready
+  status: landed
   owner_gate: false
   unblocks: [OPS-TENANCY-DOC]
   blocked_by: []
@@ -913,18 +913,18 @@ items:
   risk: 3
   evidence:
   - kind: pr
-    ref: "BIMpossible #278 OPEN, NON-DRAFT, head claude/vibrant-golick-7005b0 (4ec910a) -- filters the count on ctx.firm_id; firm_id is None fails closed and counts nothing"
+    ref: "BIMpossible #278 MERGED 2026-08-07T04:44:03Z, squash commit 5190a4a41a55b1a15edf9a55eb2130f2ddbc6e80 on origin/main -- filters the count on ctx.firm_id; firm_id is None fails closed and counts nothing"
   - kind: doc
     ref: "00_Strategy/design-docs/2026-08-06__phase-3-8-slices-2-3_build-plan.md (commit 6941a70) -- the CLOSED block recording the fix against the original finding"
   - kind: run
     ref: "Rescan 2026-08-06: #278 not in the a2ea120..origin/main merge delta (still open); GitHub Actions outage confirmed resolved via other PRs' checks this session"
   verification:
     level: verified
-    by: "Found in passing 2026-08-06 at aec/assistant_context.py:154: the briefing counted firm_views with no firm filter, leaking a cross-tenant count on a shared project. Fixed in #278 and RED-verified -- with the filter reverted all three DB tests report '3 firm'. One change went beyond the reported bug and is the part worth re-reading at merge: the 30-minute context cache key moved from (project, model, user) to (project, model, firm, user), because without the firm in the key a user whose active firm changed would keep being served the previous firm's count for the rest of the TTL, re-opening the same leak through the cache. invalidate_project_context only inspects k[0]/k[1], which kept their positions. Regression tests build two real synthetic firms on one shared project with a randomized project_id so the counts are exact. Status moved blocked_external -> ready: the outage that was the stated blocker has resolved and #278 is confirmed non-draft; this is a straightforward merge decision on already-reviewed, RED-verified work, not owner judgment on product shape -- owner_gate stays false on that basis, though the security-sensitive nature of the fix is worth a careful final read at merge time regardless."
-    at: 2026-08-06
+    by: "Found in passing 2026-08-06 at aec/assistant_context.py:154: the briefing counted firm_views with no firm filter, leaking a cross-tenant count on a shared project. Fixed in #278 and RED-verified -- with the filter reverted all three DB tests report '3 firm'. One change went beyond the reported bug and is the part worth re-reading at merge: the 30-minute context cache key moved from (project, model, user) to (project, model, firm, user), because without the firm in the key a user whose active firm changed would keep being served the previous firm's count for the rest of the TTL, re-opening the same leak through the cache. invalidate_project_context only inspects k[0]/k[1], which kept their positions. Regression tests build two real synthetic firms on one shared project with a randomized project_id so the counts are exact. Status moved blocked_external -> ready: the outage that was the stated blocker has resolved and #278 is confirmed non-draft; this is a straightforward merge decision on already-reviewed, RED-verified work, not owner judgment on product shape -- owner_gate stays false on that basis, though the security-sensitive nature of the fix is worth a careful final read at merge time regardless. Landed 2026-08-07: branch merged main in clean (zero conflicts on the 3 touched files), full local CI green (3407+2257+4 passed across the three lanes), all live GitHub checks green (backend/pytest, frontend/vitest+tsc, security-scan-summary, gitleaks, semgrep, trivy, pip-audit), mergeStateStatus CLEAN at merge time, squash-merged, post-merge diff of origin/main:backend/aec/assistant_context.py confirms the ctx.firm_id filter is present on main. Remote branch claude/vibrant-golick-7005b0 deleted after merge verification (repo delete_branch_on_merge is false, but 3 of the last 4 merged PRs had branches manually deleted, so this follows majority convention)."
+    at: 2026-08-07
   live_check:
   - "gh pr view 278 --repo YourBIMpossible/BIMpossible --json state,mergedAt,mergeable"
-  source: "BIMpossible PR#278; 00_Strategy/design-docs/2026-08-06__phase-3-8-slices-2-3_build-plan.md CLOSED block; rescan 2026-08-06"
+  source: "BIMpossible PR#278; 00_Strategy/design-docs/2026-08-06__phase-3-8-slices-2-3_build-plan.md CLOSED block; rescan 2026-08-06; landed 2026-08-07"
   notes_url:
 
 - id: SEC-GROUPS-DELIVERABLE-FIRM
