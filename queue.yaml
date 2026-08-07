@@ -17,20 +17,26 @@ schema_version: 1
 # ai-server / dashboard / families / pc-monitor: no watermark — no items derived yet (init never
 # run); tips were probed 2026-08-04 but their histories were not read. Never fake a watermark.
 reconciled:
+  # bimpossible: re-read 2026-08-06 (evening). main is UNCHANGED at a2ea120 -- nothing merged all
+  # day because GitHub Actions sat in a major_outage and main requires checks. The delta is
+  # entirely open PRs: #273 #274 #275 #276 #277 #278.
   bimpossible:
     at: '2026-08-06'
     commit: a2ea120
-    pr: 272
+    pr: 278
+  # addins: NOT re-read this pass. #54 is cited as evidence on WRITE-ENGINE-INC2 but the repo's
+  # delta since 7bdfa68 was never walked, so the watermark stays where it was. Citing a PR and
+  # reconciling a project are different things; do not conflate them.
   addins:
     at: '2026-08-06'
     commit: 7bdfa68
     pr: 53
   workspace:
     at: '2026-08-06'
-    commit: aa90996
+    commit: 6941a70
+    pr: 19
 
 # Work items.
-    pr: 18
 items:
 
 - id: P3-10A-GOLIVE
@@ -126,6 +132,8 @@ items:
     ref: "02_Reference/Audit and Scan Info/weekly-full-audit_2026-07-27.md §2(1) SEC-MEMBERSHIP-1; §4 required test"
   - kind: doc
     ref: "DRAFT WRITTEN 2026-08-06: 00_Strategy/2026-08-06__Multi-Tenant_Data-Isolation_Strategy_DRAFT.md on its own branch docs/tenancy-isolation-strategy (workspace repo, commit 7b625c2 off origin/main, worktree .claude/worktrees/tenancy-doc; the interim paper-trail copy aa90996 was dropped). Engineering half complete, all code claims read from origin/main@a2ea120; remaining work is owner-only -- ratify the three [OWNER DECIDES] blocks per Sec 8, then push + focused PR to main."
+  - kind: pr
+    ref: "Workspace PR#25 DRAFT opened 2026-08-06 (docs/tenancy-isolation-strategy, 7b625c2, pushed via Push-And-Verify.ps1, gitleaks clean). Draft status IS the merge hold: promote with `gh pr ready 25` only after the owner ratifies the three [OWNER DECIDES] blocks per the doc's Sec 8."
   verification:
     level: verified
     by: "ENGINEERING HALF DONE 2026-08-06, status ready -> blocked_owner: only ratification remains (hub entitlement per firm, cache re-verify policy, business-language commitments). || AUDIT-REQUIRED TEST NOW EXISTS: backend/tests/test_membership_firm_resolution_agreement.py (5 tests, landed with PR#243) is exactly the SS4 test the 2026-07-27 audit demanded -- it pins BOTH the deny-once-multi-tenant behavior and the unchanged single-tenant fallback for an unlinked user (read directly this session, docstring cites SEC-MEMBERSHIP-1). So the ENGINEERING half of this item is DONE. What remains is purely the owner-authored data-isolation STRATEGY DOCUMENT (Commercial Launch Prereq item 1/bs-1) -- a narrative clients read, not code. Effort downgraded M->S; risk 3->1 (the live scope-leak risk is closed in code, only the write-up remains)."
@@ -136,27 +144,30 @@ items:
   notes_url:
 
 - id: P3-8-SLICE23
-  title: "Build Phase 3.8 slices 2-3 -- is_draft reader gating + ACC sync endpoint"
+  title: "Merge Phase 3.8 slice 3 (ACC role sync); slice 2 still needs one owner ruling"
   projects: [bimpossible]
-  status: ready
+  status: blocked_external
   owner_gate: false
   unblocks: [OPS-LAUNCH]
   blocked_by: []
-  effort: M
+  effort: S
   risk: 2
   evidence:
+  - kind: pr
+    ref: "BIMpossible #275 OPEN DRAFT, head feat/phase38-draft-gating-and-acc-sync (807c5fe) -- slice 3 only: GET-only ACC Admin client, POST /data/acc/sync-roles behind require_firm_admin, flag-gated OFF via BIMPOSSIBLE_ACC_ROLE_SYNC_ENABLED"
   - kind: doc
-    ref: "BIMpossible_PHASE-STATUS.md Phase 3 sub-phase notes, Phase 3.8 row"
+    ref: "00_Strategy/design-docs/2026-08-06__phase-3-8-slices-2-3_build-plan.md (commit 25ea552) -- build plan plus the Outcome section recording what shipped and what did not"
   - kind: commit
     ref: "slice 1 migrations e6f7a8b9c0d1 (acc_* columns) + b1c2d3e4f5a6 (is_draft), per ledger text 'BUILT + shipped + applied to prod 2026-07-15'"
   verification:
-    level: claimed
-    by: "Slice 1 shipped per ledger text; not independently walked the Alembic revision graph to confirm these two revisions are ancestors of the current head. One open gating-rule design question remains per the ledger (draft user's owner-only PERSONAL views vs 'visible within my company'). This is checklist item 4 of Commercial Launch Prerequisites verbatim. Re-confirmed 2026-08-04: no delta touches it."
-    at: 2026-08-04
+    level: verified
+    by: "SLICE 3 BUILT, SLICE 2 DELIBERATELY NOT. Slice 3 is PR#275 at 807c5fe, verified across all three local lanes 2026-08-06 (35 new DB-lane tests, 16/8 new pure-lane). It ships dark: the router only mounts when BIMPOSSIBLE_ACC_ROLE_SYNC_ENABLED is set, so merging changes nothing in prod. Slice 2 (is_draft reader gating) was NOT built because the gating-rule question the ledger records is still unanswered -- does a draft user's PERSONAL view stay owner-only, or become visible within the company? Building either reading would harden a guess into code. The ACC Admin response field names could not be verified from Autodesk's reference pages (schemas render client-side), so the client tolerates several shapes. Merge is blocked only by the GitHub Actions major_outage of 2026-08-06 -- required checks cannot run on the protected main."
+    at: 2026-08-06
   live_check:
-  - "alembic history | grep e6f7a8b9c0d1|b1c2d3e4f5a6 to confirm both are ancestors of the working-tree head."
-  source: "BIMpossible_PHASE-STATUS.md Phase 3.8 note; BIMpossible_ProgramPlan_2026-05-25.md checklist item 4; memory project_phase38-scoping-paused"
-  notes_url: "00_Strategy/design-docs/phase-3-8-minimal-wedge_design-doc_2026-07-15.md"
+  - "gh pr view 275 --repo YourBIMpossible/BIMpossible --json state,mergedAt,isDraft"
+  - "curl -s https://www.githubstatus.com/api/v2/components.json | grep -A2 '\"name\": \"Actions\"'  # merge is gated on this returning operational"
+  source: "00_Strategy/design-docs/2026-08-06__phase-3-8-slices-2-3_build-plan.md; BIMpossible PR#275; BIMpossible_PHASE-STATUS.md Phase 3.8 note"
+  notes_url: "00_Strategy/design-docs/2026-08-06__phase-3-8-slices-2-3_build-plan.md"
 
 - id: OPS-DIST
   title: "Code-sign Add-Ins + ship a real installer, including the Open-in-Revit opener"
@@ -775,28 +786,31 @@ items:
   notes_url:
 
 - id: POST-268-FOLLOWUPS
-  title: "Land the three post-#268 tenancy follow-up PRs: #269 auth exemptions, #270 relay defer, #271 test-infra"
+  title: "Merge the three post-#268 follow-up PRs -- reviewed, three-lane green, awaiting checks"
   projects: [bimpossible]
-  status: ready
+  status: blocked_external
   owner_gate: false
   unblocks: [OPS-TENANCY-DOC]
   blocked_by: []
-  effort: M
+  effort: S
   risk: 2
   evidence:
   - kind: pr
-    ref: "BIMpossible #269 (draft, claude/auth-identity-exemptions), #270 (draft, claude/relay-formal-defer), #271 (draft, chore/test-infra-hygiene) -- all OPEN as of 2026-08-06"
+    ref: "BIMpossible #269 (draft, claude/auth-identity-exemptions, 011f959), #270 (draft, claude/relay-formal-defer, d4f8008), #271 (draft, chore/test-infra-hygiene, a631f9c) -- all OPEN as of 2026-08-06"
+  - kind: pr
+    ref: "BIMpossible #277 OPEN ready (claude/competent-kalam-977348) -- corrects the stale revoke_all_for_user comment at account_router.py:413 found during the #269 review"
   - kind: run
-    ref: "git show origin/main:backend/tests/test_route_tenancy_invariant.py -- exactly 6 routes still carry 'UNREVIEWED - triage needed': POST /auth/logout, POST /auth/pane/pair, POST /auth/pane/redeem, POST /auth/pane/revoke, GET /auth/status, GET /whoami. Down from the 108 reported on 2026-08-05."
+    ref: "Three-lane re-verification 2026-08-06: #269 = 3320/2211/4, #270 = 3307/2210/4, #271 = 3303/2217/4, all exit 0, no failures in any lane"
   - kind: doc
-    ref: "01_BuildLog/2026-08-06__post-268-followup-plan.md -- the plan these three PRs implement"
+    ref: "01_BuildLog/2026-08-06__post-268-followup-plan.md (Outcome section, commit 661a917) -- the plan these PRs implement plus the review findings"
   verification:
     level: verified
-    by: "The 108-route EXEMPT backlog is 94% burned down on main already (#267 removed all 16 /aps entries, #268 removed /revit, /search and the /auth role routes). The residual 6 are exactly what draft #269 addresses, counted directly out of the file on origin/main this session. Also carried here: the ownership gap the plan names at backend/auth_router.py:658 -- revoke_pane_session(body.token) takes no owner check, so a foreign-but-existing token is revocable; fix is an owner_autodesk_user_id parameter returning False. #270 records the relay option-3 defer plus the multi-firm startup tripwire; #271 is the docs-path lane fix and agent-gate charters. Unblocks OPS-TENANCY-DOC because that document cannot honestly describe the isolation surface while six routes are still labelled unreviewed."
+    by: "ALL THREE REVIEWED AND RE-VERIFIED, NONE MERGED. The review found two defects in the LOCAL CI HARNESS itself, both fixed on #271 and both of the house 'reports success, quietly did nothing' shape. First: Verify-Local-CI.ps1 ran its three pytest lanes under set -e, so the first red lane aborted the script and lanes 2 and 3 never ran -- and because the docs-path failure was a guaranteed lane-1 failure, the pure and assistant-contract lanes had not run locally at all for as long as it existed. Every earlier 'locally green' claim, including #269's and #270's original PR bodies, described one lane while appearing to describe three; both bodies now carry the real numbers. Fixed in 33c8f60. Second: #271's own docs-lint fix could PASS while checking nothing -- without BIMPOSSIBLE_REPO_ROOT the linter keeps REPO_ROOT at '/', lints exactly one file, and never collects the agent charters the PR says it lints. Fixed in a631f9c by asserting CLAUDE.md exists at the root. Merge is blocked only by the GitHub Actions major_outage of 2026-08-06. #270's checks show six simultaneous failures including gitleaks and semgrep, which is outage-shaped rather than real -- re-run them before reading anything into it."
     at: 2026-08-06
   live_check:
   - "gh pr list --repo YourBIMpossible/BIMpossible --state open --json number --jq '[.[]|select(.number>=269 and .number<=271)]|length'  # expect 0 when done"
-  source: "01_BuildLog/2026-08-06__post-268-followup-plan.md; gh pr list + origin/main file read 2026-08-06"
+  - "gh pr checks 270 --repo YourBIMpossible/BIMpossible  # re-run once Actions is operational; the 2026-08-06 failures were outage artifacts"
+  source: "01_BuildLog/2026-08-06__post-268-followup-plan.md Outcome section; gh pr list + three-lane runs 2026-08-06"
   notes_url:
 
 - id: ARCH-FIRM-ALIAS-BACKEND
@@ -851,28 +865,97 @@ items:
   notes_url:
 
 - id: WRITE-ENGINE-INC2
-  title: "Build Write Engine Increment 2 -- type-parameter targeting, String-only"
+  title: "Merge Write Engine Increment 2 -- both halves built, awaiting checks"
   projects: [bimpossible, addins]
-  status: ready
+  status: blocked_external
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: pr
+    ref: "BIMpossible #273 OPEN DRAFT, head feat/write-engine-increment2-typeparams (d0b472a) -- backend half: family-TYPE parameter targeting, String-only"
+  - kind: pr
+    ref: "BIMpossible-AddIns #54 OPEN DRAFT (3e4fcd4) -- add-in half: applies String edits to family type parameters"
+  - kind: doc
+    ref: "00_Strategy/design-docs/2026-08-06__write-engine-increment2_build-plan.md (commit 99290b1) -- build plan plus Outcome section"
+  - kind: log
+    ref: "01_BuildLog/2026-08-04__write-engine-increment1-live-smoke_RESULTS.md -- 8/8 PASS, the artifact that cleared the entry gate"
+  verification:
+    level: verified
+    by: "BOTH HALVES BUILT 2026-08-06, NEITHER MERGED. Backend is PR#273 at d0b472a, add-in is AddIns#54 at 3e4fcd4; the item stays here as ONE cross-repo row because it is not done until both land. Merge is blocked only by the GitHub Actions major_outage of 2026-08-06 -- required checks cannot run on the protected main, so nothing merged all session. Two owner decisions carried from Increment 1 are still open and the ledger marks both NON-BLOCKING: #1 (the staged unit is fetched-not-read -- add a veto guard?) and #3 (BuildSummary bucket-exhaustiveness is unenforced). Increment 3 follows; Increment 4 (ElementId) stays owner-ruled deliberately unimplemented. Ops preconditions from Increment 1 still apply: build from a branch 0-behind main in BOTH repos before any deploy; Deploy-Local.ps1 -RevitLinkOnly refuses when shared Core changed, so deploy the full ship set scoped -Year; after editing a migration's down_revision delete alembic/versions/__pycache__. unblocks stays empty deliberately -- no stored item waits on Increment 2; it is product depth, not a dependency."
+    at: 2026-08-06
+  live_check:
+  - "gh pr view 273 --repo YourBIMpossible/BIMpossible --json state,mergedAt,isDraft"
+  - "gh pr view 54 --repo YourBIMpossible/BIMpossible-AddIns --json state,mergedAt,isDraft"
+  source: "00_Strategy/design-docs/2026-08-06__write-engine-increment2_build-plan.md; BIMpossible PR#273; BIMpossible-AddIns PR#54; BIMpossible_PHASE-STATUS.md row 13.1"
+  notes_url: "00_Strategy/design-docs/2026-08-06__write-engine-increment2_build-plan.md"
+
+- id: SEC-ASSIST-FIRMVIEW
+  title: "Merge #278 -- scope the assistant briefing's firm-view count to the caller's firm"
+  projects: [bimpossible]
+  status: blocked_external
+  owner_gate: false
+  unblocks: [OPS-TENANCY-DOC]
+  blocked_by: []
+  effort: S
+  risk: 3
+  evidence:
+  - kind: pr
+    ref: "BIMpossible #278 OPEN, NON-DRAFT, head claude/vibrant-golick-7005b0 (4ec910a) -- filters the count on ctx.firm_id; firm_id is None fails closed and counts nothing"
+  - kind: doc
+    ref: "00_Strategy/design-docs/2026-08-06__phase-3-8-slices-2-3_build-plan.md (commit 6941a70) -- the CLOSED block recording the fix against the original finding"
+  verification:
+    level: verified
+    by: "Found in passing 2026-08-06 at aec/assistant_context.py:154: the briefing counted firm_views with no firm filter, leaking a cross-tenant count on a shared project. Fixed in #278 and RED-verified -- with the filter reverted all three DB tests report '3 firm'. One change went beyond the reported bug and is the part worth re-reading at merge: the 30-minute context cache key moved from (project, model, user) to (project, model, firm, user), because without the firm in the key a user whose active firm changed would keep being served the previous firm's count for the rest of the TTL, re-opening the same leak through the cache. invalidate_project_context only inspects k[0]/k[1], which kept their positions. Regression tests build two real synthetic firms on one shared project with a randomized project_id so the counts are exact. Merge blocked only by the GitHub Actions major_outage of 2026-08-06."
+    at: 2026-08-06
+  live_check:
+  - "gh pr view 278 --repo YourBIMpossible/BIMpossible --json state,mergedAt"
+  source: "BIMpossible PR#278; 00_Strategy/design-docs/2026-08-06__phase-3-8-slices-2-3_build-plan.md CLOSED block"
+  notes_url:
+
+- id: DOC-ALEMBIC-REFS-274
+  title: "Merge #274 -- fix three surviving database/alembic/versions doc references"
+  projects: [bimpossible]
+  status: blocked_external
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: "BIMpossible #274 OPEN DRAFT, head claude/fix-stale-alembic-doc-refs -- touches docs/ARCHITECTURE.md, docs/plans/TEMPLATE_BUILD_PLAN.md, docs/plans/active/phase-3-10a-cross-model-room-join.md"
+  verification:
+    level: claimed
+    by: "NOT INDEPENDENTLY REVIEWED -- another session's PR, and the only sources read were its title and its changed-file list. Same drift family as the CLAUDE.md alembic row: migrations live at backend/alembic/versions/, not database/alembic/versions/. Worth noting for whoever merges it: none of its three files are collected by the docs-path linter's globs (root CLAUDE.md, */CLAUDE.md, .claude/agents, .claude/skills, .claude/commands), so it does not overlap #271 and the two cannot conflict. It also does not clear the grandfathered 'database/migrations/' entry in that linter's KNOWN_EXTERNAL map, which is a separate reference in security-review-full.md."
+    at: 2026-08-06
+  live_check:
+  - "gh pr view 274 --repo YourBIMpossible/BIMpossible --json state,mergedAt,isDraft"
+  source: "gh pr view 274 title + file list, read 2026-08-06"
+  notes_url:
+
+- id: TEAMS-GATEWAY-W1
+  title: "Review and land #276 -- Microsoft Teams assistant gateway"
+  projects: [bimpossible]
+  status: blocked_external
   owner_gate: false
   unblocks: []
   blocked_by: []
   effort: M
-  risk: 2
+  risk: 3
   evidence:
-  - kind: doc
-    ref: "BIMpossible_PHASE-STATUS.md row 13.1 read 2026-08-06: 'Increment 2 (type-param targeting, String-only) gated on Increment 1's live smoke -- gate CLEARED 2026-08-04'"
-  - kind: log
-    ref: "01_BuildLog/2026-08-04__write-engine-increment1-live-smoke_RESULTS.md -- 8/8 PASS, the artifact that cleared the gate"
-  - kind: doc
-    ref: "2026-07-25__WriteEngine_TypedValues_and_TypeParams_DesignBrief_PROPOSAL.md sec.6 -- gated sequencing"
+  - kind: pr
+    ref: "BIMpossible #276 OPEN DRAFT, head claude/slack-work-teams-match-b4n00t -- opened 2026-08-06 by another session"
   verification:
-    level: verified
-    by: "ENTRY GATE CLEARED, NOTHING BUILT. Confirmed from the ledger row and the smoke log, both read directly this session. Two owner decisions from Increment 1 remain open and the ledger marks both NON-BLOCKING: #1 (the staged unit is fetched-not-read -- add a veto guard?) and #3 (BuildSummary bucket-exhaustiveness is unenforced). Decide them before or with Increment 2. Increment 3 follows; Increment 4 (ElementId) stays owner-ruled deliberately unimplemented. Ops preconditions learned in Increment 1 and worth repeating: build from a branch 0-behind main in BOTH repos before any deploy; Deploy-Local.ps1 -RevitLinkOnly refuses when shared Core changed, so deploy the full ship set scoped -Year; after editing a migration's down_revision delete alembic/versions/__pycache__. unblocks is empty deliberately -- no stored item waits on Increment 2; it is product depth, not a dependency."
+    level: claimed
+    by: "NOT REVIEWED AT ALL -- the only source read was the PR title. Recorded so an open PR representing real work does not sit outside the store, not because its state is known. It is presumably the Teams counterpart of SLACK-GATEWAY-W1, which is itself blocked on a missing firm-membership check needing a migration; whether #276 inherits that same gap is UNKNOWN and is the first thing to settle. Do not merge or enable any flag on the strength of this row. Probe that would settle it: read the diff for a require_active_membership dependency on every route it mounts."
     at: 2026-08-06
-  live_check: []
-  source: "BIMpossible_PHASE-STATUS.md row 13.1; design-docs/2026-07-26__write-engine-increment1_typed-values-instance_build-plan.md"
-  notes_url: "00_Strategy/design-docs/2026-07-26__write-engine-increment1_typed-values-instance_build-plan.md"
+  live_check:
+  - "gh pr view 276 --repo YourBIMpossible/BIMpossible --json state,mergedAt,isDraft"
+  source: "gh pr list, read 2026-08-06; no diff read"
+  notes_url:
 
 - id: PROVIDER-REGISTRY-272
   title: "Land PR#272 -- open the key registry to 9 providers, stop dropping unpriced models"
@@ -1084,3 +1167,26 @@ items:
   - "Test-Path 'F:\\AI-Dev\\BIMpossible\\_to_delete\\2026-08-05__client-data-quarantine' -- should be False once the owner deletes it"
   source: "decision-log/2026-08-05__client-data-remediation.md; memory project_client-data-remediation-2026-08-05"
   notes_url: "decision-log/2026-08-05__client-data-remediation.md"
+
+- id: DOC-DOCINDEX-DEFECTS-24
+  title: "docindex: code root drops silently in a worktree; sub-chunk line attribution duplicates results"
+  projects: [workspace]
+  status: ready
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: doc
+    ref: "tools/docindex/docindex.config.json:34 -- code root path '../BIMpossible' resolved relative to workspace_root()"
+  - kind: doc
+    ref: "tools/docindex/docindex.py:56 workspace_root / :66 resolve_roots -- optional root with required:false is skipped with no warning"
+  verification:
+    level: verified
+    by: "WANDER, found 2026-08-06 while evaluating PR #24 on a real Windows checkout -- reproduced and measured, deliberately NOT fixed, queued per closeout rules. DEFECT 1: workspace_root() is HERE.parent.parent, so from a worktree at .claude/worktrees/<lane> the sibling path '../BIMpossible' resolves to .claude/worktrees/BIMpossible, which does not exist; required:false makes it drop with no warning. Measured cost: 760 docs indexed instead of 845, and tools/docindex/test_docindex.py goes 58/59 -- test_the_live_ledgers_are_indexed_as_canonical fails looking for the code repo's root CLAUDE.md. Setting BIMPOSSIBLE_REPO=F:\\AI-Dev\\BIMpossible restores 845 docs and 59/59, which is what proves the diagnosis. This matters because WORKFLOW.md mandates worktrees for parallel sessions, so the sanctioned workflow is the broken one. Proposed fix: strip a trailing .claude/worktrees/<lane> from the base before resolving sibling roots -- fixes every lane at once, needs no env var, and keeps the Linux container clone working. DEFECT 2: when a section exceeds chunk.max_chars its sub-chunks all inherit the whole section's line span, so three chunks of the code repo's CLAUDE.md each carry line_start 84 / line_end 132 with different token lengths (165/308/127) and the renderer re-reads the same lines for each; on the query 'how do I add a firm parameter alias' that burns results 1-3 on one visually identical chunk and pushes the purpose-built canonical HOWTO 02_Reference/HOWTO/add-a-firm-parameter.md from rank 2 down to rank 5. NEITHER defect is a tier/config issue -- both are code, which contradicts the branch author's expectation that bad ranking is almost always a tier edit."
+    at: '2026-08-06'
+  live_check:
+  - "python tools\\docindex\\docsearch.py --stats  from a worktree -- 'by root' must list BOTH workspace and code, not workspace alone"
+  source: "session 2026-08-06 evaluating PR #24 (branch claude/documentation-rag-setup-17m33i)"
+  notes_url: "https://github.com/YourBIMpossible/BIMpossible_Workspace/pull/24"

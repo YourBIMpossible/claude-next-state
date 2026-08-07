@@ -6,7 +6,7 @@ Generated 2026-08-06 (synced). Ranked by critical path (transitive `unblocks` co
 owner-gated+S effort, then effort, then risk, then id. Full algorithm:
 `~/.claude/skills/next/reference/item-model.md`.
 
-Scope: `all`. Watermarks: `bimpossible` = 2026-08-06 @ `a2ea120` PR#272 · `addins` = 2026-08-06 @ `7bdfa68` PR#53 · `workspace` = 2026-08-06 @ `0f2ce8e` PR#18. (ai-server/dashboard/families/pc-monitor:
+Scope: `all`. Watermarks: `bimpossible` = 2026-08-06 @ `a2ea120` PR#278 · `addins` = 2026-08-06 @ `7bdfa68` PR#53 · `workspace` = 2026-08-06 @ `6941a70` PR#19. (ai-server/dashboard/families/pc-monitor:
 no items yet — run `init` to derive.)
 
 ## Blocked on you
@@ -25,6 +25,9 @@ no items yet — run `init` to derive.)
 
 [P7-SYNC-GOLIVE] Supervised owner flag-flip: go-live Revit Link sync re-enable (Phase 7 step 2)
        unblocks 0 · S · bimpossible+addins · CLAIMED 2026-08-04 · BIMpossible#187 (2936c32f) + AddIns#11 (be4d6a8f), lockstep,
+
+[OPS-CLIENTDATA-REMEDIATION] Client-data remediation: quarantine delete, PDF triage, de-ID pass, DB audit
+       unblocks 0 · S · bimpossible · CLAIMED 2026-08-05 · decision-log/2026-08-05__client-data-remediation.md -- Open 
 
 [OPS-LOCAL-SIGNIN-AUTHLOOP] Local sign-in auth-loops, so no signed-in UI can be visually verified before it ships
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-06 · 01_BuildLog/2026-08-05__product-risk-assessment.md -- the lo
@@ -54,12 +57,6 @@ no items yet — run `init` to derive.)
 
 ## Next up
 
-[POST-268-FOLLOWUPS] Land the three post-#268 tenancy follow-up PRs: #269 auth exemptions, #270 relay defer, #271 test-infra
-       unblocks 2 · M · bimpossible · VERIFIED 2026-08-06 · BIMpossible #269 (draft, claude/auth-identity-exemptions), #
-
-[P3-8-SLICE23] Build Phase 3.8 slices 2-3 -- is_draft reader gating + ACC sync endpoint
-       unblocks 1 · M · bimpossible · CLAIMED 2026-08-04 · BIMpossible_PHASE-STATUS.md Phase 3 sub-phase notes, Phase 3
-
 [OPS-DIST] Code-sign Add-Ins + ship a real installer, including the Open-in-Revit opener
        unblocks 1 · L · bimpossible+addins · CLAIMED 2026-08-04 · BIMpossible_PHASE-STATUS.md §Open-in-Revit; BIMpossible_Prod
 
@@ -69,20 +66,20 @@ no items yet — run `init` to derive.)
 [ADDINS-SLOT-LEDGER] Runtime-slot handoff ledger is stale: deploys are landing without a ledger entry
        unblocks 0 · S · addins · VERIFIED 2026-08-06 · Add-Ins decision-log/2026-07-25__runtime-slot-handoff.md -- 
 
+[DOC-DOCINDEX-DEFECTS-24] docindex: code root drops silently in a worktree; sub-chunk line attribution duplicates results
+       unblocks 0 · S · workspace · VERIFIED 2026-08-06 · tools/docindex/docindex.config.json:34 -- code root path '..
+
 [PROVIDER-REGISTRY-272] Land PR#272 -- open the key registry to 9 providers, stop dropping unpriced models
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-06 · BIMpossible #272 OPEN, NON-DRAFT, head feat/provider-open-re
 
 [ADDINS-HYGIENE] Add-Ins hygiene: finish Glass rollout (conformance-PR dedup DONE 2026-08-04)
-       unblocks 0 · M · addins · VERIFIED 2026-08-06 · #10 MERGED (main 94b21ab), #43 CLOSED, #31 = deliberate Plan-3 park
+       unblocks 0 · M · addins · VERIFIED 2026-08-06 · Add-Ins #10 MERGED 2026-08-04 (squash, main 94b21ab -- Plans
 
 [ARCH-BIMP-PARAMSET] Define the BIMP_ shared-parameter set and give DeliverableParameterInstaller its first caller
        unblocks 0 · M · addins · CLAIMED 2026-08-06 · Conformance/DeliverableParameterInstaller.cs -- already crea
 
 [P7-REVITLINK-MULTIUSER] Scale RevitLink to multi-user (RE-1 defect now fixed; RE-2 capacity limit remains)
        unblocks 0 · M · bimpossible+addins · VERIFIED 2026-08-04 · Verification Checklist item RL_P0_10 (single-pipe/single-sec
-
-[WRITE-ENGINE-INC2] Build Write Engine Increment 2 -- type-parameter targeting, String-only
-       unblocks 0 · M · bimpossible+addins · VERIFIED 2026-08-06 · BIMpossible_PHASE-STATUS.md row 13.1 read 2026-08-06: 'Incre
 
 [P3-6-SPATIAL] Build Phase 3.6 Spatial Relationship Engine v1 (architecturally unblocked)
        unblocks 0 · M · bimpossible · CLAIMED 2026-08-04 · BIMpossible_PHASE-STATUS.md Phase 3 sub-phase notes, Phase 3
@@ -92,6 +89,24 @@ no items yet — run `init` to derive.)
 
 ## Blocked elsewhere
 
+[SEC-ASSIST-FIRMVIEW] Merge #278 -- scope the assistant briefing's firm-view count to the caller's firm
+       unblocks 2 · S · bimpossible · VERIFIED 2026-08-06 · BIMpossible #278 OPEN, NON-DRAFT, head claude/vibrant-golick
+
+[POST-268-FOLLOWUPS] Merge the three post-#268 follow-up PRs -- reviewed, three-lane green, awaiting checks
+       unblocks 2 · S · bimpossible · VERIFIED 2026-08-06 · BIMpossible #269 (draft, claude/auth-identity-exemptions, 01
+
+[P3-8-SLICE23] Merge Phase 3.8 slice 3 (ACC role sync); slice 2 still needs one owner ruling
+       unblocks 1 · S · bimpossible · VERIFIED 2026-08-06 · BIMpossible #275 OPEN DRAFT, head feat/phase38-draft-gating-
+
+[WRITE-ENGINE-INC2] Merge Write Engine Increment 2 -- both halves built, awaiting checks
+       unblocks 0 · S · bimpossible+addins · VERIFIED 2026-08-06 · BIMpossible #273 OPEN DRAFT, head feat/write-engine-incremen
+
+[DOC-ALEMBIC-REFS-274] Merge #274 -- fix three surviving database/alembic/versions doc references
+       unblocks 0 · S · bimpossible · CLAIMED 2026-08-06 · BIMpossible #274 OPEN DRAFT, head claude/fix-stale-alembic-d
+
+[TEAMS-GATEWAY-W1] Review and land #276 -- Microsoft Teams assistant gateway
+       unblocks 0 · M · bimpossible · CLAIMED 2026-08-06 · BIMpossible #276 OPEN DRAFT, head claude/slack-work-teams-ma
+
 [OPS-LAUNCH] Clear the Commercial Launch Prerequisites checklist before first external deployment
        unblocks 0 · L · bimpossible · CLAIMED 2026-08-04 · BIMpossible_ProgramPlan_2026-05-25.md §Commercial Launch Pre
 
@@ -99,6 +114,9 @@ no items yet — run `init` to derive.)
 
 [OPS-REDIS-P5] Flip WEB_CONCURRENCY>1 with redis leader-lock (Wave C-1 Phase 5)
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-04 · docker/REDIS-CUTOVER.md §Next -- confirmed exists on origin/
+
+[SEC-AUDIT-HASHCHAIN] Tamper-evident hash-chain for audit tables -- deferred, gated on trigger
+       unblocks 0 · M · bimpossible · CLAIMED 2026-08-06 · 00_Strategy/2026-08-06__Multi-Tenant_Data-Isolation_Strategy
 
 [FEAT-REVIT-DOOR-PLACEMENT] Explore capturing door placement Revit-side (FamilyInstance.Host + panel transforms) so curtain-panel doors can join to rooms
        unblocks 0 · L · bimpossible+addins · CLAIMED 2026-08-05 · decision-log/2026-08-05__door-origin-gap-curtain-panel.md --
