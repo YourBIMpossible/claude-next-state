@@ -872,7 +872,7 @@ items:
   notes_url: "02_Reference/2026-08-04__SL-Parameter-Coupling-MAP.md"
 
 - id: ARCH-BIMP-PARAMSET
-  title: "Define the BIMP_ shared-parameter set and give DeliverableParameterInstaller its first caller"
+  title: "Activate the BIMP_ shared-parameter set END TO END -- define the set, then wire BOTH the writer (installer) and the reader to real entry points"
   projects: [addins]
   status: ready
   owner_gate: true
@@ -882,14 +882,20 @@ items:
   risk: 2
   evidence:
   - kind: code
-    ref: "Conformance/DeliverableParameterInstaller.cs -- already creates a GUID-based BIMP_IsDeliverable and binds it via BindingMap/GroupTypeId.IdentityData, with ZERO callers"
+    ref: "WRITER, dormant: BIMpossible.RevitLink/Conformance/DeliverableParameterInstaller.cs:10 -- internal static class, EnsureInstalled at :14; GUID-first lookup :16, opt.GUID :26, BindingMap doc.ParameterBindings :32, Insert/ReInsert on GroupTypeId.IdentityData :42-43. Contract at DeliverableParameterDefinition.cs:13-14 -- BIMP_IsDeliverable, GUID 6F1B6E9C-6E43-4C0B-9A0B-2E6C7B7D9C41, Yes/No, InstanceBinding on OST_Views."
+  - kind: code
+    ref: "READER, also dormant (found 2026-08-07): ViewExtractor.cs:24 reads the parameter by GUID -> SnapshotBuilder.cs:36 -> Commands/ConformanceDiagnosticCommand.cs:20, an IExternalCommand with NO PushButtonData in App.cs and NO Type=Command entry in any .addin. So the consumer is unreachable at runtime too -- wiring only the installer would install a parameter that nothing reads."
   - kind: doc
     ref: "02_Reference/2026-08-04__SL-Parameter-Coupling-MAP.md -- step 3 of the neutrality stack, never executed"
+  - kind: doc
+    ref: "Owner scoping decision 2026-08-07: this item is UNDER-SCOPED, not stale. Required scope = (a) decide which parameters belong in the BIMP_ set; (b) add an intentional runtime entry point that invokes DeliverableParameterInstaller.EnsureInstalled; (c) add or expose an intentional runtime entry point for the read side (ConformanceDiagnosticCommand / ViewExtractor) so the GUID-backed parameter is actually consumed; (d) decide WHERE those entry points belong -- ribbon button, .addin Type=Command entry, startup IExternalApplication, or another explicit user workflow -- and test the installed-to-read path; (e) preserve GUID-first lookup and the current binding semantics unless the feature's requirements force a deliberate migration. Writer and reader activate together or not at all."
   verification:
-    level: claimed
-    by: "SPLIT OUT of ARCH-FIRM-PARAM-NEUTRALITY on 2026-08-06 -- step 3, untouched by any commit in either delta. Machinery mostly exists: the installer already creates and binds a BIMP_ parameter, so the work is deciding WHICH parameters belong in the set, not building the binder. owner_gate true because the parameter set is a product-schema decision with downstream deliverable consequences, and because it is the point where firm-neutrality stops being a refactor and starts being a published contract. unblocks is empty and that is deliberate: nothing else in the store waits on it, and the backend alias layer already delivers the neutrality the launch checklist cares about. Not independently probed against the real SPF this session."
-    at: 2026-08-06
-  live_check: []
+    level: verified
+    by: "SPLIT OUT of ARCH-FIRM-PARAM-NEUTRALITY on 2026-08-06 -- step 3, untouched by any commit in either delta. NOT-STARTED PREMISE MACHINE-VERIFIED 2026-08-07 on AddIns main@38c2a2d, and it holds harder than written: symbol search across every tracked file finds DeliverableParameterInstaller and EnsureInstalled ONLY at their own declarations; the repo contains ZERO reflection (no Activator.CreateInstance / Type.GetType / Assembly.Load / GetMethod / MethodInfo / InvokeMember / BindingFlags in any .cs); all 8 .addin manifests carry only Type=Application entries naming <Discipline>.App; there is no InternalsVisibleTo anywhere and no Conformance/* file is source-linked into any *.Tests.csproj, so the internal class is invisible outside the RevitLink assembly; no .csproj ProjectReferences RevitLink.csproj; and no <Compile Remove> excludes it, so it is dead-but-compiled rather than an excluded file. Machinery exists, so the work is a product-schema decision plus two entry points -- not building a binder. owner_gate true because the parameter set is a product-schema decision with downstream deliverable consequences, and because it is the point where firm-neutrality stops being a refactor and starts being a published contract. unblocks is empty and that is deliberate: nothing else in the store waits on it, and the backend alias layer already delivers the neutrality the launch checklist cares about. STILL UNPROBED: which parameters belong in the set (an unmade owner decision), and the behaviour against the real SPF -- EnsureInstalled silently returns at :21 when spf is null, so a wrong or missing SPF path is a no-op with no user-visible signal."
+    at: 2026-08-07
+  live_check:
+  - 'cd F:/AI-Dev/Add-Ins; git grep -nE "DeliverableParameterInstaller|EnsureInstalled" -- "*.cs"   # expect ONLY the two declarations in Conformance/DeliverableParameterInstaller.cs -- a third hit means the WRITER side got wired'
+  - 'cd F:/AI-Dev/Add-Ins; git grep -n "ConformanceDiagnostic" -- "*.cs"; git grep -n "Type=" -- "*.addin"   # expect the class declaration only, and Application-type manifest entries only -- a PushButtonData or a Type=Command entry means the READER side got wired'
   source: "02_Reference/2026-08-04__SL-Parameter-Coupling-MAP.md; ARCH-FIRM-PARAM-NEUTRALITY split 2026-08-06"
   notes_url:
 

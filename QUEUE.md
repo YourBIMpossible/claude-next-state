@@ -128,8 +128,8 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-07 @ `e1a793f` PR#293 · `addi
 [ADDINS-HYGIENE] Add-Ins hygiene: finish Glass rollout (conformance-PR dedup DONE 2026-08-04)
        unblocks 0 · M · addins · VERIFIED 2026-08-06 · Add-Ins #10 MERGED 2026-08-04 (squash, main 94b21ab -- Plans
 
-[ARCH-BIMP-PARAMSET] Define the BIMP_ shared-parameter set and give DeliverableParameterInstaller its first caller
-       unblocks 0 · M · addins · CLAIMED 2026-08-06 · Conformance/DeliverableParameterInstaller.cs -- already crea
+[ARCH-BIMP-PARAMSET] Activate the BIMP_ shared-parameter set END TO END -- define the set, then wire BOTH the writer (installer) and the reader to real entry points
+       unblocks 0 · M · addins · VERIFIED 2026-08-07 · WRITER, dormant: BIMpossible.RevitLink/Conformance/Deliverab
 
 [P7-REVITLINK-MULTIUSER] Scale RevitLink to multi-user (RE-1 defect now fixed; RE-2 capacity limit remains)
        unblocks 0 · M · bimpossible+addins · VERIFIED 2026-08-04 · Verification Checklist item RL_P0_10 (single-pipe/single-sec
