@@ -956,9 +956,9 @@ items:
   notes_url: "https://github.com/YourBIMpossible/BIMpossible/pull/287"
 
 - id: SEC-GROUPS-PERSONAL-LISTING
-  title: "Investigate list_groups personal-group query for missing firm_id scope"
+  title: "list_groups personal-group cross-firm leak -- CONFIRMED and LANDED via PR #290 (independent parallel session won the race; see verification.by)"
   projects: [bimpossible]
-  status: in_flight
+  status: landed
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -966,19 +966,95 @@ items:
   risk: 4
   evidence:
   - kind: code
-    ref: "backend/aec/groups.py:318-329 (list_groups, personal query) filters NamedDeliverable.owner_user_id == user_uuid, project_id, kind=='group', scope=='personal', archived_at.is_(None) -- no firm_id filter. Every sibling group operation in the same file firm-scopes, personal included: create_group sets firm_id=firm_id on every row regardless of scope; update_group's `if group.firm_id != firm_id: raise 403` is unconditional (not scope-gated); delete_group has the identical check; the firm-groups query 14 lines below the personal one filters on firm_id. The omission is isolated to this one read query."
+    ref: "backend/aec/groups.py:318-329 (list_groups, personal query) filtered NamedDeliverable.owner_user_id == user_uuid, project_id, kind=='group', scope=='personal', archived_at.is_(None) -- no firm_id filter. Every sibling group operation in the same file firm-scopes, personal included: create_group sets firm_id=firm_id on every row regardless of scope; update_group's `if group.firm_id != firm_id: raise 403` is unconditional (not scope-gated); delete_group has the identical check; the firm-groups query 14 lines below the personal one filters on firm_id. The omission was isolated to this one read query."
   - kind: doc
-    ref: "backend/aec/membership.py UserFirmMembership: composite UniqueConstraint(user_id, firm_id) allows multiple firm rows per user; partial unique index ufm_one_active_per_user (status='active') allows only one ACTIVE at a time -- sequential firm-switching (revoke + new activate) is a real, already-defended-against scenario per SEC-ASSIST-FIRMVIEW's cache-key fix ('a user whose active firm changed'), not simultaneous dual-membership."
-  - kind: doc
-    ref: "backend/guard.py assert_project_allowed is a GLOBAL ALLOWED_PROJECT_IDS check (matches CLAUDE.md's explicit warning that it is a deployment rail, not a tenancy mechanism), and list_groups/create_group/update_group/delete_group call no APS-hub-isolation gate (require_project_in_firm_hub) -- project_id is not tied to the caller's active firm on this route at all, which is what makes the same project_id reachable under any firm the same user is later active in."
+    ref: "backend/aec/membership.py UserFirmMembership: composite UniqueConstraint(user_id, firm_id) allows multiple firm rows per user; partial unique index ufm_one_active_per_user (status='active') allows only one ACTIVE at a time. TWO independently-discovered, both-real mechanisms produce 'the same owner_user_id, different active firm_id over time': (a) sequential revoke-then-activate firm switching (this session's repro), and (b) admin_router.py PATCH /admin/memberships/{id} action='reassign', which mutates an EXISTING membership row's firm_id in place (PR #290's repro, a distinct and arguably more directly-reachable path since it needs no revoke/reactivate cycle at all)."
+  - kind: code
+    ref: "LANDED FIX (not this session's branch): PR #290 'sec(groups): scope list_groups personal query to the caller's firm', squash merge commit 3ca2cef044aec9dfddc5909382cedfa2ef0fa0ee, merged 2026-08-07T05:55:56Z. Single added filter clause NamedDeliverable.firm_id == firm_id in list_groups' personal query -- functionally byte-for-byte the same fix this session independently wrote and validated on its own branch (fix/groups-personal-listing-firm-scope, never pushed -- see verification.by)."
+  - kind: test
+    ref: "PR #290's merged test file backend/tests/test_groups_personal_listing_firm_scope.py (2 tests: test_personal_group_from_prior_firm_is_not_listed_after_reassign, test_own_firm_personal_group_still_lists_normally) covers the admin-reassign mechanism. This session's independently-written 3-test file (same path, never committed/pushed, discarded after confirming redundancy) additionally covered a third control -- a genuinely different user who was never a Firm A member cannot see Firm A's personal group -- but that assertion pins pre-existing owner_user_id protection, not the new firm_id fix itself (it passes identically before and after either fix), so its loss is not a coverage gap on the actual defect."
+  - kind: run
+    ref: "This session's local CI (Verify-Local-CI.ps1 -SkipFrontend, run against this session's own now-discarded fix+test before discovering PR #290): all 3 lanes green -- 3416 passed/80 skipped (DB), 2257 passed/236 skipped (pure), 4 passed (assistant contract), zero failures, test_route_tenancy_invariant.py unweakened. Confirms the fix shape is safe and non-regressing, independent of PR #290's own CI run."
   verification:
     level: claimed
-    by: "Phase 0/1 recon 2026-08-07 following up the flagged-not-fixed note on SEC-GROUPS-DELIVERABLE-FIRM (spawn_task task_ea517810 from that session, never independently claimed in this store until now). No open PR, branch, or other queue entry found touching this -- confirmed via git branch -a, gh pr list --state open, and a full-file grep of this store for list_groups/owner_user_id/personal.group before adding this entry. Contract established by reading groups.py, membership.py, identity.py, guard.py, and existing test fixtures: test_dynamic_firm_isolation.py's two_firms is the nearest pattern but uses two DIFFERENT users, one firm each -- no existing fixture covers one user active in two firms sequentially, so Phase 2 needs a new one. Investigating on fix/groups-personal-listing-firm-scope (branched from origin/main post-#287/#285); reproduction test not yet run as of this entry."
+    by: "Phase 0/1 recon 2026-08-07 following up the flagged-not-fixed note on SEC-GROUPS-DELIVERABLE-FIRM (spawn_task task_ea517810 from that session, never independently claimed in this store until now). At claim time: no open PR, branch, or other queue entry found touching this -- confirmed via git branch -a, gh pr list --state open, and a full-file grep of this store for list_groups/owner_user_id/personal.group. PHASE 2 REPRODUCED 2026-08-07 on this session's own branch: hypothesis confirmed, not a false alarm. PHASE 2 FIX APPLIED (this session's branch): firm_id filter added to the personal query, all new + adjacent-suite tests green. PHASE 3 (equivalent-path review) COMPLETE 2026-08-07 -- grepped owner_user_id == across backend/ and classified every production hit; see the 3 sibling entries below (SEC-VIEWS-PERSONAL-LISTING, SEC-ASSIST-TOOLS-PERSONAL-VIEWS, SEC-ASSIST-PERSONAL-VIEWCOUNT), still open/unclaimed as of this update -- and backend/aec/conversation_store.py, classified explicitly-safe-global via the model's own pre-existing docstring, not this bug class. PHASE 4 COLLISION DISCOVERED 2026-08-07, ~06:0x UTC: immediately before committing (local CI already green, diff review complete), a routine re-fetch of origin/main per this mandate's own 'must not assume any previously reported SHA remains current' instruction surfaced PR #290 (branch claude/groups-personal-listing-firm-scope, squash commit 3ca2cef), merged 2026-08-07T05:55:56Z -- i.e. a separate, parallel session independently investigated and landed the IDENTICAL production fix while this session was mid-Phase-4 local-CI validation. Confirmed via full diff/message comparison: same file, same single-line filter addition, same test file path, different (but equally valid) repro mechanism, no scope overlap issue -- a genuine, disclosed race between two autonomous sessions working the same hypothesis, not a process failure by either. Per this mandate's Phase 0 instruction ('if another session already owns it, do not duplicate -- only contribute on a safe non-overlapping gap and stop'), this session's own redundant branch was NOT pushed and NOT opened as a PR; its uncommitted local changes (groups.py modification + test file) were discarded and the worktree reset to match the now-current origin/main, which already contains the fix. No safe non-overlapping gap existed in this specific hypothesis's scope (the one extra control test this session wrote does not pin the new fix, only pre-existing unrelated protection) -- the 3 Phase-3 sibling findings remain the genuine non-overlapping contribution and stay queued separately, unaffected by this collision."
     at: 2026-08-07
   live_check:
-  - "git log origin/main --oneline | grep -i 'groups-personal-listing'"
-  - "gh pr list --search 'list_groups OR personal group firm' --state all"
-  source: "Session follow-up to SEC-GROUPS-DELIVERABLE-FIRM; flagged 2026-08-07, claimed 2026-08-07"
+  - "git log origin/main --oneline | grep 3ca2cef"
+  - "gh pr view 290 --json state,mergedAt,mergeCommit"
+  source: "Session follow-up to SEC-GROUPS-DELIVERABLE-FIRM; flagged 2026-08-07, claimed 2026-08-07, reproduced independently 2026-08-07, landed by a parallel session via PR #290 2026-08-07 -- collision discovered and reconciled same day"
+  notes_url: "https://github.com/YourBIMpossible/BIMpossible/pull/290"
+
+- id: SEC-VIEWS-PERSONAL-LISTING
+  title: "list_views' personal-views query has the same missing-firm_id gap as the fixed list_groups bug"
+  projects: [bimpossible]
+  status: ready
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 4
+  evidence:
+  - kind: code
+    ref: "backend/aec/views.py:207-218 (list_views, GET /data/views) -- personal query filters SavedView.owner_user_id == user_uuid, project_id, category_key, scope=='personal', archived_at.is_(None); no firm_id filter. The firm query 13 lines below (views.py:220-231) does filter on SavedView.firm_id == firm_id -- identical split to the just-fixed list_groups bug. SavedView is a local alias for the same named_deliverables table NamedDeliverable maps (confirmed by the _get_active_view comment at views.py:141-143: 'SavedView aliases the shared named_deliverables table'), so this is the literal same underlying data-leak mechanism, one call site over."
+  - kind: code
+    ref: "Response returns full rows -- 'personalViews': [_view_to_dict(v) for v in personal] -- not a count, so this is at least as severe as the fixed groups.py bug (full name + definition per leaked view, potentially many)."
+  - kind: fix
+    ref: "Sibling fix for the identical pattern in the same table: backend/aec/groups.py list_groups personal query, fixed by adding NamedDeliverable.firm_id == firm_id (branch fix/groups-personal-listing-firm-scope, see SEC-GROUPS-PERSONAL-LISTING). Not applied here -- different route/function (list_views vs list_groups), out of scope for that PR per its mandate's same-code-path restriction."
+  verification:
+    level: claimed
+    by: "Surfaced 2026-08-07 during the SEC-GROUPS-PERSONAL-LISTING investigation's Phase 3 equivalent-path review (grep for owner_user_id == across backend/). NOT reproduced with a test yet -- classified by code reading only (same reachability shape: require_active_membership supplies firm_id, assert_project_allowed is a global not firm-scoped allowlist per CLAUDE.md, so the same project_id is reachable under any firm the caller is later active in). Given how structurally identical this is to the just-confirmed list_groups defect, treat reproduction as highly likely to succeed, not merely speculative -- but it has not actually been run, so this stays 'claimed' until someone does. Next step: adapt test_groups_personal_listing_firm_scope.py's second_firm_membership/_switch_active_firm fixtures (they are generic, not groups-specific) to GET /data/views, add the firm_id filter to the personal query at views.py:210, run the sibling views test suites for no-regression, then handle via its own dedicated branch/PR per the same fail-closed discipline as the groups fix -- must NOT be folded into the groups PR or fixed silently in passing."
+    at: 2026-08-07
+  live_check:
+  - "git log origin/main --oneline | grep -i 'views-personal-listing'"
+  - "gh pr list --search 'list_views personal firm' --state all"
+  source: "Phase 3 equivalent-path review of SEC-GROUPS-PERSONAL-LISTING, 2026-08-07"
+  notes_url:
+
+- id: SEC-ASSIST-TOOLS-PERSONAL-VIEWS
+  title: "Assistant's _visible_saved_view_clause personal branch has no firm_id scope -- feeds tool_list_saved_views + tool_describe_saved_view"
+  projects: [bimpossible]
+  status: ready
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 4
+  evidence:
+  - kind: code
+    ref: "backend/aec/assistant_tools.py:295-309 _visible_saved_view_clause: firm branch is and_(SavedView.scope=='firm', SavedView.firm_id==ctx.firm_id) (correctly scoped); personal branch is and_(SavedView.scope=='personal', SavedView.owner_user_id==ctx.owner_user_id) -- no firm_id term. Feeds tool_list_saved_views (id/name/scope/category/isDefault per matching row) and tool_describe_saved_view (full _view_to_dict definition) -- both assistant-invoked tools, both reachable whenever the assistant is asked to list or describe saved views."
+  - kind: doc
+    ref: "This exact function is what SEC-ASSIST-FIRMVIEW's already-merged fix (PR#278, commit 5190a4a, backend/aec/assistant_context.py) cited as the reference for correct behavior: 'ctx.firm_id -- the same identity... the assistant's read tools already scope on via _visible_saved_view_clause'. That statement is only true of the FIRM branch of this function; the PERSONAL branch it sits beside has the identical unscoped-personal-query gap being tracked across this whole investigation (SEC-GROUPS-PERSONAL-LISTING, SEC-VIEWS-PERSONAL-LISTING, SEC-ASSIST-PERSONAL-VIEWCOUNT)."
+  verification:
+    level: claimed
+    by: "Surfaced 2026-08-07 during the SEC-GROUPS-PERSONAL-LISTING investigation's Phase 3 equivalent-path review. Not reproduced -- ctx.owner_user_id/ctx.firm_id construction (aec/assistant.py:608-622 per the assistant_context.py comment) was not traced end to end to confirm ctx.owner_user_id can genuinely carry a stale-firm personal view into a later firm context via the assistant tool path specifically (as opposed to the REST path already proven for groups). Classified by code reading only, same reachability shape as the other three findings in this family. Needs its own reproduction (likely via the assistant tool-calling test harness, not the REST test client used for the other three) before any fix is written."
+    at: 2026-08-07
+  live_check:
+  - "git log origin/main --oneline | grep -i 'assist.*saved.*view\\|visible-saved-view'"
+  source: "Phase 3 equivalent-path review of SEC-GROUPS-PERSONAL-LISTING, 2026-08-07"
+  notes_url:
+
+- id: SEC-ASSIST-PERSONAL-VIEWCOUNT
+  title: "Assistant briefing's personal_views count is the unfixed half of the SEC-ASSIST-FIRMVIEW function"
+  projects: [bimpossible]
+  status: ready
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 3
+  evidence:
+  - kind: code
+    ref: "backend/aec/assistant_context.py:172-178 (_assemble_project_context) -- personal_views = db.query(NamedDeliverable).filter(project_id, scope=='personal', owner_user_id==owner_user_id, kind=='generic_view', archived_at.is_(None)).count(). No firm_id filter. 16 lines above it, firm_views (same function) was just fixed by PR#278/commit 5190a4a to filter on ctx.firm_id -- that diff touched ONLY the firm_views block; personal_views is untouched, still the pre-fix shape."
+  - kind: doc
+    ref: "PR#278's own commit message reasoned 'the personal_views query right below it already scoped by owner_user_id, so the omission [on firm_views] looks accidental' -- true that owner_user_id scoping exists, but (per the whole SEC-GROUPS-PERSONAL-LISTING investigation) owner_user_id alone does not prevent the same user's stale-firm rows from counting after a later active-firm switch. The fix's own justifying comparison is the thing that turned out to be incomplete."
+  verification:
+    level: claimed
+    by: "Surfaced 2026-08-07 during the SEC-GROUPS-PERSONAL-LISTING investigation's Phase 3 equivalent-path review. Lower severity than the other two siblings in this family (SEC-VIEWS-PERSONAL-LISTING, SEC-ASSIST-TOOLS-PERSONAL-VIEWS) -- this leaks a COUNT only (personal_views: N in the assistant's project briefing text), not row data, matching SEC-ASSIST-FIRMVIEW's own pre-fix severity. Not reproduced -- classified by code reading only. Fix shape would mirror #278's own firm_views change almost exactly: add NamedDeliverable.firm_id == ctx.firm_id to the personal_views filter (owner_user_id already narrows to the caller, firm_id would close the stale-firm-switch gap); the (project, model, firm, user) cache key #278 already introduced likely needs no further change since firm is already part of it."
+    at: 2026-08-07
+  live_check:
+  - "git log origin/main --oneline | grep -i 'assist.*personal.*view\\|personal-viewcount'"
+  source: "Phase 3 equivalent-path review of SEC-GROUPS-PERSONAL-LISTING, 2026-08-07"
   notes_url:
 
 - id: DOC-ALEMBIC-REFS-274
