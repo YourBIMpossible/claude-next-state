@@ -23,9 +23,6 @@ no items yet — run `init` to derive.)
 [P3-8-SLICE23] Merge Phase 3.8 slice 3 (ACC role sync); slice 2 still needs one owner ruling
        unblocks 1 · S · bimpossible · VERIFIED 2026-08-06 · BIMpossible #275 OPEN DRAFT, head feat/phase38-draft-gating-
 
-[OPS-TENANCY-DOC] Write the multi-tenant data-isolation strategy doc (audit's required TEST already shipped in PR#243)
-       unblocks 1 · S · bimpossible · VERIFIED 2026-08-06 · BIMpossible_ProgramPlan_2026-05-25.md, Commercial Launch Pre
-
 [P7-SYNC-GOLIVE] Supervised owner flag-flip: go-live Revit Link sync re-enable (Phase 7 step 2)
        unblocks 0 · S · bimpossible+addins · CLAIMED 2026-08-04 · BIMpossible#187 (2936c32f) + AddIns#11 (be4d6a8f), lockstep,
 
@@ -51,6 +48,9 @@ no items yet — run `init` to derive.)
 
 [OPS-RESIDENCY-DOC] Data residency/retention policy PUBLISHED -- /data-policy page live, bs-5 closed
        unblocks 1 · S · bimpossible · CLAIMED 2026-08-04 · BIMpossible_ProgramPlan_2026-05-25.md, Commercial Launch Pre
+
+[OPS-TENANCY-DOC] Write the multi-tenant data-isolation strategy doc (audit's required TEST already shipped in PR#243)
+       unblocks 1 · S · bimpossible · VERIFIED 2026-08-06 · BIMpossible_ProgramPlan_2026-05-25.md, Commercial Launch Pre
 
 [ARCH-FIRM-ALIAS-BACKEND] Backend firm-alias layer SHIPPED -- 105 sites migrated, firm-literal baseline 126 -> 21
        unblocks 1 · S · bimpossible+addins · VERIFIED 2026-08-06 · BIMpossible #257 (85c3fff, MERGED 2026-08-05T23:43:21Z) -- b

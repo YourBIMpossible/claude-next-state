@@ -118,7 +118,7 @@ items:
 - id: OPS-TENANCY-DOC
   title: "Write the multi-tenant data-isolation strategy doc (audit's required TEST already shipped in PR#243)"
   projects: [bimpossible]
-  status: blocked_owner
+  status: landed
   owner_gate: true
   unblocks: [OPS-LAUNCH]
   blocked_by: []
@@ -135,14 +135,19 @@ items:
     ref: "DRAFT WRITTEN 2026-08-06: 00_Strategy/2026-08-06__Multi-Tenant_Data-Isolation_Strategy_DRAFT.md on its own branch docs/tenancy-isolation-strategy (workspace repo, commit 7b625c2 off origin/main, worktree .claude/worktrees/tenancy-doc; the interim paper-trail copy aa90996 was dropped). Engineering half complete, all code claims read from origin/main@a2ea120; remaining work is owner-only -- ratify the three [OWNER DECIDES] blocks per Sec 8, then push + focused PR to main."
   - kind: pr
     ref: "Workspace PR#25 DRAFT opened 2026-08-06 (docs/tenancy-isolation-strategy, 7b625c2, pushed via Push-And-Verify.ps1, gitleaks clean). Draft status IS the merge hold: promote with `gh pr ready 25` only after the owner ratifies the three [OWNER DECIDES] blocks per the doc's Sec 8."
+  - kind: doc
+    ref: "RATIFIED 2026-08-06: 00_Strategy/2026-08-06__Multi-Tenant_Data-Isolation_Strategy.md (renamed off _DRAFT, commit b484821 on docs/tenancy-isolation-strategy, worktree .claude/worktrees/tenancy-doc). All three [OWNER DECIDES] blocks recorded verbatim in Sec 8 per the owner's exact ratification wording this session: Sec 6.1 hub entitlement (a tenant-access grant, not hub ownership; no prod hub IDs seeded -- stays an onboarding-time requirement per firm), Sec 7.3 cache re-verify (deferred to first real hub move, fail-closed meanwhile), and the business-language commitment (with explicit non-promises: no absolute-prevention claim, no zero-delay claim, no residency claim). Also cited from BIMpossible_ProgramPlan_2026-05-25.md, Commercial Launch Prerequisites checklist item 1 (bs-1), same commit."
+  - kind: pr
+    ref: "Workspace PR#25 title+body rewritten 2026-08-06 to reflect ratification -- left OPEN and DRAFT deliberately, per explicit owner instruction not to merge or promote this session. `gh pr ready 25` NOT run."
   verification:
     level: verified
-    by: "ENGINEERING HALF DONE 2026-08-06, status ready -> blocked_owner: only ratification remains (hub entitlement per firm, cache re-verify policy, business-language commitments). || AUDIT-REQUIRED TEST NOW EXISTS: backend/tests/test_membership_firm_resolution_agreement.py (5 tests, landed with PR#243) is exactly the SS4 test the 2026-07-27 audit demanded -- it pins BOTH the deny-once-multi-tenant behavior and the unchanged single-tenant fallback for an unlinked user (read directly this session, docstring cites SEC-MEMBERSHIP-1). So the ENGINEERING half of this item is DONE. What remains is purely the owner-authored data-isolation STRATEGY DOCUMENT (Commercial Launch Prereq item 1/bs-1) -- a narrative clients read, not code. Effort downgraded M->S; risk 3->1 (the live scope-leak risk is closed in code, only the write-up remains)."
+    by: "RATIFIED 2026-08-06: the owner ratified all three [OWNER DECIDES] blocks this session (exact text in the doc's Sec 8); status blocked_owner -> landed. This item's own scope -- WRITE the strategy doc -- is now fully complete: content ratified, checklist closed, file renamed off _DRAFT, cited from the Commercial Launch Prerequisites checklist. 'landed' here means the deliverable shipped to its branch/PR in finished form, NOT that PR#25 merged to main -- PR#25 is deliberately left OPEN/DRAFT per explicit owner instruction ('do not merge PR #25'), so the 'verify it' step for this landed item is 'confirm PR#25 merged to main', a separate future action needing its own owner authorization (house rule: main is protected, PR+checks only). This ratification does NOT unblock HUB-TENANCY-GOLIVE (prod hub-ID seeding, migration apply, backend restart) -- that item stays on its own separate owner decision (concrete prod hub IDs per firm) and stays fail-closed until seeded. No production access, migrations, hub IDs, service restarts, or runtime policy were touched this session."
     at: '2026-08-06'
   live_check:
+  - "gh pr view 25 --repo YourBIMpossible/BIMpossible_Workspace --json state,mergedAt,isDraft -- confirms PR#25's actual merge/draft state (expect OPEN/DRAFT until the owner authorizes a merge)."
   - "grep firm_id scoping across backend query paths; confirm no cross-firm query is reachable without a firm filter. Run the get_firm_id() vs require_active_membership() agreement test the 2026-07-27 audit specifies."
   source: "BIMpossible_ProgramPlan_2026-05-25.md §Commercial Launch Prerequisites; weekly-full-audit_2026-07-27.md SEC-MEMBERSHIP-1; BIMpossible PR#231"
-  notes_url:
+  notes_url: "https://github.com/YourBIMpossible/BIMpossible_Workspace/pull/25"
 
 - id: P3-8-SLICE23
   title: "Merge Phase 3.8 slice 3 (ACC role sync); slice 2 still needs one owner ruling"
