@@ -1209,7 +1209,8 @@ items:
 - id: DOC-DOCINDEX-DEFECTS-24
   title: "docindex: code root drops silently in a worktree; sub-chunk line attribution duplicates results"
   projects: [workspace]
-  status: ready
+  status: landed
+  resolution: "FIXED 2026-08-06 overnight pass, commits 4b3f74d (worktree root resolution + missing-root warning/--stats visibility) and c37674e (per-piece line spans) on branch claude/documentation-rag-setup-17m33i, pushed to PR #24 (unmerged). 71/71 tests incl. 12 new regressions; live_check passes from the worktree (workspace 760 + code 84); probe query now cites CLAUDE.md:84/:97/:120 instead of 84x3 and the canonical HOWTO is back at rank 5->visible. Lands for real when PR #24 merges."
   owner_gate: false
   unblocks: []
   blocked_by: []
