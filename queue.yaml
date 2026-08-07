@@ -17,13 +17,14 @@ schema_version: 1
 # ai-server / dashboard / families / pc-monitor: no watermark — no items derived yet (init never
 # run); tips were probed 2026-08-04 but their histories were not read. Never fake a watermark.
 reconciled:
-  # bimpossible: re-read 2026-08-06 (evening). main is UNCHANGED at a2ea120 -- nothing merged all
-  # day because GitHub Actions sat in a major_outage and main requires checks. The delta is
-  # entirely open PRs: #273 #274 #275 #276 #277 #278.
+  # bimpossible: re-read 2026-08-06 (night), after GitHub Actions recovered from the major_outage.
+  # Merge wave landed: #269 #270 #271 #272 #274 #277 #279 (7 commits, a2ea120..344164f). Still open:
+  # #273 #275 #278 (all reviewed, CI-green, not merged) and #276 #280 #281 #282 (noticed, not
+  # reviewed -- #274 and #276 stay hands-off, other sessions' PRs).
   bimpossible:
     at: '2026-08-06'
-    commit: a2ea120
-    pr: 278
+    commit: 344164f
+    pr: 282
   # addins: NOT re-read this pass. #54 is cited as evidence on WRITE-ENGINE-INC2 but the repo's
   # delta since 7bdfa68 was never walked, so the watermark stays where it was. Citing a PR and
   # reconciling a project are different things; do not conflate them.
@@ -146,8 +147,8 @@ items:
 - id: P3-8-SLICE23
   title: "Merge Phase 3.8 slice 3 (ACC role sync); slice 2 still needs one owner ruling"
   projects: [bimpossible]
-  status: blocked_external
-  owner_gate: false
+  status: blocked_owner
+  owner_gate: true
   unblocks: [OPS-LAUNCH]
   blocked_by: []
   effort: S
@@ -161,11 +162,10 @@ items:
     ref: "slice 1 migrations e6f7a8b9c0d1 (acc_* columns) + b1c2d3e4f5a6 (is_draft), per ledger text 'BUILT + shipped + applied to prod 2026-07-15'"
   verification:
     level: verified
-    by: "SLICE 3 BUILT, SLICE 2 DELIBERATELY NOT. Slice 3 is PR#275 at 807c5fe, verified across all three local lanes 2026-08-06 (35 new DB-lane tests, 16/8 new pure-lane). It ships dark: the router only mounts when BIMPOSSIBLE_ACC_ROLE_SYNC_ENABLED is set, so merging changes nothing in prod. Slice 2 (is_draft reader gating) was NOT built because the gating-rule question the ledger records is still unanswered -- does a draft user's PERSONAL view stay owner-only, or become visible within the company? Building either reading would harden a guess into code. The ACC Admin response field names could not be verified from Autodesk's reference pages (schemas render client-side), so the client tolerates several shapes. Merge is blocked only by the GitHub Actions major_outage of 2026-08-06 -- required checks cannot run on the protected main."
+    by: "SLICE 3 BUILT, SLICE 2 DELIBERATELY NOT. Slice 3 is PR#275 at 807c5fe, verified across all three local lanes 2026-08-06 (35 new DB-lane tests, 16/8 new pure-lane). It ships dark: the router only mounts when BIMPOSSIBLE_ACC_ROLE_SYNC_ENABLED is set, so merging changes nothing in prod. Slice 2 (is_draft reader gating) was NOT built because the gating-rule question the ledger records is still unanswered -- does a draft user's PERSONAL view stay owner-only, or become visible within the company? Building either reading would harden a guess into code. The ACC Admin response field names could not be verified from Autodesk's reference pages (schemas render client-side), so the client tolerates several shapes. Status moved blocked_external -> blocked_owner: GitHub Actions has recovered and #275 is confirmed mergeable/CI-green (rescan 2026-08-06), still not in the merge delta -- #275 remains DRAFT, so the only remaining step is the owner's decision to undraft and merge a flag-gated-OFF feature, not CI recovery."
     at: 2026-08-06
   live_check:
-  - "gh pr view 275 --repo YourBIMpossible/BIMpossible --json state,mergedAt,isDraft"
-  - "curl -s https://www.githubstatus.com/api/v2/components.json | grep -A2 '\"name\": \"Actions\"'  # merge is gated on this returning operational"
+  - "gh pr view 275 --repo YourBIMpossible/BIMpossible --json state,mergedAt,isDraft,mergeable"
   source: "00_Strategy/design-docs/2026-08-06__phase-3-8-slices-2-3_build-plan.md; BIMpossible PR#275; BIMpossible_PHASE-STATUS.md Phase 3.8 note"
   notes_url: "00_Strategy/design-docs/2026-08-06__phase-3-8-slices-2-3_build-plan.md"
 
@@ -788,29 +788,28 @@ items:
 - id: POST-268-FOLLOWUPS
   title: "Merge the three post-#268 follow-up PRs -- reviewed, three-lane green, awaiting checks"
   projects: [bimpossible]
-  status: blocked_external
+  status: landed
   owner_gate: false
   unblocks: [OPS-TENANCY-DOC]
   blocked_by: []
   effort: S
-  risk: 2
+  risk: 1
   evidence:
   - kind: pr
-    ref: "BIMpossible #269 (draft, claude/auth-identity-exemptions, 011f959), #270 (draft, claude/relay-formal-defer, d4f8008), #271 (draft, chore/test-infra-hygiene, a631f9c) -- all OPEN as of 2026-08-06"
+    ref: "BIMpossible #269 (1887583), #270 (f6f0044), #271 (428889c) -- all MERGED to main 2026-08-06, post-outage-recovery"
   - kind: pr
-    ref: "BIMpossible #277 OPEN ready (claude/competent-kalam-977348) -- corrects the stale revoke_all_for_user comment at account_router.py:413 found during the #269 review"
+    ref: "BIMpossible #277 (c0d3fc1) -- MERGED 2026-08-06; corrects the stale revoke_all_for_user comment at account_router.py:413 found during the #269 review"
   - kind: run
-    ref: "Three-lane re-verification 2026-08-06: #269 = 3320/2211/4, #270 = 3307/2210/4, #271 = 3303/2217/4, all exit 0, no failures in any lane"
+    ref: "Three-lane re-verification 2026-08-06 (pre-merge): #269 = 3320/2211/4, #270 = 3307/2210/4, #271 = 3303/2217/4, all exit 0, no failures in any lane"
   - kind: doc
     ref: "01_BuildLog/2026-08-06__post-268-followup-plan.md (Outcome section, commit 661a917) -- the plan these PRs implement plus the review findings"
   verification:
     level: verified
-    by: "ALL THREE REVIEWED AND RE-VERIFIED, NONE MERGED. The review found two defects in the LOCAL CI HARNESS itself, both fixed on #271 and both of the house 'reports success, quietly did nothing' shape. First: Verify-Local-CI.ps1 ran its three pytest lanes under set -e, so the first red lane aborted the script and lanes 2 and 3 never ran -- and because the docs-path failure was a guaranteed lane-1 failure, the pure and assistant-contract lanes had not run locally at all for as long as it existed. Every earlier 'locally green' claim, including #269's and #270's original PR bodies, described one lane while appearing to describe three; both bodies now carry the real numbers. Fixed in 33c8f60. Second: #271's own docs-lint fix could PASS while checking nothing -- without BIMPOSSIBLE_REPO_ROOT the linter keeps REPO_ROOT at '/', lints exactly one file, and never collects the agent charters the PR says it lints. Fixed in a631f9c by asserting CLAUDE.md exists at the root. Merge is blocked only by the GitHub Actions major_outage of 2026-08-06. #270's checks show six simultaneous failures including gitleaks and semgrep, which is outage-shaped rather than real -- re-run them before reading anything into it."
+    by: "ALL FOUR MERGED 2026-08-06 once GitHub Actions recovered from the major_outage that was the sole remaining blocker -- confirmed via git log a2ea120..origin/main. landed not live: the two LOCAL CI HARNESS fixes on #271 (Verify-Local-CI.ps1 no longer aborts under set -e after a lane-1 failure, so lanes 2-3 actually run; docs-lint now asserts CLAUDE.md exists at REPO_ROOT instead of silently linting one file) have not yet had a real subsequent local run to confirm the fix holds outside the PR's own CI. #270's six simultaneous check failures during the outage were confirmed outage-shaped, not real, once re-run clean before merge."
     at: 2026-08-06
   live_check:
-  - "gh pr list --repo YourBIMpossible/BIMpossible --state open --json number --jq '[.[]|select(.number>=269 and .number<=271)]|length'  # expect 0 when done"
-  - "gh pr checks 270 --repo YourBIMpossible/BIMpossible  # re-run once Actions is operational; the 2026-08-06 failures were outage artifacts"
-  source: "01_BuildLog/2026-08-06__post-268-followup-plan.md Outcome section; gh pr list + three-lane runs 2026-08-06"
+  - "Run Verify-Local-CI.ps1 once and confirm all three lanes execute even when lane 1 fails (inject a deliberate lane-1 failure to prove it, or trust the next real red lane-1 run)."
+  source: "01_BuildLog/2026-08-06__post-268-followup-plan.md Outcome section; git log a2ea120..origin/main 2026-08-06"
   notes_url:
 
 - id: ARCH-FIRM-ALIAS-BACKEND
@@ -832,7 +831,7 @@ items:
   - kind: doc
     ref: "workspace ca53082 'docs(burndown): instance #1 deferral closed - alias layer built, migrator ran, 126 -> 21' (#14)"
   - kind: log
-    ref: "LOCAL RUN 2026-08-06 on main@84c94c2: semgrep --config .semgrep/bim-firm-literal.yml backend frontend -> 21 findings, exactly the 21-entry baseline; check-firm-literal-baseline.mjs exit 0, 'no new firm-parameter literals'. CAVEAT found during this run: the CI ratchet step scans with .semgrep/bim-rules.yml, which does NOT contain the firm-literal rule, so the CI gate is vacuously green -- filed as its own background task 2026-08-06; the 21-entry claim is proven by this local run, not by CI."
+    ref: "LOCAL RUN 2026-08-06 on main@84c94c2: semgrep --config .semgrep/bim-firm-literal.yml backend frontend -> 21 findings, exactly the 21-entry baseline; check-firm-literal-baseline.mjs exit 0, 'no new firm-parameter literals'. CAVEAT found during this run: the CI ratchet step scans with .semgrep/bim-rules.yml, which does NOT contain the firm-literal rule, so the CI gate is vacuously green -- filed as its own background task 2026-08-06; the 21-entry claim is proven by this local run, not by CI. RESOLVED 2026-08-06 via #279 (344164f) -- ratchet step now scans bim-firm-literal.yml and the checker hard-fails on a 0-findings-vs-nonzero-baseline scan; see SEC-FIRMLITERAL-RATCHET-CI."
   verification:
     level: verified
     by: "SPLIT OUT of ARCH-FIRM-PARAM-NEUTRALITY on 2026-08-06 because half of that item shipped and half never started. This is step 2 (the backend alias layer whose shape frontend/app/lib/clients/clientRules.ts had already documented). Merge-verified on both repos. landed not live: the migrated read paths have had no runtime exercise against a real non-firm model -- the 113-check proof was a dual-import comparison, not a live query. Residual 21 baseline entries = 11 backend Tier 3 business-logic couplings + 10 frontend sites in clientRules.ts. Also inherited, still unchecked: discipline_field_probe.py probes BOTH 'S&L_SoilBearing' and 'S&L_Soil_Bearing' -- one almost certainly does not exist in the SPF, and a probe for a non-existent name returns a silent false NOT-PRESENT."
@@ -865,17 +864,21 @@ items:
   notes_url:
 
 - id: WRITE-ENGINE-INC2
-  title: "Merge Write Engine Increment 2 -- both halves built, awaiting checks"
+  title: "Merge Write Engine Increment 2 -- both halves built, CI green, awaiting owner merge decision"
   projects: [bimpossible, addins]
-  status: blocked_external
-  owner_gate: false
+  status: blocked_owner
+  owner_gate: true
   unblocks: []
   blocked_by: []
   effort: S
   risk: 2
   evidence:
   - kind: pr
-    ref: "BIMpossible #273 OPEN DRAFT, head feat/write-engine-increment2-typeparams (d0b472a) -- backend half: family-TYPE parameter targeting, String-only"
+    ref: "BIMpossible #273 OPEN DRAFT, head feat/write-engine-increment2-typeparams, now at e018294 -- backend half: family-TYPE parameter targeting, String-only"
+  - kind: commit
+    ref: "e018294 (2026-08-06) -- fixed a semgrep bim-raw-sql-concat finding in c4e7a2b91d38's downgrade(): sa.text(f\"...\") stranded-row COUNT swapped for sa.select/sa.table/sa.column, same query, no raw SQL construction"
+  - kind: run
+    ref: "gh pr checks 273 2026-08-06 post-fix: backend/pytest, frontend/vitest+tsc, security-scan-summary (semgrep, gitleaks, pip-audit, trivy) all pass -- fully green"
   - kind: pr
     ref: "BIMpossible-AddIns #54 OPEN DRAFT (3e4fcd4) -- add-in half: applies String edits to family type parameters"
   - kind: doc
@@ -884,18 +887,18 @@ items:
     ref: "01_BuildLog/2026-08-04__write-engine-increment1-live-smoke_RESULTS.md -- 8/8 PASS, the artifact that cleared the entry gate"
   verification:
     level: verified
-    by: "BOTH HALVES BUILT 2026-08-06, NEITHER MERGED. Backend is PR#273 at d0b472a, add-in is AddIns#54 at 3e4fcd4; the item stays here as ONE cross-repo row because it is not done until both land. Merge is blocked only by the GitHub Actions major_outage of 2026-08-06 -- required checks cannot run on the protected main, so nothing merged all session. Two owner decisions carried from Increment 1 are still open and the ledger marks both NON-BLOCKING: #1 (the staged unit is fetched-not-read -- add a veto guard?) and #3 (BuildSummary bucket-exhaustiveness is unenforced). Increment 3 follows; Increment 4 (ElementId) stays owner-ruled deliberately unimplemented. Ops preconditions from Increment 1 still apply: build from a branch 0-behind main in BOTH repos before any deploy; Deploy-Local.ps1 -RevitLinkOnly refuses when shared Core changed, so deploy the full ship set scoped -Year; after editing a migration's down_revision delete alembic/versions/__pycache__. unblocks stays empty deliberately -- no stored item waits on Increment 2; it is product depth, not a dependency."
+    by: "BOTH HALVES BUILT, BACKEND NOW FULLY CI-GREEN, NEITHER MERGED. The GitHub Actions outage that previously blocked all checks has resolved; the one real (non-outage) blocker found this session -- #273's semgrep finding -- is fixed and re-verified green via direct gh pr checks. Both #273 and AddIns#54 remain DRAFT. Status moved blocked_external -> blocked_owner: the only remaining step is an explicit owner decision to undraft and merge both halves, not further engineering or CI recovery. Per house rule, a green branch is not merge authorization. Two owner decisions carried from Increment 1 are still open and the ledger marks both NON-BLOCKING: #1 (the staged unit is fetched-not-read -- add a veto guard?) and #3 (BuildSummary bucket-exhaustiveness is unenforced). Increment 3 follows; Increment 4 (ElementId) stays owner-ruled deliberately unimplemented. Ops preconditions from Increment 1 still apply: build from a branch 0-behind main in BOTH repos before any deploy; Deploy-Local.ps1 -RevitLinkOnly refuses when shared Core changed, so deploy the full ship set scoped -Year; after editing a migration's down_revision delete alembic/versions/__pycache__. unblocks stays empty deliberately -- no stored item waits on Increment 2; it is product depth, not a dependency."
     at: 2026-08-06
   live_check:
   - "gh pr view 273 --repo YourBIMpossible/BIMpossible --json state,mergedAt,isDraft"
   - "gh pr view 54 --repo YourBIMpossible/BIMpossible-AddIns --json state,mergedAt,isDraft"
-  source: "00_Strategy/design-docs/2026-08-06__write-engine-increment2_build-plan.md; BIMpossible PR#273; BIMpossible-AddIns PR#54; BIMpossible_PHASE-STATUS.md row 13.1"
+  source: "00_Strategy/design-docs/2026-08-06__write-engine-increment2_build-plan.md; BIMpossible PR#273 (e018294); BIMpossible-AddIns PR#54; BIMpossible_PHASE-STATUS.md row 13.1"
   notes_url: "00_Strategy/design-docs/2026-08-06__write-engine-increment2_build-plan.md"
 
 - id: SEC-ASSIST-FIRMVIEW
   title: "Merge #278 -- scope the assistant briefing's firm-view count to the caller's firm"
   projects: [bimpossible]
-  status: blocked_external
+  status: ready
   owner_gate: false
   unblocks: [OPS-TENANCY-DOC]
   blocked_by: []
@@ -906,19 +909,21 @@ items:
     ref: "BIMpossible #278 OPEN, NON-DRAFT, head claude/vibrant-golick-7005b0 (4ec910a) -- filters the count on ctx.firm_id; firm_id is None fails closed and counts nothing"
   - kind: doc
     ref: "00_Strategy/design-docs/2026-08-06__phase-3-8-slices-2-3_build-plan.md (commit 6941a70) -- the CLOSED block recording the fix against the original finding"
+  - kind: run
+    ref: "Rescan 2026-08-06: #278 not in the a2ea120..origin/main merge delta (still open); GitHub Actions outage confirmed resolved via other PRs' checks this session"
   verification:
     level: verified
-    by: "Found in passing 2026-08-06 at aec/assistant_context.py:154: the briefing counted firm_views with no firm filter, leaking a cross-tenant count on a shared project. Fixed in #278 and RED-verified -- with the filter reverted all three DB tests report '3 firm'. One change went beyond the reported bug and is the part worth re-reading at merge: the 30-minute context cache key moved from (project, model, user) to (project, model, firm, user), because without the firm in the key a user whose active firm changed would keep being served the previous firm's count for the rest of the TTL, re-opening the same leak through the cache. invalidate_project_context only inspects k[0]/k[1], which kept their positions. Regression tests build two real synthetic firms on one shared project with a randomized project_id so the counts are exact. Merge blocked only by the GitHub Actions major_outage of 2026-08-06."
+    by: "Found in passing 2026-08-06 at aec/assistant_context.py:154: the briefing counted firm_views with no firm filter, leaking a cross-tenant count on a shared project. Fixed in #278 and RED-verified -- with the filter reverted all three DB tests report '3 firm'. One change went beyond the reported bug and is the part worth re-reading at merge: the 30-minute context cache key moved from (project, model, user) to (project, model, firm, user), because without the firm in the key a user whose active firm changed would keep being served the previous firm's count for the rest of the TTL, re-opening the same leak through the cache. invalidate_project_context only inspects k[0]/k[1], which kept their positions. Regression tests build two real synthetic firms on one shared project with a randomized project_id so the counts are exact. Status moved blocked_external -> ready: the outage that was the stated blocker has resolved and #278 is confirmed non-draft; this is a straightforward merge decision on already-reviewed, RED-verified work, not owner judgment on product shape -- owner_gate stays false on that basis, though the security-sensitive nature of the fix is worth a careful final read at merge time regardless."
     at: 2026-08-06
   live_check:
-  - "gh pr view 278 --repo YourBIMpossible/BIMpossible --json state,mergedAt"
-  source: "BIMpossible PR#278; 00_Strategy/design-docs/2026-08-06__phase-3-8-slices-2-3_build-plan.md CLOSED block"
+  - "gh pr view 278 --repo YourBIMpossible/BIMpossible --json state,mergedAt,mergeable"
+  source: "BIMpossible PR#278; 00_Strategy/design-docs/2026-08-06__phase-3-8-slices-2-3_build-plan.md CLOSED block; rescan 2026-08-06"
   notes_url:
 
 - id: DOC-ALEMBIC-REFS-274
   title: "Merge #274 -- fix three surviving database/alembic/versions doc references"
   projects: [bimpossible]
-  status: blocked_external
+  status: landed
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -926,14 +931,14 @@ items:
   risk: 1
   evidence:
   - kind: pr
-    ref: "BIMpossible #274 OPEN DRAFT, head claude/fix-stale-alembic-doc-refs -- touches docs/ARCHITECTURE.md, docs/plans/TEMPLATE_BUILD_PLAN.md, docs/plans/active/phase-3-10a-cross-model-room-join.md"
+    ref: "BIMpossible #274 (469173e) -- MERGED 2026-08-06 to main, by another session/party; deliberately not touched by this session per PR ownership convention"
   verification:
-    level: claimed
-    by: "NOT INDEPENDENTLY REVIEWED -- another session's PR, and the only sources read were its title and its changed-file list. Same drift family as the CLAUDE.md alembic row: migrations live at backend/alembic/versions/, not database/alembic/versions/. Worth noting for whoever merges it: none of its three files are collected by the docs-path linter's globs (root CLAUDE.md, */CLAUDE.md, .claude/agents, .claude/skills, .claude/commands), so it does not overlap #271 and the two cannot conflict. It also does not clear the grandfathered 'database/migrations/' entry in that linter's KNOWN_EXTERNAL map, which is a separate reference in security-review-full.md."
+    level: verified
+    by: "MERGE CONFIRMED via git log a2ea120..origin/main; still NOT independently reviewed by this session (another party's PR -- only title, file list, and merge state were ever read, per the house convention of not touching another session's branch). Same drift family as the CLAUDE.md alembic row: migrations live at backend/alembic/versions/, not database/alembic/versions/. landed not live: no read-after-merge confirmation that the three doc files actually render the corrected path (low-risk, doc-only change)."
     at: 2026-08-06
   live_check:
-  - "gh pr view 274 --repo YourBIMpossible/BIMpossible --json state,mergedAt,isDraft"
-  source: "gh pr view 274 title + file list, read 2026-08-06"
+  - "grep -c 'database/alembic/versions' docs/ARCHITECTURE.md docs/plans/TEMPLATE_BUILD_PLAN.md docs/plans/active/phase-3-10a-cross-model-room-join.md  # expect 0 across all three"
+  source: "git log a2ea120..origin/main 2026-08-06 (469173e)"
   notes_url:
 
 - id: TEAMS-GATEWAY-W1
@@ -958,9 +963,9 @@ items:
   notes_url:
 
 - id: PROVIDER-REGISTRY-272
-  title: "Land PR#272 -- open the key registry to 9 providers, stop dropping unpriced models"
+  title: "Provider key registry opened to 9 providers -- MERGED, not yet deployed"
   projects: [bimpossible]
-  status: ready
+  status: landed
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -968,18 +973,18 @@ items:
   risk: 1
   evidence:
   - kind: pr
-    ref: "BIMpossible #272 OPEN, NON-DRAFT, head feat/provider-open-registry (cd57d8b) -- backend/aec/providers.py adds perplexity, mistral, xai, openrouter; all runtime_supported=False, needs_base_url=False"
+    ref: "BIMpossible #272 (79e9de5, squash) -- MERGED 2026-08-06; backend/aec/providers.py adds perplexity, mistral, xai, openrouter; all runtime_supported=False, needs_base_url=False"
   - kind: pr
     ref: "BIMpossible #249 (7de7a8a) + #245 (463592c) -- the key-management service and personal-key tier this builds on, both MERGED"
   - kind: flag
     ref: "backend/aec/client_keys.py:80 -- BIMPOSSIBLE_PERSONAL_KEYS_ENABLED defaults to '1' (ON); BIMPOSSIBLE_KEY_CRYPTO_KEY falls back to SECRET_KEY when unset"
   verification:
     level: verified
-    by: "PR is open and NOT a draft -- it is waiting on a merge decision, not on work. Security reframing read from the PR body and worth preserving because it is the reason this is safe: model openness is a metering question, base_url openness is an SSRF vector (cloud metadata at 169.254.169.254, docker-db-1:5432, redis, localhost, the LAN). OpenRouter gives 'any model' behind one fixed vetted HTTPS host, so the registry opens without opening egress; the one case that genuinely needs a URL (Ollama) belongs in the Revit add-in's InferenceProvider layer where localhost:11434 is the user's own process. The personal-key tier it rides on is ON by default in code -- verified by reading the getenv default, not the deployed value. unblocks empty: nothing stored depends on it."
+    by: "MERGED 2026-08-06, confirmed via git log a2ea120..origin/main. landed not live: /account/usage now names unpriced models rather than dropping them silently, but that surface has not been exercised against a live account since merge. Security reframing preserved because it is the reason this was safe to land: model openness is a metering question, base_url openness is an SSRF vector (cloud metadata at 169.254.169.254, docker-db-1:5432, redis, localhost, the LAN). OpenRouter gives 'any model' behind one fixed vetted HTTPS host, so the registry opens without opening egress; the one case that genuinely needs a URL (Ollama) belongs in the Revit add-in's InferenceProvider layer where localhost:11434 is the user's own process. unblocks empty: nothing stored depends on it."
     at: 2026-08-06
   live_check:
-  - "gh pr view 272 --repo YourBIMpossible/BIMpossible --json state,mergedAt"
-  source: "gh pr view 272 body; backend/aec/client_keys.py on origin/main; memory project_multi-provider-open-registry"
+  - "Load /account/usage for an account with an unpriced-model key configured -- confirm it renders a name instead of dropping the row."
+  source: "git log a2ea120..origin/main 2026-08-06 (79e9de5); backend/aec/client_keys.py on origin/main; memory project_multi-provider-open-registry"
   notes_url:
 
 - id: SLACK-GATEWAY-W1
@@ -1000,7 +1005,7 @@ items:
     ref: "workspace PR#17 (OPEN draft) -- Slack Assistant Gateway design doc"
   verification:
     level: claimed
-    by: "PR body and file list read; the code itself was NOT reviewed this session. Flagged as an item because it is the largest unmerged surface in the repo and it introduces a NEW alembic migration -- merging it makes 9329a1e7be85 part of the head chain, which interacts directly with the HUB-TENANCY-GOLIVE migration hold. Sequence them: do not merge this while e0f1a2b3c4d5 is unapplied in production, or the next backend-migrate applies two unrelated schema changes in one step. owner_gate true on two counts: it is a new external integration surface (Slack workspace credentials), and the ledger already frames Phase 15e's write half as hard-gated through the Phase 13 change-set lifecycle -- this wave is read-only, and that boundary is an owner commitment, not an implementation detail. unblocks empty: it is a new product surface, nothing stored waits on it."
+    by: "PR body and file list read; the code itself was NOT reviewed this session. Flagged as an item because it is the largest unmerged surface in the repo and it introduces a NEW alembic migration -- merging it makes 9329a1e7be85 part of the head chain, which interacts directly with the HUB-TENANCY-GOLIVE migration hold. Sequence them: do not merge this while e0f1a2b3c4d5 is unapplied in production, or the next backend-migrate applies two unrelated schema changes in one step. owner_gate true on two counts: it is a new external integration surface (Slack workspace credentials), and the ledger already frames Phase 15e's write half as hard-gated through the Phase 13 change-set lifecycle -- this wave is read-only, and that boundary is an owner commitment, not an implementation detail. unblocks empty: it is a new product surface, nothing stored waits on it. NEW 2026-08-06: PR#280 ('feat(slack): tenancy enforcement for Slack assistant gateway') appeared this session and its title suggests it may address the firm-membership gap noted above -- NOT CONFIRMED, diff not read; see SEC-FIRMVIEW-TENANCY-280."
     at: 2026-08-06
   live_check:
   - "gh pr view 262 --repo YourBIMpossible/BIMpossible --json state,isDraft"
@@ -1022,14 +1027,14 @@ items:
   - kind: doc
     ref: "01_BuildLog/2026-08-06__revit-relay-multitenancy-triage.md -- 'RESOLVED 2026-08-06 (PR B): option 3 taken formally, option 1 rejected, option 2 named as the eventual fix'"
   - kind: pr
-    ref: "BIMpossible #270 (OPEN draft, claude/relay-formal-defer) -- records the defer plus a multi-firm startup tripwire in revit_link/feature_flag.py: warn_if_multi_firm_single_relay"
+    ref: "BIMpossible #270 (f6f0044) -- MERGED 2026-08-06; records the defer plus a multi-firm startup tripwire in revit_link/feature_flag.py: warn_if_multi_firm_single_relay, now live on main"
   verification:
     level: verified
-    by: "DELIBERATELY DEFERRED with named triggers, not overlooked. A relay_bindings table is a data-model change and therefore CONFIRM-gated even under overnight autonomy, so option 1 was rejected on process grounds and option 3 (formal defer + tripwire) was taken. #268 added an imperative membership check on the six live /revit routes, which NARROWS but does not close the gap -- the relay itself still routes globally. Residual accepted risk, stated plainly: same-desktop cross-firm access on a one-operator deployment. Build option 2 when ANY of three triggers fires: a second Revit desktop is paired, a second firm is onboarded with the flag on, or the relay is bound off loopback. Distinct from P7-REVITLINK-MULTIUSER, which is about pipe-instance capacity (RE-2) -- that path is proven compiled out, this one is live."
+    by: "DELIBERATELY DEFERRED with named triggers, not overlooked. A relay_bindings table is a data-model change and therefore CONFIRM-gated even under overnight autonomy, so option 1 was rejected on process grounds and option 3 (formal defer + tripwire) was taken. #268 added an imperative membership check on the six live /revit routes, which NARROWS but does not close the gap -- the relay itself still routes globally. Residual accepted risk, stated plainly: same-desktop cross-firm access on a one-operator deployment. Build option 2 when ANY of three triggers fires: a second Revit desktop is paired, a second firm is onboarded with the flag on, or the relay is bound off loopback. Distinct from P7-REVITLINK-MULTIUSER, which is about pipe-instance capacity (RE-2) -- that path is proven compiled out, this one is live. #270 merged 2026-08-06 so the tripwire code is now on main; its runtime firing has still not been observed (no docker/log access this session), so the code being present is landed evidence, not live evidence."
     at: 2026-08-06
   live_check:
-  - "Check the startup log for warn_if_multi_firm_single_relay once #270 merges; it fires when BIMPOSSIBLE_REVIT_LINK_ENABLED is on AND two or more firms hold active memberships."
-  source: "01_BuildLog/2026-08-06__revit-relay-multitenancy-triage.md; BIMpossible PR#270"
+  - "Check the startup log for warn_if_multi_firm_single_relay; it fires when BIMPOSSIBLE_REVIT_LINK_ENABLED is on AND two or more firms hold active memberships."
+  source: "01_BuildLog/2026-08-06__revit-relay-multitenancy-triage.md; BIMpossible PR#270 (f6f0044)"
   notes_url:
 
 - id: OPS-BACKUP-RESTORE-DRILL
@@ -1190,3 +1195,89 @@ items:
   - "python tools\\docindex\\docsearch.py --stats  from a worktree -- 'by root' must list BOTH workspace and code, not workspace alone"
   source: "session 2026-08-06 evaluating PR #24 (branch claude/documentation-rag-setup-17m33i)"
   notes_url: "https://github.com/YourBIMpossible/BIMpossible_Workspace/pull/24"
+
+- id: SEC-FIRMLITERAL-RATCHET-CI
+  title: "Firm-literal CI ratchet was scanning the wrong config and passing vacuously -- fixed"
+  projects: [bimpossible]
+  status: landed
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: pr
+    ref: "BIMpossible #279 (344164f) -- MERGED 2026-08-06; security-scan.yml RATCHET step scanned .semgrep/bim-rules.yml, which does not contain bim-firm-parameter-literal (that rule deliberately lives in .semgrep/bim-firm-literal.yml since --exclude-rule proved broken on semgrep 1.166.0), so the ratchet always saw 0 findings and passed regardless of new firm-literal sites"
+  - kind: commit
+    ref: "diff read directly 2026-08-06: ratchet step now points at bim-firm-literal.yml; check-firm-literal-baseline.mjs hard-fails on a 0-findings-vs-nonzero-baseline scan, so this exact misconfiguration class cannot recur silently; validate step covers both configs; dead --exclude-rule flag dropped from the gating step"
+  verification:
+    level: verified
+    by: "Found as a caveat while verifying ARCH-FIRM-ALIAS-BACKEND's 21-entry baseline claim on 2026-08-06 (the CI gate backing that claim was vacuously green), fixed same day by another party, and confirmed merged via git log a2ea120..origin/main. Read the actual diff on origin/main rather than trusting the PR title: the PR body's own numbers (21 findings against the real config; checker exits 1 against the old wrong config) match what the diff implements. landed not live: no subsequent real CI run has been observed to confirm the ratchet fires correctly end-to-end in a GitHub Actions execution, only the local semgrep numbers quoted in the PR body."
+    at: 2026-08-06
+  live_check:
+  - "Next security-scan-summary run on any branch -- confirm the RATCHET step log shows bim-firm-literal.yml as its --config, not bim-rules.yml."
+  source: "git show 344164f 2026-08-06; ARCH-FIRM-ALIAS-BACKEND evidence"
+  notes_url:
+
+- id: SEC-FIRMVIEW-TENANCY-280
+  title: "Review PR#280 -- tenancy enforcement for Slack assistant gateway"
+  projects: [bimpossible]
+  status: blocked_external
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 3
+  evidence:
+  - kind: pr
+    ref: "BIMpossible #280 OPEN -- title only, 'feat(slack): tenancy enforcement for Slack assistant gateway'; noticed during the 2026-08-06 rescan, not opened by this session"
+  verification:
+    level: claimed
+    by: "NOT REVIEWED -- title read only, during a sweep for unfamiliar PRs while rescanning merge state after a user-flagged staleness check. Its title suggests it may resolve the firm-membership gap SLACK-GATEWAY-W1 already flags as the blocker on that item, but this is speculation, not a confirmed reading. Do not treat SLACK-GATEWAY-W1 as unblocked on the strength of this row. Probe that would settle it: read the diff for a require_active_membership dependency, and check whether it touches the same 9329a1e7be85 migration lineage."
+    at: 2026-08-06
+  live_check:
+  - "gh pr view 280 --repo YourBIMpossible/BIMpossible --json state,isDraft,mergedAt,body"
+  source: "gh pr list sweep, read 2026-08-06; no diff read"
+  notes_url:
+
+- id: TENANCY-PROBE-281
+  title: "Review PR#281 -- tenancy invariant coverage for flag-gated routers, /probe hub isolation fix"
+  projects: [bimpossible]
+  status: blocked_external
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 3
+  evidence:
+  - kind: pr
+    ref: "BIMpossible #281 OPEN -- title only, 'Tenancy invariant: cover flag-gated routers, fix /probe hub isolation'; noticed during the 2026-08-06 rescan, not opened by this session"
+  verification:
+    level: claimed
+    by: "NOT REVIEWED -- title read only, during the same unfamiliar-PR sweep as #280. A /probe hub-isolation fix is directly adjacent to the HUB-TENANCY-GOLIVE hold and to OPS-TENANCY-DOC's live_check (get_firm_id() vs require_active_membership() agreement), so this may be load-bearing for both -- not confirmed. Do not act on this row's strength alone."
+    at: 2026-08-06
+  live_check:
+  - "gh pr view 281 --repo YourBIMpossible/BIMpossible --json state,isDraft,mergedAt,body"
+  source: "gh pr list sweep, read 2026-08-06; no diff read"
+  notes_url:
+
+- id: DEP-JSYAML-282
+  title: "Review/merge PR#282 -- Dependabot js-yaml bump"
+  projects: [bimpossible]
+  status: blocked_external
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: "BIMpossible #282 OPEN -- Dependabot, js-yaml version bump; noticed during the 2026-08-06 rescan, not opened by this session"
+  verification:
+    level: claimed
+    by: "NOT REVIEWED -- title only. Routine dependency bump, lowest risk of the three newly-noticed PRs; recorded so it does not sit outside the store, not because anything about it is confirmed."
+    at: 2026-08-06
+  live_check:
+  - "gh pr checks 282 --repo YourBIMpossible/BIMpossible"
+  source: "gh pr list sweep, read 2026-08-06"
+  notes_url:

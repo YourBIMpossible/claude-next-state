@@ -6,7 +6,7 @@ Generated 2026-08-06 (synced). Ranked by critical path (transitive `unblocks` co
 owner-gated+S effort, then effort, then risk, then id. Full algorithm:
 `~/.claude/skills/next/reference/item-model.md`.
 
-Scope: `all`. Watermarks: `bimpossible` = 2026-08-06 @ `a2ea120` PR#278 · `addins` = 2026-08-06 @ `7bdfa68` PR#53 · `workspace` = 2026-08-06 @ `6941a70` PR#19. (ai-server/dashboard/families/pc-monitor:
+Scope: `all`. Watermarks: `bimpossible` = 2026-08-06 @ `344164f` PR#282 · `addins` = 2026-08-06 @ `7bdfa68` PR#53 · `workspace` = 2026-08-06 @ `6941a70` PR#19. (ai-server/dashboard/families/pc-monitor:
 no items yet — run `init` to derive.)
 
 ## Blocked on you
@@ -20,6 +20,9 @@ no items yet — run `init` to derive.)
 [FE-3-10-FLAG] Rebuild the frontend with NEXT_PUBLIC_BIMPOSSIBLE_PHASE3_10_ENABLED=1 so room-join and door columns are visible
        unblocks 1 · S · bimpossible · VERIFIED 2026-08-06 · frontend/Dockerfile:34-35 on origin/main -- ARG NEXT_PUBLIC_
 
+[P3-8-SLICE23] Merge Phase 3.8 slice 3 (ACC role sync); slice 2 still needs one owner ruling
+       unblocks 1 · S · bimpossible · VERIFIED 2026-08-06 · BIMpossible #275 OPEN DRAFT, head feat/phase38-draft-gating-
+
 [OPS-TENANCY-DOC] Write the multi-tenant data-isolation strategy doc (audit's required TEST already shipped in PR#243)
        unblocks 1 · S · bimpossible · VERIFIED 2026-08-06 · BIMpossible_ProgramPlan_2026-05-25.md, Commercial Launch Pre
 
@@ -32,6 +35,9 @@ no items yet — run `init` to derive.)
 [OPS-LOCAL-SIGNIN-AUTHLOOP] Local sign-in auth-loops, so no signed-in UI can be visually verified before it ships
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-06 · 01_BuildLog/2026-08-05__product-risk-assessment.md -- the lo
 
+[WRITE-ENGINE-INC2] Merge Write Engine Increment 2 -- both halves built, CI green, awaiting owner merge decision
+       unblocks 0 · S · bimpossible+addins · VERIFIED 2026-08-06 · BIMpossible #273 OPEN DRAFT, head feat/write-engine-incremen
+
 [OD-DECISIONS] Decide OD3 (fire-alarm schedule owner) and OD4 (OSS reuse triage)
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-04 · 02_Reference/Audit and Scan Info/BIMpossible_Verification_Ch
 
@@ -39,6 +45,9 @@ no items yet — run `init` to derive.)
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-06 · 01_BuildLog/2026-08-05__hub-tenancy-migration-BLOCKED_HANDOF
 
 ## Landed — not verified live
+
+[POST-268-FOLLOWUPS] Merge the three post-#268 follow-up PRs -- reviewed, three-lane green, awaiting checks
+       unblocks 2 · S · bimpossible · VERIFIED 2026-08-06 · BIMpossible #269 (1887583), #270 (f6f0044), #271 (428889c) -
 
 [OPS-RESIDENCY-DOC] Data residency/retention policy PUBLISHED -- /data-policy page live, bs-5 closed
        unblocks 1 · S · bimpossible · CLAIMED 2026-08-04 · BIMpossible_ProgramPlan_2026-05-25.md, Commercial Launch Pre
@@ -49,6 +58,15 @@ no items yet — run `init` to derive.)
 [OPS-SYNTH-AUDIT-HARDEN] Harden synthetic-concurrency-audit tooling: env-guard seeding, loopback-check host, fix schedule
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-04 · weekly-full-audit_2026-08-04.md SEC-SCRIPTS-PERF-1, CQ-SYNTH
 
+[SEC-FIRMLITERAL-RATCHET-CI] Firm-literal CI ratchet was scanning the wrong config and passing vacuously -- fixed
+       unblocks 0 · S · bimpossible · VERIFIED 2026-08-06 · BIMpossible #279 (344164f) -- MERGED 2026-08-06; security-sc
+
+[DOC-ALEMBIC-REFS-274] Merge #274 -- fix three surviving database/alembic/versions doc references
+       unblocks 0 · S · bimpossible · VERIFIED 2026-08-06 · BIMpossible #274 (469173e) -- MERGED 2026-08-06 to main, by 
+
+[PROVIDER-REGISTRY-272] Provider key registry opened to 9 providers -- MERGED, not yet deployed
+       unblocks 0 · S · bimpossible · VERIFIED 2026-08-06 · BIMpossible #272 (79e9de5, squash) -- MERGED 2026-08-06; bac
+
 [WS-NEXT-VERSIONING] Version /next skill + store + session docs into workspace repo (branch + draft PR)
        unblocks 0 · S · workspace · VERIFIED 2026-08-06 · 2026-08-04__ProductionQueue_Session_Findings.md §3 -- cloud 
 
@@ -56,6 +74,9 @@ no items yet — run `init` to derive.)
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-06 · 01_BuildLog/2026-08-04__doors-join-increment1_RESULTS.md, 'F
 
 ## Next up
+
+[SEC-ASSIST-FIRMVIEW] Merge #278 -- scope the assistant briefing's firm-view count to the caller's firm
+       unblocks 2 · S · bimpossible · VERIFIED 2026-08-06 · BIMpossible #278 OPEN, NON-DRAFT, head claude/vibrant-golick
 
 [OPS-DIST] Code-sign Add-Ins + ship a real installer, including the Open-in-Revit opener
        unblocks 1 · L · bimpossible+addins · CLAIMED 2026-08-04 · BIMpossible_PHASE-STATUS.md §Open-in-Revit; BIMpossible_Prod
@@ -68,9 +89,6 @@ no items yet — run `init` to derive.)
 
 [DOC-DOCINDEX-DEFECTS-24] docindex: code root drops silently in a worktree; sub-chunk line attribution duplicates results
        unblocks 0 · S · workspace · VERIFIED 2026-08-06 · tools/docindex/docindex.config.json:34 -- code root path '..
-
-[PROVIDER-REGISTRY-272] Land PR#272 -- open the key registry to 9 providers, stop dropping unpriced models
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-06 · BIMpossible #272 OPEN, NON-DRAFT, head feat/provider-open-re
 
 [ADDINS-HYGIENE] Add-Ins hygiene: finish Glass rollout (conformance-PR dedup DONE 2026-08-04)
        unblocks 0 · M · addins · VERIFIED 2026-08-06 · Add-Ins #10 MERGED 2026-08-04 (squash, main 94b21ab -- Plans
@@ -89,23 +107,17 @@ no items yet — run `init` to derive.)
 
 ## Blocked elsewhere
 
-[SEC-ASSIST-FIRMVIEW] Merge #278 -- scope the assistant briefing's firm-view count to the caller's firm
-       unblocks 2 · S · bimpossible · VERIFIED 2026-08-06 · BIMpossible #278 OPEN, NON-DRAFT, head claude/vibrant-golick
+[DEP-JSYAML-282] Review/merge PR#282 -- Dependabot js-yaml bump
+       unblocks 0 · S · bimpossible · CLAIMED 2026-08-06 · BIMpossible #282 OPEN -- Dependabot, js-yaml version bump; n
 
-[POST-268-FOLLOWUPS] Merge the three post-#268 follow-up PRs -- reviewed, three-lane green, awaiting checks
-       unblocks 2 · S · bimpossible · VERIFIED 2026-08-06 · BIMpossible #269 (draft, claude/auth-identity-exemptions, 01
-
-[P3-8-SLICE23] Merge Phase 3.8 slice 3 (ACC role sync); slice 2 still needs one owner ruling
-       unblocks 1 · S · bimpossible · VERIFIED 2026-08-06 · BIMpossible #275 OPEN DRAFT, head feat/phase38-draft-gating-
-
-[WRITE-ENGINE-INC2] Merge Write Engine Increment 2 -- both halves built, awaiting checks
-       unblocks 0 · S · bimpossible+addins · VERIFIED 2026-08-06 · BIMpossible #273 OPEN DRAFT, head feat/write-engine-incremen
-
-[DOC-ALEMBIC-REFS-274] Merge #274 -- fix three surviving database/alembic/versions doc references
-       unblocks 0 · S · bimpossible · CLAIMED 2026-08-06 · BIMpossible #274 OPEN DRAFT, head claude/fix-stale-alembic-d
+[SEC-FIRMVIEW-TENANCY-280] Review PR#280 -- tenancy enforcement for Slack assistant gateway
+       unblocks 0 · M · bimpossible · CLAIMED 2026-08-06 · BIMpossible #280 OPEN -- title only, 'feat(slack): tenancy e
 
 [TEAMS-GATEWAY-W1] Review and land #276 -- Microsoft Teams assistant gateway
        unblocks 0 · M · bimpossible · CLAIMED 2026-08-06 · BIMpossible #276 OPEN DRAFT, head claude/slack-work-teams-ma
+
+[TENANCY-PROBE-281] Review PR#281 -- tenancy invariant coverage for flag-gated routers, /probe hub isolation fix
+       unblocks 0 · M · bimpossible · CLAIMED 2026-08-06 · BIMpossible #281 OPEN -- title only, 'Tenancy invariant: cov
 
 [OPS-LAUNCH] Clear the Commercial Launch Prerequisites checklist before first external deployment
        unblocks 0 · L · bimpossible · CLAIMED 2026-08-04 · BIMpossible_ProgramPlan_2026-05-25.md §Commercial Launch Pre
