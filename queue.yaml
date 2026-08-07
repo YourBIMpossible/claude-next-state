@@ -32,6 +32,10 @@ reconciled:
     at: '2026-08-06'
     commit: 7bdfa68
     pr: 53
+  # workspace: NOT re-read this pass. PR #24 was conflict-resolved, merged (squash e699e37), and
+  # its target item (DOC-DOCINDEX-DEFECTS-24) promoted to live, but the repo's full delta since
+  # 6941a70 was never walked -- other commits may have landed on workspace main in between.
+  # Citing a PR and reconciling a project are different things; do not conflate them.
   workspace:
     at: '2026-08-06'
     commit: 6941a70
@@ -1001,6 +1005,8 @@ items:
     ref: "Response returns full rows -- 'personalViews': [_view_to_dict(v) for v in personal] -- not a count, so this is at least as severe as the fixed groups.py bug (full name + definition per leaked view, potentially many)."
   - kind: fix
     ref: "Sibling fix for the identical pattern in the same table: backend/aec/groups.py list_groups personal query, fixed by adding NamedDeliverable.firm_id == firm_id (branch fix/groups-personal-listing-firm-scope, see SEC-GROUPS-PERSONAL-LISTING). Not applied here -- different route/function (list_views vs list_groups), out of scope for that PR per its mandate's same-code-path restriction."
+  - kind: doc
+    ref: "CORROBORATED INDEPENDENTLY by the parallel session that landed PR #290 (see SEC-GROUPS-PERSONAL-LISTING collision note). Its memory record -- C:\\Users\\Zeria\\.claude\\projects\\F--AI-Dev-BIMpossible\\memory\\named-deliverable-personal-scope-firm-gaps.md -- independently lists this same views.py finding (its #1) and SEC-ASSIST-PERSONAL-VIEWCOUNT (its #2), reached via a different route, which raises confidence that both are real. That record ALSO carries 3 findings NOT tracked anywhere in this queue: (a) all four groups.py routes and the views.py equivalents skip firm-hub isolation entirely -- only assert_project_allowed (global allowlist), never require_project_in_firm_hub, contra the repo CLAUDE.md 'APS hub isolation' section; (b) uix_named_deliverables_personal_name_group in backend/db/models.py omits firm_id from its unique index unlike its firm-scope sibling, causing a spurious 409 when a reassigned user recreates a same-named personal group/view; (c) update_group/delete_group call assert_project_allowed(group.project_id) -- whose 403 body echoes the project_id -- BEFORE the group.firm_id != firm_id ownership check, a narrow cross-firm project-id disclosure if that project is later de-allowlisted. Those 3 are recorded here as a POINTER only, unverified by this session and not claimed by it; whoever picks them up should promote them to their own queue entries after confirming they are still present. Noted 2026-08-07 during this session's /close closeout, which found them in that memory file with no corresponding queue record."
   verification:
     level: claimed
     by: "Surfaced 2026-08-07 during the SEC-GROUPS-PERSONAL-LISTING investigation's Phase 3 equivalent-path review (grep for owner_user_id == across backend/). NOT reproduced with a test yet -- classified by code reading only (same reachability shape: require_active_membership supplies firm_id, assert_project_allowed is a global not firm-scoped allowlist per CLAUDE.md, so the same project_id is reachable under any firm the caller is later active in). Given how structurally identical this is to the just-confirmed list_groups defect, treat reproduction as highly likely to succeed, not merely speculative -- but it has not actually been run, so this stays 'claimed' until someone does. Next step: adapt test_groups_personal_listing_firm_scope.py's second_firm_membership/_switch_active_firm fixtures (they are generic, not groups-specific) to GET /data/views, add the firm_id filter to the personal query at views.py:210, run the sibling views test suites for no-regression, then handle via its own dedicated branch/PR per the same fail-closed discipline as the groups fix -- must NOT be folded into the groups PR or fixed silently in passing."
@@ -1313,8 +1319,8 @@ items:
 - id: DOC-DOCINDEX-DEFECTS-24
   title: "docindex: code root drops silently in a worktree; sub-chunk line attribution duplicates results"
   projects: [workspace]
-  status: landed
-  resolution: "FIXED 2026-08-06 overnight pass, commits 4b3f74d (worktree root resolution + missing-root warning/--stats visibility) and c37674e (per-piece line spans) on branch claude/documentation-rag-setup-17m33i, pushed to PR #24 (unmerged). 71/71 tests incl. 12 new regressions; live_check passes from the worktree (workspace 760 + code 84); probe query now cites CLAUDE.md:84/:97/:120 instead of 84x3 and the canonical HOWTO is back at rank 5->visible. Lands for real when PR #24 merges."
+  status: live
+  resolution: "FIXED 2026-08-06 overnight pass, commits 4b3f74d (worktree root resolution + missing-root warning/--stats visibility) and c37674e (per-piece line spans) on branch claude/documentation-rag-setup-17m33i. MERGED 2026-08-07T06:02:33Z via PR #24 squash commit e699e37 to workspace main, after resolving one merge conflict against main (b0d0cd0) and regenerating doc-reference-baseline.json wholesale. 71/71 tests incl. 12 new regressions; live_check re-run post-merge from origin/main confirms both roots present (workspace 764 + code 88)."
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -1325,13 +1331,15 @@ items:
     ref: "tools/docindex/docindex.config.json:34 -- code root path '../BIMpossible' resolved relative to workspace_root()"
   - kind: doc
     ref: "tools/docindex/docindex.py:56 workspace_root / :66 resolve_roots -- optional root with required:false is skipped with no warning"
+  - kind: pr
+    ref: "Workspace PR#24 MERGED 2026-08-07T06:02:33Z, squash commit e699e374f8b86c008181275a7102326ebd32c330 on origin/main. Conflicts resolved via a merge commit (b0d0cd0, no rebase/force-push) before the squash: HANDOFF.md kept the branch's fully-qualified wording, doc-reference-baseline.json regenerated via --update-baseline (164 unresolved refs / 93 docs)."
   verification:
     level: verified
-    by: "WANDER, found 2026-08-06 while evaluating PR #24 on a real Windows checkout -- reproduced and measured, deliberately NOT fixed, queued per closeout rules. DEFECT 1: workspace_root() is HERE.parent.parent, so from a worktree at .claude/worktrees/<lane> the sibling path '../BIMpossible' resolves to .claude/worktrees/BIMpossible, which does not exist; required:false makes it drop with no warning. Measured cost: 760 docs indexed instead of 845, and tools/docindex/test_docindex.py goes 58/59 -- test_the_live_ledgers_are_indexed_as_canonical fails looking for the code repo's root CLAUDE.md. Setting BIMPOSSIBLE_REPO=F:\\AI-Dev\\BIMpossible restores 845 docs and 59/59, which is what proves the diagnosis. This matters because WORKFLOW.md mandates worktrees for parallel sessions, so the sanctioned workflow is the broken one. Proposed fix: strip a trailing .claude/worktrees/<lane> from the base before resolving sibling roots -- fixes every lane at once, needs no env var, and keeps the Linux container clone working. DEFECT 2: when a section exceeds chunk.max_chars its sub-chunks all inherit the whole section's line span, so three chunks of the code repo's CLAUDE.md each carry line_start 84 / line_end 132 with different token lengths (165/308/127) and the renderer re-reads the same lines for each; on the query 'how do I add a firm parameter alias' that burns results 1-3 on one visually identical chunk and pushes the purpose-built canonical HOWTO 02_Reference/HOWTO/add-a-firm-parameter.md from rank 2 down to rank 5. NEITHER defect is a tier/config issue -- both are code, which contradicts the branch author's expectation that bad ranking is almost always a tier edit."
-    at: '2026-08-06'
+    by: "WANDER, found 2026-08-06 while evaluating PR #24 on a real Windows checkout -- reproduced and measured. MERGED AND LIVE-VERIFIED 2026-08-07: PR #24 conflict-resolved and squash-merged to origin/main as e699e37. Post-merge live_check run from the primary checkout: `python tools\\docindex\\docsearch.py --stats` reports 852 docs / 11,963 chunks / 81,815 terms, by-root workspace 764 + code 88 -- BOTH roots present, confirming DEFECT 1 stays fixed outside the worktree that originally exposed it. Full validation suite also passed at merge time: 71/71 docindex tests, doc-reference gate 0 new broken refs (164 baseline), budget gate OK, gitleaks clean. DEFECT 1 (worktree code-root drop) and DEFECT 2 (sub-chunk line-span duplication) both confirmed fixed by the merged diff. || Prior reading preserved: DEFECT 1: workspace_root() is HERE.parent.parent, so from a worktree at .claude/worktrees/<lane> the sibling path '../BIMpossible' resolves to .claude/worktrees/BIMpossible, which does not exist; required:false makes it drop with no warning. Measured cost: 760 docs indexed instead of 845, and tools/docindex/test_docindex.py goes 58/59 -- test_the_live_ledgers_are_indexed_as_canonical fails looking for the code repo's root CLAUDE.md. DEFECT 2: when a section exceeds chunk.max_chars its sub-chunks all inherit the whole section's line span, so three chunks of the code repo's CLAUDE.md each carry line_start 84 / line_end 132 with different token lengths (165/308/127) and the renderer re-reads the same lines for each; on the query 'how do I add a firm parameter alias' that burned results 1-3 on one visually identical chunk and pushed the purpose-built canonical HOWTO 02_Reference/HOWTO/add-a-firm-parameter.md from rank 2 down to rank 5."
+    at: '2026-08-07'
   live_check:
-  - "python tools\\docindex\\docsearch.py --stats  from a worktree -- 'by root' must list BOTH workspace and code, not workspace alone"
-  source: "session 2026-08-06 evaluating PR #24 (branch claude/documentation-rag-setup-17m33i)"
+  - "python tools\\docindex\\docsearch.py --stats  -- 'by root' must list BOTH workspace and code, not workspace alone. CONFIRMED 2026-08-07 post-merge: workspace 764, code 88."
+  source: "session 2026-08-06 evaluating PR #24 (branch claude/documentation-rag-setup-17m33i); merged and verified 2026-08-07"
   notes_url: "https://github.com/YourBIMpossible/BIMpossible_Workspace/pull/24"
 
 - id: SEC-FIRMLITERAL-RATCHET-CI

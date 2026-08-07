@@ -2,8 +2,9 @@
 
 # /next — work-item queue
 
-Generated 2026-08-06 (synced). Ranked by critical path (transitive `unblocks` cone), tiebreak:
-owner-gated+S effort, then effort, then risk, then id. Full algorithm:
+Generated 2026-08-07 (partial regen — PR #24 merged and DOC-DOCINDEX-DEFECTS-24 promoted to
+live; full workspace resync since 6941a70 still owed). Ranked by critical path (transitive
+`unblocks` cone), tiebreak: owner-gated+S effort, then effort, then risk, then id. Full algorithm:
 `~/.claude/skills/next/reference/item-model.md`.
 
 Scope: `all`. Watermarks: `bimpossible` = 2026-08-06 @ `344164f` PR#282 · `addins` = 2026-08-06 @ `7bdfa68` PR#53 · `workspace` = 2026-08-06 @ `6941a70` PR#19. (ai-server/dashboard/families/pc-monitor:
@@ -43,6 +44,9 @@ no items yet — run `init` to derive.)
 
 ## Landed — not verified live
 
+[SEC-ASSIST-FIRMVIEW] Merge #278 -- scope the assistant briefing's firm-view count to the caller's firm
+       unblocks 2 · S · bimpossible · VERIFIED 2026-08-07 · BIMpossible #278 MERGED 2026-08-07T04:44:03Z, squash commit 
+
 [POST-268-FOLLOWUPS] Merge the three post-#268 follow-up PRs -- reviewed, three-lane green, awaiting checks
        unblocks 2 · S · bimpossible · VERIFIED 2026-08-06 · BIMpossible #269 (1887583), #270 (f6f0044), #271 (428889c) -
 
@@ -54,6 +58,12 @@ no items yet — run `init` to derive.)
 
 [ARCH-FIRM-ALIAS-BACKEND] Backend firm-alias layer SHIPPED -- 105 sites migrated, firm-literal baseline 126 -> 21
        unblocks 1 · S · bimpossible+addins · VERIFIED 2026-08-06 · BIMpossible #257 (85c3fff, MERGED 2026-08-05T23:43:21Z) -- b
+
+[SEC-GROUPS-DELIVERABLE-FIRM] Cross-firm NamedDeliverable IDOR in groups.py category derivation -- fixed and merged
+       unblocks 0 · S · bimpossible · MERGED-TO-MAIN 2026-08-07 · backend/aec/groups.py:195-231 (_validate_members_and_compute
+
+[SEC-GROUPS-PERSONAL-LISTING] list_groups personal-group cross-firm leak -- CONFIRMED and LANDED via PR #290 (independent parallel session won the race; see verification.by)
+       unblocks 0 · S · bimpossible · MERGED-TO-MAIN 2026-08-07 · backend/aec/groups.py:318-329 (list_groups, personal query) 
 
 [OPS-SYNTH-AUDIT-HARDEN] Harden synthetic-concurrency-audit tooling: env-guard seeding, loopback-check host, fix schedule
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-04 · weekly-full-audit_2026-08-04.md SEC-SCRIPTS-PERF-1, CQ-SYNTH
@@ -75,20 +85,23 @@ no items yet — run `init` to derive.)
 
 ## Next up
 
-[SEC-ASSIST-FIRMVIEW] Merge #278 -- scope the assistant briefing's firm-view count to the caller's firm
-       unblocks 2 · S · bimpossible · VERIFIED 2026-08-06 · BIMpossible #278 OPEN, NON-DRAFT, head claude/vibrant-golick
-
 [OPS-DIST] Code-sign Add-Ins + ship a real installer, including the Open-in-Revit opener
        unblocks 1 · L · bimpossible+addins · CLAIMED 2026-08-04 · BIMpossible_PHASE-STATUS.md §Open-in-Revit; BIMpossible_Prod
 
 [OPS-DEPLOY-RUNBOOK] Walk the deploy/rollback runbook draft on the prod host; fill VERIFY blanks
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-04 · Carried-open finding across multiple audit cycles, per BIMpo
 
+[SEC-ASSIST-TOOLS-PERSONAL-VIEWS] Assistant's _visible_saved_view_clause personal branch has no firm_id scope -- feeds tool_list_saved_views + tool_describe_saved_view
+       unblocks 0 · S · bimpossible · CLAIMED 2026-08-07 · backend/aec/assistant_tools.py:295-309 _visible_saved_view_c
+
+[SEC-VIEWS-PERSONAL-LISTING] list_views' personal-views query has the same missing-firm_id gap as the fixed list_groups bug
+       unblocks 0 · S · bimpossible · CLAIMED 2026-08-07 · backend/aec/views.py:207-218 (list_views, GET /data/views) -
+
+[SEC-ASSIST-PERSONAL-VIEWCOUNT] Assistant briefing's personal_views count is the unfixed half of the SEC-ASSIST-FIRMVIEW function
+       unblocks 0 · S · bimpossible · CLAIMED 2026-08-07 · backend/aec/assistant_context.py:172-178 (_assemble_project_
+
 [ADDINS-SLOT-LEDGER] Runtime-slot handoff ledger is stale: deploys are landing without a ledger entry
        unblocks 0 · S · addins · VERIFIED 2026-08-06 · Add-Ins decision-log/2026-07-25__runtime-slot-handoff.md -- 
-
-[DOC-DOCINDEX-DEFECTS-24] docindex: code root drops silently in a worktree; sub-chunk line attribution duplicates results
-       unblocks 0 · S · workspace · VERIFIED 2026-08-06 · tools/docindex/docindex.config.json:34 -- code root path '..
 
 [ADDINS-HYGIENE] Add-Ins hygiene: finish Glass rollout (conformance-PR dedup DONE 2026-08-04)
        unblocks 0 · M · addins · VERIFIED 2026-08-06 · Add-Ins #10 MERGED 2026-08-04 (squash, main 94b21ab -- Plans
@@ -171,9 +184,11 @@ no items yet — run `init` to derive.)
 [ADDINS-PANE-PR45] Land Add-Ins PR#45 -- Assistant pane header dock fix (branch checked out locally)
        unblocks 0 · S · addins · VERIFIED 2026-08-06 · Add-Ins PR#45 'fix(revitlink): dock Assistant pane header to
 
+[DOC-DOCINDEX-DEFECTS-24] docindex: code root drops silently in a worktree; sub-chunk line attribution duplicates results
+       unblocks 0 · S · workspace · VERIFIED 2026-08-07 · tools/docindex/docindex.config.json:34 -- code root path '..
+
 [DOC-LEDGER-HYGIENE] Retire stale NEXT.md: superseded banner applied, commit pending
        unblocks 0 · S · bimpossible+workspace · VERIFIED 2026-08-06 · 00_Strategy/NEXT.md header, read 2026-07-26: 'Updated 2026-0
 
 [P3-10B-DOORS] Doors room-pair slice LIVE on main -- Increment 1 merged (PR#253); direction is Increment 2
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-06 · BIMpossible PR#253 'feat(3.10b): doors resolve to the room P
-
