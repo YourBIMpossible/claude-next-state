@@ -945,12 +945,12 @@ items:
     ref: "Structurally invisible to backend/tests/test_route_tenancy_invariant.py -- that ratchet checks only that a mounted route resolves require_active_membership somewhere in its dependency graph (create_group/update_group both do), not that request-body-supplied ids are row-scoped to the caller's firm. Confirmed by reading the test module: it walks FastAPI's resolved dependant graph, never request payloads."
   verification:
     level: claimed
-    by: "Found in passing while auditing for other instances of the SEC-ASSIST-FIRMVIEW bug class (unscoped firm-owned reads). Worse in kind than that bug: this leaks actual category content, not a count, and persists it at rest rather than re-leaking transiently per request. Fix in progress this session on fix/groups-named-deliverable-tenant-scope, kept as a separate PR from #278 per one-defect-per-PR policy."
-    at: 2026-08-06
+    by: "Found in passing while auditing for other instances of the SEC-ASSIST-FIRMVIEW bug class (unscoped firm-owned reads). Worse in kind than that bug: this leaks actual category content, not a count, and persists it at rest rather than re-leaking transiently per request. Fix implemented 2026-08-07 on fix/groups-named-deliverable-tenant-scope (branched from origin/main post-#278): firm_id filter added to _validate_members_and_compute_categories (write path, both create_group and update_group) and _live_member_map (read path, defense in depth for any reference persisted some other way). A foreign-firm id now falls into the pre-existing missing_count fail-closed branch -- no new error path, no cross-firm existence oracle. 6 regression tests written in backend/tests/test_groups_named_deliverable_firm_scope.py (create/update rejection + no persistence, mixed valid/foreign rejected wholesale, valid-only control, readback never leaks foreign categories, direct-seed defense-in-depth check on the read path) -- not yet run against a live DB. Not yet committed. Separately, flagged (not fixed -- out of this fix's scope) an unconfirmed possible second issue: list_groups' personal-groups query (groups.py ~line 318) never filters by firm_id, only owner_user_id -- exploitable only if one user account can belong to multiple firms, unconfirmed. Spawned as its own follow-up task, not part of this PR."
+    at: 2026-08-07
   live_check:
   - "git log --all --oneline -- backend/aec/groups.py | head -5"
   - "gh pr list --search \"groups.py in:file\" --state all"
-  source: "Session rescan 2026-08-06, following up SEC-ASSIST-FIRMVIEW"
+  source: "Session rescan 2026-08-06, following up SEC-ASSIST-FIRMVIEW; fix work continued 2026-08-07"
   notes_url:
 
 - id: DOC-ALEMBIC-REFS-274
