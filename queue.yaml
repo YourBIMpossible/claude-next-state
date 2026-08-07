@@ -806,6 +806,8 @@ items:
     ref: "BIMpossible #269 (1887583), #270 (f6f0044), #271 (428889c) -- all MERGED to main 2026-08-06, post-outage-recovery"
   - kind: pr
     ref: "BIMpossible #277 (c0d3fc1) -- MERGED 2026-08-06; corrects the stale revoke_all_for_user comment at account_router.py:413 found during the #269 review"
+  - kind: pr
+    ref: "BIMpossible #285 (ecdb4f3) -- MERGED 2026-08-07; closes both flags from adversarial review of #271 (Verify-Local-CI.ps1's /repo:ro mount exposing .env to the backend lane's container; pure-lane db.session stub silently passing tests that reached real DB calls). Local: DB 3329/80, pure 2224/222, assistant-contract 4/0 (all 3 lanes green). GitHub Actions: 7/7 checks green. PR comment records full evidence: https://github.com/YourBIMpossible/BIMpossible/pull/285#issuecomment-5212729271"
   - kind: run
     ref: "Three-lane re-verification 2026-08-06 (pre-merge): #269 = 3320/2211/4, #270 = 3307/2210/4, #271 = 3303/2217/4, all exit 0, no failures in any lane"
   - kind: doc
@@ -952,6 +954,32 @@ items:
   - "git log origin/main --oneline | grep 5ed42ec"
   source: "Session rescan 2026-08-06, following up SEC-ASSIST-FIRMVIEW; fix landed 2026-08-07"
   notes_url: "https://github.com/YourBIMpossible/BIMpossible/pull/287"
+
+- id: SEC-GROUPS-PERSONAL-LISTING
+  title: "Investigate list_groups personal-group query for missing firm_id scope"
+  projects: [bimpossible]
+  status: in_flight
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 4
+  evidence:
+  - kind: code
+    ref: "backend/aec/groups.py:318-329 (list_groups, personal query) filters NamedDeliverable.owner_user_id == user_uuid, project_id, kind=='group', scope=='personal', archived_at.is_(None) -- no firm_id filter. Every sibling group operation in the same file firm-scopes, personal included: create_group sets firm_id=firm_id on every row regardless of scope; update_group's `if group.firm_id != firm_id: raise 403` is unconditional (not scope-gated); delete_group has the identical check; the firm-groups query 14 lines below the personal one filters on firm_id. The omission is isolated to this one read query."
+  - kind: doc
+    ref: "backend/aec/membership.py UserFirmMembership: composite UniqueConstraint(user_id, firm_id) allows multiple firm rows per user; partial unique index ufm_one_active_per_user (status='active') allows only one ACTIVE at a time -- sequential firm-switching (revoke + new activate) is a real, already-defended-against scenario per SEC-ASSIST-FIRMVIEW's cache-key fix ('a user whose active firm changed'), not simultaneous dual-membership."
+  - kind: doc
+    ref: "backend/guard.py assert_project_allowed is a GLOBAL ALLOWED_PROJECT_IDS check (matches CLAUDE.md's explicit warning that it is a deployment rail, not a tenancy mechanism), and list_groups/create_group/update_group/delete_group call no APS-hub-isolation gate (require_project_in_firm_hub) -- project_id is not tied to the caller's active firm on this route at all, which is what makes the same project_id reachable under any firm the same user is later active in."
+  verification:
+    level: claimed
+    by: "Phase 0/1 recon 2026-08-07 following up the flagged-not-fixed note on SEC-GROUPS-DELIVERABLE-FIRM (spawn_task task_ea517810 from that session, never independently claimed in this store until now). No open PR, branch, or other queue entry found touching this -- confirmed via git branch -a, gh pr list --state open, and a full-file grep of this store for list_groups/owner_user_id/personal.group before adding this entry. Contract established by reading groups.py, membership.py, identity.py, guard.py, and existing test fixtures: test_dynamic_firm_isolation.py's two_firms is the nearest pattern but uses two DIFFERENT users, one firm each -- no existing fixture covers one user active in two firms sequentially, so Phase 2 needs a new one. Investigating on fix/groups-personal-listing-firm-scope (branched from origin/main post-#287/#285); reproduction test not yet run as of this entry."
+    at: 2026-08-07
+  live_check:
+  - "git log origin/main --oneline | grep -i 'groups-personal-listing'"
+  - "gh pr list --search 'list_groups OR personal group firm' --state all"
+  source: "Session follow-up to SEC-GROUPS-DELIVERABLE-FIRM; flagged 2026-08-07, claimed 2026-08-07"
+  notes_url:
 
 - id: DOC-ALEMBIC-REFS-274
   title: "Merge #274 -- fix three surviving database/alembic/versions doc references"
