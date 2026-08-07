@@ -927,6 +927,32 @@ items:
   source: "BIMpossible PR#278; 00_Strategy/design-docs/2026-08-06__phase-3-8-slices-2-3_build-plan.md CLOSED block; rescan 2026-08-06"
   notes_url:
 
+- id: SEC-GROUPS-DELIVERABLE-FIRM
+  title: "Cross-firm NamedDeliverable IDOR in groups.py category derivation -- fix in progress"
+  projects: [bimpossible]
+  status: ready
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 4
+  evidence:
+  - kind: code
+    ref: "backend/aec/groups.py:195-231 (_validate_members_and_compute_categories) fetches NamedDeliverable rows by raw request-supplied id (db.query(NamedDeliverable).filter(NamedDeliverable.id.in_(ids))) with no firm_id check -- only kind/archived_at/project_id are validated. create_group and update_group both call it without passing the caller's firm_id for row-level ownership. A Firm B caller can submit Firm A's saved-view UUID as a member; its categories are unioned into Firm B's new/updated group, persisted in named_deliverables.categories and .members, and re-served on every future GET via _group_to_dict's live_map (groups.py:138-147, same unscoped id.in_() shape)."
+  - kind: run
+    ref: "2026-08-06 rescan: diffed groups.py against every refs/remotes/origin branch (all real-diff candidates confirmed pure staleness via git log <merge-base>..branch -- groups.py, zero actual commits); grepped all open PR file lists and all-branch commit messages for groups.py/NamedDeliverable/_validate_members_and_compute_categories -- no hits anywhere. Not present in this file prior to this entry."
+  - kind: doc
+    ref: "Structurally invisible to backend/tests/test_route_tenancy_invariant.py -- that ratchet checks only that a mounted route resolves require_active_membership somewhere in its dependency graph (create_group/update_group both do), not that request-body-supplied ids are row-scoped to the caller's firm. Confirmed by reading the test module: it walks FastAPI's resolved dependant graph, never request payloads."
+  verification:
+    level: claimed
+    by: "Found in passing while auditing for other instances of the SEC-ASSIST-FIRMVIEW bug class (unscoped firm-owned reads). Worse in kind than that bug: this leaks actual category content, not a count, and persists it at rest rather than re-leaking transiently per request. Fix in progress this session on fix/groups-named-deliverable-tenant-scope, kept as a separate PR from #278 per one-defect-per-PR policy."
+    at: 2026-08-06
+  live_check:
+  - "git log --all --oneline -- backend/aec/groups.py | head -5"
+  - "gh pr list --search \"groups.py in:file\" --state all"
+  source: "Session rescan 2026-08-06, following up SEC-ASSIST-FIRMVIEW"
+  notes_url:
+
 - id: DOC-ALEMBIC-REFS-274
   title: "Merge #274 -- fix three surviving database/alembic/versions doc references"
   projects: [bimpossible]
