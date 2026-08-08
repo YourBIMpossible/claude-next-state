@@ -1664,7 +1664,8 @@ items:
 - id: SEC-VIEWS-PERSONAL-INDEX-FIRMID
   title: "uix_saved_views_personal_name (personal views/leaves unique index) omits firm_id -- same reassigned-user 409 dead-end as the groups sibling"
   projects: [bimpossible]
-  status: ready
+  status: in_flight
+  claim: "CLAIMED 2026-08-07 by Claude session (worktree hopeful-faraday-112cc2, branch fix/views-personal-index-firmid off origin/main c371b12): RED-first repro per live_check (stale-firm personal view row, POST /data/views same name), then firm_id into uix_saved_views_personal_name via models.py + alembic migration IF the index/model contract matches the group case; migration-reviewer gate; separate PR per owner instruction."
   owner_gate: false
   unblocks: []
   blocked_by: []
