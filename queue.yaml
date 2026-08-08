@@ -46,10 +46,24 @@ reconciled:
   # already self-reconciled by their fixing sessions (SEC-VIEWS-PERSONAL-INDEX-FIRMID and
   # SEC-GROUPS-VIEWS-404-EXISTENCE-ORACLE carry the merge SHAs at verified level); this pass
   # independently confirmed both SHAs in git log c371b12..origin/main -- nothing else in the delta.
+  # Fourth pass 2026-08-08: delta 0fdf6e0..3116d10 = 8 commits. #318 was already reconciled at
+  # a199c2d by its own session; the other seven are new to the store -- #319 (dc935bf, weekly
+  # graphify metrics datapoint recovered from the retired update-graph-align worktree: a chore,
+  # no item, nothing owed), #320 #322 #325 (BM25 help ranker + corpus waves 1-3 + CI boundary
+  # guard -> NEW item CKA-PILLAR1-HELP-CORPUS, cross-repo with workspace #39), #321 (share-link
+  # viewer page -> NEW item FIX-SHARE-LINK-VIEWER; workspace #39 had it as P0 held-for-owner-go
+  # and the hold has since been released by the merge), #323 (AUTH-5 -> OPS-LOCAL-SIGNIN-AUTHLOOP
+  # marked CONTRADICTED: a merged fix arrived carrying a different diagnosis of the same symptom
+  # than the stored one, and neither has been probed since), #324 (25-item audit remediation ->
+  # NEW item AUDIT-2026-08-08-REMEDIATION, cross-repo with workspace #40).
+  # Tip is 3116d10 (#324) but the HIGHEST PR number in the delta is 325 -- #325 merged BEFORE
+  # #324, so pr: below is the high-water mark, not the tip's PR. A concurrent session was merging
+  # throughout this pass (#325 landed 12 min before the first check); re-fetched at write time and
+  # 3116d10 was still the tip, but re-fetch before trusting it rather than assuming.
   bimpossible:
-    at: '2026-08-07'
-    commit: 0fdf6e0
-    pr: 317
+    at: '2026-08-08'
+    commit: 3116d10
+    pr: 325
   # addins: re-read 2026-08-07 (night) -- the previous pass recorded this delta as EMPTY; it is not
   # empty now. git log 7bdfa68..origin/main = 6 commits: #55 (CLAUDE.md factual fixes) #56 (firm-
   # literal ratchet gate + CI enforcement, the C# counterpart of BIMpossible #279) #58 (SyncConfig's
@@ -58,10 +72,23 @@ reconciled:
   # ARCH-FIRM-ALIAS-BACKEND rather than given their own item -- same work, other half of the repo.
   # Re-confirmed 2026-08-07 (late night): git log 7bdfa68..origin/main re-walked after fetch --
   # tip still 5160510, delta beyond it EMPTY, working tree clean.
+  # 2026-08-08: delta 5160510..fdeeb54 = 2 commits, #62 (674c87f, nuget-vulns CI gate) and #63
+  # (fdeeb54, TDD-exclusion census). BOTH WERE ALREADY RECONCILED into items ADDINS-DEP-SCAN and
+  # ADDINS-TDD-CENSUS, at verified level carrying those exact squash SHAs -- by an earlier sync
+  # that wrote the items and then exited WITHOUT committing or advancing this watermark (recovered
+  # and committed as-is at 5b8af17 before this pass). So this pass added no items for addins; it
+  # advanced the watermark that pass never reached, and repaired the status vocabulary those items
+  # were written with (see below).
+  # Vocabulary repair, this pass: four items carried `status: done`, which is NOT in the closed
+  # vocabulary in reference/item-model.md -- ADDINS-BRANCH-PROTECT, ADDINS-DEP-SCAN,
+  # ADDINS-TDD-CENSUS, SLOP-AUDIT-SKILL. All four re-probed live and set to `live` (not `landed`):
+  # protection GET returns [firm-literals, test, gitleaks, nuget-vulns]; the census report and its
+  # re-run script are both on main; the slop skill is present and referenced once by /audit. Same
+  # class of defect as the 'open' value corrected in the 2026-08-07 sync.
   addins:
-    at: '2026-08-07'
-    commit: '5160510'
-    pr: 61
+    at: '2026-08-08'
+    commit: fdeeb54
+    pr: 63
   # workspace: re-read 2026-08-07 -- full delta 6941a70..da35d34 walked (12 commits: #20 #21(revert)
   # #22 #23 #25 #26 #29 #30 #31 #32 #33, #24 already handled prior pass). PR#25 (tenancy strategy
   # doc) and PR#26/#33 (backup resilience plan + verified restore drill) are the load-bearing ones
@@ -78,10 +105,20 @@ reconciled:
   # decision rule -- evidence added to OPS-BACKUP-RESTORE-DRILL), 11b79ec (retire Sync Dashboard
   # workflow, GitHub Models permanently retired -- no item needed, removal is self-contained).
   # No new items from this delta.
+  # Fourth pass 2026-08-08: delta 11b79ec..1a3021d = 4 commits, two PRs and two direct-to-main.
+  # #39 (69a5eb4, Pillar 1 Wave 1 decision record + both coverage inventories + share-link defect
+  # investigation) -> folded into the NEW cross-repo item CKA-PILLAR1-HELP-CORPUS and cited by
+  # FIX-SHARE-LINK-VIEWER. #40 (1a3021d, audit report + resolution record) -> the docs half of the
+  # NEW cross-repo item AUDIT-2026-08-08-REMEDIATION. Direct commits: d4d0d6c (Slop lens SLOP-N
+  # into the bimpossible-audit-skill matrix) -> evidence added to SLOP-AUDIT-SKILL, whose projects
+  # widened to [claude-profile, workspace] because the lens now binds the weekly full audit too;
+  # f5d70d9 (audit-matrix unattended-run integrity rules -- RUN DEGRADED banner, coverage-gap
+  # section, pre-declared expected failures) -> NO ITEM, self-contained harness hardening with
+  # nothing owed downstream, same treatment as 11b79ec last pass.
   workspace:
-    at: '2026-08-07'
-    commit: 11b79ec
-    pr: 38
+    at: '2026-08-08'
+    commit: 1a3021d
+    pr: 40
 
 # Work items.
 items:
@@ -1307,13 +1344,15 @@ items:
     ref: "BIMpossible #246 (9b7dfd9, Account link in the projects/files/model headers) and #249 (7de7a8a, provider-aware key service) -- both MERGED on green CI, neither has been seen in a browser"
   - kind: pr
     ref: "BIMpossible #259 (7f1c835) -- the shared AppHeader those pages now render, same exposure"
+  - kind: pr
+    ref: "BIMpossible #323 (57eb2e5, merged 2026-08-08) AUTH-5 -- a MERGED FIX for this exact symptom, arrived with a DIFFERENT diagnosis. backend/auth_router.py now drops prompt=login on the self-heal retry only (is_retry True -> omit prompt entirely; is_retry False -> still prompt=login, preserving AUTH-4's account-picker guarantee). Confirmed on origin/main at auth_router.py:146-183."
   verification:
-    level: claimed
-    by: "STRUCTURAL VERIFICATION GAP, not a defect in any one PR. Three merged frontend changes in this delta are signed-in-only surfaces, so CI green is the ONLY evidence any of them exists visually. Reported as claimed: the .env is protected and was not read, so the exact cause is the risk assessment's reading, not a probe of mine. This is the same class of finding the Phase 15a row already records ('Stage A can never be run through the production web UI pre-merge') -- but that one was structural and unavoidable, and this one is a fixable local-environment problem. Fixing it converts every future frontend merge from 'CI says it compiles' to 'I have seen it'. unblocks empty because no stored item is gated on it; its value is a permanent raise in the evidence floor, which the cone cannot express."
-    at: 2026-08-06
+    level: contradicted
+    by: "TWO COMPETING DIAGNOSES OF ONE SYMPTOM, both unresolved by probe -- surfaced, not picked.\n  READING A (stored, 2026-08-06, level claimed): the local .env carries production OAuth callbacks together with SECURE_COOKIES=1, so the local stack can never hold a session. Source is 01_BuildLog/2026-08-05__product-risk-assessment.md read as prose; .env is a protected file and was never read.\n  READING B (PR #323, 2026-08-08, merged): not an environment defect at all -- since AUTH-3 the OAuth CSRF state is cookie-only (aps_oauth_state, Max-Age = _STATE_TTL), so a slow credential+MFA entry outlives the cookie, /auth/callback sees 'states held=0' and self-heals to /auth/login?retried=1; the retry then re-sent prompt=login, forcing the whole slow dance again. #323 breaks that cycle.\n  Neither reading has been settled by a probe: nobody has signed in at the local stack since #323 merged. If B is the whole cause the item is now closed by a merge; if A also holds, #323 changes nothing locally. Status stays blocked_owner because only the owner can run the one probe that decides it (live_check below), and .env stays unread.\n  Retained original assessment: STRUCTURAL VERIFICATION GAP, not a defect in any one PR. Three merged frontend changes in this delta are signed-in-only surfaces, so CI green is the ONLY evidence any of them exists visually. Reported as claimed: the .env is protected and was not read, so the exact cause is the risk assessment's reading, not a probe of mine. This is the same class of finding the Phase 15a row already records ('Stage A can never be run through the production web UI pre-merge') -- but that one was structural and unavoidable, and this one is a fixable local-environment problem. Fixing it converts every future frontend merge from 'CI says it compiles' to 'I have seen it'. unblocks empty because no stored item is gated on it; its value is a permanent raise in the evidence floor, which the cone cannot express."
+    at: '2026-08-08'
   live_check:
-  - "Sign in at the local stack and load /account; a loop back to the login page reproduces it."
-  source: "01_BuildLog/2026-08-05__product-risk-assessment.md; PRs #246 / #249 / #259"
+  - "Sign in at the local stack and load /account; a loop back to the login page reproduces it. Post-#323 this probe now DISCRIMINATES: still looping => reading A (env), signs in => reading B (state-cookie TTL) was the cause and this item closes."
+  source: "01_BuildLog/2026-08-05__product-risk-assessment.md; PRs #246 / #249 / #259; contradicted by PR #323 (AUTH-5) 2026-08-08"
   notes_url:
 
 - id: PROD-DERIV-3
@@ -1842,7 +1881,7 @@ items:
 - id: ADDINS-BRANCH-PROTECT
   title: "Protect Add-Ins main: require PRs + firm-literals/test/gitleaks checks, strict up-to-date"
   projects: [addins]
-  status: done
+  status: live  # was 'done' -- outside the status vocabulary; corrected 2026-08-08 sync
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -1853,7 +1892,7 @@ items:
     ref: "Applied 2026-08-08 via gh api PUT repos/YourBIMpossible/BIMpossible-AddIns/branches/main/protection. Result: strict=true, contexts=[firm-literals, test, gitleaks], required_pull_request_reviews with 0 approvals (PR required, solo-dev self-merge allowed), force-push and deletion blocked. Check names taken from the successful check-runs on merged PR #61's head f71e088. Before this, ci.yml + security-scan.yml ran on every push/PR but nothing blocked a merge on failure (protection GET returned 404) -- alarms, not gates."
   verification:
     level: verified
-    by: "gh api GET after PUT confirmed the exact protection state above"
+    by: "gh api GET after PUT confirmed the exact protection state above. Re-probed 2026-08-08 sync: contexts are now [firm-literals, test, gitleaks, nuget-vulns] -- a superset, the fourth added by ADDINS-DEP-SCAN after this item landed. Protection is live, not merely configured."
     at: '2026-08-08'
   live_check:
   - "gh api repos/YourBIMpossible/BIMpossible-AddIns/branches/main/protection --jq '.required_status_checks.contexts'  # expect [firm-literals, test, gitleaks]"
@@ -1862,8 +1901,8 @@ items:
 
 - id: SLOP-AUDIT-SKILL
   title: "Repo-agnostic on-demand slop-audit skill: silent-catch census, counter-integrity, tested-but-dead"
-  projects: [claude-profile]
-  status: done
+  projects: [claude-profile, workspace]
+  status: live  # was 'done' -- outside the status vocabulary; corrected 2026-08-08 sync
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -1872,11 +1911,13 @@ items:
   evidence:
   - kind: doc
     ref: "Anti-slop coverage plan sec.2: PC-Monitor, Finance-Dashboard, Preseason Pick'em, claude-profile have no audit skill and no CI; AI-Server/Dashboard have pytest-only CI. The checklist already exists inside revit-functionality-audit but is scoped to Add-Ins."
+  - kind: commit
+    ref: "workspace d4d0d6c (2026-08-08, direct to main) -- Slop lens SLOP-N wired into the BIMpossible audit skill: 04_PromptsThatWorked/Audits/bimpossible-audit-skill/references/slop-audit.md added, audit-matrix.md + SKILL.md updated for silent-catch / counter-integrity / tested-but-dead. Both files confirmed present on workspace origin/main."
   - kind: doc
     ref: "Design decision (reconciliation sec.2 Q3, owner-accepted 2026-08-08): ONE skill taking a repo path argument, lean description, per-language notes in the body -- NOT per-repo copies (would multiply description budget; context_weight.py would WARN) and NOT a ctxcheck config (ctxcheck checks claims-vs-reality, not code defects)."
   verification:
     level: verified
-    by: "Executed 2026-08-08 same day on owner go (add to weekly audit + /audit): skills/slop-audit/SKILL.md written per the accepted design (one repo-agnostic skill, repo path arg, 3 checks + per-language swallow patterns, findings-only); /audit gained an 'Anti-slop checklist (every run, both modes)' section referencing it; weekly scheduled task slop-audit-weekly created (Mon 09:30 local + jitter) sweeping AI-Server, Dashboard, PC-Monitor, Finance-Dashboard, Preseason Pick'em, claude-profile, ctxcheck, ctxdex incrementally, skip-if-unchanged, BIMpossible/Add-Ins excluded (own tracks). Skill confirmed live in the session skill listing."
+    by: "Re-probed 2026-08-08 sync: both live_checks pass (skill present in ~/.claude/skills/, 'Anti-slop checklist' occurs once in /audit SKILL.md). The lens also reached the BIMpossible audit track this delta -- workspace d4d0d6c added references/slop-audit.md + a SLOP-N row to the audit matrix, so the checklist now binds the weekly full audit as well as the on-demand skill; projects widened to include workspace for that reason. Original: executed 2026-08-08 same day on owner go (add to weekly audit + /audit): skills/slop-audit/SKILL.md written per the accepted design (one repo-agnostic skill, repo path arg, 3 checks + per-language swallow patterns, findings-only); /audit gained an 'Anti-slop checklist (every run, both modes)' section referencing it; weekly scheduled task slop-audit-weekly created (Mon 09:30 local + jitter) sweeping AI-Server, Dashboard, PC-Monitor, Finance-Dashboard, Preseason Pick'em, claude-profile, ctxcheck, ctxdex incrementally, skip-if-unchanged, BIMpossible/Add-Ins excluded (own tracks). Skill confirmed live in the session skill listing."
     at: '2026-08-08'
   live_check:
   - "ls ~/.claude/skills/ | grep -i slop  # expect slop-audit"
@@ -1887,7 +1928,7 @@ items:
 - id: ADDINS-TDD-CENSUS
   title: "Measure Add-Ins logic in the /tdd-excluded Revit-API-bound glue zone vs extracted tested cores"
   projects: [addins]
-  status: done
+  status: live  # was 'done' -- outside the status vocabulary; corrected 2026-08-08 sync
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -1898,7 +1939,7 @@ items:
     ref: "Anti-slop coverage plan sec.3: /tdd explicitly excludes Revit-API-bound glue ('extract the testable core instead'); nobody has measured how much real logic sits in that excluded zone. Right now the extraction rate is an assumption, not a number."
   verification:
     level: verified
-    by: "Executed 2026-08-08 same day (PR #63, squash fdeeb54): report at Add-Ins/audits/2026-08-08__tdd-exclusion-census.md, re-runnable script at audits/tools/tdd_census.py. Measured: 58% of 38,339 non-test LOC Revit-API-bound, 11% WPF/UI, 29% Revit-free logic of which 86% wired into test assemblies. Uncovered Revit-free remainder 1,626 LOC; only FamilyFixerViewModel.cs (341) and DpapiPaneTokenStore.cs (160) are of size. Findings only, no fixes."
+    by: "Executed 2026-08-08 same day (PR #63, squash fdeeb54): report at Add-Ins/audits/2026-08-08__tdd-exclusion-census.md, re-runnable script at audits/tools/tdd_census.py. Measured: 58% of 38,339 non-test LOC Revit-API-bound, 11% WPF/UI, 29% Revit-free logic of which 86% wired into test assemblies. Uncovered Revit-free remainder 1,626 LOC; only FamilyFixerViewModel.cs (341) and DpapiPaneTokenStore.cs (160) are of size. Findings only, no fixes. Re-probed 2026-08-08 sync: both artifacts confirmed on Add-Ins origin/main (audits/2026-08-08__tdd-exclusion-census.md, audits/tools/tdd_census.py) -- the deliverable is a report and it exists, so this is live, not merely landed."
     at: '2026-08-08'
   live_check:
   - "ls F:/AI-Dev/Add-Ins/audits/  # expect a census report once done"
@@ -1908,7 +1949,7 @@ items:
 - id: ADDINS-DEP-SCAN
   title: "Add deterministic NuGet dependency-vulnerability check to Add-Ins CI, gate it, add its check name to branch protection"
   projects: [addins]
-  status: done
+  status: live  # was 'done' -- outside the status vocabulary; corrected 2026-08-08 sync
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -1921,10 +1962,85 @@ items:
     ref: "Owner scope directive 2026-08-08 (verbatim intent): add a deterministic NuGet dependency-vulnerability check to Add-Ins CI, make it fail on actionable findings, then add its exact successful check name to the EXISTING branch-protection rule (currently firm-literals, test, gitleaks; strict=true, PR required with 0 approvals). Do NOT expand into a general security-program project."
   verification:
     level: verified
-    by: "Executed 2026-08-08 same day: nuget-vulns job added to security-scan.yml (PR #62, squash 674c87f) -- dotnet list package --vulnerable --include-transitive over every top-level BIMpossible.*/*.csproj on windows-latest, grep+exit-code gated, fail-closed on empty glob. Trivy REJECTED: needs packages.lock.json, none committed. Check added to main protection (contexts now firm-literals, test, gitleaks, nuget-vulns; verified by GET). Gate exercised end-to-end on PR #63: all four checks ran and passed post-branch-update. Local baseline: all 18 projects clean."
+    by: "Executed 2026-08-08 same day: nuget-vulns job added to security-scan.yml (PR #62, squash 674c87f) -- dotnet list package --vulnerable --include-transitive over every top-level BIMpossible.*/*.csproj on windows-latest, grep+exit-code gated, fail-closed on empty glob. Trivy REJECTED: needs packages.lock.json, none committed. Check added to main protection (contexts now firm-literals, test, gitleaks, nuget-vulns; verified by GET). Gate exercised end-to-end on PR #63: all four checks ran and passed post-branch-update. Local baseline: all 18 projects clean. Re-probed 2026-08-08 sync: live GET returns contexts [firm-literals, test, gitleaks, nuget-vulns] -- the gate is enforced, not just written."
     at: '2026-08-08'
   live_check:
   - "grep -iE 'vulnerable|trivy|dep' F:/AI-Dev/Add-Ins/.github/workflows/*.yml  # expect a dep-scan job once done"
   - "gh api repos/YourBIMpossible/BIMpossible-AddIns/branches/main/protection --jq '.required_status_checks.contexts'  # expect the new check name added"
   source: "F:/AI-Dev/_scratch/anti-slop-reconciliation-2026-08-08.md Left-Flag, owner accepted 2026-08-08"
+  notes_url:
+
+- id: CKA-PILLAR1-HELP-CORPUS
+  title: "Client Knowledge Assistant Pillar 1: BM25 help ranker + how-to corpus, waves 1-3 shipped"
+  projects: [bimpossible, workspace]
+  status: landed
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 2
+  evidence:
+  - kind: pr
+    ref: "BIMpossible #320 (f8791ec) -- ports the docindex BM25 ranker into backend/aec/help_library.py, replacing the naive keyword matcher behind search_help_docs. Identifier-aware tokenization, compound-token expansion, tier weighting, in-memory index cached on (filename, mtime, size). External signature unchanged. 29 pre-existing tests pass + 9 new pins (38/38)."
+  - kind: pr
+    ref: "BIMpossible #322 (149815a) -- Wave 2 batch 4 corpus: Mech/Plumb/FP/Struct articles + 13 pins. NOTE: #322's PR body is a verbatim copy of #320's, so the title is the only description of what it actually shipped -- do not cite that body as evidence."
+  - kind: pr
+    ref: "BIMpossible #325 (9242846) -- CI boundary guard (C1) + Wave 3 articles (C2). backend/tests/test_help_corpus_guard.py exposes a reusable validate_help_corpus(dir): required frontmatter (title/area/keywords/last_verified), allowlisted schema, area allowlist (12 + project-setup, revit-link), banned internal markers, credential patterns (sk-, AKIA, 64-hex, Bearer). 9 tests."
+  - kind: pr
+    ref: "workspace #39 (69a5eb4) -- the decision record: Parts A+B done, owner decision packet (5 items resolved), 4-wave corpus plan, per-article metadata contract, plus both coverage inventories (65 web-app + 53 Add-Ins ribbon surfaces) and a 6-flag client-facing verification checklist."
+  verification:
+    level: verified
+    by: "Merge-verified only, deliberately NOT called live. Probed on BIMpossible origin/main 2026-08-08: backend/aec/help_library.py carries the BM25 ranker, backend/tests/test_help_corpus_guard.py exists, backend/aec/help/ holds exactly 29 articles. TWO NAMED GAPS keep this at landed: (1) no runtime evidence -- nothing observed shows the DEPLOYED assistant ranking real queries against the new corpus, only that the code and articles are on main; (2) the plan in workspace #39 is four waves and this delta contains waves 1-3, so Wave 4 was not seen -- stated as an observation of the delta, not as a claim that Wave 4 is the only work left. Cross-repo per reconcile.md: code half (BIMpossible) and decision half (workspace) are one item."
+    at: '2026-08-08'
+  live_check:
+  - "gh pr list --repo YourBIMpossible/BIMpossible --search 'help corpus wave' --state merged --json number,title  # expect a Wave 4 PR once the plan completes"
+  - "ls F:/AI-Dev/BIMpossible/backend/aec/help/ | wc -l  # 29 at this watermark; a jump means Wave 4 landed"
+  source: "BIMpossible #320 / #322 / #325; workspace #39 decision record"
+  notes_url:
+
+- id: FIX-SHARE-LINK-VIEWER
+  title: "Public share-link viewer page added -- every /share/<token> URL used to 404"
+  projects: [bimpossible]
+  status: landed
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: pr
+    ref: "BIMpossible #321 (66d09f2, merged 2026-08-08) -- adds frontend/app/share/[token]/page.tsx and frontend/app/lib/api/shareSnapshot.ts (plain fetch; recipients are anonymous by design). No backend change: the token endpoint already existed, only the page that consumes it was missing. Element rows are deliberately NOT rendered in this pass."
+  - kind: doc
+    ref: "workspace #39 (69a5eb4) recorded this as a P0 share-link route defect with the fix HELD FOR OWNER GO. The fix subsequently merged, so the hold was released -- recorded here because the queue should not still show it as gated."
+  verification:
+    level: verified
+    by: "Merge-verified, not live. Confirmed on origin/main 2026-08-08: frontend/app/share/[token]/page.tsx, page.test.tsx, and app/lib/api/shareSnapshot.ts all present. Not promoted to live because no share URL has been loaded in a browser. Worth naming: this is the ONE recently-merged client-facing surface that OPS-LOCAL-SIGNIN-AUTHLOOP does not block -- the viewer is anonymous by design, so it can be verified without a working local sign-in. That makes it the cheapest landed->live conversion currently in the store."
+    at: '2026-08-08'
+  live_check:
+  - "Open a real ${origin}/share/<token> URL in a browser -- expect the snapshot to render, not a 404. No sign-in required."
+  source: "BIMpossible #321; workspace #39 (share-link route defect investigation)"
+  notes_url:
+
+- id: AUDIT-2026-08-08-REMEDIATION
+  title: "2026-08-08 incremental audit: 25 findings resolved, CI green, report + resolution record filed"
+  projects: [bimpossible, workspace]
+  status: landed
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 2
+  evidence:
+  - kind: pr
+    ref: "BIMpossible #324 (3116d10, merged 2026-08-08) -- H-1 slack require_identity; H-2/H-3 backup bounded-exec + --exit-on-error; M-1..M-10 hub-check, counters, case-insensitive _first, SYSTEM task principal, health-file lock, Pester pin, migration data-loss notes, /events body cap, copy-out hash verify; L-1,3,4,5,6,8,9,10,12,13,14 hardening. L-7 closed as an OWNER DECISION, not a fix: declared alias order is authoritative and firm-first is intentional. L-2 was already fixed on main (b19e377)."
+  - kind: pr
+    ref: "workspace #40 (1a3021d, merged 2026-08-08) -- the docs half: incremental audit report (#256->#322 window), triaged second-opinion, resolution record, checklist + _audit-runs rows. Report at BIMpossible_Workspace/02_Reference/Audit and Scan Info/audit-resolution_2026-08-08.md."
+  verification:
+    level: verified
+    by: "Both halves merged and confirmed as tips of their respective delta walks (BIMpossible 3116d10 is origin/main HEAD; workspace 1a3021d is origin/main HEAD). Held at landed rather than live because the evidence is 'CI green on the PR' -- that is merge evidence, and per reconcile.md landed->live needs runtime evidence. Nothing here has been observed on a running deployment. Audit-ID caution carried from the breach-chain track: audit IDs (H-1, M-3, L-7...) are REUSED across runs, so cite these as ID@2026-08-08 -- an unqualified 'M-3' will collide with a different finding from another run."
+    at: '2026-08-08'
+  live_check:
+  - "ls 'F:/AI-Dev/BIMpossible_Workspace/02_Reference/Audit and Scan Info/audit-resolution_2026-08-08.md'"
+  - "Next full audit run: the 25 resolved IDs should not resurface. Recurrence is the only real proof the fixes hold."
+  source: "BIMpossible #324; workspace #40 resolution record"
   notes_url:
