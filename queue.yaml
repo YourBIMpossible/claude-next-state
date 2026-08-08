@@ -1096,7 +1096,7 @@ items:
 - id: SEC-ASSIST-PERSONAL-VIEWCOUNT
   title: "Assistant briefing's personal_views count is the unfixed half of the SEC-ASSIST-FIRMVIEW function"
   projects: [bimpossible]
-  status: ready
+  status: landed
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -1108,13 +1108,15 @@ items:
   - kind: doc
     ref: "PR#278's own commit message reasoned 'the personal_views query right below it already scoped by owner_user_id, so the omission [on firm_views] looks accidental' -- true that owner_user_id scoping exists, but (per the whole SEC-GROUPS-PERSONAL-LISTING investigation) owner_user_id alone does not prevent the same user's stale-firm rows from counting after a later active-firm switch. The fix's own justifying comparison is the thing that turned out to be incomplete."
   verification:
-    level: claimed
-    by: "Surfaced 2026-08-07 during the SEC-GROUPS-PERSONAL-LISTING investigation's Phase 3 equivalent-path review. Lower severity than the other two siblings in this family (SEC-VIEWS-PERSONAL-LISTING, SEC-ASSIST-TOOLS-PERSONAL-VIEWS) -- this leaks a COUNT only (personal_views: N in the assistant's project briefing text), not row data, matching SEC-ASSIST-FIRMVIEW's own pre-fix severity. Not reproduced -- classified by code reading only. Fix shape would mirror #278's own firm_views change almost exactly: add NamedDeliverable.firm_id == ctx.firm_id to the personal_views filter (owner_user_id already narrows to the caller, firm_id would close the stale-firm-switch gap); the (project, model, firm, user) cache key #278 already introduced likely needs no further change since firm is already part of it."
-    at: 2026-08-07
+    level: verified
+    by: "Surfaced 2026-08-07 during the SEC-GROUPS-PERSONAL-LISTING investigation's Phase 3 equivalent-path review (count-only leak, lower severity than its two siblings). REPRODUCED + FIXED + MERGED 2026-08-08 (worktree assist-viewcount, branch claude/assist-personal-viewcount-firm-scope, commit da7e542, squash-merged to main as b19e377 via PR #318, mergedAt 2026-08-08T08:05:45Z, owner-authorized promote+merge). Fix exactly the shape predicted at promotion: NamedDeliverable.firm_id == ctx.firm_id added to the personal_views filter, plus fail-closed personal_views=0 when ctx.firm_id is None (mirroring #278's firm_views branch); the (project, model, firm, user) cache key needed no change, confirmed by reviewer inspection. Reproduction: new backend/tests/test_assistant_context_personal_viewcount_firm_scope_dblane.py (3 tests: prior-firm rows not counted; prior firm's own read still counts positively, blocking an always-zero fix; None-firm counts nothing) proven RED against pre-fix code via stash-run-restore, GREEN after; sibling file's unidentified-caller assertion updated 1->0 personal (it pinned the fail-open behavior) and likewise proven RED pre-fix. Full Verify-Local-CI backend lane green (3656/2375/4), all PR required checks green. backend-endpoint-reviewer gate: PASS; its one substantive follow-up (assistant_tools.py _visible_saved_view_clause personal branch leaks NAME+FULL DEFINITION via list/describe tools, worse than this count) is exactly SEC-ASSIST-TOOLS-PERSONAL-VIEWS -- corroborates that item, not expanded into per mandate. Reviewer's minor optional: no test pins the briefing cache-key shape itself (a future key regression dropping firm/user has no test); noted here rather than opened as its own item."
+    at: 2026-08-08
   live_check:
-  - "git log origin/main --oneline | grep -i 'assist.*personal.*view\\|personal-viewcount'"
-  source: "Phase 3 equivalent-path review of SEC-GROUPS-PERSONAL-LISTING, 2026-08-07"
-  notes_url:
+  - "git log origin/main --oneline | grep b19e377  # squash SHA of PR #318"
+  - "gh pr view 318 --json state,mergedAt,mergeCommit"
+  source: "Phase 3 equivalent-path review of SEC-GROUPS-PERSONAL-LISTING, 2026-08-07; fixed + merged via PR https://github.com/YourBIMpossible/BIMpossible/pull/318, 2026-08-08"
+  notes_url: "https://github.com/YourBIMpossible/BIMpossible/pull/318"
+  claim: "LANDED 2026-08-08: PR #318 squash-merged to main as b19e377. Post-merge verification: merge commit at origin/main tip, PR state MERGED. Two of the four-item personal-scope family now remain open: SEC-ASSIST-TOOLS-PERSONAL-VIEWS (next, higher severity) and SEC-GROUPS-VIEWS-PERSONAL-SAMEFIRM-EXISTENCE-ORACLE (design-intent call)."
 
 - id: DOC-ALEMBIC-REFS-274
   title: "Merge #274 -- fix three surviving database/alembic/versions doc references"
