@@ -1503,7 +1503,8 @@ items:
 - id: SEC-GROUPS-VIEWS-HUB-ISOLATION
   title: "groups.py + views.py routes check only the global project allowlist, never per-firm hub isolation"
   projects: [bimpossible]
-  status: ready
+  status: in_flight
+  claim: "CLAIMED 2026-08-07 by Claude session (worktree hopeful-faraday-112cc2): investigating per live_check order -- invariant-test coverage first, then integration repro, fix both files in one PR if confirmed."
   owner_gate: false
   unblocks: []
   blocked_by: []
