@@ -1664,8 +1664,8 @@ items:
 - id: SEC-VIEWS-PERSONAL-INDEX-FIRMID
   title: "uix_saved_views_personal_name (personal views/leaves unique index) omits firm_id -- same reassigned-user 409 dead-end as the groups sibling"
   projects: [bimpossible]
-  status: in_flight
-  claim: "CLAIMED 2026-08-07 by Claude session (worktree hopeful-faraday-112cc2, branch fix/views-personal-index-firmid off origin/main c371b12): RED-first repro per live_check (stale-firm personal view row, POST /data/views same name), then firm_id into uix_saved_views_personal_name via models.py + alembic migration IF the index/model contract matches the group case; migration-reviewer gate; separate PR per owner instruction."
+  status: landed
+  claim: "LANDED 2026-08-07: PR #316 squash-merged to main as 242e645, all required checks green, remote branch deleted. REPRODUCED first per live_check: backend/tests/test_views_personal_index_firmid.py ran RED on unmodified code -- seeding the caller's OWN personal view under a foreign firm_id (post-reassign state), then POST /data/views with the same name/category returned 409 'A view with that name already exists for this category.' -- confirming the contract matches the group case exactly. Fix: firm_id added to uix_saved_views_personal_name -> (owner_user_id, firm_id, project_id, category_key, name), same partial WHERE, in models.py + alembic e2f3a4b5c6d7 (head after #315's d1e2f3a4b5c6). Migration uses op.drop_index(..., if_exists=True); ONE PROVENANCE CORRECTION vs this entry's original fix-shape note: repo-wide grep proved this index shipped via create_all ONLY -- it appears in NO alembic revision and NO SQL script (not even the 2026-05-25 phase35 script), so if_exists is still required but for a narrower reason than the groups sibling. ONE SCOPE REFINEMENT vs the original NOTE: although the WHERE has no kind= clause, category_key is in the key and group rows carry category_key NULL, so under Postgres NULL-distinctness this index only ever bites non-NULL-category rows (leaves/generic views) -- group rows are covered solely by #315's index; the two fixes are complementary, not overlapping. Upgrade only loosens uniqueness (owner_user_id stays in the key); downgrade re-tightens, documented failure mode + resolution in docstring; deployment holds a brief ACCESS EXCLUSIVE lock on named_deliverables during the in-transaction rebuild (reviewer note, acceptable: small table, backend-migrate runs before the app). Control test pins same-firm duplicate still 409s; #315's groups module re-run green alongside. migration-reviewer gate: PASS -- approve (chain linearity across all 54 revisions, parity character-identical, firm_id NOT NULL so no NULL-distinctness hole, if_exists masking bounded -- a surviving wrong index would fail the create loudly). Migration up/down/up verified on a stamped throwaway DB; Verify-Local-CI -SkipFrontend LOCAL CI GREEN (includes migration replay from scratch)."
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -1675,12 +1675,13 @@ items:
   - kind: code
     ref: "CONFIRMED by direct read 2026-08-07 while fixing SEC-GROUPS-PERSONAL-INDEX-FIRMID: backend/db/models.py:299-304 uix_saved_views_personal_name is UNIQUE (owner_user_id, project_id, category_key, name) WHERE scope='personal' AND archived_at IS NULL -- no firm_id, the IDENTICAL omission the groups index had. Same mechanism: a user reassigned between firms who owned a personal view named X (project P, category C) under the old firm cannot create one under the new firm; the 409 collides with their own stale-firm row, invisible since the #290/#312 read-path fixes. owner_user_id in the key means no cross-user conflation -- write-path availability defect, not corruption. NOTE the WHERE has no kind= clause, so unlike the groups index this one covers leaves AND any personal kind."
   verification:
-    level: claimed
-    by: "Not reproduced -- deliberately left out of the groups PR per stay-on-mandate. Fix shape is a direct copy of the groups fix (PR for SEC-GROUPS-PERSONAL-INDEX-FIRMID): add firm_id to the index columns in models.py + an alembic migration with DROP INDEX IF EXISTS (this index also shipped via the 2026-05-25 phase35 SQL script / create_all, not an alembic revision), RED-first repro test on POST /data/views with a stale-firm row seeded."
+    level: verified
+    by: "VERIFIED 2026-08-07 by reproduction (see claim: test module RED on unmodified code with the predicted 409, GREEN after fix, merged as 242e645 on PR #316; migration-reviewer PASS; up/down/up cycle + full local CI migration replay green). Two details in the original claimed-level note were corrected during the fix and are recorded in the claim: the index's provenance (create_all only, never any SQL script) and its effective scope (NULL category_key means it never bites group rows despite the missing kind= clause)."
     at: '2026-08-07'
   live_check:
-  - "Integration test: seed the caller's own personal view row under a foreign firm_id (same owner/project/category/name), then POST /data/views with that name -- expect 409 today (proving the gap), 201 after the fix"
-  source: "backend/db/models.py:299-304 direct read during SEC-GROUPS-PERSONAL-INDEX-FIRMID, 2026-08-07"
+  - "git log origin/main --oneline | grep 242e645  # squash SHA of PR #316"
+  - "psql: \\d named_deliverables  -- uix_saved_views_personal_name should now list (owner_user_id, firm_id, project_id, category_key, name)"
+  source: "backend/db/models.py:299-304 direct read during SEC-GROUPS-PERSONAL-INDEX-FIRMID, 2026-08-07; PR https://github.com/YourBIMpossible/BIMpossible/pull/316"
   notes_url:
 
 - id: DASH-BIMWATCH-WIRING
