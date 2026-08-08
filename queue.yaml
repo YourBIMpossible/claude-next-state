@@ -27,17 +27,34 @@ reconciled:
   # is the true current tip, confirmed via git rev-list 1a73c62..origin/main returning exactly
   # that one commit -- do not trust a previously-recorded watermark commit without re-fetching;
   # #293 merged AFTER this sync's first PR pull already thought it had the full delta.
+  #
+  # RE-SYNCED 2026-08-07 (night), e1a793f..c371b12 = 15 commits. Merged in that window:
+  # #294 (synth-audit breach misclassification) #295 #296 (doc hygiene) #297 (NEUTRALITY CLOSEOUT
+  # -- big: allowlist moves into the DB, firm-literal baseline goes to zero) #298 #311 (graphify)
+  # #299 (nanoid advisory) #300 (dependabot github-actions ecosystem ON) #306 #307 (grouped bumps,
+  # auto-merged) #276 (TEAMS GATEWAY, flag-off) #312 #313 #314 #315 (the groups/views firm-scope +
+  # hub-isolation wave, already reconciled by the concurrent session that built it).
+  # Two things this pass changed that are NOT mere status flips: HUB-TENANCY-GOLIVE's stored
+  # migration target e0f1a2b3c4d5 is four revisions behind head (now d1e2f3a4b5c6) -- marked
+  # contradicted; and the firm-literal baseline is now ZERO, which silently inerts #279's
+  # scan-did-not-run tripwire. Still open: #273 #275 (drafts, owner merge call), #222 #283
+  # (drafts), and nine Dependabot PRs (DEP-TRIAGE-2026-08). origin/main was observed advancing
+  # DURING this sync (#315 landed between two commands in the same pass) -- re-fetch before
+  # trusting this tip.
   bimpossible:
     at: '2026-08-07'
-    commit: e1a793f
-    pr: 293
-  # addins: re-read 2026-08-07 -- git log 7bdfa68..origin/main confirmed EMPTY, zero-commit delta.
-  # Watermark commit/pr unchanged because nothing changed; `at` advanced because the read itself
-  # was performed and confirmed, not skipped.
+    commit: c371b12
+    pr: 315
+  # addins: re-read 2026-08-07 (night) -- the previous pass recorded this delta as EMPTY; it is not
+  # empty now. git log 7bdfa68..origin/main = 6 commits: #55 (CLAUDE.md factual fixes) #56 (firm-
+  # literal ratchet gate + CI enforcement, the C# counterpart of BIMpossible #279) #58 (SyncConfig's
+  # 21 literals through FirmParams/FirmFamilies, baseline 29->8) #59 (last three, 8->5) #60 (docs:
+  # the ratchet's mechanism and why 5 sites stay) #61 (.graphifyignore). Folded into
+  # ARCH-FIRM-ALIAS-BACKEND rather than given their own item -- same work, other half of the repo.
   addins:
     at: '2026-08-07'
-    commit: 7bdfa68
-    pr: 53
+    commit: '5160510'
+    pr: 61
   # workspace: re-read 2026-08-07 -- full delta 6941a70..da35d34 walked (12 commits: #20 #21(revert)
   # #22 #23 #25 #26 #29 #30 #31 #32 #33, #24 already handled prior pass). PR#25 (tenancy strategy
   # doc) and PR#26/#33 (backup resilience plan + verified restore drill) are the load-bearing ones
@@ -315,6 +332,8 @@ items:
     ref: "BIMpossible PR#231 (ff42ac3) -- SEC-NPMALERT-1 (=WSR13): both HIGH alerts (brace-expansion, glob) triaged scope=development and fixed via npm overrides, merged 2026-07-27"
   - kind: run
     ref: "gh api dependabot/alerts 2026-08-04: 1 open HIGH — a NEW advisory (see SEC-BRACE-2), not a regression of the policy scope here"
+  - kind: run
+    ref: "POLICY NOW DEMONSTRATED IN THE WILD, which is exactly what the 2026-08-04 note said was still owed. #300 (2fcec8d) added the github-actions ecosystem to the Dependabot config on 2026-08-07, and Dependabot immediately opened five Action bumps -- #301 setup-python, #302 dependabot/fetch-metadata, #303 actions/github-script, #304 actions/setup-node, #305 actions/checkout. All five are still OPEN and unmerged (gh pr list, 2026-08-07 night). In the same window the npm/pip grouped bumps #306 (backend-minor-patch) and #307 (frontend-minor-patch) DID auto-merge to main. That is the designed split observed end to end: Actions wait for a human, package bumps do not. Observed from PR state, not from re-reading the workflow."
   verification:
     level: verified
     by: "DECIDED + SHIPPED 2026-08-04 (owner chose option a, 'exclude Actions from auto-merge'): dependabot-automerge.yml gates on steps.meta.outputs.package-ecosystem != 'github_actions', so an Action bump always waits for manual review regardless of semver level; npm/pip auto-merge unchanged. Rationale recorded in the workflow header, not just the commit. MERGED f8b022f and pulled to the local main. No Actions allowlist change needed (no new uses: reference). Alerts also back at ZERO (SEC-BRACE-2 via PR#240). Live-ness note: the workflow only executes on a dependabot PR, so the next github_actions bump (AddIns #17 is one) is the first run that will demonstrate the exclusion in the wild."
@@ -660,6 +679,8 @@ items:
     ref: "BIMpossible PR#241 (2eb20c3, merged 2026-08-04) -- the floating 2026-07-26/27 run-hardening WIP committed: /data-prefix fix, redis compose fix, profile-drift check"
   - kind: run
     ref: "2026-08-04 probes: grep BIMPOSSIBLE_ALLOW_SYNTHETIC_SEED hits both scripts (4+3); git ls-files confirms Run-ScheduledConcurrencyAudit.ps1 tracked; Get-ScheduledTask confirmed the Windows task was NEVER actually registered"
+  - kind: pr
+    ref: "FOLLOW-ON, and it is a correctness fix rather than more hardening: BIMpossible #294 (ec9eec9, merged 2026-08-07) 'fix guard-check breach misclassification'. The guard check had been treating ANY non-401/403 response as an isolation breach, so a 300-VU spike dry run reported 28 'breaches' that were entirely connection drops, timeouts and 500s with no evidence any cross-tenant data was ever returned. Replaced with a four-way classifier (new guard_classification.py, unit-tested, no Locust/DB dependency): PASS (401/403 or an identity echo matching the caller's own tenant) / AVAILABILITY_FAILURE (status 0 or 5xx -- a load signal, never a security finding) / CONFIRMED_BREACH (response proves protected cross-tenant data came back) / GUARD_POLICY_ANOMALY (non-denial that does not itself prove disclosure). locustfile.py routes non-pass responses into three non-overlapping report lists so nothing double-counts, all still register as Locust failures so load visibility is preserved, diff_baseline.py reports the categories distinctly with only confirmed breaches CRITICAL, and the nonzero-on-any-finding exit contract is unchanged. Commit message read directly; the classifier module itself was not reviewed."
   verification:
     level: verified
     at: 2026-08-04
@@ -764,7 +785,7 @@ items:
   notes_url:
 
 - id: HUB-TENANCY-GOLIVE
-  title: "Seed firm->hub binding, migrate to e0f1a2b3c4d5, restart backend, run both tenancy smokes"
+  title: "Seed firm->hub binding, migrate to head (NOT e0f1a2b3c4d5 -- 4 revisions behind), restart backend, run both tenancy smokes"
   projects: [bimpossible]
   status: blocked_owner
   owner_gate: true
@@ -776,16 +797,19 @@ items:
   - kind: pr
     ref: "BIMpossible #264 (90088f0), #265 (1fe6010), #266 (84c94c2), #267 (7180426), #268 (a2ea120) -- all MERGED to main 2026-08-06"
   - kind: commit
-    ref: "backend/alembic/versions/e0f1a2b3c4d5_add_firm_allowed_hubs_and_project_hub_cache.py on origin/main; down_revision b0c1d2e3f4a5; nothing names e0f1a2b3c4d5 as its down_revision, so it is the single head"
+    ref: "backend/alembic/versions/e0f1a2b3c4d5_add_firm_allowed_hubs_and_project_hub_cache.py on origin/main; down_revision b0c1d2e3f4a5. STALE AS OF 2026-08-07 (night): the claim that followed here -- 'nothing names e0f1a2b3c4d5 as its down_revision, so it is the single head' -- was true when written and is now FALSE."
+  - kind: commit
+    ref: "CORRECTED HEAD, computed 2026-08-07 night by reading revision/down_revision out of every backend/alembic/versions/*.py on origin/main: the chain is d1e2f3a4b5c6 <- a7c1e93f4b28 <- f2b3c4d5e6f7 <- 9329a1e7be85 <- e0f1a2b3c4d5. So e0f1a2b3c4d5 sits FOUR revisions below the head. Provenance of the four that landed on top: 9329a1e7be85 = Slack gateway (#262); f2b3c4d5e6f7 = add_allowed_projects, from the neutrality closeout #297; a7c1e93f4b28 = Teams gateway (#276, 879e857); d1e2f3a4b5c6 = personal-group unique index (#315, c371b12). d1e2f3a4b5c6 is the head -- no other version file names it as a down_revision. Single head confirmed, no branch to merge."
   - kind: doc
     ref: "01_BuildLog/2026-08-05__hub-tenancy-migration-BLOCKED_HANDOFF.md -- HELD; the approved 'restart backend only' instruction must NOT be run"
   verification:
-    level: claimed
-    by: "MERGE VERIFIED, RUNTIME NOT. Code for the whole hub-isolation stack is on main and the migration file is the single alembic head. Whether the running backend serves it, and whether e0f1a2b3c4d5 is applied, COULD NOT BE PROBED this session -- docker and DB access were out of scope, so this is a failed probe, not a negative result. The handoff states the ordered unblock: (1) owner sets firms.aps_hub_id for firm c0757b61-423b-5534-b494-719d3b10bae6 (prod-DB writes are auto-denied to Claude), (2) docker compose run --rm backend-migrate, (3) confirm SELECT firm_id,hub_id FROM firm_allowed_hubs returns >=1 row, (4) restart backend. Two named failure modes if run out of order: docker compose restart skips depends_on backend-migrate so the DB falls behind the code and the app crash-loops on SchemaNotAtHeadError; and an empty seed fail-closes 403 across 55 gated routes (48 in backend/aec/router.py, 7 in backend/aec/qa/router.py). There is NO feature flag -- the gate is unconditional. Two owner smokes are un-run: the #266 upstream-sanitization smoke (bad item_id -> UPSTREAM_MESSAGES[404] sentence, no WIP_ERROR/jsonapi/request id) and the tenancy smoke (model page + schedule -> 200)."
-    at: 2026-08-06
+    level: contradicted
+    by: "CONTRADICTION FOUND 2026-08-07 (night rescan), and it changes the runbook: this item's own stored instruction says 'migrate to e0f1a2b3c4d5', and that revision is no longer the head -- four migrations have landed on top of it since (see the CORRECTED HEAD evidence row). Both readings, per the anti-drift rule: (a) STORE: e0f1a2b3c4d5 is the single head -- was TRUE when recorded 2026-08-06; (b) PROBE: origin/main's version files now chain d1e2f3a4b5c6 <- a7c1e93f4b28 <- f2b3c4d5e6f7 <- 9329a1e7be85 <- e0f1a2b3c4d5 -- TRUE as of c371b12. Reading (b) supersedes (a) on date order alone, but it is flagged rather than silently rewritten because it alters an owner-executed, prod-touching runbook. PRACTICAL EFFECT: step 2 must be `docker compose run --rm backend-migrate` (which goes to head), NOT a hand-pinned `alembic upgrade e0f1a2b3c4d5` -- pinning to the stored revision would leave the DB four migrations short while the code expects head, which is precisely the SchemaNotAtHeadError crash-loop this item already warns about. NOTE the four are not incidental: two of them (Slack 9329a1e7be85, Teams a7c1e93f4b28) belong to gateways that are flag-gated OFF, and one (f2b3c4d5e6f7 add_allowed_projects, from #297) moves the ALLOWED_PROJECT_IDS rail into the database -- that one interacts with this item's own subject matter and has NOT been reviewed for interaction with the hub gate. PRIOR ASSESSMENT, still accurate on everything else: MERGE VERIFIED, RUNTIME NOT. Code for the whole hub-isolation stack is on main. Whether the running backend serves it, and whether e0f1a2b3c4d5 is applied, COULD NOT BE PROBED this session -- docker and DB access were out of scope, so this is a failed probe, not a negative result. The handoff states the ordered unblock: (1) owner sets firms.aps_hub_id for firm c0757b61-423b-5534-b494-719d3b10bae6 (prod-DB writes are auto-denied to Claude), (2) docker compose run --rm backend-migrate, (3) confirm SELECT firm_id,hub_id FROM firm_allowed_hubs returns >=1 row, (4) restart backend. Two named failure modes if run out of order: docker compose restart skips depends_on backend-migrate so the DB falls behind the code and the app crash-loops on SchemaNotAtHeadError; and an empty seed fail-closes 403 across 55 gated routes (48 in backend/aec/router.py, 7 in backend/aec/qa/router.py). There is NO feature flag -- the gate is unconditional. Two owner smokes are un-run: the #266 upstream-sanitization smoke (bad item_id -> UPSTREAM_MESSAGES[404] sentence, no WIP_ERROR/jsonapi/request id) and the tenancy smoke (model page + schedule -> 200)."
+    at: '2026-08-07'
   live_check:
   - "docker compose run --rm backend-migrate; then SELECT firm_id,hub_id FROM firm_allowed_hubs (expect >=1 row) BEFORE restarting the backend."
-  source: "01_BuildLog/2026-08-05__hub-tenancy-migration-BLOCKED_HANDOFF.md; git delta 08a1f03..a2ea120; memory project_hub-tenancy-migration-hold"
+  - "docker compose run --rm backend-migrate alembic current  # expect d1e2f3a4b5c6, NOT e0f1a2b3c4d5 -- re-derive the head before the run, it has moved twice in two days"
+  source: "01_BuildLog/2026-08-05__hub-tenancy-migration-BLOCKED_HANDOFF.md; git delta 08a1f03..a2ea120; alembic graph re-read on origin/main@c371b12 2026-08-07; memory project_hub-tenancy-migration-hold"
   notes_url:
 
 - id: FE-3-10-FLAG
@@ -843,7 +867,7 @@ items:
   notes_url:
 
 - id: ARCH-FIRM-ALIAS-BACKEND
-  title: "Backend firm-alias layer SHIPPED -- 105 sites migrated, firm-literal baseline 126 -> 21"
+  title: "Firm-alias layer SHIPPED -- BIMpossible firm-literal baseline now ZERO (126 -> 21 -> 0), Add-Ins 29 -> 5"
   projects: [bimpossible, addins]
   status: landed
   owner_gate: false
@@ -862,13 +886,18 @@ items:
     ref: "workspace ca53082 'docs(burndown): instance #1 deferral closed - alias layer built, migrator ran, 126 -> 21' (#14)"
   - kind: log
     ref: "LOCAL RUN 2026-08-06 on main@84c94c2: semgrep --config .semgrep/bim-firm-literal.yml backend frontend -> 21 findings, exactly the 21-entry baseline; check-firm-literal-baseline.mjs exit 0, 'no new firm-parameter literals'. CAVEAT found during this run: the CI ratchet step scans with .semgrep/bim-rules.yml, which does NOT contain the firm-literal rule, so the CI gate is vacuously green -- filed as its own background task 2026-08-06; the 21-entry claim is proven by this local run, not by CI. RESOLVED 2026-08-06 via #279 (344164f) -- ratchet step now scans bim-firm-literal.yml and the checker hard-fails on a 0-findings-vs-nonzero-baseline scan; see SEC-FIRMLITERAL-RATCHET-CI."
+  - kind: pr
+    ref: "BASELINE IS NOW ZERO, not 21. BIMpossible #297 (2332646, 'feat(closeout): reconstructed neutrality + remediation final closeout (D-4, D-6, T1/T2/T4)', merged 2026-08-07) rewrote .semgrep/firm-literal-baseline.txt to empty; the file's own header on origin/main records the arc: '126 when the ratchet gate landed -> 21 after the B1 alias-layer migration (2026-08-06) -> 0', the final 21 (11 backend, 10 frontend) having been moved onto backend/aec/param_aliases.py and the clientRules.ts registry that the gate excludes. Counted directly from origin/main, not from the PR body: 0 non-comment lines."
+  - kind: pr
+    ref: "ADD-INS HALF NOW LANDED TOO (git log 7bdfa68..origin/main, read 2026-08-07 night -- 6 commits, none of which existed at the previous sync, whose watermark comment recorded this delta as EMPTY): #56 dc91118 'Add firm-literal ratchet gate + CI enforcement' gives the C# repo its own ratchet, the direct counterpart of BIMpossible's #279; #58 a3ab08b routes SyncConfig's 21 firm literals through FirmParams/FirmFamilies (baseline 29 -> 8); #59 822f401 routes the last three neutralizable ones (8 -> 5); #60 38c2a2d documents the mechanism and why the remaining 5 sites stay."
   verification:
     level: verified
-    by: "SPLIT OUT of ARCH-FIRM-PARAM-NEUTRALITY on 2026-08-06 because half of that item shipped and half never started. This is step 2 (the backend alias layer whose shape frontend/app/lib/clients/clientRules.ts had already documented). Merge-verified on both repos. landed not live: the migrated read paths have had no runtime exercise against a real non-firm model -- the 113-check proof was a dual-import comparison, not a live query. Residual 21 baseline entries = 11 backend Tier 3 business-logic couplings + 10 frontend sites in clientRules.ts. Also inherited, still unchecked: discipline_field_probe.py probes BOTH 'S&L_SoilBearing' and 'S&L_Soil_Bearing' -- one almost certainly does not exist in the SPF, and a probe for a non-existent name returns a silent false NOT-PRESENT."
+    by: "SPLIT OUT of ARCH-FIRM-PARAM-NEUTRALITY on 2026-08-06 because half of that item shipped and half never started. This is step 2 (the backend alias layer whose shape frontend/app/lib/clients/clientRules.ts had already documented). Merge-verified on both repos. landed not live: the migrated read paths have had no runtime exercise against a real non-firm model -- the 113-check proof was a dual-import comparison, not a live query. Residual 21 baseline entries = 11 backend Tier 3 business-logic couplings + 10 frontend sites in clientRules.ts. Also inherited, still unchecked: discipline_field_probe.py probes BOTH 'S&L_SoilBearing' and 'S&L_Soil_Bearing' -- one almost certainly does not exist in the SPF, and a probe for a non-existent name returns a silent false NOT-PRESENT. UPDATE 2026-08-07 (night): the Add-Ins half of the neutrality work has now landed as well (#56/#58/#59/#60), taking the C# baseline 29 -> 5 and giving that repo its own CI ratchet. Both baselines are now non-zero-by-design and ratcheted, so the remaining sites (21 BIMpossible / 5 Add-Ins) are a documented residue, not a backlog -- the title's '126 -> 21' figure describes the BIMpossible side only and should not be read as the whole picture. Still verified-not-live for the same reason as before: no runtime exercise against a real non-firm model on either side."
     at: 2026-08-06
   live_check:
-  - "node scripts/check-firm-literal-baseline.mjs  # expect green against the 21-entry baseline"
-  source: "BIMpossible PR#257; AddIns PR#52; 02_Reference/2026-08-04__SL-Parameter-Coupling-MAP.md"
+  - "git show origin/main:.semgrep/firm-literal-baseline.txt | grep -vc '^#\\|^$'  # expect 0 -- the 21-entry figure in this item's older evidence rows is superseded"
+  - "node scripts/check-firm-literal-baseline.mjs  # expect green; see SEC-FIRMLITERAL-RATCHET-CI for what a zero baseline does to the scan-actually-ran guard"
+  source: "BIMpossible PR#257 + #297; AddIns PR#52/#56/#58/#59/#60; 02_Reference/2026-08-04__SL-Parameter-Coupling-MAP.md"
   notes_url: "02_Reference/2026-08-04__SL-Parameter-Coupling-MAP.md"
 
 - id: ARCH-BIMP-PARAMSET
@@ -1109,9 +1138,9 @@ items:
   notes_url:
 
 - id: TEAMS-GATEWAY-W1
-  title: "Review and land #276 -- Microsoft Teams assistant gateway"
+  title: "Microsoft Teams assistant gateway MERGED (#276) flag-gated off -- carries the firm-membership + hub-isolation fix"
   projects: [bimpossible]
-  status: blocked_external
+  status: landed
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -1119,14 +1148,17 @@ items:
   risk: 3
   evidence:
   - kind: pr
-    ref: "BIMpossible #276 OPEN DRAFT, head claude/slack-work-teams-match-b4n00t -- opened 2026-08-06 by another session"
+    ref: "BIMpossible #276 MERGED 2026-08-08T02:18:43Z as 879e857 'feat(teams): Microsoft Teams assistant gateway -- the Slack lane's twin (wave 1, flag-gated off)' -- confirmed in git log e1a793f..origin/main, sync 2026-08-07 (night)."
+  - kind: pr
+    ref: "The membership-gap question this row was opened to settle is ANSWERED, and the answer is the opposite of the feared one: #276 SHIPPED the fix. Per the diff-grounded comparison recorded on SEC-FIRMVIEW-TENANCY-280 (another session, 2026-08-07, read against origin/main file contents), main now gates the gateway choke points via _still_a_member() -> aec.gateway_membership.is_active_member_of_firm(db, firm_id, user_uuid=bimpossible_user_id) PLUS aec.hub_tenancy.assert_project_in_firm_hub -- i.e. it closes hub isolation as well, which the competing #280 never addressed. That comparison is why #280 was closed as superseded."
   verification:
-    level: claimed
-    by: "NOT REVIEWED AT ALL -- the only source read was the PR title. Recorded so an open PR representing real work does not sit outside the store, not because its state is known. It is presumably the Teams counterpart of SLACK-GATEWAY-W1, which is itself blocked on a missing firm-membership check needing a migration; whether #276 inherits that same gap is UNKNOWN and is the first thing to settle. Do not merge or enable any flag on the strength of this row. Probe that would settle it: read the diff for a require_active_membership dependency on every route it mounts. RECONFIRMED 2026-08-07: gh pr list --search updated:>=2026-08-06 still shows #276 OPEN/DRAFT, same head claude/slack-work-teams-match-b4n00t -- no state change, still unreviewed. Note SLACK-GATEWAY-W1 (its presumed counterpart) is now landed via #262, and a separate finding this pass (SEC-FIRMVIEW-TENANCY-280) shows #280 stacked on that same now-superseded head branch -- if #276 is ALSO based on a pre-#262 branch, it likely has the identical stale-base problem and should be checked for that specifically, not just for the membership-check gap."
+    level: verified
+    by: "MERGE CONFIRMED by machine evidence (git log delta), not by a ledger claim. The security substance is SECOND-HAND-VERIFIED: this session did not read #276's diff itself -- it is relying on the origin/main file-content comparison another session performed and recorded on 2026-08-07 when closing #280. That comparison read db/models.py, aec/gateway_membership.py and tests/test_slack_router.py directly, so it is real evidence, but treat the routing detail as one remove from source. landed not live: the Teams gateway is flag-gated OFF, so nothing here has runtime exercise; enabling the flag is a separate owner decision that has NOT been made and is not implied by this merge. PRIOR STATE, kept for the record: NOT REVIEWED AT ALL -- the only source read was the PR title. Recorded so an open PR representing real work does not sit outside the store, not because its state is known. It is presumably the Teams counterpart of SLACK-GATEWAY-W1, which is itself blocked on a missing firm-membership check needing a migration; whether #276 inherits that same gap is UNKNOWN and is the first thing to settle. Do not merge or enable any flag on the strength of this row. Probe that would settle it: read the diff for a require_active_membership dependency on every route it mounts. RECONFIRMED 2026-08-07: gh pr list --search updated:>=2026-08-06 still shows #276 OPEN/DRAFT, same head claude/slack-work-teams-match-b4n00t -- no state change, still unreviewed. Note SLACK-GATEWAY-W1 (its presumed counterpart) is now landed via #262, and a separate finding this pass (SEC-FIRMVIEW-TENANCY-280) shows #280 stacked on that same now-superseded head branch -- if #276 is ALSO based on a pre-#262 branch, it likely has the identical stale-base problem and should be checked for that specifically, not just for the membership-check gap. -- END PRIOR STATE; the stale-base worry did not materialise, #276 merged cleanly to main."
     at: '2026-08-07'
   live_check:
-  - "gh pr view 276 --repo YourBIMpossible/BIMpossible --json state,mergedAt,isDraft"
-  source: "gh pr list, read 2026-08-06; no diff read"
+  - "gh pr view 276 --repo YourBIMpossible/BIMpossible --json state,mergedAt  # expect MERGED"
+  - "grep -rn 'BIMPOSSIBLE_TEAMS' backend/ --include=*.py  # the gateway flag; expect it still defaults OFF until an owner decision says otherwise"
+  source: "git log e1a793f..origin/main (sync 2026-08-07 night); membership detail second-hand from SEC-FIRMVIEW-TENANCY-280's origin/main comparison"
   notes_url:
 
 - id: PROVIDER-REGISTRY-272
@@ -1395,17 +1427,18 @@ items:
     ref: "diff read directly 2026-08-06: ratchet step now points at bim-firm-literal.yml; check-firm-literal-baseline.mjs hard-fails on a 0-findings-vs-nonzero-baseline scan, so this exact misconfiguration class cannot recur silently; validate step covers both configs; dead --exclude-rule flag dropped from the gating step"
   verification:
     level: verified
-    by: "Found as a caveat while verifying ARCH-FIRM-ALIAS-BACKEND's 21-entry baseline claim on 2026-08-06 (the CI gate backing that claim was vacuously green), fixed same day by another party, and confirmed merged via git log a2ea120..origin/main. Read the actual diff on origin/main rather than trusting the PR title: the PR body's own numbers (21 findings against the real config; checker exits 1 against the old wrong config) match what the diff implements. landed not live: no subsequent real CI run has been observed to confirm the ratchet fires correctly end-to-end in a GitHub Actions execution, only the local semgrep numbers quoted in the PR body."
+    by: "Found as a caveat while verifying ARCH-FIRM-ALIAS-BACKEND's 21-entry baseline claim on 2026-08-06 (the CI gate backing that claim was vacuously green), fixed same day by another party, and confirmed merged via git log a2ea120..origin/main. Read the actual diff on origin/main rather than trusting the PR title: the PR body's own numbers (21 findings against the real config; checker exits 1 against the old wrong config) match what the diff implements. landed not live: no subsequent real CI run has been observed to confirm the ratchet fires correctly end-to-end in a GitHub Actions execution, only the local semgrep numbers quoted in the PR body. SIDE EFFECT NOTICED 2026-08-07 (night rescan), NOT A REGRESSION OF THIS FIX BUT WORTH KNOWING: #279's safety net was 'hard-fail when semgrep reports ZERO findings against a NONZERO baseline', which is what detects a scan that silently did not run. The neutrality closeout (#297) has since taken the baseline to zero entries, so that guard's precondition can no longer be met and it is now inert -- a 0-vs-0 result is indistinguishable from a scan that never executed. The ratchet's primary job still works (any finding at all now exceeds a zero baseline and fails), so this is a lost tripwire, not an open hole. Read directly from scripts/check-firm-literal-baseline.mjs on origin/main; NOT confirmed against a real CI run, and no fix attempted here per the /next boundary (status reporting, not code changes)."
     at: 2026-08-06
   live_check:
   - "Next security-scan-summary run on any branch -- confirm the RATCHET step log shows bim-firm-literal.yml as its --config, not bim-rules.yml."
-  source: "git show 344164f 2026-08-06; ARCH-FIRM-ALIAS-BACKEND evidence"
+  - "git show origin/main:.semgrep/firm-literal-baseline.txt | grep -vc '^#\\|^$'  # if this is 0, the scan-actually-ran guard below is inert; decide whether that is acceptable"
+  source: "git show 344164f 2026-08-06; re-read of check-firm-literal-baseline.mjs on origin/main 2026-08-07; ARCH-FIRM-ALIAS-BACKEND evidence"
   notes_url:
 
 - id: SEC-FIRMVIEW-TENANCY-280
-  title: "PR#280 needs rebase+retarget onto main -- its base branch predates #262's squash merge"
+  title: "PR#280 CLOSED as superseded by main's #276/#291 fix -- owner-directed, coverage check done"
   projects: [bimpossible]
-  status: ready
+  status: landed
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -1416,14 +1449,19 @@ items:
     ref: "BIMpossible #280 OPEN, 2 commits, 'feat(slack): tenancy enforcement for Slack assistant gateway' -- adds Autodesk identity binding + firm-membership checks to Slack assistant turns/pairing, per PR body: the gateway took firm_id entirely from slack_workspace_binding.firm_id and never re-checked the paired user still belonged to that firm, so a user removed from the firm kept full read access through Slack for as long as their slack_user_binding row existed."
   - kind: doc
     ref: "PR#280's baseRefName is claude/slack-assistant-gateway -- SLACK-GATEWAY-W1's own head branch. That branch (35f0bdb) still exists on origin but its content is now SUPERSEDED: PR#262 squash-merged as dd89889 on 2026-08-07, so main's history does not contain the branch's original commits. gh reports mergeStateStatus CLEAN / mergeable MERGEABLE against that stale base, which is exactly the misleading-green state CLAUDE.md's GitHub-workflow section warns about for stacked PRs after a squash merge."
+  - kind: doc
+    ref: "Owner instruction 2026-08-07 (review/closeout session, re-confirmed independently via gh pr view 262/280 + git ls-remote same day): do NOT merge #280 yet. Next implementation session scoped narrowly to (1) rebase claude/slack-tenancy-enforcement onto current origin/main, (2) resolve conflicts and re-validate the Alembic chain (downgrade->upgrade->alembic check), (3) retarget #280's base to main, (4) re-run CI and review the diff against main (not the stale base), (5) merge only once that is green. Explicit exclusions for that session: do not bundle the 4 unrelated pre-existing dirty files in BIMpossible_Workspace, do not touch the unpushed 2b246f5 hub-coupling commit, no new Slack feature work -- stays a narrow rebase+retarget of the existing tenancy fix only."
+  - kind: commit
+    ref: "2026-08-07 rebase session: `git rebase --onto origin/main 35f0bdb claude/slack-tenancy-enforcement` conflicted in backend/slack/router.py at all 3 checkpoints the branch touches. Root cause is NOT textual drift -- main's PR #276 (feat(teams) Microsoft Teams gateway, merged 2026-08-08T02:18:43Z) independently built the identical F-1/F-3 fix under issue #291: same choke points (channel-message pre-ack, BackgroundTask answer path, bind path), same 'paired is not authorized, binding may predate revocation' reasoning, same fail-closed contract -- but via a different mechanism. Main: `_still_a_member()` -> `aec.gateway_membership.is_active_member_of_firm(db, firm_id, user_uuid=bimpossible_user_id)` + `aec.hub_tenancy.assert_project_in_firm_hub` (also closes hub isolation, which #280 does not address at all). #280: `pairing.check_active_membership()` -> `aec.membership.get_active_firm_id`, backed by a NEW migration adding `slack_user_binding.autodesk_user_id` (raw Autodesk id, since `bimpossible_user_id` is a one-way uuid5 hash). Confirmed on origin/main: `aec/membership.py`/`get_active_firm_id` still exists (not replaced), but nothing greps for `slack_user_binding.autodesk_user_id` or `c7a3e1b9d240` -- #280's migration and its raw-id lookup path appear to have no consumer on main's new mechanism. Rebase aborted (`git rebase --abort`); branch left exactly as it was, zero commits changed. This is a design decision (which mechanism wins, or how to reconcile), not a rebase conflict -- not resolved unilaterally per this task's explicit stop condition."
+  - kind: pr
+    ref: "RESOLUTION 2026-08-07: owner ruled do-not-rebase/do-not-merge; directed a test-only coverage comparison, then close-as-superseded if main covers substantively. Comparison result: #280's one unique regression case (legacy binding with null autodesk_user_id) is UNREPRESENTABLE on main -- main's slack_user_binding has no autodesk_user_id column, bimpossible_user_id is NOT NULL and is the sole identity input to is_active_member_of_firm's forward-hash join, so no un-gateable binding shape exists; the null case was an artifact of #280's own migration design. Every other deny path #280 tested (no membership / revoked / pending / wrong firm) has a substantive equivalent in main's test_slack_router.py, which ADDITIONALLY pins the fail-closed lookup-failure contract on both use-time and redeem paths (tests #280 lacked). No test ported; nothing salvaged (owner explicitly ruled out salvaging the autodesk_user_id migration/lookup). PR #280 CLOSED with owner-supplied superseded language + coverage-check note. Cleanup owner-directed same day: worktree .claude/worktrees/slack-tenancy + local and remote branch claude/slack-tenancy-enforcement (01ff8e8) all deleted; commits remain reachable via the closed PR on GitHub."
   verification:
-    level: contradicted
-    by: "gh's own mergeable=MERGEABLE reads as 'safe to merge' but is checking against a base branch whose commits never landed on main -- CLAUDE.md is explicit: 'after the base PR SQUASH-merges, REBASE the stacked branch onto main... before retargeting -- squash leaves the original commits out of main's DAG, so a naive retarget re-presents merged content and can silently revert files' (near-miss precedent: nearly dropped da4r_enabled() on #187). Both readings: (a) gh says clean/mergeable: TRUE against current base; (b) that base is stale relative to main: TRUE. This item is not actionable as 'merge #280' until someone rebases claude/tenancy-enforcement (or whatever #280's head is) onto origin/main and retargets the PR base to main, verifying no files silently revert in the process. Not fixed by this sync -- reconciliation only, per skill boundary (no commits/pushes from /next)."
+    level: verified
+    by: "gh pr close 280 succeeded 2026-08-07; comparison grounded in origin/main file contents (db/models.py SlackUserBinding columns, aec/gateway_membership.py, tests/test_slack_router.py full deny-test read), not memory."
     at: '2026-08-07'
   live_check:
-  - "gh pr view 280 --repo YourBIMpossible/BIMpossible --json baseRefName,mergeStateStatus,mergeable  # re-check after any rebase; baseRefName should read main once retargeted"
-  - "git ls-remote --heads origin claude/slack-assistant-gateway  # if this disappears (branch cleaned up post-#262), #280 needs a base-branch fix regardless"
-  source: "gh pr view 280; git ls-remote; sync pass 2026-08-07 cross-referencing CLAUDE.md's stacked-PR rule"
+  - "gh pr view 280 --repo YourBIMpossible/BIMpossible --json state  # expect CLOSED"
+  source: "gh pr view 280/276/281; git log -S on router.py; owner ruling + close directive 2026-08-07"
   notes_url:
 
 - id: TENANCY-PROBE-281
@@ -1680,4 +1718,53 @@ items:
     by: "git status confirmed 2026-08-07; content of the diff itself not re-reviewed this pass"
     at: '2026-08-07'
   source: "Session finding, carried over from an earlier dashboard-update pass this session; out of scope for that pass since it touches AI-Server's own repo, not Dashboard"
+  notes_url:
+
+- id: OPS-NEUTRALITY-CLOSEOUT-D6
+  title: "Neutrality + remediation closeout MERGED (#297); D-6 compare-mode soak running, owner go/no-go due 2026-08-15"
+  projects: [bimpossible]
+  status: landed
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 3
+  evidence:
+  - kind: pr
+    ref: "BIMpossible #297 (2332646) MERGED 2026-08-07 -- 'feat(closeout): reconstructed neutrality + remediation final closeout (D-4, D-6, T1/T2/T4)'. Confirmed in git log e1a793f..origin/main during the 2026-08-07 night rescan; the diff --stat was read, the diff itself was not."
+  - kind: commit
+    ref: "This PR is larger than its title implies and touches a tenancy-adjacent rail: it adds backend/allowlist_source.py (193 lines), backend/allowlist_db.py (43), and migration f2b3c4d5e6f7_add_allowed_projects.py (44), i.e. it moves the ALLOWED_PROJECT_IDS allowlist into the database. CLAUDE.md is explicit that ALLOWED_PROJECT_IDS is a deployment rail and NOT a tenancy mechanism, so making it DB-backed does not make it one -- flagged here so nobody later reads 'allowlist is in the DB now' as 'tenancy is handled'. It also rewrote .semgrep/firm-literal-baseline.txt to empty (see ARCH-FIRM-ALIAS-BACKEND) and added a security-scan.yml step plus Verify-Local-CI.ps1 changes."
+  - kind: doc
+    ref: "D-6 seeded 2026-08-08; compare-mode soak running since 2026-08-08 04:10 UTC with day-0 and post-restart both green. Daily parity check runs as Windows scheduled task BIMpossible-D6-Soak-Parity-Check, appending to F:/AI-Dev/.tools/d6-soak/soak-log.jsonl. Sourced from memory project_neutrality-closeout-reconstruction, which is a prior session's record -- treat the soak's day-to-day results as CLAIMED until the jsonl is read directly."
+  verification:
+    level: claimed
+    by: "MERGE is machine-verified (git log delta); everything downstream of the merge is not. Added during the 2026-08-07 night rescan because a merged PR of this size with a dated owner decision attached to it was not represented in the store at all -- it existed only in memory. The 7-day compare-mode soak ends 2026-08-15 and the memory record states it needs an unambiguous owner go before anything flips; that decision is NOT yet due and no one should pre-empt it. What is genuinely unverified: whether the soak has stayed green since day 0 (read the jsonl), and whether the DB-backed allowlist interacts with the hub-tenancy gate that HUB-TENANCY-GOLIVE is about to bring up -- its migration f2b3c4d5e6f7 sits between the Slack and Teams migrations in that item's chain and has not been reviewed for that interaction."
+    at: '2026-08-07'
+  live_check:
+  - "Get-Content F:/AI-Dev/.tools/d6-soak/soak-log.jsonl -Tail 5  # expect one green parity entry per day since 2026-08-08"
+  - "Get-ScheduledTask BIMpossible-D6-Soak-Parity-Check  # expect Ready/Running, not disabled"
+  source: "git log e1a793f..origin/main; git show 2332646 --stat; memory project_neutrality-closeout-reconstruction"
+  notes_url:
+
+- id: DEP-TRIAGE-2026-08
+  title: "Nine Dependabot PRs open and waiting -- five are Action bumps the auto-merge policy deliberately holds for review"
+  projects: [bimpossible]
+  status: ready
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: pr
+    ref: "Open as of 2026-08-07 night (gh pr list, all non-draft): github-actions -- #301 actions/setup-python 5->7, #302 dependabot/fetch-metadata 2->3, #303 actions/github-script 7->9, #304 actions/setup-node 4->7, #305 actions/checkout 4->7. npm -- #308 @testing-library/jest-dom 6.9.1->7.0.0, #309 eslint-plugin-react-hooks 4.6.2->7.1.1, #310 react + @types/react, #139 tailwind-merge 2.6.1->3.6.0 (open since 2026-07-21)."
+  - kind: doc
+    ref: "The five Action bumps are open BY DESIGN, not by neglect: SEC-DEPENDABOT-CI records the 2026-08-04 owner decision to exclude the github_actions ecosystem from auto-merge at every semver level, and #300 (2026-08-07) turned that ecosystem on. These five are the first PRs produced under that policy and they are its intended output -- a human reviews each Action bump. Do not 'fix' them by re-enabling auto-merge."
+  verification:
+    level: verified
+    by: "PR list read live 2026-08-07 night; no diff of any individual bump was reviewed, so nothing is said here about whether any of them is safe to take. All four npm ones are MAJOR version jumps (jest-dom 6->7, react-hooks plugin 4->7, tailwind-merge 2->3) and #310 moves React itself, so these are not rubber stamps -- react-hooks 4->7 in particular spans the lint-rule rewrite. Grouped minor/patch bumps continue to auto-merge unattended (#306/#307 did exactly that on 2026-08-07), so this queue will not grow from routine updates; it accumulates only the ones policy says a person should look at. Kept as ONE item rather than nine because the decision is a single triage sitting, not nine independent tasks."
+    at: '2026-08-07'
+  live_check:
+  - "gh pr list --repo YourBIMpossible/BIMpossible --author app/dependabot --json number,title  # expect this set to shrink only via deliberate review"
+  source: "gh pr list 2026-08-07 night; SEC-DEPENDABOT-CI policy record"
   notes_url:
