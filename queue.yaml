@@ -1577,8 +1577,8 @@ items:
 - id: SEC-GROUPS-403-ORDERING
   title: "update_group/delete_group check the global allowlist (which echoes project_id) before the firm-ownership check"
   projects: [bimpossible]
-  status: in_flight
-  claim: "CLAIMED 2026-08-07 by Claude session (worktree hopeful-faraday-112cc2, fresh branch fix/groups-403-ordering off e5bbb04): reproduce per live_check (foreign-firm group with non-allowlisted project_id must currently leak the allowlist 403), then mirror F-5 -- firm check first in update_group/delete_group. Note: e5bbb04 (SEC-GROUPS-VIEWS-HUB-ISOLATION) placed the hub gate AFTER the firm check on these routes already; this item is only the remaining allowlist-before-firm-check residue."
+  status: landed
+  claim: "LANDED 2026-08-07: PR #314 squash-merged to main as 4448fcf, all required checks green, remote branch deleted. REPRODUCED first per live_check: new backend/tests/test_groups_403_ordering.py ran RED on unmodified code -- a firm-A caller PATCH/DELETEing a firm-B group id with off-list project_id received the verbatim leak 'Project 'b.00000000-dead-beef-0000-000000000403' is not in the allowlist. Add it to ALLOWED_PROJECT_IDS in .env to proceed.' -- confirming the disclosure exactly as described. Fix: mirrored F-5 -- swapped the blocks in update_group and delete_group so group.firm_id != firm_id (uniform 403 'Group not found.') runs before assert_project_allowed; resulting order auth -> firm ownership -> allowlist -> hub gate -> scope checks; P1-5 and the e5bbb04 hub-gate placement preserved and pinned (2 foreign-probe uniform-403 tests asserting project_id never appears in the detail + 2 own-group allowlist controls). backend-endpoint-reviewer gate: PASS, no follow-ups. Verify-Local-CI backend lanes green. Reviewer's one out-of-scope observation promoted to its own entry: SEC-GROUPS-VIEWS-404-EXISTENCE-ORACLE."
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -1596,7 +1596,66 @@ items:
     by: "NEEDS REPRODUCTION (no live/test request has confirmed the actual 403 body an attacker receives), but the F-5 discovery above substantially raises confidence this is real and not merely theoretical -- the same engineering group already treated this exact ordering as worth a dedicated fix in the sibling file. Exploitability is narrow, same precondition the source note gave: the attacker needs a valid group_id belonging to a DIFFERENT firm, AND that group's project_id must currently be OUTSIDE the global ALLOWED_PROJECT_IDS allowlist for the disclosure branch to fire (if the project is allowlisted, as most active projects presumably are, assert_project_allowed passes silently and the flow reaches the firm check, which returns a generic 'Group not found' -- no leak in that path). Fix shape: mirror F-5 exactly -- swap the two blocks so `if group.firm_id != firm_id` runs first in both update_group and delete_group."
     at: '2026-08-07'
   live_check:
-  - "grep -n 'assert_project_allowed\\|firm_id != firm_id' backend/aec/groups.py  # confirm ordering unchanged since this pass"
-  - "Integration test: as a firm-A user, PATCH/DELETE a real group_id belonging to firm B whose project_id has been removed from ALLOWED_PROJECT_IDS -- expect current behavior to return the project-allowlist 403 (with project_id in the body) rather than the generic 'Group not found', proving the disclosure fires as described"
-  source: "named-deliverable-personal-scope-firm-gaps.md finding #5; backend/aec/groups.py + views.py + guard.py confirmed via direct read 2026-08-07 sync pass"
+  - "git log origin/main --oneline | grep 4448fcf  # squash SHA of PR #314"
+  - "grep -n 'assert_project_allowed\\|firm_id != firm_id' backend/aec/groups.py  # firm check now precedes allowlist in update_group/delete_group"
+  source: "named-deliverable-personal-scope-firm-gaps.md finding #5; backend/aec/groups.py + views.py + guard.py confirmed via direct read 2026-08-07 sync pass; PR https://github.com/YourBIMpossible/BIMpossible/pull/314"
+  notes_url:
+
+- id: SEC-GROUPS-VIEWS-404-EXISTENCE-ORACLE
+  title: "PATCH/DELETE groups+views: nonexistent id returns 404 but cross-firm id returns 403 -- status-code existence oracle"
+  projects: [bimpossible]
+  status: ready
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: code
+    ref: "Surfaced by the backend-endpoint-reviewer gate during SEC-GROUPS-403-ORDERING (PR #314, 2026-08-07): _get_active_group (backend/aec/groups.py:~170) raises 404 'Group not found.' for a nonexistent/archived id, while a real-but-cross-firm id reaches the firm check and gets 403 'Group not found.' -- same detail string, different status code, so an authed member of any firm can distinguish 'no such group anywhere' from 'a group with this id exists in some other firm'. Identical pre-existing shape in views.py's F-5 pattern (update_view/delete_view). Inherited, not introduced, by #313/#314 -- both preserved the pre-existing codes."
+  verification:
+    level: claimed
+    by: "Reviewer observation + code read only, not reproduced with live requests. Low severity: group ids are UUIDv4 (unguessable), the leak is one bit of existence, and the detail string is already uniform -- only the status code differs. Fix shape if taken: return 404 for the cross-firm branch too (or 403 for the nonexistent branch), consistently across groups.py update/delete and views.py update_view/delete_view in one PR, with a paired-status regression test."
+    at: '2026-08-07'
+  live_check:
+  - "As a firm-A user: PATCH /data/groups/<random-uuid> (expect 404) vs PATCH /data/groups/<real-firm-B-group-id> (expect 403) -- if both return the same status, this has been fixed"
+  source: "backend-endpoint-reviewer gate on PR #314, 2026-08-07"
+  notes_url:
+
+- id: DASH-BIMWATCH-WIRING
+  title: "Wire bimwatch pipeline output into the live dashboard (index.html/data.js have zero references)"
+  projects: [dashboard]
+  status: ready
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: log
+    ref: "2026-08-07 session: grepped index.html and data.js in both Dashboard and Dashboard-auto for bimwatch/bim-watch patterns, zero matches in either file; bimwatch/ pipeline itself is live and running (.github/workflows/bimwatch.yml daily 06:00 UTC, unbroken collection commits through 2026-08-07)"
+  verification:
+    level: claimed
+    by: "Grep-confirmed absence of wiring 2026-08-07 during an unrelated file-recovery investigation (Dashboard-auto had lost its bimwatch working-tree files to an accidental deletion, since restored via git restore -- unrelated to this gap). Not a decision to build it, just a surfaced gap; not re-checked since."
+    at: '2026-08-07'
+  source: "Session finding 2026-08-07, surfaced incidentally while investigating deleted bimwatch files in Dashboard-auto's working tree"
+  notes_url:
+
+- id: AISERVER-OPENCODE-DOCS
+  title: "Commit AI-Server's uncommitted opencode/local-coding-agent doc updates (PROGRAM_PLAN.md, README.md)"
+  projects: [ai-server]
+  status: ready
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: log
+    ref: "2026-08-07 close: git status on F:/AI-Dev/AI-Server shows M CLAUDE.md, M PROGRAM_PLAN.md, M README.md still uncommitted on main, plus untracked .claude/ and docs/superpowers/plans/2026-07-12-harness.md; changes date back to a dashboard-update pass that verified the opencode/local-coding-agent finding (landed on the Dashboard card in commit 660f726) but never committed the corresponding AI-Server-repo doc updates"
+  verification:
+    level: claimed
+    by: "git status confirmed 2026-08-07; content of the diff itself not re-reviewed this pass"
+    at: '2026-08-07'
+  source: "Session finding, carried over from an earlier dashboard-update pass this session; out of scope for that pass since it touches AI-Server's own repo, not Dashboard"
   notes_url:
