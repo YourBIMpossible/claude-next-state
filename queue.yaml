@@ -1015,7 +1015,7 @@ items:
 - id: SEC-VIEWS-PERSONAL-LISTING
   title: "list_views' personal-views query has the same missing-firm_id gap as the fixed list_groups bug"
   projects: [bimpossible]
-  status: ready
+  status: in_flight
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -1039,6 +1039,7 @@ items:
   - "gh pr list --search 'list_views personal firm' --state all"
   source: "Phase 3 equivalent-path review of SEC-GROUPS-PERSONAL-LISTING, 2026-08-07"
   notes_url:
+  claim: "In flight 2026-08-07 (worktree vibrant-golick-7005b0, branch fix/views-personal-listing-firm-scope) -- dispatched to reproduce with a real test, fix if confirmed, PR per the SEC-GROUPS-PERSONAL-LISTING template. Phase-0 recon found a SECOND concurrent worktree (quirky-jepsen-9f58e5, branch claude/views-personal-listing-firm-scope) already sitting on the exact same one-line fix to backend/aec/views.py, uncommitted, no test coverage, no PR -- same collision shape as the list_groups race documented in SEC-GROUPS-PERSONAL-LISTING/memory queue-claims-are-not-locks. Proceeding independently per that precedent's protocol (build the reproduction + fix + tests regardless, re-check live state immediately before publish, fold gracefully into whichever side lands first). This worktree was not touched, only inspected read-only (git status/diff)."
 
 - id: SEC-ASSIST-TOOLS-PERSONAL-VIEWS
   title: "Assistant's _visible_saved_view_clause personal branch has no firm_id scope -- feeds tool_list_saved_views + tool_describe_saved_view"
