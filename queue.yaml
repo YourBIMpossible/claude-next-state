@@ -1015,7 +1015,7 @@ items:
 - id: SEC-VIEWS-PERSONAL-LISTING
   title: "list_views' personal-views query has the same missing-firm_id gap as the fixed list_groups bug"
   projects: [bimpossible]
-  status: in_flight
+  status: landed
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -1035,11 +1035,11 @@ items:
     by: "REPRODUCED + FIXED + PR OPEN 2026-08-07 (worktree vibrant-golick-7005b0, branch fix/views-personal-listing-firm-scope, commit 13c88b9). Reproduction: new live-DB integration test backend/tests/test_views_personal_listing_firm_scope.py (ported from the groups sibling; the paraphrased second_firm_membership/_switch_active_firm fixture names in the earlier note don't literally exist -- the real sibling pattern is a foreign-Firm-row fixture, which is what was ported) ran RED against unfixed code on a throwaway migrated Postgres, proving the leak, then GREEN after adding SavedView.firm_id == firm_id as the first clause of the personal query (exact 3ca2cef shape). Same-firm control test green; groups sibling test still green; full view-related subset (128 tests) green; full Verify-Local-CI backend lane green (3629/2375/4 across the three lanes, migrations replay, single head, ratchet, gitleaks). backend-endpoint-reviewer gate run: fix confirmed correct and sufficient; its one finding (no hub-isolation gating on any /data/views route, identically /data/groups) is pre-existing and already tracked as SEC-GROUPS-VIEWS-HUB-ISOLATION, plus one informational note (list_views queries don't filter kind, inert today -- no production_schedule writers exist). PR #312 opened via Push-And-Verify, ALL required checks green; squash-merge attempt was blocked by the session's permission classifier, so THE MERGE IS THE OWNER'S CLICK. Collision resolution: re-checked live immediately before publish -- the concurrent worktree quirky-jepsen-9f58e5 never committed/pushed/PR'd its identical uncommitted fix, so no fold was needed; that worktree's local edit is now redundant and can be discarded by its own session."
     at: 2026-08-07
   live_check:
-  - "gh pr view 312 --repo YourBIMpossible/BIMpossible --json state,mergedAt  # expect MERGED once owner clicks; then flip this item to landed"
+  - "git log origin/main --oneline | grep ad5d09f  # squash SHA of PR #312"
   - "git log origin/main --oneline | grep -i 'list_views personal'"
   source: "This session's reproduction + fix run, 2026-08-07; PR https://github.com/YourBIMpossible/BIMpossible/pull/312"
   notes_url:
-  claim: "In flight 2026-08-07, worktree vibrant-golick-7005b0, branch fix/views-personal-listing-firm-scope -- COMPLETE THROUGH PR: #312 open + all checks green, awaiting owner squash-merge (classifier blocked the session's merge). On merge: flip status to landed, record squash SHA."
+  claim: "LANDED 2026-08-07: PR #312 squash-merged to main as ad5d09f (mergedAt 2026-08-08T04:01:10Z, owner-authorized merge; remote branch deleted). Post-merge verification on origin/main: SavedView.firm_id == firm_id present in list_views personal query and backend/tests/test_views_personal_listing_firm_scope.py present in the tree. Closes the personal-listing defect class consistently across groups.py (#290) and views.py (#312). Follow-up stays separate: SEC-GROUPS-VIEWS-HUB-ISOLATION."
 
 - id: SEC-ASSIST-TOOLS-PERSONAL-VIEWS
   title: "Assistant's _visible_saved_view_clause personal branch has no firm_id scope -- feeds tool_list_saved_views + tool_describe_saved_view"
