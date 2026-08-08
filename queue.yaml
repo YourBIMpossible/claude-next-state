@@ -41,16 +41,23 @@ reconciled:
   # (drafts), and nine Dependabot PRs (DEP-TRIAGE-2026-08). origin/main was observed advancing
   # DURING this sync (#315 landed between two commands in the same pass) -- re-fetch before
   # trusting this tip.
+  # Third pass 2026-08-07 (late night): delta c371b12..0fdf6e0 = 2 commits, #316 (personal-view
+  # unique index firm_id, 242e645) and #317 (groups/views 404 existence oracle, 0fdf6e0). Both were
+  # already self-reconciled by their fixing sessions (SEC-VIEWS-PERSONAL-INDEX-FIRMID and
+  # SEC-GROUPS-VIEWS-404-EXISTENCE-ORACLE carry the merge SHAs at verified level); this pass
+  # independently confirmed both SHAs in git log c371b12..origin/main -- nothing else in the delta.
   bimpossible:
     at: '2026-08-07'
-    commit: c371b12
-    pr: 315
+    commit: 0fdf6e0
+    pr: 317
   # addins: re-read 2026-08-07 (night) -- the previous pass recorded this delta as EMPTY; it is not
   # empty now. git log 7bdfa68..origin/main = 6 commits: #55 (CLAUDE.md factual fixes) #56 (firm-
   # literal ratchet gate + CI enforcement, the C# counterpart of BIMpossible #279) #58 (SyncConfig's
   # 21 literals through FirmParams/FirmFamilies, baseline 29->8) #59 (last three, 8->5) #60 (docs:
   # the ratchet's mechanism and why 5 sites stay) #61 (.graphifyignore). Folded into
   # ARCH-FIRM-ALIAS-BACKEND rather than given their own item -- same work, other half of the repo.
+  # Re-confirmed 2026-08-07 (late night): git log 7bdfa68..origin/main re-walked after fetch --
+  # tip still 5160510, delta beyond it EMPTY, working tree clean.
   addins:
     at: '2026-08-07'
     commit: '5160510'
@@ -63,10 +70,18 @@ reconciled:
   # versioning, previously landed pending this exact merge). WS-NEXT-VERSIONING promoted
   # landed->live; .tools/state/* now tracked on workspace main. No other items in this 1-commit
   # delta.
+  # Third pass 2026-08-07 (late night): delta 2196bfb..11b79ec = 7 commits, all doc/ledger --
+  # 8a7e82d (#19 tenancy work-arc DRAFT doc), 1d4e8b5 (wave-status Wave 30, Phase 15e chat
+  # gateways), f003341+ebfec37 (phase-status: hub cutover / tenancy test gate PAUSED --
+  # corroborates HUB-TENANCY-GOLIVE's hold), ce2422f (#37 D-6 seed + compare-mode soak started
+  # -- evidence added to OPS-NEUTRALITY-CLOSEOUT-D6), 5025f23 (#38 runbook Step 7 LogonType
+  # decision rule -- evidence added to OPS-BACKUP-RESTORE-DRILL), 11b79ec (retire Sync Dashboard
+  # workflow, GitHub Models permanently retired -- no item needed, removal is self-contained).
+  # No new items from this delta.
   workspace:
     at: '2026-08-07'
-    commit: 2196bfb
-    pr: 33
+    commit: 11b79ec
+    pr: 38
 
 # Work items.
 items:
@@ -1002,7 +1017,7 @@ items:
   - kind: doc
     ref: "Structurally invisible to backend/tests/test_route_tenancy_invariant.py -- that ratchet checks only that a mounted route resolves require_active_membership somewhere in its dependency graph (create_group/update_group both do), not that request-body-supplied ids are row-scoped to the caller's firm. Confirmed by reading the test module: it walks FastAPI's resolved dependant graph, never request payloads."
   verification:
-    level: merged-to-main
+    level: verified  # was 'merged-to-main' -- outside the level vocabulary; corrected 2026-08-07 sync (the by: names squash SHA 5ed42ec + green CI, which meets the verified bar)
     by: "Found in passing while auditing for other instances of the SEC-ASSIST-FIRMVIEW bug class (unscoped firm-owned reads). Worse in kind than that bug: this leaks actual category content, not a count, and persists it at rest rather than re-leaking transiently per request. Fix implemented 2026-08-07 on fix/groups-named-deliverable-tenant-scope (branched from origin/main post-#278): firm_id filter added to _validate_members_and_compute_categories (write path, both create_group and update_group) and _live_member_map (read path, defense in depth for any reference persisted some other way). A foreign-firm id now falls into the pre-existing missing_count fail-closed branch -- no new error path, no cross-firm existence oracle. 6 regression tests written in backend/tests/test_groups_named_deliverable_firm_scope.py (create/update rejection + no persistence, mixed valid/foreign rejected wholesale, valid-only control, readback never leaks foreign categories, direct-seed defense-in-depth check on the read path). Verified via Verify-Local-CI.ps1 -SkipFrontend (throwaway Postgres+Redis, migration replay clean, all 3 backend lanes green: 3413 passed/0 failed DB lane, 2257 passed/0 failed pure lane, 4 passed/0 failed assistant-contract lane -- test_route_tenancy_invariant.py included and unweakened). Committed ef7d128, pushed, PR #287 opened, all CI green (backend/pytest, frontend/vitest+tsc, security-scan-summary, gitleaks, pip-audit, semgrep, trivy -- 2 jobs skipped as expected: dependabot automerge, docs-hygiene), squash-merged to main 2026-08-07T05:14:08Z as 5ed42ec, remote branch deleted. Separately, flagged (not fixed -- out of this fix's scope) an unconfirmed possible second issue: list_groups' personal-groups query (groups.py ~line 318) never filters by firm_id, only owner_user_id -- exploitable only if one user account can belong to multiple firms, unconfirmed. Spawned as its own follow-up task (spawn_task task_ea517810), not part of this PR."
     at: 2026-08-07
   live_check:
@@ -1263,6 +1278,8 @@ items:
     ref: "workspace #33 (da35d34, merged 2026-08-07T06:11:54Z) -- FIRST REAL END-TO-END RUN of Backup-Db.ps1 -VerifyRestore, post-#292-fix: 26s total, exit 0, dump 61021 KB / 47 tables in TOC, restore drill 147/147 named_deliverables rows matched. Recorded in 01_BuildLog/2026-08-06__backup-resilience-remediation-plan.md §6 Measured values table."
   - kind: pr
     ref: "BIMpossible #293 (e1a793f, merged 2026-08-07T06:28:48Z, AFTER #33's drill) -- a DIFFERENT script (Register-BackupResilienceTasks.ps1, the scheduler-registration path, not Backup-Db.ps1 which #33 drilled) had its own defect on the real host: -RepetitionDuration ([timespan]::MaxValue) serialized to a value Task Scheduler rejects (HRESULT 0x80041318), so the FIRST elevated run registered ZERO scheduled tasks while printing 'Both tasks registered' -- a textbook instance of this repo's own named 'reports success, quietly did nothing' defect pattern (CLAUDE.md Debugging discipline section). Fixed by omitting the parameter (empty <Duration/> = repeat indefinitely, verified via a live probe task) and adding -ErrorAction Stop so a real failure now kills the script instead of sailing past it."
+  - kind: pr
+    ref: "workspace #38 (5025f23, merged 2026-08-07) -- adds Step 7/7a/7b to the runbook: register first, OBSERVE the actual task Principal, patch only if the observed LogonType is wrong (S4U lacks network access, so offsite sync to G: would fail every scheduled run while passing manual runs); includes the Set-ScheduledTask -Principal remediation and a forced-run verification reading LastTaskResult + the offsite-sync transcript. This documents the DECISION RULE and procedure only -- it is not an observed registration or an observed unattended run, so the scope note's 'not yet observed by any session' gap on the scheduled-task path STANDS."
   verification:
     level: verified
     by: "The catastrophic unknown this item existed to close -- 'has a restore from this backup ever actually worked' -- is now answered yes, with a timestamped, row-count-matched drill, not a belief. Risk dropped 4 -> 2 accordingly. What remains is genuinely owner-only and much smaller than the original title: (1) the Measured-values table itself flags '-CommandTimeoutSec (1200s) and watchdog staleness thresholds deliberately NOT re-tuned -- single data point; 7-day collection still owed' -- i.e. no formal RPO/RTO figures derived yet, just one raw timing; (2) no restore-operator name found anywhere in the remediation plan doc or PR trail -- picking a human is not a probe this skill can run. Pairs with OPS-DEPLOY-RUNBOOK as before. IMPORTANT SCOPE NOTE added 2026-08-07: #33's 147/147 drill proves the backup+restore MECHANICS (Backup-Db.ps1, invoked manually/directly); it says nothing about the SCHEDULED-TASK path (Register-BackupResilienceTasks.ps1), which #293 shows was still silently registering zero tasks as of the same day, discovered AFTER the drill landed. #293's fix is landed but not live -- no observed run confirms the Task Scheduler now actually fires Backup-Db.ps1 unattended on the real host post-fix. Do not read '-VerifyRestore proven live' in the title as covering the automated schedule; it covers the restore mechanics only."
@@ -1668,7 +1685,7 @@ items:
 - id: SEC-GROUPS-VIEWS-PERSONAL-SAMEFIRM-EXISTENCE-ORACLE
   title: "PATCH/DELETE groups+views: same-firm personal-scope 403 lets a colleague infer a personal group/view id exists -- possibly by design"
   projects: [bimpossible]
-  status: open
+  status: ready  # was 'open' -- outside the status vocabulary; corrected 2026-08-07 sync
   claim:
   owner_gate: false
   unblocks: []
@@ -1733,20 +1750,22 @@ items:
 - id: AISERVER-OPENCODE-DOCS
   title: "Commit AI-Server's uncommitted opencode/local-coding-agent doc updates (PROGRAM_PLAN.md, README.md)"
   projects: [ai-server]
-  status: ready
+  status: landed
   owner_gate: false
   unblocks: []
   blocked_by: []
   effort: S
-  risk: 2
+  risk: 1
   evidence:
-  - kind: log
-    ref: "2026-08-07 close: git status on F:/AI-Dev/AI-Server shows M CLAUDE.md, M PROGRAM_PLAN.md, M README.md still uncommitted on main, plus untracked .claude/ and docs/superpowers/plans/2026-07-12-harness.md; changes date back to a dashboard-update pass that verified the opencode/local-coding-agent finding (landed on the Dashboard card in commit 660f726) but never committed the corresponding AI-Server-repo doc updates"
+  - kind: commit
+    ref: "AI-Server main 2172820 -- 'docs: document opencode local coding-agent (WP-G piece, verified 2026-07-25)', 3 files changed (CLAUDE.md, PROGRAM_PLAN.md, README.md), 53 insertions/2 deletions. Committed local-only, NOT yet pushed to origin."
   verification:
-    level: claimed
-    by: "git status confirmed 2026-08-07; content of the diff itself not re-reviewed this pass"
-    at: '2026-08-07'
-  source: "Session finding, carried over from an earlier dashboard-update pass this session; out of scope for that pass since it touches AI-Server's own repo, not Dashboard"
+    level: verified
+    by: "Diff read in full before commit -- documents the already-verified opencode/qwen3-coder setup (matches Dashboard card commit 660f726). Untracked .claude/ and docs/superpowers/plans/2026-07-12-harness.md deliberately left out of this commit -- unrelated WIP, not part of this item's scope."
+    at: '2026-08-08'
+  live_check:
+  - "git -C F:/AI-Dev/AI-Server log --oneline origin/main..HEAD  # confirm whether 2172820 has been pushed yet"
+  source: "Session finding, carried over from an earlier dashboard-update pass this session; committed 2026-08-08 per explicit user request"
   notes_url:
 
 - id: OPS-NEUTRALITY-CLOSEOUT-D6
@@ -1764,7 +1783,7 @@ items:
   - kind: commit
     ref: "This PR is larger than its title implies and touches a tenancy-adjacent rail: it adds backend/allowlist_source.py (193 lines), backend/allowlist_db.py (43), and migration f2b3c4d5e6f7_add_allowed_projects.py (44), i.e. it moves the ALLOWED_PROJECT_IDS allowlist into the database. CLAUDE.md is explicit that ALLOWED_PROJECT_IDS is a deployment rail and NOT a tenancy mechanism, so making it DB-backed does not make it one -- flagged here so nobody later reads 'allowlist is in the DB now' as 'tenancy is handled'. It also rewrote .semgrep/firm-literal-baseline.txt to empty (see ARCH-FIRM-ALIAS-BACKEND) and added a security-scan.yml step plus Verify-Local-CI.ps1 changes."
   - kind: doc
-    ref: "D-6 seeded 2026-08-08; compare-mode soak running since 2026-08-08 04:10 UTC with day-0 and post-restart both green. Daily parity check runs as Windows scheduled task BIMpossible-D6-Soak-Parity-Check, appending to F:/AI-Dev/.tools/d6-soak/soak-log.jsonl. Sourced from memory project_neutrality-closeout-reconstruction, which is a prior session's record -- treat the soak's day-to-day results as CLAIMED until the jsonl is read directly."
+    ref: "D-6 seeded 2026-08-08; compare-mode soak running since 2026-08-08 04:10 UTC with day-0 and post-restart both green. Daily parity check runs as Windows scheduled task BIMpossible-D6-Soak-Parity-Check, appending to F:/AI-Dev/.tools/d6-soak/soak-log.jsonl. Originally sourced only from memory project_neutrality-closeout-reconstruction; UPGRADED 2026-08-07 sync: workspace PR #37 (ce2422f, merged) documents the D-6 seed + compare-mode soak start on workspace main -- the seed/start facts are now doc-backed, but the soak's day-to-day results stay CLAIMED until the jsonl is read directly."
   verification:
     level: claimed
     by: "MERGE is machine-verified (git log delta); everything downstream of the merge is not. Added during the 2026-08-07 night rescan because a merged PR of this size with a dated owner decision attached to it was not represented in the store at all -- it existed only in memory. The 7-day compare-mode soak ends 2026-08-15 and the memory record states it needs an unambiguous owner go before anything flips; that decision is NOT yet due and no one should pre-empt it. What is genuinely unverified: whether the soak has stayed green since day 0 (read the jsonl), and whether the DB-backed allowlist interacts with the hub-tenancy gate that HUB-TENANCY-GOLIVE is about to bring up -- its migration f2b3c4d5e6f7 sits between the Slack and Teams migrations in that item's chain and has not been reviewed for that interaction."
@@ -1796,4 +1815,116 @@ items:
   live_check:
   - "gh pr list --repo YourBIMpossible/BIMpossible --author app/dependabot --json number,title  # expect this set to shrink only via deliberate review"
   source: "gh pr list 2026-08-07 night; SEC-DEPENDABOT-CI policy record"
+  notes_url:
+
+- id: OPS-WORKTREE-DRIFT-REVIEW
+  title: "Per-repo drift ownership review: workspace uncommitted docs + .tools/state edits, BIMpossible behind-5 + dirty tree"
+  projects: [workspace, bimpossible]
+  status: ready
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: log
+    ref: "Observed 2026-08-07 sync pass: workspace main carries 2 untracked docs (00_Strategy/design-docs/2026-08-06__revitlink-pipe-transport-investigation.md, 01_BuildLog/2026-08-07__hub-tenancy-VERIFIED-fail-closed.md) plus the uncommitted 2026-08-07 /next sync edits to F:/AI-Dev/.tools/state/queue.yaml + QUEUE.md; BIMpossible local checkout is 5 behind origin/main with M backend/aec/help/open-a-model.md and untracked database/maintenance/2026-08-05__audit-client-data-in-db.sql"
+  verification:
+    level: claimed
+    by: "Queued on owner direction 2026-08-07 (post-sync): do NOT pull/reset/stash/delete/commit any of it blind -- first determine per file whether the change is intentional, belongs to an active branch/session, and is already externalized elsewhere (the _backups/_archive recoverability rule applies). The sync-edit half is this store's own uncommitted state; committing it is part of this review, not of any sync."
+    at: '2026-08-07'
+  live_check:
+  - "git -C F:/AI-Dev/BIMpossible_Workspace status --short  # expect the 2 untracked docs until reviewed"
+  - "git -C F:/AI-Dev/BIMpossible status --short; git -C F:/AI-Dev/BIMpossible rev-list --count HEAD..origin/main  # expect dirty + behind until reviewed"
+  source: "2026-08-07 /next sync Left-Flags; owner instruction 'Do not clean up automatically'"
+  notes_url:
+
+- id: ADDINS-BRANCH-PROTECT
+  title: "Protect Add-Ins main: require PRs + firm-literals/test/gitleaks checks, strict up-to-date"
+  projects: [addins]
+  status: done
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: log
+    ref: "Applied 2026-08-08 via gh api PUT repos/YourBIMpossible/BIMpossible-AddIns/branches/main/protection. Result: strict=true, contexts=[firm-literals, test, gitleaks], required_pull_request_reviews with 0 approvals (PR required, solo-dev self-merge allowed), force-push and deletion blocked. Check names taken from the successful check-runs on merged PR #61's head f71e088. Before this, ci.yml + security-scan.yml ran on every push/PR but nothing blocked a merge on failure (protection GET returned 404) -- alarms, not gates."
+  verification:
+    level: verified
+    by: "gh api GET after PUT confirmed the exact protection state above"
+    at: '2026-08-08'
+  live_check:
+  - "gh api repos/YourBIMpossible/BIMpossible-AddIns/branches/main/protection --jq '.required_status_checks.contexts'  # expect [firm-literals, test, gitleaks]"
+  source: "anti-slop reconciliation 2026-08-08 (F:/AI-Dev/_scratch/anti-slop-reconciliation-2026-08-08.md), owner accepted + directed execution"
+  notes_url:
+
+- id: SLOP-AUDIT-SKILL
+  title: "Repo-agnostic on-demand slop-audit skill: silent-catch census, counter-integrity, tested-but-dead"
+  projects: [claude-profile]
+  status: done
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 1
+  evidence:
+  - kind: doc
+    ref: "Anti-slop coverage plan sec.2: PC-Monitor, Finance-Dashboard, Preseason Pick'em, claude-profile have no audit skill and no CI; AI-Server/Dashboard have pytest-only CI. The checklist already exists inside revit-functionality-audit but is scoped to Add-Ins."
+  - kind: doc
+    ref: "Design decision (reconciliation sec.2 Q3, owner-accepted 2026-08-08): ONE skill taking a repo path argument, lean description, per-language notes in the body -- NOT per-repo copies (would multiply description budget; context_weight.py would WARN) and NOT a ctxcheck config (ctxcheck checks claims-vs-reality, not code defects)."
+  verification:
+    level: verified
+    by: "Executed 2026-08-08 same day on owner go (add to weekly audit + /audit): skills/slop-audit/SKILL.md written per the accepted design (one repo-agnostic skill, repo path arg, 3 checks + per-language swallow patterns, findings-only); /audit gained an 'Anti-slop checklist (every run, both modes)' section referencing it; weekly scheduled task slop-audit-weekly created (Mon 09:30 local + jitter) sweeping AI-Server, Dashboard, PC-Monitor, Finance-Dashboard, Preseason Pick'em, claude-profile, ctxcheck, ctxdex incrementally, skip-if-unchanged, BIMpossible/Add-Ins excluded (own tracks). Skill confirmed live in the session skill listing."
+    at: '2026-08-08'
+  live_check:
+  - "ls ~/.claude/skills/ | grep -i slop  # expect slop-audit"
+  - "grep -c 'Anti-slop checklist' ~/.claude/skills/audit/SKILL.md  # expect 1"
+  source: "F:/AI-Dev/_scratch/anti-slop-reconciliation-2026-08-08.md sec.3 item 1"
+  notes_url:
+
+- id: ADDINS-TDD-CENSUS
+  title: "Measure Add-Ins logic in the /tdd-excluded Revit-API-bound glue zone vs extracted tested cores"
+  projects: [addins]
+  status: done
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 1
+  evidence:
+  - kind: doc
+    ref: "Anti-slop coverage plan sec.3: /tdd explicitly excludes Revit-API-bound glue ('extract the testable core instead'); nobody has measured how much real logic sits in that excluded zone. Right now the extraction rate is an assumption, not a number."
+  verification:
+    level: verified
+    by: "Executed 2026-08-08 same day (PR #63, squash fdeeb54): report at Add-Ins/audits/2026-08-08__tdd-exclusion-census.md, re-runnable script at audits/tools/tdd_census.py. Measured: 58% of 38,339 non-test LOC Revit-API-bound, 11% WPF/UI, 29% Revit-free logic of which 86% wired into test assemblies. Uncovered Revit-free remainder 1,626 LOC; only FamilyFixerViewModel.cs (341) and DpapiPaneTokenStore.cs (160) are of size. Findings only, no fixes."
+    at: '2026-08-08'
+  live_check:
+  - "ls F:/AI-Dev/Add-Ins/audits/  # expect a census report once done"
+  source: "F:/AI-Dev/_scratch/anti-slop-reconciliation-2026-08-08.md sec.3 item 4"
+  notes_url:
+
+- id: ADDINS-DEP-SCAN
+  title: "Add deterministic NuGet dependency-vulnerability check to Add-Ins CI, gate it, add its check name to branch protection"
+  projects: [addins]
+  status: done
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: log
+    ref: "Verified 2026-08-08: Add-Ins security-scan.yml is a single gitleaks job (46 lines, one runs-on) -- secret scanning only. No Trivy, no dependency scanning anywhere in the repo's CI, while the repo restores Nice3point.Revit.Api.* and xunit from public nuget.org with nothing watching advisories. BIMpossible by contrast gates trivy (HIGH/CRITICAL) + pip-audit at ERROR."
+  - kind: doc
+    ref: "Owner scope directive 2026-08-08 (verbatim intent): add a deterministic NuGet dependency-vulnerability check to Add-Ins CI, make it fail on actionable findings, then add its exact successful check name to the EXISTING branch-protection rule (currently firm-literals, test, gitleaks; strict=true, PR required with 0 approvals). Do NOT expand into a general security-program project."
+  verification:
+    level: verified
+    by: "Executed 2026-08-08 same day: nuget-vulns job added to security-scan.yml (PR #62, squash 674c87f) -- dotnet list package --vulnerable --include-transitive over every top-level BIMpossible.*/*.csproj on windows-latest, grep+exit-code gated, fail-closed on empty glob. Trivy REJECTED: needs packages.lock.json, none committed. Check added to main protection (contexts now firm-literals, test, gitleaks, nuget-vulns; verified by GET). Gate exercised end-to-end on PR #63: all four checks ran and passed post-branch-update. Local baseline: all 18 projects clean."
+    at: '2026-08-08'
+  live_check:
+  - "grep -iE 'vulnerable|trivy|dep' F:/AI-Dev/Add-Ins/.github/workflows/*.yml  # expect a dep-scan job once done"
+  - "gh api repos/YourBIMpossible/BIMpossible-AddIns/branches/main/protection --jq '.required_status_checks.contexts'  # expect the new check name added"
+  source: "F:/AI-Dev/_scratch/anti-slop-reconciliation-2026-08-08.md Left-Flag, owner accepted 2026-08-08"
   notes_url:

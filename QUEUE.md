@@ -6,7 +6,7 @@ Generated 2026-08-07 (synced). Ranked by critical path (transitive `unblocks` co
 owner-gated+S effort, then effort, then risk, then id. Full algorithm:
 `~/.claude/skills/next/reference/item-model.md`.
 
-Scope: `all`. Watermarks: `bimpossible` = 2026-08-07 @ `c371b12` PR#315 · `addins` = 2026-08-07 @ `5160510` PR#61 · `workspace` = 2026-08-07 @ `2196bfb` PR#33. (ai-server/dashboard/families/pc-monitor:
+Scope: `all`. Watermarks: `bimpossible` = 2026-08-07 @ `0fdf6e0` PR#317 · `addins` = 2026-08-07 @ `5160510` PR#61 · `workspace` = 2026-08-07 @ `11b79ec` PR#38. (ai-server/dashboard/families/pc-monitor:
 no items yet — run `init` to derive.)
 
 ## Blocked on you
@@ -59,7 +59,7 @@ no items yet — run `init` to derive.)
        unblocks 1 · S · bimpossible+addins · VERIFIED 2026-08-06 · BIMpossible #257 (85c3fff, MERGED 2026-08-05T23:43:21Z) -- backend/ae…
 
 [SEC-GROUPS-DELIVERABLE-FIRM] Cross-firm NamedDeliverable IDOR in groups.py category derivation -- fixed and merged
-       unblocks 0 · S · bimpossible · MERGED-TO-MAIN 2026-08-07 · backend/aec/groups.py:195-231 (_validate_members_and_compute_categori…
+       unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · backend/aec/groups.py:195-231 (_validate_members_and_compute_categori…
 
 [SEC-GROUPS-PERSONAL-LISTING] list_groups personal-group cross-firm leak -- CONFIRMED and LANDED via PR #290 (independent parallel session won the race; see verification.by)
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-07 · backend/aec/groups.py:318-329 (list_groups, personal query) filtered …
@@ -85,6 +85,9 @@ no items yet — run `init` to derive.)
 [SEC-GROUPS-PERSONAL-INDEX-FIRMID] uix_named_deliverables_personal_name_group unique index omits firm_id -- confirmed write-path only, not data corruption
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · Source: named-deliverable-personal-scope-firm-gaps.md finding #4, pro…
 
+[SEC-VIEWS-PERSONAL-INDEX-FIRMID] uix_saved_views_personal_name (personal views/leaves unique index) omits firm_id -- same reassigned-user 409 dead-end as the groups sibling
+       unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · CONFIRMED by direct read 2026-08-07 while fixing SEC-GROUPS-PERSONAL-…
+
 [TENANCY-PROBE-281] Tenancy invariant now covers flag-gated routers; /probe hub isolation fixed, 41 routes triaged
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · BIMpossible #281 MERGED 2026-08-07T02:48:19Z, squash commit 36412c9c9…
 
@@ -96,6 +99,9 @@ no items yet — run `init` to derive.)
 
 [PROVIDER-REGISTRY-272] Provider key registry opened to 9 providers -- MERGED, not yet deployed
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-06 · BIMpossible #272 (79e9de5, squash) -- MERGED 2026-08-06; backend/aec/…
+
+[SEC-GROUPS-VIEWS-404-EXISTENCE-ORACLE] PATCH/DELETE groups+views: nonexistent id returns 404 but cross-firm id returns 403 -- status-code existence oracle
+       unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · Surfaced by the backend-endpoint-reviewer gate during SEC-GROUPS-403-…
 
 [DEP-JSYAML-282] Dependabot js-yaml 4.3.0 -> 4.3.1 merged (GHSA-5p4m-2wfm-xmqj, dev-only transitive)
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · BIMpossible #282 MERGED 2026-08-07T02:30:12Z, squash commit 5d0379d32…
@@ -135,8 +141,8 @@ no items yet — run `init` to derive.)
 [DEP-TRIAGE-2026-08] Nine Dependabot PRs open and waiting -- five are Action bumps the auto-merge policy deliberately holds for review
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · Open as of 2026-08-07 night (gh pr list, all non-draft): github-actio…
 
-[SEC-VIEWS-PERSONAL-INDEX-FIRMID] uix_saved_views_personal_name (personal views/leaves unique index) omits firm_id -- same reassigned-user 409 dead-end as the groups sibling
-       unblocks 0 · S · bimpossible · CLAIMED 2026-08-07 · CONFIRMED by direct read 2026-08-07 while fixing SEC-GROUPS-PERSONAL-…
+[OPS-WORKTREE-DRIFT-REVIEW] Per-repo drift ownership review: workspace uncommitted docs + .tools/state edits, BIMpossible behind-5 + dirty tree
+       unblocks 0 · S · workspace+bimpossible · CLAIMED 2026-08-07 · Observed 2026-08-07 sync pass: workspace main carries 2 untracked d…
 
 [TAILWIND-V4-VERIFY] Verify Tailwind v4 migration (#284) live in prod -- Docker image is baked, merge alone doesn't ship it
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-07 · BIMpossible #284 (89f1222, merged 2026-08-07T04:51:18Z) -- replaces p…
@@ -144,8 +150,8 @@ no items yet — run `init` to derive.)
 [DASH-BIMWATCH-WIRING] Wire bimwatch pipeline output into the live dashboard (index.html/data.js have zero references)
        unblocks 0 · S · dashboard · CLAIMED 2026-08-07 · 2026-08-07 session: grepped index.html and data.js in both Dashboard …
 
-[SEC-GROUPS-VIEWS-404-EXISTENCE-ORACLE] PATCH/DELETE groups+views: nonexistent id returns 404 but cross-firm id returns 403 -- status-code existence oracle
-       unblocks 0 · S · bimpossible · CLAIMED 2026-08-07 · Surfaced by the backend-endpoint-reviewer gate during SEC-GROUPS-403-…
+[SEC-GROUPS-VIEWS-PERSONAL-SAMEFIRM-EXISTENCE-ORACLE] PATCH/DELETE groups+views: same-firm personal-scope 403 lets a colleague infer a personal group/view id exists -- possibly by design
+       unblocks 0 · S · bimpossible · CLAIMED 2026-08-07 · Surfaced by the backend-endpoint-reviewer gate during SEC-GROUPS-VIEW…
 
 [ADDINS-HYGIENE] Add-Ins hygiene: finish Glass rollout (conformance-PR dedup DONE 2026-08-04)
        unblocks 0 · M · addins · VERIFIED 2026-08-06 · Add-Ins #10 MERGED 2026-08-04 (squash, main 94b21ab -- Plans 1+2 conf…
