@@ -1577,7 +1577,8 @@ items:
 - id: SEC-GROUPS-403-ORDERING
   title: "update_group/delete_group check the global allowlist (which echoes project_id) before the firm-ownership check"
   projects: [bimpossible]
-  status: ready
+  status: in_flight
+  claim: "CLAIMED 2026-08-07 by Claude session (worktree hopeful-faraday-112cc2, fresh branch fix/groups-403-ordering off e5bbb04): reproduce per live_check (foreign-firm group with non-allowlisted project_id must currently leak the allowlist 403), then mirror F-5 -- firm check first in update_group/delete_group. Note: e5bbb04 (SEC-GROUPS-VIEWS-HUB-ISOLATION) placed the hub gate AFTER the firm check on these routes already; this item is only the remaining allowlist-before-firm-check residue."
   owner_gate: false
   unblocks: []
   blocked_by: []
