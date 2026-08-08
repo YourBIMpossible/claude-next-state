@@ -1623,6 +1623,27 @@ items:
   source: "backend-endpoint-reviewer gate on PR #314, 2026-08-07"
   notes_url:
 
+- id: SEC-VIEWS-PERSONAL-INDEX-FIRMID
+  title: "uix_saved_views_personal_name (personal views/leaves unique index) omits firm_id -- same reassigned-user 409 dead-end as the groups sibling"
+  projects: [bimpossible]
+  status: ready
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: code
+    ref: "CONFIRMED by direct read 2026-08-07 while fixing SEC-GROUPS-PERSONAL-INDEX-FIRMID: backend/db/models.py:299-304 uix_saved_views_personal_name is UNIQUE (owner_user_id, project_id, category_key, name) WHERE scope='personal' AND archived_at IS NULL -- no firm_id, the IDENTICAL omission the groups index had. Same mechanism: a user reassigned between firms who owned a personal view named X (project P, category C) under the old firm cannot create one under the new firm; the 409 collides with their own stale-firm row, invisible since the #290/#312 read-path fixes. owner_user_id in the key means no cross-user conflation -- write-path availability defect, not corruption. NOTE the WHERE has no kind= clause, so unlike the groups index this one covers leaves AND any personal kind."
+  verification:
+    level: claimed
+    by: "Not reproduced -- deliberately left out of the groups PR per stay-on-mandate. Fix shape is a direct copy of the groups fix (PR for SEC-GROUPS-PERSONAL-INDEX-FIRMID): add firm_id to the index columns in models.py + an alembic migration with DROP INDEX IF EXISTS (this index also shipped via the 2026-05-25 phase35 SQL script / create_all, not an alembic revision), RED-first repro test on POST /data/views with a stale-firm row seeded."
+    at: '2026-08-07'
+  live_check:
+  - "Integration test: seed the caller's own personal view row under a foreign firm_id (same owner/project/category/name), then POST /data/views with that name -- expect 409 today (proving the gap), 201 after the fix"
+  source: "backend/db/models.py:299-304 direct read during SEC-GROUPS-PERSONAL-INDEX-FIRMID, 2026-08-07"
+  notes_url:
+
 - id: DASH-BIMWATCH-WIRING
   title: "Wire bimwatch pipeline output into the live dashboard (index.html/data.js have zero references)"
   projects: [dashboard]
