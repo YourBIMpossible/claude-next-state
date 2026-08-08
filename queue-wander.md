@@ -3,3 +3,5 @@
 - ~~2026-08-07 (deploy gap)~~ DONE 2026-08-07 release sync: main checkout on master @ 03194f3, hook verified live; rule recorded in claude-profile notes/MAINTENANCE.md.
 - 2026-08-07 (ctxdex gate): Bearer + connection-string content patterns are the likeliest false-positive sources in the manual-ingest secret gate — when the missed-query/refused-ingest log starts, seed it with this note before tuning any pattern.
 - 2026-08-07 (dashboard dead-code closeout): F:\AI-Dev\Dashboard docs still describe the retired GitHub Models prose sync — REFRESH-SPEC.md ("sync_dashboard.py — soft prose only" section) plus docs/superpowers/specs/2026-07-04-local-dashboard-monitor-design.md and docs/superpowers/plans/2026-07-04-local-dashboard-monitor.md; prose-only cleanup, code already removed (e1961c9).
+
+- 2026-08-07 (PR #317 reviewer, cosmetic): delete_group firm-default guard returns 409 (backend/aec/groups.py:~568) while delete_view's returns 403 (backend/aec/views.py:~506) -- pre-existing status-code inconsistency, no security impact; align when next touching either route. [WANDER-317-DELETE-GUARD-CODE]
