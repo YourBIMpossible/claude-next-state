@@ -1643,8 +1643,8 @@ items:
 - id: SEC-GROUPS-VIEWS-404-EXISTENCE-ORACLE
   title: "PATCH/DELETE groups+views: nonexistent id returns 404 but cross-firm id returns 403 -- status-code existence oracle"
   projects: [bimpossible]
-  status: in_flight
-  claim: "CLAIMED 2026-08-07 by Claude session (worktree hopeful-faraday-112cc2, branch sec/groups-views-404-existence-oracle off origin/main 242e645): reproduce per live_check with paired live requests (nonexistent vs cross-firm id per route), then unify the status code across groups.py update/delete and views.py update_view/delete_view in one PR (expected shape: cross-firm branch returns 404, matching the not-found branch), update any tests pinning the old 403, backend-endpoint-reviewer gate."
+  status: landed
+  claim: "LANDED 2026-08-07: PR #317 squash-merged to main as 0fdf6e0, all required checks green, remote branch deleted. REPRODUCED first per live_check: backend/tests/test_groups_views_404_oracle.py ran RED on unmodified code -- paired probes per route (nonexistent id vs a real cross-firm group/view id on the allowlisted project) showed 404 vs 403 with the identical detail string, e.g. 'cross-firm probe returned 403, nonexistent returned 404 -- status-code existence oracle: {\"detail\":\"Group not found.\"}' -- all four routes (groups PATCH/DELETE, views PATCH/DELETE). Fix: four one-line changes, the firm_id != firm_id branch now raises 404 with the unchanged uniform detail, indistinguishable from not-found; F-5 ordering (firm check before allowlist) and the Phase-6 hub-gate placement untouched. Stale 403 pins updated in the same PR with their original properties preserved: test_groups_403_ordering.py (helper renamed _assert_uniform_not_found, no-project_id-echo assert + own-row allowlist-403 controls kept), test_groups_views_hub_isolation.py (foreign-group pins now 404, no-APS-probe property via autouse _no_aps_probe kept), test_dynamic_firm_isolation.py (cross-firm view PATCH/DELETE expect 404, failed-delete still proves the row intact and firm-A-owned). backend-endpoint-reviewer gate: PASS (ordering intact, 404 branch leaks nothing, fix complete within groups.py/views.py -- remaining 403s are same-firm scope/role denials that never fire cross-firm; its one stale-comment flag fixed in the same commit). Reviewer's two non-blocking out-of-scope observations, both pre-existing: (a) same-firm personal-scope 403 reveals a colleague's id exists -- same-tenant, not this oracle; (b) delete_group firm-default guard is 409 while delete_view's is 403 -- cosmetic inconsistency, no security impact. assistant_tools/assistant_write_tools dict-style 'not found' errors are out of HTTP scope, untouched. DB lane 24 passed across the four modules; Verify-Local-CI -SkipFrontend LOCAL CI GREEN."
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -1654,11 +1654,12 @@ items:
   - kind: code
     ref: "Surfaced by the backend-endpoint-reviewer gate during SEC-GROUPS-403-ORDERING (PR #314, 2026-08-07): _get_active_group (backend/aec/groups.py:~170) raises 404 'Group not found.' for a nonexistent/archived id, while a real-but-cross-firm id reaches the firm check and gets 403 'Group not found.' -- same detail string, different status code, so an authed member of any firm can distinguish 'no such group anywhere' from 'a group with this id exists in some other firm'. Identical pre-existing shape in views.py's F-5 pattern (update_view/delete_view). Inherited, not introduced, by #313/#314 -- both preserved the pre-existing codes."
   verification:
-    level: claimed
-    by: "Reviewer observation + code read only, not reproduced with live requests. Low severity: group ids are UUIDv4 (unguessable), the leak is one bit of existence, and the detail string is already uniform -- only the status code differs. Fix shape if taken: return 404 for the cross-firm branch too (or 403 for the nonexistent branch), consistently across groups.py update/delete and views.py update_view/delete_view in one PR, with a paired-status regression test."
+    level: verified
+    by: "VERIFIED 2026-08-07 by reproduction (see claim: paired-probe test module RED on unmodified code with the predicted 403-vs-404 split on all four routes, GREEN after fix, merged as 0fdf6e0 on PR #317; backend-endpoint-reviewer PASS; full local CI green). Original claimed-level severity note stands: one bit of existence, UUIDv4 unguessable, detail already uniform."
     at: '2026-08-07'
   live_check:
   - "As a firm-A user: PATCH /data/groups/<random-uuid> (expect 404) vs PATCH /data/groups/<real-firm-B-group-id> (expect 403) -- if both return the same status, this has been fixed"
+  - "FIXED 2026-08-07 (PR #317 / 0fdf6e0): both probes now return 404 with the identical detail; pinned by backend/tests/test_groups_views_404_oracle.py for all four routes"
   source: "backend-endpoint-reviewer gate on PR #314, 2026-08-07"
   notes_url:
 
