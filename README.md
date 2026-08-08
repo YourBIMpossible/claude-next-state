@@ -9,7 +9,8 @@ Backing store for the `/next` skill (`~/.claude/skills/next/`). Answers "where i
 |---|---|
 | `projects.yaml` | Registry. What projects exist, where they live, how to probe them. Hand-edited. |
 | `queue.yaml` | **Canonical** work-item store. Hand-editable and machine-written. |
-| `QUEUE.md` | Generated human view. Do not hand-edit — regenerated on every write. |
+| `QUEUE.md` | Generated human view. Do not hand-edit — regenerated from `queue.yaml` by `render_queue.py`. |
+| `render_queue.py` | Deterministic `QUEUE.md` renderer (BFS `unblocks`-cone ranking, derived sections). Same store → same bytes; `--check` verifies. |
 | `DESIGN.md` | Why this exists and what it deliberately does not do. |
 
 ## Usage
@@ -44,17 +45,26 @@ drift apart, and is the specific failure this store exists to prevent.
 **`landed` is not `live`.** Merged means merged. Live requires runtime evidence — a flag observed on,
 a smoke log read, a DB row seen. Most stranded value in this workspace sits between those two states.
 
-## Version history (recommended, not done for you)
+## Source of truth and the published mirror
 
-This folder is not a git repo. The judgment accumulated in `queue.yaml` is the expensive part of this
-system and is worth versioning. To do it — deliberately left for you to run, given the workspace's
-repo-sprawl guardrails:
+**This folder is the live canonical store** — its own local git repo (`master`), and where `/next`
+actually reads and writes. Every write is diffable and revertible through its history.
+
+It is also **published as a committed mirror** in the BIMpossible workspace repo at
+`F:\AI-Dev\BIMpossible_Workspace\.tools\state` (Option B, adopted 2026-08-08), so the queue is
+visible, reviewable, and recoverable in GitHub rather than only on this machine. The rule:
+
+- A successful `/next <target> sync` writes this live store, then regenerates `QUEUE.md` from
+  `queue.yaml` with `render_queue.py` and **publishes both to the mirror together** (via the
+  workspace `Push-And-Verify.ps1`).
+- `QUEUE.md` is generated output — never hand-edited, here or in the mirror.
+- Reproducibility check, from either copy:
 
 ```bash
-git -C "F:/AI-Dev/.tools/state" init && git -C "F:/AI-Dev/.tools/state" add -A && git -C "F:/AI-Dev/.tools/state" commit -m "next: initial store"
+python render_queue.py --state-dir . --generated-on <YYYY-MM-DD> --check
 ```
 
-Local only, no remote needed. Alternative: include this folder in the existing `_backups` routine.
+Reports `CHECK OK` when `QUEUE.md` reproduces byte-for-byte from `queue.yaml`.
 
 ## What this is not
 
