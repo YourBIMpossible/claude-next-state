@@ -1643,7 +1643,8 @@ items:
 - id: SEC-GROUPS-VIEWS-404-EXISTENCE-ORACLE
   title: "PATCH/DELETE groups+views: nonexistent id returns 404 but cross-firm id returns 403 -- status-code existence oracle"
   projects: [bimpossible]
-  status: ready
+  status: in_flight
+  claim: "CLAIMED 2026-08-07 by Claude session (worktree hopeful-faraday-112cc2, branch sec/groups-views-404-existence-oracle off origin/main 242e645): reproduce per live_check with paired live requests (nonexistent vs cross-firm id per route), then unify the status code across groups.py update/delete and views.py update_view/delete_view in one PR (expected shape: cross-firm branch returns 404, matching the not-found branch), update any tests pinning the old 403, backend-endpoint-reviewer gate."
   owner_gate: false
   unblocks: []
   blocked_by: []
