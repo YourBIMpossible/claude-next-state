@@ -1530,7 +1530,8 @@ items:
 - id: SEC-GROUPS-PERSONAL-INDEX-FIRMID
   title: "uix_named_deliverables_personal_name_group unique index omits firm_id -- confirmed write-path only, not data corruption"
   projects: [bimpossible]
-  status: ready
+  status: in_flight
+  claim: "CLAIMED 2026-08-07 by Claude session (worktree hopeful-faraday-112cc2, branch fix/groups-personal-index-firmid off origin/main): reproduce per live_check (two-firm insert collision on same owner/project/name), then add firm_id to the personal unique index via Alembic migration + models.py, migration-reviewer gate."
   owner_gate: false
   unblocks: []
   blocked_by: []
