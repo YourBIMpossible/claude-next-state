@@ -1663,6 +1663,29 @@ items:
   source: "backend-endpoint-reviewer gate on PR #314, 2026-08-07"
   notes_url:
 
+- id: SEC-GROUPS-VIEWS-PERSONAL-SAMEFIRM-EXISTENCE-ORACLE
+  title: "PATCH/DELETE groups+views: same-firm personal-scope 403 lets a colleague infer a personal group/view id exists -- possibly by design"
+  projects: [bimpossible]
+  status: open
+  claim:
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: code
+    ref: "Surfaced by the backend-endpoint-reviewer gate during SEC-GROUPS-VIEWS-404-EXISTENCE-ORACLE (PR #317, 2026-08-07): after the firm check passes, a SAME-FIRM caller probing a colleague's personal-scope row gets 403 'You can only edit/delete your own personal groups.' (backend/aec/groups.py update/delete) / the views.py equivalent, while a nonexistent id gets 404 -- so a same-firm user can infer that a colleague's personal group/view with a given id exists. NOT cross-tenant (the cross-firm branch returns 404 as of #317); the one bit leaks only within a firm, and ids are UUIDv4. May violate the intended privacy model for 'personal' objects -- or may be intentional (personal objects could be deliberately visible-but-immutable within a firm)."
+  verification:
+    level: claimed
+    by: "Reviewer observation + code read only -- NOT reproduced at route level, and the product contract is UNRESOLVED. Two gates before any code change: (1) real route-level reproduction (same-firm user B probing user A's personal group/view id on PATCH/DELETE, paired against a nonexistent id); (2) product-contract review -- determine whether personal-object existence is intentionally visible within a firm (check list-endpoint behavior: if personal rows of colleagues already appear in any same-firm listing, the 'oracle' discloses nothing new and this item should be closed as by-design). Only if BOTH establish it is unintended does the fix shape apply (personal-scope deny branch returns 404 like the cross-firm branch, with a paired-status regression test)."
+    at: '2026-08-07'
+  live_check:
+  - "As same-firm user B: PATCH /data/groups/<user-A-personal-group-id> (currently 403 'You can only edit your own personal groups.') vs PATCH /data/groups/<random-uuid> (404) -- if both return the same status, this has been addressed"
+  - "Contract check first: do colleagues' personal groups/views appear in the same-firm list endpoints? If yes, existence is already visible by design and this is not a defect"
+  source: "backend-endpoint-reviewer gate on PR #317, 2026-08-07 (non-blocking Left-Flag, promoted to queue on user instruction)"
+  notes_url:
+
 - id: SEC-VIEWS-PERSONAL-INDEX-FIRMID
   title: "uix_saved_views_personal_name (personal views/leaves unique index) omits firm_id -- same reassigned-user 409 dead-end as the groups sibling"
   projects: [bimpossible]
