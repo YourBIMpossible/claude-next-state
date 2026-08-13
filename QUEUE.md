@@ -2,11 +2,11 @@
 
 # /next — work-item queue
 
-Generated 2026-08-08 (synced). Ranked by critical path (transitive `unblocks` cone), tiebreak:
+Generated 2026-08-13 (synced). Ranked by critical path (transitive `unblocks` cone), tiebreak:
 owner-gated+S effort, then effort, then risk, then id. Full algorithm:
 `~/.claude/skills/next/reference/item-model.md`.
 
-Scope: `all`. Watermarks: `bimpossible` = 2026-08-08 @ `3116d10` PR#325 · `addins` = 2026-08-08 @ `fdeeb54` PR#63 · `workspace` = 2026-08-08 @ `1a3021d` PR#40.
+Scope: `all`. Watermarks: `bimpossible` = 2026-08-13 @ `66a0993` PR#348 · `addins` = 2026-08-08 @ `fdeeb54` PR#63 · `workspace` = 2026-08-08 @ `1a3021d` PR#40.
 (families/pc-monitor: no items yet — run `init` to derive.)
 
 ## Blocked on you
@@ -19,7 +19,7 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-08 @ `3116d10` PR#325 · `addi
        unblocks 1 · S · bimpossible · VERIFIED 2026-08-06 · frontend/Dockerfile:34-35 on origin/main -- ARG NEXT_PUBLIC_BIMPOSSI…
 
 [OPS-BACKUP-RESTORE-DRILL] -VerifyRestore proven live (147/147 rows); RPO/RTO table + named restore operator still open
-       unblocks 1 · S · bimpossible+workspace · VERIFIED 2026-08-07 · 01_BuildLog/2026-08-05__product-risk-assessment.md finding W4/W5 (or…
+       unblocks 1 · S · bimpossible+workspace · VERIFIED 2026-08-13 · 01_BuildLog/2026-08-05__product-risk-assessment.md finding W4/W5 (or…
 
 [P3-8-SLICE23] Merge Phase 3.8 slice 3 (ACC role sync); slice 2 still needs one owner ruling
        unblocks 1 · S · bimpossible · VERIFIED 2026-08-07 · BIMpossible #275 OPEN DRAFT, head feat/phase38-draft-gating-and-acc-…
@@ -78,6 +78,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-08 @ `3116d10` PR#325 · `addi
 [SLACK-GATEWAY-W1] Read-only Slack assistant gateway merged, flag-off; migration 9329a1e7be85 now on main
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · BIMpossible #262 MERGED 2026-08-07T04:20:29Z, squash commit dd898899…
 
+[APS-TOKEN-REFRESH-CLASSIFY] Classify APS/auth token-refresh failures instead of leaking 500s (_authed_get, remaining paths, AEC worker)
+       unblocks 0 · S · bimpossible · VERIFIED 2026-08-13 · BIMpossible #334 (e0577ad) -- token-refresh failures in _authed_get …
+
 [FIX-SHARE-LINK-VIEWER] Public share-link viewer page added -- every /share/<token> URL used to 404
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-08 · BIMpossible #321 (66d09f2, merged 2026-08-08) -- adds frontend/app/s…
 
@@ -90,11 +93,17 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-08 @ `3116d10` PR#325 · `addi
 [SEC-GROUPS-403-ORDERING] update_group/delete_group check the global allowlist (which echoes project_id) before the firm-ownership check
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-07 · Source: named-deliverable-personal-scope-firm-gaps.md finding #5, pr…
 
+[SEC-GROUPS-EDIT-PERM-ALIGN] Align firm-group edit-permission gating in the frontend (GRP-1, GRP-2)
+       unblocks 0 · S · bimpossible · VERIFIED 2026-08-13 · BIMpossible #329 (c311e0d, merged 2026-08-08) -- GRP-1/GRP-2 firm-gr…
+
 [SEC-GROUPS-PERSONAL-INDEX-FIRMID] uix_named_deliverables_personal_name_group unique index omits firm_id -- confirmed write-path only, not data corruption
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · Source: named-deliverable-personal-scope-firm-gaps.md finding #4, pr…
 
 [SEC-VIEWS-PERSONAL-INDEX-FIRMID] uix_saved_views_personal_name (personal views/leaves unique index) omits firm_id -- same reassigned-user 409 dead-end as the groups sibling
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · CONFIRMED by direct read 2026-08-07 while fixing SEC-GROUPS-PERSONAL…
+
+[SHARE-V2-CELL-FREEZE] Share v2 snapshots freeze display-formatted cell values, not raw metric values (SHARE-V2-DEF-1)
+       unblocks 0 · S · bimpossible · VERIFIED 2026-08-13 · BIMpossible #336 (22b6f4e, merged 2026-08-08) -- SHARE-V2-DEF-1: the…
 
 [TENANCY-PROBE-281] Tenancy invariant now covers flag-gated routers; /probe hub isolation fixed, 41 routes triaged
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · BIMpossible #281 MERGED 2026-08-07T02:48:19Z, squash commit 36412c9c…
@@ -114,6 +123,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-08 @ `3116d10` PR#325 · `addi
 [SEC-GROUPS-VIEWS-404-EXISTENCE-ORACLE] PATCH/DELETE groups+views: nonexistent id returns 404 but cross-firm id returns 403 -- status-code existence oracle
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · Surfaced by the backend-endpoint-reviewer gate during SEC-GROUPS-403…
 
+[TEST-OPS-HYGIENE] Test/ops hygiene: app-boot tripwire, post-deploy identity smoke script, flaky prefs test fixed
+       unblocks 0 · S · bimpossible · VERIFIED 2026-08-13 · BIMpossible #339 (e516a0d) -- app-boot smoke tripwire that fails CI …
+
 [DEP-JSYAML-282] Dependabot js-yaml 4.3.0 -> 4.3.1 merged (GHSA-5p4m-2wfm-xmqj, dev-only transitive)
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · BIMpossible #282 MERGED 2026-08-07T02:30:12Z, squash commit 5d0379d3…
 
@@ -129,11 +141,17 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-08 @ `3116d10` PR#325 · `addi
 [AUDIT-2026-08-08-REMEDIATION] 2026-08-08 incremental audit: 25 findings resolved, CI green, report + resolution record filed
        unblocks 0 · M · bimpossible+workspace · VERIFIED 2026-08-08 · BIMpossible #324 (3116d10, merged 2026-08-08) -- H-1 slack require_i…
 
-[CKA-PILLAR1-HELP-CORPUS] Client Knowledge Assistant Pillar 1: BM25 help ranker + how-to corpus, waves 1-3 shipped
-       unblocks 0 · M · bimpossible+workspace · VERIFIED 2026-08-08 · BIMpossible #320 (f8791ec) -- ports the docindex BM25 ranker into ba…
+[CKA-PILLAR1-HELP-CORPUS] Client Knowledge Assistant Pillar 1: BM25 help ranker + how-to corpus, waves 1-4 shipped
+       unblocks 0 · M · bimpossible+workspace · VERIFIED 2026-08-13 · BIMpossible #320 (f8791ec) -- ports the docindex BM25 ranker into ba…
 
 [WARM-ORIGIN-DOORGAP] Curtain-panel/unhosted doors have no origin: label them 'no location (curtain panel)' instead of deriving one
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-06 · 01_BuildLog/2026-08-04__doors-join-increment1_RESULTS.md, 'Follow-up…
+
+[CKA-PILLAR2-FIRM-DOCS] Client Knowledge Assistant Pillar 2: per-firm client documents (upload, extraction, BM25 retrieval, assistant tool)
+       unblocks 0 · L · bimpossible · VERIFIED 2026-08-13 · BIMpossible #327 (46520a7, merged 2026-08-08) -- Pillar 2 v1: per-fi…
+
+[CKA-PILLAR3-EXPLAINABILITY] Client Knowledge Assistant Pillar 3: client explainability (change sets, help handoff, model-health remedies, alert next-steps, Groups read parity)
+       unblocks 0 · L · bimpossible · VERIFIED 2026-08-13 · BIMpossible #326 (686b064, merged 2026-08-08) -- Pillar 3: change se…
 
 ## Next up
 
@@ -175,6 +193,14 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-08 @ `3116d10` PR#325 · `addi
 
 [P3-6-SPATIAL] Build Phase 3.6 Spatial Relationship Engine v1 (architecturally unblocked)
        unblocks 0 · M · bimpossible · CLAIMED 2026-08-04 · BIMpossible_PHASE-STATUS.md Phase 3 sub-phase notes, Phase 3.6 row
+
+## In flight
+
+[AUTHZ-INHERITANCE-P1] Authorization-Inheritance Phase 1: permission-projection foundation (spine)
+       unblocks 0 · L · bimpossible · VERIFIED 2026-08-13 · BIMpossible #337 OPEN/READY (feat/authz permission-projection founda…
+
+[ENROLL-TENANCY-LAYER] Client/project enrollment tenancy layer (E1-E5), flag-gated dark ship
+       unblocks 0 · L · bimpossible · VERIFIED 2026-08-13 · BIMpossible #333 OPEN/READY (client/project enrollment tenancy layer…
 
 ## Blocked elsewhere
 
@@ -235,6 +261,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-08 @ `3116d10` PR#325 · `addi
 
 [ADDINS-PANE-PR45] Land Add-Ins PR#45 -- Assistant pane header dock fix (branch checked out locally)
        unblocks 0 · S · addins · VERIFIED 2026-08-06 · Add-Ins PR#45 'fix(revitlink): dock Assistant pane header to Top, co…
+
+[CI-DRAFT-GATING] CI cost/draft-gating live: drafts skip expensive CI, superseded runs cancel, auto-draft-on-red reverted
+       unblocks 0 · S · bimpossible · VERIFIED 2026-08-13 · BIMpossible #342 (4956b45) -- expensive CI + security scans skip on …
 
 [DOC-DOCINDEX-DEFECTS-24] docindex: code root drops silently in a worktree; sub-chunk line attribution duplicates results
        unblocks 0 · S · workspace · VERIFIED 2026-08-07 · tools/docindex/docindex.config.json:34 -- code root path '../BIMposs…

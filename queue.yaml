@@ -60,10 +60,25 @@ reconciled:
   # #324, so pr: below is the high-water mark, not the tip's PR. A concurrent session was merging
   # throughout this pass (#325 landed 12 min before the first check); re-fetched at write time and
   # 3116d10 was still the tip, but re-fetch before trusting it rather than assuming.
+  # Fifth pass 2026-08-13: delta 3116d10..66a0993 = merge wave #326..#348 (18 merged PRs).
+  # Client-assistant pillars: #328 (Pillar 1 Wave 4) folded into CKA-PILLAR1-HELP-CORPUS (closes its
+  # Wave-4 gap, still landed on the runtime gap); #327 (Pillar 2 firm docs) and #326 (Pillar 3
+  # explainability) are NEW items CKA-PILLAR2-FIRM-DOCS / CKA-PILLAR3-EXPLAINABILITY. Share cluster:
+  # #331 folded into FIX-SHARE-LINK-VIEWER as confirming evidence, #336 (SHARE-V2-DEF-1 display-format
+  # freeze) is NEW item SHARE-V2-CELL-FREEZE. #334/#335 (APS/auth token-refresh classification) ->
+  # NEW APS-TOKEN-REFRESH-CLASSIFY. #329 (frontend firm-group edit-perm alignment) -> NEW
+  # SEC-GROUPS-EDIT-PERM-ALIGN. #330 (offsite-sync current-user principal) -> evidence on
+  # OPS-BACKUP-RESTORE-DRILL. CI/test/ops hygiene: #338/#342/#343/#348 -> NEW CI-DRAFT-GATING (live:
+  # draft-gating + cancel-superseded active, auto-draft-on-red added then removed); #339/#340/#341 ->
+  # NEW TEST-OPS-HYGIENE (landed; #340 Verify-Deploy.ps1 never run on prod host). Open feature PRs
+  # given in_flight items: #337 (AUTHZ-INHERITANCE-P1), #333 (ENROLL-TENANCY-LAYER) -- both ready+GREEN.
+  # #346/#347 grouped Dependabot minor/patch auto-merges: no item (designed auto-merge, per
+  # SEC-DEPENDABOT-CI). #310 (React 19) confirmed CLOSED, not chased. Tip 66a0993 (#348), highest PR
+  # 348. gh pr checks probed #337/#333 live this pass -- both green; re-fetch before trusting tip.
   bimpossible:
-    at: '2026-08-08'
-    commit: 3116d10
-    pr: 325
+    at: '2026-08-13'
+    commit: 66a0993
+    pr: 348
   # addins: re-read 2026-08-07 (night) -- the previous pass recorded this delta as EMPTY; it is not
   # empty now. git log 7bdfa68..origin/main = 6 commits: #55 (CLAUDE.md factual fixes) #56 (firm-
   # literal ratchet gate + CI enforcement, the C# counterpart of BIMpossible #279) #58 (SyncConfig's
@@ -1317,10 +1332,12 @@ items:
     ref: "BIMpossible #293 (e1a793f, merged 2026-08-07T06:28:48Z, AFTER #33's drill) -- a DIFFERENT script (Register-BackupResilienceTasks.ps1, the scheduler-registration path, not Backup-Db.ps1 which #33 drilled) had its own defect on the real host: -RepetitionDuration ([timespan]::MaxValue) serialized to a value Task Scheduler rejects (HRESULT 0x80041318), so the FIRST elevated run registered ZERO scheduled tasks while printing 'Both tasks registered' -- a textbook instance of this repo's own named 'reports success, quietly did nothing' defect pattern (CLAUDE.md Debugging discipline section). Fixed by omitting the parameter (empty <Duration/> = repeat indefinitely, verified via a live probe task) and adding -ErrorAction Stop so a real failure now kills the script instead of sailing past it."
   - kind: pr
     ref: "workspace #38 (5025f23, merged 2026-08-07) -- adds Step 7/7a/7b to the runbook: register first, OBSERVE the actual task Principal, patch only if the observed LogonType is wrong (S4U lacks network access, so offsite sync to G: would fail every scheduled run while passing manual runs); includes the Set-ScheduledTask -Principal remediation and a forced-run verification reading LastTaskResult + the offsite-sync transcript. This documents the DECISION RULE and procedure only -- it is not an observed registration or an observed unattended run, so the scope note's 'not yet observed by any session' gap on the scheduled-task path STANDS."
+  - kind: pr
+    ref: "BIMpossible #330 (fdc9384, merged 2026-08-08) -- feat(backup): opt-in current-user principal for the offsite-sync task. The concrete implementation of #38's Principal/LogonType decision rule: a current-user principal has the network access S4U lacks, so a scheduled offsite sync to G: can now actually succeed rather than failing every unattended run while passing manual ones. Landed only -- see verification for the still-open observed-unattended-run gap."
   verification:
     level: verified
-    by: "The catastrophic unknown this item existed to close -- 'has a restore from this backup ever actually worked' -- is now answered yes, with a timestamped, row-count-matched drill, not a belief. Risk dropped 4 -> 2 accordingly. What remains is genuinely owner-only and much smaller than the original title: (1) the Measured-values table itself flags '-CommandTimeoutSec (1200s) and watchdog staleness thresholds deliberately NOT re-tuned -- single data point; 7-day collection still owed' -- i.e. no formal RPO/RTO figures derived yet, just one raw timing; (2) no restore-operator name found anywhere in the remediation plan doc or PR trail -- picking a human is not a probe this skill can run. Pairs with OPS-DEPLOY-RUNBOOK as before. IMPORTANT SCOPE NOTE added 2026-08-07: #33's 147/147 drill proves the backup+restore MECHANICS (Backup-Db.ps1, invoked manually/directly); it says nothing about the SCHEDULED-TASK path (Register-BackupResilienceTasks.ps1), which #293 shows was still silently registering zero tasks as of the same day, discovered AFTER the drill landed. #293's fix is landed but not live -- no observed run confirms the Task Scheduler now actually fires Backup-Db.ps1 unattended on the real host post-fix. Do not read '-VerifyRestore proven live' in the title as covering the automated schedule; it covers the restore mechanics only."
-    at: '2026-08-07'
+    by: "The catastrophic unknown this item existed to close -- 'has a restore from this backup ever actually worked' -- is now answered yes, with a timestamped, row-count-matched drill, not a belief. Risk dropped 4 -> 2 accordingly. What remains is genuinely owner-only and much smaller than the original title: (1) the Measured-values table itself flags '-CommandTimeoutSec (1200s) and watchdog staleness thresholds deliberately NOT re-tuned -- single data point; 7-day collection still owed' -- i.e. no formal RPO/RTO figures derived yet, just one raw timing; (2) no restore-operator name found anywhere in the remediation plan doc or PR trail -- picking a human is not a probe this skill can run. Pairs with OPS-DEPLOY-RUNBOOK as before. IMPORTANT SCOPE NOTE added 2026-08-07: #33's 147/147 drill proves the backup+restore MECHANICS (Backup-Db.ps1, invoked manually/directly); it says nothing about the SCHEDULED-TASK path (Register-BackupResilienceTasks.ps1), which #293 shows was still silently registering zero tasks as of the same day, discovered AFTER the drill landed. #293's fix is landed but not live -- no observed run confirms the Task Scheduler now actually fires Backup-Db.ps1 unattended on the real host post-fix. Do not read '-VerifyRestore proven live' in the title as covering the automated schedule; it covers the restore mechanics only. UPDATE 2026-08-13: BIMpossible #330 (fdc9384) adds the opt-in current-user principal for the offsite-sync task -- the implementation of #38's Principal/LogonType decision rule. Still landed, not live: no OBSERVED unattended scheduled run yet confirms Task Scheduler fires Backup-Db.ps1 + offsite sync end to end on the real host post-#330. The owner-only remainders (RPO/RTO table, named restore operator) are unchanged, so this stays blocked_owner."
+    at: '2026-08-13'
   live_check:
   - "grep -A5 '## 6. Measured values' 01_BuildLog/2026-08-06__backup-resilience-remediation-plan.md  # confirm the drill row is still there and check whether a 7-day collection or RTO/RPO row has since been added"
   - "grep -i 'restore operator' 01_BuildLog/2026-08-06__backup-resilience-remediation-plan.md 01_BuildLog/2026-08-05__product-risk-assessment.md  # currently 0 hits anywhere"
@@ -1971,7 +1988,7 @@ items:
   notes_url:
 
 - id: CKA-PILLAR1-HELP-CORPUS
-  title: "Client Knowledge Assistant Pillar 1: BM25 help ranker + how-to corpus, waves 1-3 shipped"
+  title: "Client Knowledge Assistant Pillar 1: BM25 help ranker + how-to corpus, waves 1-4 shipped"
   projects: [bimpossible, workspace]
   status: landed
   owner_gate: false
@@ -1988,10 +2005,12 @@ items:
     ref: "BIMpossible #325 (9242846) -- CI boundary guard (C1) + Wave 3 articles (C2). backend/tests/test_help_corpus_guard.py exposes a reusable validate_help_corpus(dir): required frontmatter (title/area/keywords/last_verified), allowlisted schema, area allowlist (12 + project-setup, revit-link), banned internal markers, credential patterns (sk-, AKIA, 64-hex, Bearer). 9 tests."
   - kind: pr
     ref: "workspace #39 (69a5eb4) -- the decision record: Parts A+B done, owner decision packet (5 items resolved), 4-wave corpus plan, per-article metadata contract, plus both coverage inventories (65 web-app + 53 Add-Ins ribbon surfaces) and a 6-flag client-facing verification checklist."
+  - kind: pr
+    ref: "BIMpossible #328 (04cd5af, merged 2026-08-08) -- Pillar 1 Wave 4: long-tail client-surface audit + 10 help articles. This is the fourth and final wave of the workspace #39 plan, so the 'Wave 4 not seen' gap this item previously named is now closed."
   verification:
     level: verified
-    by: "Merge-verified only, deliberately NOT called live. Probed on BIMpossible origin/main 2026-08-08: backend/aec/help_library.py carries the BM25 ranker, backend/tests/test_help_corpus_guard.py exists, backend/aec/help/ holds exactly 29 articles. TWO NAMED GAPS keep this at landed: (1) no runtime evidence -- nothing observed shows the DEPLOYED assistant ranking real queries against the new corpus, only that the code and articles are on main; (2) the plan in workspace #39 is four waves and this delta contains waves 1-3, so Wave 4 was not seen -- stated as an observation of the delta, not as a claim that Wave 4 is the only work left. Cross-repo per reconcile.md: code half (BIMpossible) and decision half (workspace) are one item."
-    at: '2026-08-08'
+    by: "Merge-verified only, deliberately NOT called live. Probed on BIMpossible origin/main 2026-08-08: backend/aec/help_library.py carries the BM25 ranker, backend/tests/test_help_corpus_guard.py exists. Of the two gaps this item previously named, gap 2 (Wave 4 unseen) is now CLOSED -- #328 landed Wave 4 (long-tail audit + 10 more articles), completing the four-wave workspace #39 plan. Gap 1 STANDS and keeps this at landed: no runtime evidence -- nothing observed shows the DEPLOYED assistant ranking real queries against the corpus, only that the code and all four waves of articles are on main. Cross-repo per reconcile.md: code half (BIMpossible) and decision half (workspace) are one item."
+    at: '2026-08-13'
   live_check:
   - "gh pr list --repo YourBIMpossible/BIMpossible --search 'help corpus wave' --state merged --json number,title  # expect a Wave 4 PR once the plan completes"
   - "ls F:/AI-Dev/BIMpossible/backend/aec/help/ | wc -l  # 29 at this watermark; a jump means Wave 4 landed"
@@ -2010,15 +2029,19 @@ items:
   evidence:
   - kind: pr
     ref: "BIMpossible #321 (66d09f2, merged 2026-08-08) -- adds frontend/app/share/[token]/page.tsx and frontend/app/lib/api/shareSnapshot.ts (plain fetch; recipients are anonymous by design). No backend change: the token endpoint already existed, only the page that consumes it was missing. Element rows are deliberately NOT rendered in this pass."
+  - kind: pr
+    ref: "SHARE v2 SUPERSEDES THE 'no rows' pass: BIMpossible #332 (squash 9b70864, merged + PROD LIVE-VERIFIED 2026-08-08) adds frozen server-resolved row/column snapshots (new table share_snapshots, Alembic i9j0k1l2m3n4), an anonymous read that strips all internal identifiers, DELETE revoke, and a per-IP 60/60s rate limiter (closes the CF V4 exception; contact-form limiter untouched). Prod smoke (synthetic data only): frozen read + no-store, non-oracular 404s, 429 + Retry-After after 60 reads, anon DELETE 401, FK-cascade cleanup, zero internal-ID leak; synthetic rows deleted after. Anchor: workspace 00_Strategy/design-docs/2026-08-08__share-v2-frozen-snapshots-anchor.md (workspace commit 3bee57e)."
+  - kind: pr
+    ref: "BIMpossible #331 (507ee6f, merged 2026-08-08) -- Share links live: Cache-Control no-store + client help article (post-CF-bypass), the first share-links-live hardening step. Its no-store behavior is exactly what the #332 prod smoke below confirmed on the live container, so this is folded in as confirming evidence."
   - kind: doc
     ref: "workspace #39 (69a5eb4) recorded this as a P0 share-link route defect with the fix HELD FOR OWNER GO. The fix subsequently merged, so the hold was released -- recorded here because the queue should not still show it as gated."
   verification:
     level: verified
-    by: "Merge-verified, not live. Confirmed on origin/main 2026-08-08: frontend/app/share/[token]/page.tsx, page.test.tsx, and app/lib/api/shareSnapshot.ts all present. Not promoted to live because no share URL has been loaded in a browser. Worth naming: this is the ONE recently-merged client-facing surface that OPS-LOCAL-SIGNIN-AUTHLOOP does not block -- the viewer is anonymous by design, so it can be verified without a working local sign-in. That makes it the cheapest landed->live conversion currently in the store."
+    by: "PROD LIVE-VERIFIED 2026-08-08 via Share v2 (#332 / 9b70864). The earlier #321 pass was merge-verified-not-live and deliberately rendered no rows; Share v2 supersedes it end-to-end: migration i9j0k1l2m3n4 applied on prod (alembic current = i9j0k1l2m3n4 head), backend Up (healthy), and a synthetic anonymous token served a frozen table with Cache-Control: no-store and no hub/project/model/file/firm identifiers. Rate limit, non-oracular 404s, revoke auth gate, and FK-cascade delete all confirmed against the live container with disposable synthetic data (deleted after). Full evidence in the anchor doc."
     at: '2026-08-08'
   live_check:
-  - "Open a real ${origin}/share/<token> URL in a browser -- expect the snapshot to render, not a 404. No sign-in required."
-  source: "BIMpossible #321; workspace #39 (share-link route defect investigation)"
+  - "FULLY LIVE 2026-08-08 (backend + frontend). Regression guard: opening a real ${origin}/share/<token> should render the frozen snapshot TABLE (not a 404, not the definition-only fallback). Browser-verified 2026-08-08 against 127.0.0.1:3000 with a synthetic token after the frontend image was rebuilt post-merge."
+  source: "BIMpossible #321 + #331 + #332 (Share v2 frozen snapshots); workspace #39 (share-link route defect investigation); later display-format defect #336 tracked separately as SHARE-V2-CELL-FREEZE"
   notes_url:
 
 - id: AUDIT-2026-08-08-REMEDIATION
@@ -2043,4 +2066,205 @@ items:
   - "ls 'F:/AI-Dev/BIMpossible_Workspace/02_Reference/Audit and Scan Info/audit-resolution_2026-08-08.md'"
   - "Next full audit run: the 25 resolved IDs should not resurface. Recurrence is the only real proof the fixes hold."
   source: "BIMpossible #324; workspace #40 resolution record"
+  notes_url:
+
+- id: CI-DRAFT-GATING
+  title: "CI cost/draft-gating live: drafts skip expensive CI, superseded runs cancel, auto-draft-on-red reverted"
+  projects: [bimpossible]
+  status: live
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: "BIMpossible #342 (4956b45) -- expensive CI + security scans skip on draft PRs, run on ready_for_review. Load-bearing change: on the two open ready PRs the draft/dependabot-only jobs show 'skipping' while the real jobs run."
+  - kind: pr
+    ref: "BIMpossible #338 (8f5ff32) -- concurrency cancels superseded PR runs (an in-progress run is cancelled when a newer push supersedes it)."
+  - kind: pr
+    ref: "BIMpossible #343 (3bdee56) then #348 (66a0993) -- auto-draft ready PRs on CI/security/build failure was ADDED by #343 and REMOVED by #348 (the workflow was disabled/ineffective, so it was pulled). Net end-state: NO auto-draft-on-red; do not re-propose it (matches the known auto-draft token-limitation)."
+  verification:
+    level: verified
+    by: "CI-workflow changes activate from the default branch the moment they merge (GitHub reads workflow definitions from main), so these are live, not merely landed -- and the effect is directly observable: gh pr checks on the two open ready PRs #337 and #333 (probed 2026-08-13) both show the expensive jobs passing and the draft-only/dependabot jobs 'skipping', which is exactly #342's designed split. #348 leaves the tree with the auto-draft-on-red workflow removed (tip commit 66a0993). Net: draft-gating LIVE, superseded-run cancellation LIVE, auto-draft-on-red GONE."
+    at: '2026-08-13'
+  live_check:
+  - "gh pr checks 337 -R YourBIMpossible/BIMpossible  # expensive jobs pass on a ready PR; auto-merge/docs-hygiene show 'skipping'"
+  source: "BIMpossible #338 / #342 / #343 / #348 (merge-wave delta, 2026-08-13 reconcile)"
+  notes_url:
+
+- id: TEST-OPS-HYGIENE
+  title: "Test/ops hygiene: app-boot tripwire, post-deploy identity smoke script, flaky prefs test fixed"
+  projects: [bimpossible]
+  status: landed
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: "BIMpossible #339 (e516a0d) -- app-boot smoke tripwire that fails CI fast if the app cannot boot. Runs in CI, self-activating."
+  - kind: pr
+    ref: "BIMpossible #340 (a2344bd) -- Verify-Deploy.ps1, a READ-ONLY post-deploy identity smoke. This is an ops script whose value only exists when RUN on the prod host; no observed run yet, so it is the one landed-not-live piece here. Pairs with OPS-DEPLOY-RUNBOOK (walk it during the runbook pass) and would raise the evidence floor OPS-LOCAL-SIGNIN-AUTHLOOP describes."
+  - kind: pr
+    ref: "BIMpossible #341 (21e145d) -- fixes a flaky account-prefs test (CI-only, self-activating)."
+  verification:
+    level: verified
+    by: "All three merged (SHAs named). #339 and #341 are CI tests -- on main = running. #340's Verify-Deploy.ps1 is a deploy-host script with no observed run, which is exactly why the item stays landed: no runtime evidence of #340 executing on the prod host. Merge evidence only for the ops half."
+    at: '2026-08-13'
+  live_check:
+  - "Run Verify-Deploy.ps1 read-only on the prod host after a deploy; capture the identity-smoke result to convert #340 landed->live."
+  source: "BIMpossible #339 / #340 / #341 (merge-wave delta, 2026-08-13 reconcile)"
+  notes_url:
+
+- id: APS-TOKEN-REFRESH-CLASSIFY
+  title: "Classify APS/auth token-refresh failures instead of leaking 500s (_authed_get, remaining paths, AEC worker)"
+  projects: [bimpossible]
+  status: landed
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: pr
+    ref: "BIMpossible #334 (e0577ad) -- token-refresh failures in _authed_get are now classified as a proper auth error instead of surfacing as a bare 500."
+  - kind: pr
+    ref: "BIMpossible #335 (86f5d9f) -- extends the same classification to the remaining request paths and the AEC worker, so no token-refresh path leaks a 500."
+  verification:
+    level: verified
+    by: "Both merged (two SHAs named). Held at landed: the fix changes error CLASSIFICATION on a live APS token-refresh failure, and no session has observed a real (or forced) token-refresh failure returning the reclassified status on a running deployment -- OPS-LOCAL-SIGNIN-AUTHLOOP blocks the signed-in probe. Merge evidence only, so landed not live."
+    at: '2026-08-13'
+  live_check:
+  - "Force an APS token-refresh failure against the running backend and confirm the response is the classified auth error, not a 500."
+  source: "BIMpossible #334 / #335 (merge-wave delta, 2026-08-13 reconcile)"
+  notes_url:
+
+- id: SHARE-V2-CELL-FREEZE
+  title: "Share v2 snapshots freeze display-formatted cell values, not raw metric values (SHARE-V2-DEF-1)"
+  projects: [bimpossible]
+  status: landed
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: pr
+    ref: "BIMpossible #336 (22b6f4e, merged 2026-08-08) -- SHARE-V2-DEF-1: the frozen share snapshot was capturing raw metric values; it now freezes the display-formatted cells, so an anonymous share recipient sees the same formatted values the author saw. Merged AFTER #332's prod smoke (9b70864), so it is NOT covered by that smoke run."
+  - kind: doc
+    ref: "Correctness follow-up on FIX-SHARE-LINK-VIEWER / Share v2 (#332); same share_snapshots surface, tracked separately because #332's prod live-verification predates this fix."
+  verification:
+    level: verified
+    by: "Merged, SHA named (22b6f4e). Landed not live: the display-formatting fix landed after the #332 prod smoke, and no later smoke has re-frozen a snapshot and confirmed the formatted (not raw) values are what an anonymous recipient receives. Merge evidence only."
+    at: '2026-08-13'
+  live_check:
+  - "Freeze a share snapshot containing formatted metric cells and open it anonymously -- expect display-formatted values, not raw."
+  source: "BIMpossible #336 (SHARE-V2-DEF-1); FIX-SHARE-LINK-VIEWER / #332 Share v2"
+  notes_url:
+
+- id: CKA-PILLAR2-FIRM-DOCS
+  title: "Client Knowledge Assistant Pillar 2: per-firm client documents (upload, extraction, BM25 retrieval, assistant tool)"
+  projects: [bimpossible]
+  status: landed
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: L
+  risk: 3
+  evidence:
+  - kind: pr
+    ref: "BIMpossible #327 (46520a7, merged 2026-08-08) -- Pillar 2 v1: per-firm client document upload, text extraction, BM25 retrieval, and an assistant tool that answers from the firm's own documents. Per-firm document storage + retrieval is a tenant-isolation-sensitive surface (risk 3): a cross-firm leak here would expose uploaded client documents."
+  verification:
+    level: verified
+    by: "Merged, SHA named (46520a7). Landed not live: no runtime evidence that the deployed assistant retrieves a firm's uploaded documents (and ONLY that firm's) against real data, and the tenant-isolation guarantee on the new upload/retrieval path has not been probed live this pass. Merge evidence only. Flagged for a tenancy check: confirm firm_id scoping on the client-documents store and the BM25 retrieval query before this reaches external clients."
+    at: '2026-08-13'
+  live_check:
+  - "Upload a document as firm A, query the assistant as firm B, confirm zero cross-firm retrieval; confirm firm_id scoping on the client-documents table and BM25 query."
+  source: "BIMpossible #327 (Pillar 2 per-firm client documents)"
+  notes_url:
+
+- id: CKA-PILLAR3-EXPLAINABILITY
+  title: "Client Knowledge Assistant Pillar 3: client explainability (change sets, help handoff, model-health remedies, alert next-steps, Groups read parity)"
+  projects: [bimpossible]
+  status: landed
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: L
+  risk: 2
+  evidence:
+  - kind: pr
+    ref: "BIMpossible #326 (686b064, merged 2026-08-08) -- Pillar 3: change sets, assistant help handoff, model-health remedies, alert next-steps, and Groups read parity, so client-facing surfaces explain what changed and what to do next."
+  verification:
+    level: verified
+    by: "Merged, SHA named (686b064). Landed not live: these are signed-in client-facing surfaces, so OPS-LOCAL-SIGNIN-AUTHLOOP blocks visual verification -- CI green is the only evidence they render. Merge evidence only."
+    at: '2026-08-13'
+  live_check:
+  - "Once local sign-in works (OPS-LOCAL-SIGNIN-AUTHLOOP), load a change set / alert next-steps surface and confirm the explainability content renders."
+  source: "BIMpossible #326 (Pillar 3 client explainability)"
+  notes_url:
+
+- id: SEC-GROUPS-EDIT-PERM-ALIGN
+  title: "Align firm-group edit-permission gating in the frontend (GRP-1, GRP-2)"
+  projects: [bimpossible]
+  status: landed
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: pr
+    ref: "BIMpossible #329 (c311e0d, merged 2026-08-08) -- GRP-1/GRP-2 firm-group edit permission alignment. FRONTEND-ONLY (confirmed via PR file list): new useFirmGroupPermission hook + roles API client, ManageGroupsModal + useGroups + model page gated so the edit UI matches who may actually edit a firm group. Not a backend authz change -- server enforcement lives in the SEC-GROUPS-* items; this stops the client offering edits the backend would reject."
+  verification:
+    level: verified
+    by: "Merged, SHA named (c311e0d); file list confirms frontend-only. Landed not live: signed-in UI gating, and OPS-LOCAL-SIGNIN-AUTHLOOP blocks local visual verification, so CI (new hook/API/modal tests) is the only evidence it behaves. Merge evidence only. Note: client-side gating is UX convenience, not a security boundary -- authoritative firm-group permission enforcement remains server-side (SEC-GROUPS-403-ORDERING / SEC-GROUPS-VIEWS-404-EXISTENCE-ORACLE)."
+    at: '2026-08-13'
+  live_check:
+  - "As a non-privileged firm member, confirm the group edit controls are hidden/disabled in ManageGroupsModal once local sign-in is verifiable."
+  source: "BIMpossible #329 (GRP-1, GRP-2 firm-group edit permission alignment); PR file list probed 2026-08-13"
+  notes_url:
+
+- id: AUTHZ-INHERITANCE-P1
+  title: "Authorization-Inheritance Phase 1: permission-projection foundation (spine)"
+  projects: [bimpossible]
+  status: in_flight
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: L
+  risk: 2
+  evidence:
+  - kind: pr
+    ref: "BIMpossible #337 OPEN/READY (feat/authz permission-projection foundation) -- the Phase 1 spine of authorization inheritance. Not merged; actively in flight."
+  verification:
+    level: verified
+    by: "IN FLIGHT, not merged. Machine fact 2026-08-13: PR#337 state OPEN, ready_for_review, all CI GREEN (backend pytest, frontend next build, frontend vitest+tsc, gitleaks, pip-audit, semgrep, trivy, security-scan-summary all pass; only auto-merge/docs-hygiene skipping under the new draft-gating). No merge decision yet. Verified as in-flight by the open PR + green checks; the WORK itself is unverified until it lands."
+    at: '2026-08-13'
+  live_check:
+  - "gh pr view 337 -R YourBIMpossible/BIMpossible --json state,isDraft,mergedAt  # expect OPEN/ready until it merges"
+  source: "BIMpossible PR#337 (open ready; machine-fact probe 2026-08-13 reconcile)"
+  notes_url:
+
+- id: ENROLL-TENANCY-LAYER
+  title: "Client/project enrollment tenancy layer (E1-E5), flag-gated dark ship"
+  projects: [bimpossible]
+  status: in_flight
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: L
+  risk: 2
+  evidence:
+  - kind: pr
+    ref: "BIMpossible #333 OPEN/READY (client/project enrollment tenancy layer, E1-E5) -- flag-gated dark ship, so a merge changes nothing in prod until the flag is set. Not merged; actively in flight."
+  verification:
+    level: verified
+    by: "IN FLIGHT, not merged. Machine fact 2026-08-13: PR#333 state OPEN, ready_for_review, all CI GREEN (backend pytest, frontend next build, frontend vitest+tsc, gitleaks, pip-audit, semgrep, trivy, security-scan-summary pass; auto-merge/docs-hygiene skipping). Dark-ship (flag-gated) design means a merge is safe but this is still open. Verified in-flight by the open PR + green checks."
+    at: '2026-08-13'
+  live_check:
+  - "gh pr view 333 -R YourBIMpossible/BIMpossible --json state,isDraft,mergedAt  # expect OPEN/ready until it merges"
+  source: "BIMpossible PR#333 (open ready, E1-E5 enrollment tenancy; machine-fact probe 2026-08-13 reconcile)"
   notes_url:
