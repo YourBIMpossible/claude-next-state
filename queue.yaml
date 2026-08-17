@@ -136,8 +136,17 @@ reconciled:
   # re-fetched at write time; highest PR now 386.
   bimpossible:
     at: '2026-08-17'
-    commit: 410d7aa
-    pr: 386
+    commit: a3ae3d9
+    pr: 389
+  # bimpossible: post-verification closure 2026-08-17 -- delta 410d7aa..a3ae3d9 = 3 commits.
+  #   #387 (b12ef36, wizard keep-alive-safe provision) + #388 (90247f3, wizard approved fixes wave) ->
+  #   NEW item WIZARD-NEWPROJECT-SETUP, merge-verified (concurrent wizard session's work; recorded by
+  #   SHA, not run). #389 (a3ae3d9, this closure's own hub-iso enrollment fixtures) -> folded into
+  #   SEC-GROUPS-VIEWS-HUB-ISOLATION, promoted landed->live (14 passed vs deployed image). Also this
+  #   closure, no new commits: OPS-NEUTRALITY-CLOSEOUT-D6 landed->dropped (D6 soak decommissioned,
+  #   superseded by RAIL-RETIRE-FINAL); FE-3-10-FLAG live_check corrected (invalid printenv -> deployed
+  #   bundle-marker grep); CKA-PILLAR1-HELP-CORPUS refreshed (corpus 29->41 .md, stays landed -- no
+  #   runtime ranking evidence). Anti-drift held: merge != deployed != live-verified throughout.
   # bimpossible: sync 2026-08-14 -- delta 66a0993..8118589 was a single merge, #349 (locust/gevent
   # full-suite deadlock fix). Applied to TEST-OPS-HYGIENE (confirming evidence) and flagged as the
   # required rebase base for the two open authz/enrollment PRs (#337, #333). AUTHZ-INHERITANCE-P1
@@ -974,12 +983,14 @@ items:
     ref: "BIMpossible #359 MERGED (squash b5c6e64) 2026-08-16T07:04:22Z -- Dockerfile ARG default flipped to 1 (bake Phase 3.10 UI)"
   - kind: run
     ref: "Frontend image rebuilt via Refresh-Frontend.ps1 2026-08-15/16 post-merge; prod browser smoke 2026-08-16 on app.yourbimpossible.com (model Sutter MBH_Interiors.rvt, project MBCC - Test - 27): Rooms category renders; Furniture shows the flag-gated 'Room data is still warming up' banner -- both readings only possible with the flag baked ON"
+  - kind: code
+    ref: "live_check CORRECTED 2026-08-17: the prior probe 'docker exec <frontend> printenv NEXT_PUBLIC_BIMPOSSIBLE_PHASE3_10_ENABLED' was INVALID -- NEXT_PUBLIC_* is inlined at build and unset at runtime (verified: printenv returns nothing in docker-frontend-1), so the check could never pass even with the flag baked ON. Replaced with a build-time proof: grep the flag-gated backend-contract marker 'linked_room_join_state' (useCategoryData.ts:64 type, read at :388 inside if(PHASE3_10_ENABLED)) in the deployed server bundle -- returns 1 today. No frontend code change."
   verification:
     level: verified
     by: "CLOSED LIVE 2026-08-16: PR#359 baked NEXT_PUBLIC_BIMPOSSIBLE_PHASE3_10_ENABLED=1 into the image default, frontend rebuilt via Refresh-Frontend.ps1, and the prod browser smoke observed the flag-gated UI serving (Rooms renders; Furniture warming banner). The stranded finished value this item tracked -- P3-10A/P3-10B merged but invisible -- is now user-visible. || Prior reading 2026-08-06: BOTH HALVES READ ON origin/main. The backend gate is gone; the frontend gate is not. Because the value is a Docker build ARG defaulting to 0, a merge can never turn these columns on -- only an image rebuild can. P3-10A-GOLIVE and P3-10B-DOORS both merged, yet no user can see either result."
     at: '2026-08-16'
   live_check:
-  - "docker exec <frontend> printenv NEXT_PUBLIC_BIMPOSSIBLE_PHASE3_10_ENABLED  # expect 1"
+  - "docker exec docker-frontend-1 sh -c \"grep -c -F -- 'linked_room_join_state' '/app/.next/server/app/project/[id]/model/page.js'\"  # expect >=1: the marker is read ONLY behind if(PHASE3_10_ENABLED) (useCategoryData.ts:388) and Next DCE-strips it when the flag builds false, so its presence in the deployed server bundle proves the flag baked ON"
   source: "frontend/Dockerfile + backend/aec/router.py on origin/main; PR#359 (b5c6e64); prod browser smoke 2026-08-16"
   notes_url:
 
@@ -1710,7 +1721,7 @@ items:
 - id: SEC-GROUPS-VIEWS-HUB-ISOLATION
   title: "groups.py + views.py routes check only the global project allowlist, never per-firm hub isolation"
   projects: [bimpossible]
-  status: landed
+  status: live
   claim: "LANDED 2026-08-07: PR #313 squash-merged to main as e5bbb04 (mergedAt 2026-08-08T04:40:52Z, all required checks green; remote branch deleted). REPRODUCED + FIXED + PR #313 OPEN 2026-08-07 (worktree hopeful-faraday-112cc2, branch fix/groups-views-hub-isolation, commit f232207). Invariant-test question resolved first per live_check: test_route_tenancy_invariant.py pins ONLY the membership invariant (require_active_membership/require_firm_admin in the dependency graph) -- it never asserts hub isolation, so its passing does NOT contradict this finding; deliberately not extended because the fix is imperative (invisible to dependency-graph walking) -- the behavior suite is the pin. Reproduction: new backend/tests/test_groups_views_hub_isolation.py ran RED on unmodified code (all 8 cross-hub requests succeeded 200/201/204 with the project ON the global allowlist but its hub OUTSIDE firm_allowed_hubs). Fix: imperative await assert_project_in_firm_hub() in all 8 route bodies (routes made async) -- NOT Depends(require_project_in_firm_hub), because these surfaces authenticate via web session and the Depends form injects an APS-token 401 ahead of the audited F-6/SEC-2 ordering (first attempt did exactly that and broke 67 tests; assistant/wizard/share imperative precedent followed instead). backend-endpoint-reviewer gate: PASS after its one finding (5.3: hub gate ran before the firm check on PATCH/DELETE /data/groups -- existence oracle + foreign-row-driven APS probe) was fixed by moving the gate after the firm check, pinned by 2 ordering tests (12 tests total in the module). Verify-Local-CI backend lanes green. Pre-existing allowlist-before-firm-check residue left for SEC-GROUPS-403-ORDERING (out of scope). Merge pending required checks on PR #313."
   owner_gate: false
   unblocks: []
@@ -1724,13 +1735,17 @@ items:
     ref: "CODE SHAPE CONFIRMED this sync pass by direct read (not the original finder): grep 'require_project_in_firm_hub|assert_project_allowed' across backend/aec/groups.py and backend/aec/views.py finds zero occurrences of require_project_in_firm_hub in either file. All 8 mutating/reading routes -- groups.py list_groups(307)/create_group(364)/update_group(436)/delete_group(516) and views.py list_views(191)/create_view(246)/update_view(336)/delete_view(450) -- guard project access with assert_project_allowed(project_id) only, which per backend/guard.py is a GLOBAL allowlist membership check (ALLOWED_PROJECT_IDS), not scoped to any firm's allowed hubs."
   - kind: doc
     ref: "Contra CLAUDE.md's 'APS hub isolation (Phase 6 tenancy)' section: 'Any route that touches an APS project (by project_id...) must also prove project.hub_id in firm_allowed_hubs(firm_id) -- via Depends(require_project_in_firm_hub)... ALLOWED_PROJECT_IDS remains a deployment rail, never a tenancy mechanism.' The already-shipped Phase 6 wave (PRs #265/#267/#268/#281) wired this dependency across /data, /aps, /revit, /search and (per #281) 41 previously-invisible flag-gated routes -- groups.py and views.py were apparently never included in any of those sweeps despite matching the same 'takes project_id, is reachable by any allowlisted-firm member' shape the invariant test targets."
+  - kind: pr
+    ref: 'BIMpossible #389 (squash a3ae3d9, merged 2026-08-17T04:42Z) -- test(hub-iso): make the enrollment gate explicit in the groups/views hub-isolation matrix. _seed gains enroll=; the autouse sweep also clears FirmAllowedProject for TEST_PROJECT_ID; 2 positive tests seed enrollment + force the flag; 2 new deny tests pin the unenrolled 403. Cross-hub deny (8) and 404 non-enumeration (2) unchanged.'
+  - kind: run
+    ref: pytest tests/test_groups_views_hub_isolation.py -> 14 passed in docker-backend-1 (deployed image) against schema-only throwaway DB bimpossible_test_hubiso, ambient flag both on and unset (2026-08-17)
   verification:
     level: verified
-    by: "landed 2026-08-17 sweep: hub isolation itself HOLDS -- negative/cross-hub cases in test_groups_views_hub_isolation.py pass and require_project_in_firm_hub is present in groups.py+views.py. BUT 2 positive-path tests (test_groups_allowed_hub_still_works, test_views_allowed_hub_still_works) FAIL with 403 'not enrolled for your firm': the now-live enrollment gate (BIMPOSSIBLE_PROJECT_ENROLLMENT_ENABLED=1) intercepts before the hub grant, and these tests predate enrollment so they don't seed an enrollment row. Stale test vs live layer, not a leak. Stays landed until the test seeds enrollment; declared pytest live_check does not cleanly pass."
+    by: "landed->live 2026-08-17 closure: the enrollment-aware fixtures merged (PR #389, squash a3ae3d9). The 2 positive-path tests now force BIMPOSSIBLE_PROJECT_ENROLLMENT_ENABLED on and seed a FirmAllowedProject row (enrolled->allowed), and 2 NEW paired deny tests prove allowed-hub-but-unenrolled -> 403 'This project is not enrolled for your firm' (distinct from the cross-hub 403). Full matrix (enrolled->allow, unenrolled->403, cross-hub->403, missing->404) ran GREEN against the DEPLOYED backend image (docker-backend-1) on a schema-only throwaway DB (zero prod rows): 14 passed with the ambient flag both =1 and unset, so it is deterministic in the flag-on container and in CI (no .env) alike. require_project_in_firm_hub present in groups.py+views.py; the imperative gate fires before the enrollment check. Declared pytest live_check now passes cleanly. Route-level hub isolation PLUS the live enrollment layer are both pinned and green end-to-end."
     at: '2026-08-17'
   live_check:
-  - "python -m pytest backend/tests/test_route_tenancy_invariant.py -q -k 'groups or views'  # first move -- check whether this already covers/exempts these routers before assuming a gap needs a new fix"
-  - "grep -rn require_project_in_firm_hub backend/aec/groups.py backend/aec/views.py  # expect 0 hits today; should be >0 once fixed"
+  - "docker exec docker-backend-1 sh -c 'export TEST_DATABASE_URL=\"${DATABASE_URL%/*}/bimpossible_test\"; python -m pytest tests/test_groups_views_hub_isolation.py -q'  # expect 14 passed (enrolled->allow, unenrolled->403, cross-hub->403, missing->404)"
+  - 'grep -rn require_project_in_firm_hub backend/aec/groups.py backend/aec/views.py  # >0 hits (hub gate present); enrollment gate is imperative assert_project_access in the same route bodies'
   source: "named-deliverable-personal-scope-firm-gaps.md finding #3; code confirmed via direct read 2026-08-07 sync pass"
   notes_url:
 
@@ -1927,7 +1942,7 @@ items:
 - id: OPS-NEUTRALITY-CLOSEOUT-D6
   title: "Neutrality + remediation closeout MERGED (#297); D-6 compare-mode soak running, owner go/no-go due 2026-08-15"
   projects: [bimpossible]
-  status: landed
+  status: dropped
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -1940,13 +1955,17 @@ items:
     ref: "This PR is larger than its title implies and touches a tenancy-adjacent rail: it adds backend/allowlist_source.py (193 lines), backend/allowlist_db.py (43), and migration f2b3c4d5e6f7_add_allowed_projects.py (44), i.e. it moves the ALLOWED_PROJECT_IDS allowlist into the database. CLAUDE.md is explicit that ALLOWED_PROJECT_IDS is a deployment rail and NOT a tenancy mechanism, so making it DB-backed does not make it one -- flagged here so nobody later reads 'allowlist is in the DB now' as 'tenancy is handled'. It also rewrote .semgrep/firm-literal-baseline.txt to empty (see ARCH-FIRM-ALIAS-BACKEND) and added a security-scan.yml step plus Verify-Local-CI.ps1 changes."
   - kind: doc
     ref: "D-6 seeded 2026-08-08; compare-mode soak running since 2026-08-08 04:10 UTC with day-0 and post-restart both green. Daily parity check runs as Windows scheduled task BIMpossible-D6-Soak-Parity-Check, appending to F:/AI-Dev/.tools/d6-soak/soak-log.jsonl. Originally sourced only from memory project_neutrality-closeout-reconstruction; UPGRADED 2026-08-07 sync: workspace PR #37 (ce2422f, merged) documents the D-6 seed + compare-mode soak start on workspace main -- the seed/start facts are now doc-backed, but the soak's day-to-day results stay CLAIMED until the jsonl is read directly."
+  - kind: doc
+    ref: 'F:/AI-Dev/.tools/d6-soak/RETIRED.md (2026-08-17) -- decommission record: task unregistered, script inert, soak-log.jsonl preserved, superseded by RAIL-RETIRE-FINAL / PR #374.'
+  - kind: doc
+    ref: Build log F:/AI-Dev/BIMpossible_Workspace/01_BuildLog/2026-08-08__d6-allowlist-seed-and-soak-start.md closed 2026-08-17 with the 'SUPERSEDED, not promoted' outcome per its own gate (line 82).
   verification:
-    level: contradicted
-    by: "CONTRADICTED 2026-08-17 sweep. STORED: expect one green parity entry/day since 2026-08-08. PROBE: F:/AI-Dev/.tools/d6-soak/soak-log.jsonl tails show status=ALERT every day (2026-08-14/15/16), mode='env' (expected 'compare'), 'effective/common allowlist is EMPTY', safe_to_promote=false. Task BIMpossible-D6-Soak-Parity-Check state=Ready (still scheduled). Compounding: the ALLOWED_PROJECT_IDS rail this soak monitors was retired end-to-end 2026-08-16/17 (RAIL-RETIRE-FINAL, guard.py gone). The soak is alerting on a decommissioned subsystem. Needs an owner call: close D6 as superseded and unschedule the task, or repoint the soak."
+    level: verified
+    by: "DROPPED 2026-08-17 -- superseded by RAIL-RETIRE-FINAL / PR #374. The soak exclusively monitored the ALLOWED_PROJECT_IDS rail (imports allowlist_source + allowlist_db, reads ALLOWED_PROJECT_IDS); that rail was retired end-to-end (guard.py + both modules deleted, merge e36ae9b, deployed 2026-08-16/17), so the soak could only ALERT on a subsystem that no longer exists. DECOMMISSIONED this closure: scheduled task BIMpossible-D6-Soak-Parity-Check unregistered (confirmed absent); D6-Soak-Check.ps1 left inert; soak-log.jsonl preserved as history; F:/AI-Dev/.tools/d6-soak/RETIRED.md written; build log 2026-08-08__d6-allowlist-seed-and-soak-start.md closed with the SUPERSEDED outcome. No promotion to db mode occurred and none is possible -- there is no allowlist left to soak. Tenancy now lives in firm membership -> hub grant -> project enrollment (aec/hub_tenancy.py)."
     at: '2026-08-17'
   live_check:
-  - "Get-Content F:/AI-Dev/.tools/d6-soak/soak-log.jsonl -Tail 5  # expect one green parity entry per day since 2026-08-08"
-  - "Get-ScheduledTask BIMpossible-D6-Soak-Parity-Check  # expect Ready/Running, not disabled"
+  - 'Get-ScheduledTask BIMpossible-D6-Soak-Parity-Check -ErrorAction SilentlyContinue  # expect NOT FOUND (unregistered 2026-08-17)'
+  - 'Test-Path F:/AI-Dev/.tools/d6-soak/RETIRED.md  # expect True (decommission record)'
   source: "git log e1a793f..origin/main; git show 2332646 --stat; memory project_neutrality-closeout-reconstruction"
   notes_url:
 
@@ -2107,13 +2126,15 @@ items:
     ref: "workspace #39 (69a5eb4) -- the decision record: Parts A+B done, owner decision packet (5 items resolved), 4-wave corpus plan, per-article metadata contract, plus both coverage inventories (65 web-app + 53 Add-Ins ribbon surfaces) and a 6-flag client-facing verification checklist."
   - kind: pr
     ref: "BIMpossible #328 (04cd5af, merged 2026-08-08) -- Pillar 1 Wave 4: long-tail client-surface audit + 10 help articles. This is the fourth and final wave of the workspace #39 plan, so the 'Wave 4 not seen' gap this item previously named is now closed."
+  - kind: code
+    ref: 'Corpus size 29 -> 41 .md files: git ls-tree -r origin/main -- backend/aec/help/ counts 41 markdown articles at tip a3ae3d9 (2026-08-17), up from the 29 recorded at the prior watermark. Confirms Wave 4 (#328) plus subsequent article growth landed. Still merge-verified only -- no runtime evidence the DEPLOYED assistant ranks real queries against the corpus, so this stays landed (gap 1 stands).'
   verification:
     level: verified
     by: "Merge-verified only, deliberately NOT called live. Probed on BIMpossible origin/main 2026-08-08: backend/aec/help_library.py carries the BM25 ranker, backend/tests/test_help_corpus_guard.py exists. Of the two gaps this item previously named, gap 2 (Wave 4 unseen) is now CLOSED -- #328 landed Wave 4 (long-tail audit + 10 more articles), completing the four-wave workspace #39 plan. Gap 1 STANDS and keeps this at landed: no runtime evidence -- nothing observed shows the DEPLOYED assistant ranking real queries against the corpus, only that the code and all four waves of articles are on main. Cross-repo per reconcile.md: code half (BIMpossible) and decision half (workspace) are one item."
     at: '2026-08-13'
   live_check:
-  - "gh pr list --repo YourBIMpossible/BIMpossible --search 'help corpus wave' --state merged --json number,title  # expect a Wave 4 PR once the plan completes"
-  - "ls F:/AI-Dev/BIMpossible/backend/aec/help/ | wc -l  # 29 at this watermark; a jump means Wave 4 landed"
+  - "gh pr list --repo YourBIMpossible/BIMpossible --search 'help corpus' --state merged --json number,title  # Wave 4 (#328) + later article PRs merged"
+  - "git ls-tree -r --name-only origin/main -- backend/aec/help/ | grep -c '\\.md$'  # 41 at watermark a3ae3d9 (was 29); further growth = more waves landed"
   source: "BIMpossible #320 / #322 / #325; workspace #39 decision record"
   notes_url:
 
@@ -2634,4 +2655,27 @@ items:
   live_check:
   - "git -C F:/AI-Dev/BIMpossible_Workspace status -s 00_Strategy/design-docs  # both gone from untracked = the Option C session (or owner) already committed them; item may be closable"
   source: "owner directive in-session 2026-08-16; /close externalization"
+  notes_url:
+- id: WIZARD-NEWPROJECT-SETUP
+  title: 'New-Project-Setup wizard hardened -- keep-alive-safe provision (#387) + approved fixes wave (#388: combobox, address/client, dup-number advisory, schedule/value/timezone, Option A session-cached consent)'
+  projects: [bimpossible]
+  status: landed
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 2
+  evidence:
+  - kind: pr
+    ref: 'BIMpossible #387 (squash b12ef36, merged 2026-08-17) -- fix(wizard): survive proxy keep-alive resets on provision + honest outcome recovery. The provision-500 was a proxy<->backend keep-alive reset after the OAuth idle gap; provision now survives it and reports the real outcome instead of a spurious 500.'
+  - kind: pr
+    ref: 'BIMpossible #388 (squash 90247f3, merged 2026-08-17) -- feat(wizard): approved fixes wave (combobox, address/client, duplicate-number advisory, schedule/value/timezone, Option A session-cached consent; AUTH-5 write-token identity verification preserved).'
+  verification:
+    level: verified
+    by: 'Merge-verified only, deliberately NOT called live: both PRs squash-merged to origin/main 2026-08-17 (delta 410d7aa..a3ae3d9 reconcile walk). Built by a concurrent wizard session; this reconciliation records the merges by SHA, it did not run or observe the deployed wizard end-to-end, so no runtime claim is made. Promote to live on a deployed provision smoke.'
+    at: '2026-08-17'
+  live_check:
+  - "git log origin/main --oneline | grep -E 'b12ef36|90247f3'  # both wizard PRs on main"
+  - 'gh pr view 387 --json state --jq .state; gh pr view 388 --json state --jq .state  # both MERGED'
+  source: 'delta 410d7aa..a3ae3d9 (#387 b12ef36, #388 90247f3); concurrent wizard session'
   notes_url:

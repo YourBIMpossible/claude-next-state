@@ -2,11 +2,11 @@
 
 # /next — work-item queue
 
-Generated 2026-08-17 (synced). Ranked by critical path (transitive `unblocks` cone), tiebreak:
+Generated 2026-08-16 (synced). Ranked by critical path (transitive `unblocks` cone), tiebreak:
 owner-gated+S effort, then effort, then risk, then id. Full algorithm:
 `~/.claude/skills/next/reference/item-model.md`.
 
-Scope: `all`. Watermarks: `bimpossible` = 2026-08-17 @ `410d7aa` PR#386 · `addins` = 2026-08-16 @ `a0a4e07` PR#64 · `workspace` = 2026-08-08 @ `1a3021d` PR#40.
+Scope: `all`. Watermarks: `bimpossible` = 2026-08-17 @ `a3ae3d9` PR#389 · `addins` = 2026-08-16 @ `a0a4e07` PR#64 · `workspace` = 2026-08-08 @ `1a3021d` PR#40.
 (families/pc-monitor: no items yet — run `init` to derive.)
 
 ## Blocked on you
@@ -100,13 +100,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-17 @ `410d7aa` PR#386 · `addi
 [DEP-JSYAML-282] Dependabot js-yaml 4.3.0 -> 4.3.1 merged (GHSA-5p4m-2wfm-xmqj, dev-only transitive)
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · BIMpossible #282 MERGED 2026-08-07T02:30:12Z, squash commit 5d0379d3…
 
-[OPS-NEUTRALITY-CLOSEOUT-D6] Neutrality + remediation closeout MERGED (#297); D-6 compare-mode soak running, owner go/no-go due 2026-08-15
-       unblocks 0 · M · bimpossible · CONTRADICTED 2026-08-17 · BIMpossible #297 (2332646) MERGED 2026-08-07 -- 'feat(closeout): rec…
-       ⚠ both readings unresolved — CONTRADICTED 2026-08-17 sweep. STORED: expect one green parity entry/day since 2026-08-08. PROBE: F:/AI-Dev/.tools/d6-soak/soak-log.jsonl tails show s…
-
-[SEC-GROUPS-VIEWS-HUB-ISOLATION] groups.py + views.py routes check only the global project allowlist, never per-firm hub isolation
-       unblocks 0 · M · bimpossible · VERIFIED 2026-08-17 · Source: parallel session's memory record named-deliverable-personal-…
-
 [TEAMS-GATEWAY-W1] Microsoft Teams assistant gateway MERGED (#276) flag-gated off -- carries the firm-membership + hub-isolation fix
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-07 · BIMpossible #276 MERGED 2026-08-08T02:18:43Z as 879e857 'feat(teams)…
 
@@ -118,6 +111,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-17 @ `410d7aa` PR#386 · `addi
 
 [WARM-ORIGIN-DOORGAP] Curtain-panel/unhosted doors have no origin: label them 'no location (curtain panel)' instead of deriving one
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-17 · 01_BuildLog/2026-08-04__doors-join-increment1_RESULTS.md, 'Follow-up…
+
+[WIZARD-NEWPROJECT-SETUP] New-Project-Setup wizard hardened -- keep-alive-safe provision (#387) + approved fixes wave (#388: combobox, address/client, dup-number advisory, schedule/value/timezone, Option A session-cached consent)
+       unblocks 0 · M · bimpossible · VERIFIED 2026-08-17 · BIMpossible #387 (squash b12ef36, merged 2026-08-17) -- fix(wizard):…
 
 [R5-AECDM-PUSHDOWN] R5 AECDM query-pushdown lane MERGED -- flag-gated, read-only (PR #363)
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-17 · BIMpossible #363 MERGED (d56bd14, 2026-08-16T19:47:59Z, branch feat/…
@@ -297,6 +293,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-17 @ `410d7aa` PR#386 · `addi
 
 [WS-NEXT-VERSIONING] Version /next skill + store + session docs into workspace repo (branch + draft PR)
        unblocks 0 · S · workspace · VERIFIED 2026-08-07 · 2026-08-04__ProductionQueue_Session_Findings.md §3 -- cloud session …
+
+[SEC-GROUPS-VIEWS-HUB-ISOLATION] groups.py + views.py routes check only the global project allowlist, never per-firm hub isolation
+       unblocks 0 · M · bimpossible · VERIFIED 2026-08-17 · Source: parallel session's memory record named-deliverable-personal-…
 
 [ADDINS-TDD-CENSUS] Measure Add-Ins logic in the /tdd-excluded Revit-API-bound glue zone vs extracted tested cores
        unblocks 0 · M · addins · VERIFIED 2026-08-08 · Anti-slop coverage plan sec.3: /tdd explicitly excludes Revit-API-bo…
