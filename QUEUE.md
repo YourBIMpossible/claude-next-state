@@ -2,21 +2,14 @@
 
 # /next — work-item queue
 
-Generated 2026-08-13 (synced). Ranked by critical path (transitive `unblocks` cone), tiebreak:
+Generated 2026-08-17 (synced). Ranked by critical path (transitive `unblocks` cone), tiebreak:
 owner-gated+S effort, then effort, then risk, then id. Full algorithm:
 `~/.claude/skills/next/reference/item-model.md`.
 
-Scope: `all`. Watermarks: `bimpossible` = 2026-08-13 @ `66a0993` PR#348 · `addins` = 2026-08-08 @ `fdeeb54` PR#63 · `workspace` = 2026-08-08 @ `1a3021d` PR#40.
+Scope: `all`. Watermarks: `bimpossible` = 2026-08-17 @ `410d7aa` PR#386 · `addins` = 2026-08-16 @ `a0a4e07` PR#64 · `workspace` = 2026-08-08 @ `1a3021d` PR#40.
 (families/pc-monitor: no items yet — run `init` to derive.)
 
 ## Blocked on you
-
-[HUB-TENANCY-GOLIVE] Seed firm->hub binding, migrate to head (NOT e0f1a2b3c4d5 -- 4 revisions behind), restart backend, run both tenancy smokes
-       unblocks 2 · S · bimpossible · CONTRADICTED 2026-08-07 · BIMpossible #264 (90088f0), #265 (1fe6010), #266 (84c94c2), #267 (71…
-       ⚠ both readings unresolved — CONTRADICTION FOUND 2026-08-07 (night rescan), and it changes the runbook: this item's own stored instruction says 'migrate to e0f1a2b3c4d5', and that…
-
-[FE-3-10-FLAG] Rebuild the frontend with NEXT_PUBLIC_BIMPOSSIBLE_PHASE3_10_ENABLED=1 so room-join and door columns are visible
-       unblocks 1 · S · bimpossible · VERIFIED 2026-08-06 · frontend/Dockerfile:34-35 on origin/main -- ARG NEXT_PUBLIC_BIMPOSSI…
 
 [OPS-BACKUP-RESTORE-DRILL] -VerifyRestore proven live (147/147 rows); RPO/RTO table + named restore operator still open
        unblocks 1 · S · bimpossible+workspace · VERIFIED 2026-08-13 · 01_BuildLog/2026-08-05__product-risk-assessment.md finding W4/W5 (or…
@@ -30,18 +23,20 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-13 @ `66a0993` PR#348 · `addi
 [OPS-CLIENTDATA-REMEDIATION] Client-data remediation: quarantine delete, PDF triage, de-ID pass, DB audit
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-07 · decision-log/2026-08-05__client-data-remediation.md -- Open Items ch…
 
-[OPS-LOCAL-SIGNIN-AUTHLOOP] Local sign-in auth-loops, so no signed-in UI can be visually verified before it ships
-       unblocks 0 · S · bimpossible · CONTRADICTED 2026-08-08 · 01_BuildLog/2026-08-05__product-risk-assessment.md -- the local .env…
-       ⚠ both readings unresolved — TWO COMPETING DIAGNOSES OF ONE SYMPTOM, both unresolved by probe -- surfaced, not picked. READING A (stored, 2026-08-06, level claimed): the local .en…
-
 [WRITE-ENGINE-INC2] Merge Write Engine Increment 2 -- both halves built, CI green, awaiting owner merge decision
        unblocks 0 · S · bimpossible+addins · VERIFIED 2026-08-07 · BIMpossible #273 OPEN DRAFT, head feat/write-engine-increment2-typep…
+
+[NL-FILTER-EVAL-QUALITY] NL-filter intent-fidelity eval harness built (report-only, key-gated); two accuracy fixes landed
+       unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · BIMpossible #375 MERGED (989a2fb, 23:25Z) -- implements the BUILD NO…
 
 [OD-DECISIONS] Decide OD3 (fire-alarm schedule owner) and OD4 (OSS reuse triage)
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-04 · 02_Reference/Audit and Scan Info/BIMpossible_Verification_Checklist.…
 
 [PROD-DERIV-3] Discharge the DERIV-3 prod verification -- needs a mid-translation model and an APS upload
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-06 · 01_BuildLog/2026-08-05__hub-tenancy-migration-BLOCKED_HANDOFF.md -- …
+
+[AUTHZ-SHADOW-WINDOW-VALIDITY] DEFERRED to pre-pilot re-entry (runbook Sec 6): shadow-window validity work only when a real pilot is prepared
+       unblocks 0 · S · bimpossible · VERIFIED 2026-08-16 · 2026-08-16 prod probe with SHADOW live: authz_decision_log holds onl…
 
 ## Landed — not verified live
 
@@ -59,6 +54,15 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-13 @ `66a0993` PR#348 · `addi
 
 [ARCH-FIRM-ALIAS-BACKEND] Firm-alias layer SHIPPED -- BIMpossible firm-literal baseline now ZERO (126 -> 21 -> 0), Add-Ins 29 -> 5
        unblocks 1 · S · bimpossible+addins · VERIFIED 2026-08-06 · BIMpossible #257 (85c3fff, MERGED 2026-08-05T23:43:21Z) -- backend/a…
+
+[AUTHZ-INHERITANCE-P1] Authorization-Inheritance Phase 1: permission-projection foundation (spine)
+       unblocks 1 · L · bimpossible · VERIFIED 2026-08-16 · BIMpossible #337 MERGED (squash b4515ba) 2026-08-15T00:06:40Z -- Pha…
+
+[ENROLL-TENANCY-LAYER] Client/project enrollment tenancy layer (E1-E5), flag-gated dark ship
+       unblocks 1 · L · bimpossible · VERIFIED 2026-08-14 · BIMpossible #333 MERGED (squash 593a4fb) 2026-08-14T23:33:38Z -- cli…
+
+[AUTHZ-SHADOW-ACTIVATE] AUTH-INH arc CLOSED 2026-08-16: foundation complete, enforcement deferred to pre-pilot validation (runbook Sec 6)
+       unblocks 0 · S · bimpossible · VERIFIED 2026-08-16 · NORTHSTAR guardrail #1 (owner 'go' AND ratified revocation window, p…
 
 [SEC-GROUPS-DELIVERABLE-FIRM] Cross-firm NamedDeliverable IDOR in groups.py category derivation -- fixed and merged
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · backend/aec/groups.py:195-231 (_validate_members_and_compute_categor…
@@ -81,11 +85,17 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-13 @ `66a0993` PR#348 · `addi
 [APS-TOKEN-REFRESH-CLASSIFY] Classify APS/auth token-refresh failures instead of leaking 500s (_authed_get, remaining paths, AEC worker)
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-13 · BIMpossible #334 (e0577ad) -- token-refresh failures in _authed_get …
 
+[DATA-EMPTY-PERSIST-GUARD] Never persist empty categories/property/spec data version-immutably
+       unblocks 0 · S · bimpossible · VERIFIED 2026-08-16 · BIMpossible #362 MERGED (0b314d8, 2026-08-16) -- never persist an em…
+
 [FIX-SHARE-LINK-VIEWER] Public share-link viewer page added -- every /share/<token> URL used to 404
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-08 · BIMpossible #321 (66d09f2, merged 2026-08-08) -- adds frontend/app/s…
 
 [OPS-SYNTH-AUDIT-HARDEN] Harden synthetic-concurrency-audit tooling: env-guard seeding, loopback-check host, fix schedule
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-04 · weekly-full-audit_2026-08-04.md SEC-SCRIPTS-PERF-1, CQ-SYNTH-HOST-EN…
+
+[RAIL-RETIRE-FINAL] ALLOWED_PROJECT_IDS / guard.py allowlist subsystem retired end-to-end (PRs #371, #374)
+       unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · BIMpossible #371 MERGED (9b851ff, 2026-08-16T20:24:50Z) -- migrates …
 
 [SEC-FIRMLITERAL-RATCHET-CI] Firm-literal CI ratchet was scanning the wrong config and passing vacuously -- fixed
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-06 · BIMpossible #279 (344164f) -- MERGED 2026-08-06; security-scan.yml R…
@@ -108,11 +118,17 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-13 @ `66a0993` PR#348 · `addi
 [TENANCY-PROBE-281] Tenancy invariant now covers flag-gated routers; /probe hub isolation fixed, 41 routes triaged
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · BIMpossible #281 MERGED 2026-08-07T02:48:19Z, squash commit 36412c9c…
 
+[TENANCY-RAIL-SEARCH-RESOLVE] /search/models + /aps/model/resolve migrated off the ALLOWED_PROJECT_IDS rail
+       unblocks 0 · S · bimpossible · VERIFIED 2026-08-16 · BIMpossible #366 MERGED (e585862, 2026-08-16) -- migrates /search/mo…
+
 [AISERVER-OPENCODE-DOCS] Commit AI-Server's uncommitted opencode/local-coding-agent doc updates (PROGRAM_PLAN.md, README.md)
        unblocks 0 · S · ai-server · VERIFIED 2026-08-08 · AI-Server main 2172820 -- 'docs: document opencode local coding-agen…
 
 [DOC-ALEMBIC-REFS-274] Merge #274 -- fix three surviving database/alembic/versions doc references
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · BIMpossible #274 (469173e) -- MERGED 2026-08-06 to main, by another …
+
+[OPS-CACHE-RECONCILE-V1] Quarantine-first cache-reconciliation worker, report-only v1
+       unblocks 0 · S · bimpossible · VERIFIED 2026-08-16 · BIMpossible #364 MERGED (ed6ad70, 2026-08-16) -- cache reconciliatio…
 
 [OPS-REFRESH-FRONTEND-NODEPS] Fixed: Refresh-Frontend.ps1 was silently shipping backend code + migrations on a frontend-only deploy
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · BIMpossible #289 (5d8d559, merged 2026-08-07T05:47:09Z) -- docker co…
@@ -124,7 +140,7 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-13 @ `66a0993` PR#348 · `addi
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · Surfaced by the backend-endpoint-reviewer gate during SEC-GROUPS-403…
 
 [TEST-OPS-HYGIENE] Test/ops hygiene: app-boot tripwire, post-deploy identity smoke script, flaky prefs test fixed
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-13 · BIMpossible #339 (e516a0d) -- app-boot smoke tripwire that fails CI …
+       unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · BIMpossible #339 (e516a0d) -- app-boot smoke tripwire that fails CI …
 
 [DEP-JSYAML-282] Dependabot js-yaml 4.3.0 -> 4.3.1 merged (GHSA-5p4m-2wfm-xmqj, dev-only transitive)
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · BIMpossible #282 MERGED 2026-08-07T02:30:12Z, squash commit 5d0379d3…
@@ -147,6 +163,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-13 @ `66a0993` PR#348 · `addi
 [WARM-ORIGIN-DOORGAP] Curtain-panel/unhosted doors have no origin: label them 'no location (curtain panel)' instead of deriving one
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-06 · 01_BuildLog/2026-08-04__doors-join-increment1_RESULTS.md, 'Follow-up…
 
+[R5-AECDM-PUSHDOWN] R5 AECDM query-pushdown lane MERGED -- flag-gated, read-only (PR #363)
+       unblocks 0 · M · bimpossible · VERIFIED 2026-08-17 · BIMpossible #363 MERGED (d56bd14, 2026-08-16T19:47:59Z, branch feat/…
+
 [CKA-PILLAR2-FIRM-DOCS] Client Knowledge Assistant Pillar 2: per-firm client documents (upload, extraction, BM25 retrieval, assistant tool)
        unblocks 0 · L · bimpossible · VERIFIED 2026-08-13 · BIMpossible #327 (46520a7, merged 2026-08-08) -- Pillar 2 v1: per-fi…
 
@@ -154,9 +173,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-13 @ `66a0993` PR#348 · `addi
        unblocks 0 · L · bimpossible · VERIFIED 2026-08-13 · BIMpossible #326 (686b064, merged 2026-08-08) -- Pillar 3: change se…
 
 ## Next up
-
-[OPS-DIST] Code-sign Add-Ins + ship a real installer, including the Open-in-Revit opener
-       unblocks 1 · L · bimpossible+addins · CLAIMED 2026-08-04 · BIMpossible_PHASE-STATUS.md §Open-in-Revit; BIMpossible_ProductionRo…
 
 [OPS-DEPLOY-RUNBOOK] Walk the deploy/rollback runbook draft on the prod host; fill VERIFY blanks
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-04 · Carried-open finding across multiple audit cycles, per BIMpossible_P…
@@ -194,20 +210,18 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-13 @ `66a0993` PR#348 · `addi
 [P3-6-SPATIAL] Build Phase 3.6 Spatial Relationship Engine v1 (architecturally unblocked)
        unblocks 0 · M · bimpossible · CLAIMED 2026-08-04 · BIMpossible_PHASE-STATUS.md Phase 3 sub-phase notes, Phase 3.6 row
 
-## In flight
-
-[AUTHZ-INHERITANCE-P1] Authorization-Inheritance Phase 1: permission-projection foundation (spine)
-       unblocks 0 · L · bimpossible · VERIFIED 2026-08-13 · BIMpossible #337 OPEN/READY (feat/authz permission-projection founda…
-
-[ENROLL-TENANCY-LAYER] Client/project enrollment tenancy layer (E1-E5), flag-gated dark ship
-       unblocks 0 · L · bimpossible · VERIFIED 2026-08-13 · BIMpossible #333 OPEN/READY (client/project enrollment tenancy layer…
-
 ## Blocked elsewhere
+
+[OPS-CF-RECORD-CONSOLIDATION] After Option C session ends: commit the two untracked CF docs, fold the two Access memories
+       unblocks 0 · S · workspace · VERIFIED 2026-08-16 · Two untracked docs in the workspace main tree: 00_Strategy/design-do…
 
 [OPS-LAUNCH] Clear the Commercial Launch Prerequisites checklist before first external deployment
        unblocks 0 · L · bimpossible · CLAIMED 2026-08-04 · BIMpossible_ProgramPlan_2026-05-25.md §Commercial Launch Prerequisit…
 
 ## Parked
+
+[OPS-DIST] Add-Ins installer SHIPPED (AddIns#64); lane PARKED by owner -- tools not ready, code-sign cert parked
+       unblocks 1 · L · bimpossible+addins · VERIFIED 2026-08-16 · BIMpossible_PHASE-STATUS.md §Open-in-Revit; BIMpossible_ProductionRo…
 
 [OPS-REDIS-P5] Flip WEB_CONCURRENCY>1 with redis leader-lock (Wave C-1 Phase 5)
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-04 · docker/REDIS-CUTOVER.md §Next -- confirmed exists on origin/main 202…
@@ -229,11 +243,20 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-13 @ `66a0993` PR#348 · `addi
 
 ## Live (last 30 days)
 
+[HUB-TENANCY-GOLIVE] Seed firm->hub binding, migrate to HEAD via backend-migrate (never a hand-pinned revision), restart backend, run both tenancy smokes
+       unblocks 2 · S · bimpossible · VERIFIED 2026-08-16 · BIMpossible #264 (90088f0), #265 (1fe6010), #266 (84c94c2), #267 (71…
+
 [P13-T4-REFUSAL] Live-test Apply-Changes refusal paths -- non-cloud file, expired pane pairing
        unblocks 2 · S · bimpossible+addins · VERIFIED 2026-08-04 · addins main cfb4cc1 (T4 apply core); BIMpossible PR#229 b19674c + Ad…
 
+[FE-3-10-FLAG] Phase 3.10 UI flag baked ON -- room-join/door columns LIVE in prod (PR#359 + rebuild + browser smoke)
+       unblocks 1 · S · bimpossible · VERIFIED 2026-08-16 · frontend/Dockerfile:34-35 on origin/main -- ARG NEXT_PUBLIC_BIMPOSSI…
+
 [P3-10A-GOLIVE] Cross-Model Room Join LIVE -- rollout flag DELETED, path unconditional (PR#244)
        unblocks 1 · S · bimpossible · VERIFIED 2026-08-06 · BIMpossible_PHASE-STATUS.md Phase 3 sub-phase notes, Phase 3.10a row
+
+[OPS-ADMIN-HOST-SPLIT] Option C admin-hostname split live: founder surface on admin.yourbimpossible.com only
+       unblocks 1 · S · bimpossible · VERIFIED 2026-08-16 · BIMpossible #367 MERGED (736b2d6, 2026-08-16) -- Option C middleware…
 
 [WRITE-ENGINE-INC1] Write Engine Increment-1 -- SHIPPED: Task 8 smoke passed, #232 + AddIns #49 merged lockstep
        unblocks 1 · L · bimpossible+addins · VERIFIED 2026-08-04 · 00_Strategy/design-docs/2026-07-26__write-engine-increment1_typed-va…

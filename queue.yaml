@@ -75,10 +75,74 @@ reconciled:
   # #346/#347 grouped Dependabot minor/patch auto-merges: no item (designed auto-merge, per
   # SEC-DEPENDABOT-CI). #310 (React 19) confirmed CLOSED, not chased. Tip 66a0993 (#348), highest PR
   # 348. gh pr checks probed #337/#333 live this pass -- both green; re-fetch before trusting tip.
+  # Sixth pass 2026-08-14 (post-merge): delta 8118589..b4515ba = exactly 2 commits, both feature PRs
+  # landing per the owner's locked merge order -- #333 (593a4fb, enrollment tenancy) merged FIRST,
+  # then #337 (b4515ba, authz permission-projection spine) merged onto the final enrollment foundation
+  # after a second synchronization (merge of main into #337, conservative composition, collision fix).
+  # Both promoted in_flight->landed: ENROLL-TENANCY-LAYER + AUTHZ-INHERITANCE-P1. NEW item
+  # AUTHZ-SHADOW-ACTIVATE (blocked_owner) -- with both foundations merged dark, the arc now strands on
+  # one owner/.env gate (ratify revocation window + flip enforcement OFF->SHADOW). CI blocker this pass:
+  # duplicate Alembic revision-id j0k1l2m3n4o5 (#333 vs #337) -> fixed in 816345c (renumber to
+  # j0k1permproj), single head r8s9t0u1v2w3 on main confirmed. Highest PR stays 349 (337/333 are lower
+  # numbers merged later). Tip b4515ba re-confirmed via git fetch + git log 8118589..origin/main.
+  # Eighth pass 2026-08-16: delta deb3f35..b5c6e64 = exactly 1 commit, #359 (FE-3-10 flag baked
+  # ON). Promoted FE-3-10-FLAG blocked_owner->live on merged PR + prod browser smoke (Rooms renders,
+  # Furniture warming banner). #358 (staging membership seed) CLOSED unmerged -- its content shipped
+  # via #356 (already inside the watermark). Runtime evidence applied without new commits:
+  # AUTHZ-SHADOW-ACTIVATE promoted to live (BIMPOSSIBLE_AUTHZ_ENFORCEMENT_MODE=SHADOW observed live);
+  # NEW item AUTHZ-SHADOW-WINDOW-VALIDITY for the shadow-telemetry undercount (missing commit on read
+  # paths, audit finding unfixed) + all-3-rows no-projection-record signal. HUB-TENANCY-GOLIVE
+  # reconfirmed live (9 prod projects under b.c2836070, model pages load, browser 2026-08-16).
+  # Owner ruling 2026-08-15 recorded: OPS-DIST ready->parked (installer SHIPPED via AddIns #64 but
+  # lane deprioritized -- tools not ready, code-sign cert PARKED; priorities = web client path +
+  # tool readiness). Open drafts #350-#355, #357 unchanged, not in the merge delta.
+  # Ninth pass 2026-08-16 (evening): delta b5c6e64..833964d = 11 commits. AUTHZ cluster largely
+  # self-reconciled by the closeout session (#370 gate note already cited in the four AUTHZ items);
+  # this pass added #361 (f10eab2, durable decision-log writes HIGH-1 + projection backfill) as
+  # evidence on AUTHZ-SHADOW-WINDOW-VALIDITY (fixes its defect (1); item stays blocked_owner per
+  # the #370 pre-pilot deferral) and #355 (d502fc2, dark ApsAclSource importer) on
+  # AUTHZ-INHERITANCE-P1. NEW items: DATA-EMPTY-PERSIST-GUARD (#362 0b314d8 + #365 8aa95a5),
+  # OPS-CACHE-RECONCILE-V1 (#364 ed6ad70, report-only), TENANCY-RAIL-SEARCH-RESOLVE (#366 e585862),
+  # OPS-ADMIN-HOST-SPLIT (#367 736b2d6 + #369 004ca15 + live probe: admin.yourbimpossible.com
+  # CF-Access-gated, app.yourbimpossible.com/admin -> 404, app root 200 -- Option C LIVE,
+  # supersedes the same-day Option B posture; a concurrent session executed the CF flip),
+  # R5-AECDM-PUSHDOWN (#363 open non-draft -> in_flight). #357 (784079c, automated weekly restore
+  # drills) -> evidence on OPS-BACKUP-RESTORE-DRILL (still no observed unattended run). #368
+  # (0638f6d) -> evidence on TEST-OPS-HYGIENE. Drafts #350-#354, #360 unchanged. Tip 833964d
+  # re-fetched at write time; highest PR 370.
+  # Tenth pass 2026-08-16 (late evening): delta 833964d..d56bd14 = exactly 1 commit, #363
+  # (d56bd14, merged 19:47:59Z). R5-AECDM-PUSHDOWN promoted in_flight->landed (flag-gated read-only,
+  # not live -- pushdown flag never observed ON). Ninth pass had recorded #363/#364/#365 while #364
+  # (ed6ad70, 17:06) and #365 (8aa95a5, 16:01) were merging BELOW the 833964d watermark -- both
+  # re-confirmed ancestors of 833964d this pass, so already-reconciled, no double-count. NEW item
+  # RAIL-RETIRE-FINAL for open non-draft #371 (this session's ALLOWED_PROJECT_IDS rail-retirement
+  # branch, tip 4589269) -- gh pr checks 371 shows backend/pytest FAIL, frontend PENDING: red, not
+  # mergeable, in_flight. #360 still OPEN DRAFT (no change). addins delta a0a4e07..origin/main EMPTY,
+  # watermark held. #1 move unchanged: both touched items have cone 0 and cannot rank #1. Tip
+  # d56bd14 re-fetched at write time; highest PR now 371.
+  # Eleventh pass 2026-08-17: delta d56bd14..origin/main = 15 commits, PRs #371-386 (#376 closed
+  # unmerged, superseded by #378). RAIL-RETIRE-FINAL promoted in_flight->landed: #371's RED pytest
+  # was fixed and merged (9b851ff), then #374 did the full end-to-end subsystem teardown (e36ae9b,
+  # guard.py/allowlist_db.py/allowlist_source.py/seed_allowlist.py all deleted, confirmed absent on
+  # origin/main). R5-AECDM-PUSHDOWN gained evidence (#372/#373/#380), stays landed-not-live. NEW item
+  # NL-FILTER-EVAL-QUALITY (blocked_owner) for the report-only key-gated eval harness (#375) plus its
+  # two accuracy fixes (#377, #386) -- needs an owner key/run for a first signal. TEST-OPS-HYGIENE
+  # gained evidence (#378 pre-push CI hook, #381, #384) -- CI-side, self-activating except #378's
+  # one-time per-checkout hook install. #382 (assistant Electrical Circuits fix), #383 (cold-load
+  # perf fix), #385 (search defaults to current project), #379 (docs) reviewed: complete,
+  # self-activating, no owner action -- no item written, per store hygiene (queue tracks open work,
+  # not a changelog). addins delta a0a4e07..origin/main EMPTY, watermark held. #1 move unchanged:
+  # OPS-BACKUP-RESTORE-DRILL still leads (all touched/new items are cone 0). Tip origin/main
+  # re-fetched at write time; highest PR now 386.
   bimpossible:
-    at: '2026-08-13'
-    commit: 66a0993
-    pr: 348
+    at: '2026-08-17'
+    commit: 410d7aa
+    pr: 386
+  # bimpossible: sync 2026-08-14 -- delta 66a0993..8118589 was a single merge, #349 (locust/gevent
+  # full-suite deadlock fix). Applied to TEST-OPS-HYGIENE (confirming evidence) and flagged as the
+  # required rebase base for the two open authz/enrollment PRs (#337, #333). AUTHZ-INHERITANCE-P1
+  # refreshed with the 2d3efa1 identity-self-service push. No new items: the merge is infra hygiene
+  # already covered by TEST-OPS-HYGIENE. #337 backend/pytest was PENDING at probe time.
   # addins: re-read 2026-08-07 (night) -- the previous pass recorded this delta as EMPTY; it is not
   # empty now. git log 7bdfa68..origin/main = 6 commits: #55 (CLAUDE.md factual fixes) #56 (firm-
   # literal ratchet gate + CI enforcement, the C# counterpart of BIMpossible #279) #58 (SyncConfig's
@@ -100,10 +164,14 @@ reconciled:
   # protection GET returns [firm-literals, test, gitleaks, nuget-vulns]; the census report and its
   # re-run script are both on main; the slop skill is present and referenced once by /audit. Same
   # class of defect as the 'open' value corrected in the 2026-08-07 sync.
+  # 2026-08-16: delta fdeeb54..a0a4e07 = 1 commit, #64 (OPS-DIST installer pipeline -- Inno Setup
+  # suite + opener installers), squash-merged 2026-08-16. Folded into OPS-DIST as evidence; the item
+  # itself moved ready->parked on the owner's 2026-08-15 deprioritization ruling, so the merged
+  # installer is banked, not a live lane.
   addins:
-    at: '2026-08-08'
-    commit: fdeeb54
-    pr: 63
+    at: '2026-08-16'
+    commit: a0a4e07
+    pr: 64
   # workspace: re-read 2026-08-07 -- full delta 6941a70..da35d34 walked (12 commits: #20 #21(revert)
   # #22 #23 #25 #26 #29 #30 #31 #32 #33, #24 already handled prior pass). PR#25 (tenancy strategy
   # doc) and PR#26/#33 (backup resilience plan + verified restore drill) are the load-bearing ones
@@ -275,10 +343,10 @@ items:
   notes_url: "00_Strategy/design-docs/2026-08-06__phase-3-8-slices-2-3_build-plan.md"
 
 - id: OPS-DIST
-  title: "Code-sign Add-Ins + ship a real installer, including the Open-in-Revit opener"
+  title: "Add-Ins installer SHIPPED (AddIns#64); lane PARKED by owner -- tools not ready, code-sign cert parked"
   projects: [bimpossible, addins]
-  status: ready
-  owner_gate: false
+  status: parked
+  owner_gate: true
   unblocks: [OPS-LAUNCH]
   blocked_by: []
   effort: L
@@ -286,12 +354,14 @@ items:
   evidence:
   - kind: doc
     ref: "BIMpossible_PHASE-STATUS.md §Open-in-Revit; BIMpossible_ProductionRoadmap_2026-07-26.md §2 item 2"
+  - kind: pr
+    ref: "AddIns #64 MERGED (squash a0a4e07) 2026-08-16T07:04:09Z -- OPS-DIST installer pipeline: Inno Setup suite + opener installers. The installer half of this item's scope is BUILT and on main"
   verification:
-    level: claimed
-    by: "Roadmap + ledger agree: today distribution is a shared %APPDATA% xcopy process (Add-Ins/decision-log/2026-07-25__runtime-slot-handoff.md) plus a separate Open-in-Revit opener exe with its own HKCU protocol registration -- neither has an installer. Scope must explicitly cover BOTH mechanisms or the opener ships uncovered. Also closes a Low-severity breach-chain finding (unsigned assemblies via unchecked xcopy) -- same underlying fix, not a separate item. 2026-08-04: a cloud re-derivation proposed splitting this into installer/opener-ship/suite-rollout; kept as ONE item — the split added granularity without new evidence."
-    at: 2026-08-04
+    level: verified
+    by: "PARKED 2026-08-15 by owner ruling (overnight approval message): the installer works but the tools are not ready to distribute, and the code-signing cert purchase is PARKED -- the whole distribution lane is deprioritized. Real priorities named in the same ruling: the web-platform client path + tool readiness. The merged AddIns #64 installer pipeline is banked on main for when the lane resumes; the code-sign half remains unbuilt. Un-park trigger: owner declares the tool suite distribution-ready. || Prior reading 2026-08-04 (still accurate for the unbuilt half): distribution today is a shared %APPDATA% xcopy plus a separate Open-in-Revit opener exe with its own HKCU protocol registration; the code-sign gap is also a Low-severity breach-chain finding (unsigned assemblies via unchecked xcopy). Kept as ONE item -- an earlier proposed split added granularity without new evidence."
+    at: '2026-08-16'
   live_check: []
-  source: "BIMpossible_PHASE-STATUS.md §Open-in-Revit; BIMpossible_ProductionRoadmap_2026-07-26.md §2 item 2; memory addins-distribution-readiness"
+  source: "Owner message 2026-08-15 (overnight approval) -- deprioritization ruling; AddIns PR#64 (a0a4e07); BIMpossible_PHASE-STATUS.md §Open-in-Revit; BIMpossible_ProductionRoadmap_2026-07-26.md §2 item 2; memory addins-distribution-readiness"
   notes_url:
 
 - id: P7-SYNC-GOLIVE
@@ -852,9 +922,9 @@ items:
   notes_url:
 
 - id: HUB-TENANCY-GOLIVE
-  title: "Seed firm->hub binding, migrate to head (NOT e0f1a2b3c4d5 -- 4 revisions behind), restart backend, run both tenancy smokes"
+  title: "Seed firm->hub binding, migrate to HEAD via backend-migrate (never a hand-pinned revision), restart backend, run both tenancy smokes"
   projects: [bimpossible]
-  status: blocked_owner
+  status: live
   owner_gate: true
   unblocks: [OPS-LAUNCH, WARM-ORIGIN-DOORGAP]
   blocked_by: []
@@ -869,20 +939,23 @@ items:
     ref: "CORRECTED HEAD, computed 2026-08-07 night by reading revision/down_revision out of every backend/alembic/versions/*.py on origin/main: the chain is d1e2f3a4b5c6 <- a7c1e93f4b28 <- f2b3c4d5e6f7 <- 9329a1e7be85 <- e0f1a2b3c4d5. So e0f1a2b3c4d5 sits FOUR revisions below the head. Provenance of the four that landed on top: 9329a1e7be85 = Slack gateway (#262); f2b3c4d5e6f7 = add_allowed_projects, from the neutrality closeout #297; a7c1e93f4b28 = Teams gateway (#276, 879e857); d1e2f3a4b5c6 = personal-group unique index (#315, c371b12). d1e2f3a4b5c6 is the head -- no other version file names it as a down_revision. Single head confirmed, no branch to merge."
   - kind: doc
     ref: "01_BuildLog/2026-08-05__hub-tenancy-migration-BLOCKED_HANDOFF.md -- HELD; the approved 'restart backend only' instruction must NOT be run"
+  - kind: run
+    ref: "Prod browser smoke 2026-08-16: all 9 prod projects list under hub b.c2836070 for the owner; model pages load. Reconfirms the live status against the running app, not just the DB"
   verification:
-    level: contradicted
-    by: "CONTRADICTION FOUND 2026-08-07 (night rescan), and it changes the runbook: this item's own stored instruction says 'migrate to e0f1a2b3c4d5', and that revision is no longer the head -- four migrations have landed on top of it since (see the CORRECTED HEAD evidence row). Both readings, per the anti-drift rule: (a) STORE: e0f1a2b3c4d5 is the single head -- was TRUE when recorded 2026-08-06; (b) PROBE: origin/main's version files now chain d1e2f3a4b5c6 <- a7c1e93f4b28 <- f2b3c4d5e6f7 <- 9329a1e7be85 <- e0f1a2b3c4d5 -- TRUE as of c371b12. Reading (b) supersedes (a) on date order alone, but it is flagged rather than silently rewritten because it alters an owner-executed, prod-touching runbook. PRACTICAL EFFECT: step 2 must be `docker compose run --rm backend-migrate` (which goes to head), NOT a hand-pinned `alembic upgrade e0f1a2b3c4d5` -- pinning to the stored revision would leave the DB four migrations short while the code expects head, which is precisely the SchemaNotAtHeadError crash-loop this item already warns about. NOTE the four are not incidental: two of them (Slack 9329a1e7be85, Teams a7c1e93f4b28) belong to gateways that are flag-gated OFF, and one (f2b3c4d5e6f7 add_allowed_projects, from #297) moves the ALLOWED_PROJECT_IDS rail into the database -- that one interacts with this item's own subject matter and has NOT been reviewed for interaction with the hub gate. PRIOR ASSESSMENT, still accurate on everything else: MERGE VERIFIED, RUNTIME NOT. Code for the whole hub-isolation stack is on main. Whether the running backend serves it, and whether e0f1a2b3c4d5 is applied, COULD NOT BE PROBED this session -- docker and DB access were out of scope, so this is a failed probe, not a negative result. The handoff states the ordered unblock: (1) owner sets firms.aps_hub_id for firm c0757b61-423b-5534-b494-719d3b10bae6 (prod-DB writes are auto-denied to Claude), (2) docker compose run --rm backend-migrate, (3) confirm SELECT firm_id,hub_id FROM firm_allowed_hubs returns >=1 row, (4) restart backend. Two named failure modes if run out of order: docker compose restart skips depends_on backend-migrate so the DB falls behind the code and the app crash-loops on SchemaNotAtHeadError; and an empty seed fail-closes 403 across 55 gated routes (48 in backend/aec/router.py, 7 in backend/aec/qa/router.py). There is NO feature flag -- the gate is unconditional. Two owner smokes are un-run: the #266 upstream-sanitization smoke (bad item_id -> UPSTREAM_MESSAGES[404] sentence, no WIP_ERROR/jsonapi/request id) and the tenancy smoke (model page + schedule -> 200)."
-    at: '2026-08-07'
+    level: verified
+    by: "CONTRADICTION RESOLVED 2026-08-14 (audit-remediation, owner-directed): the 2026-08-07 contradiction (stored pin e0f1a2b3c4d5 vs then-head d1e2f3a4b5c6) was caused by the runbook hand-pinning a revision that keeps going stale -- the head has moved AGAIN since (now r8s9t0u1v2w3 after the 2026-08-14 #333/#337 merge wave; single head verified by full down_revision chain parse, 64 revisions). Root-cause fix applied instead of a third re-pin: the instruction is now 'migrate to HEAD via docker compose run --rm backend-migrate' with no revision literal anywhere in this item, so it can never go stale this way again. Everything else from the 2026-08-07 assessment stands: MERGE VERIFIED, RUNTIME NOT (docker/DB probes remain out of scope -- failed probe, not a negative). Ordered unblock unchanged: (1) owner seeds firm->hub binding for firm c0757b61-423b-5534-b494-719d3b10bae6, (2) docker compose run --rm backend-migrate, (3) SELECT firm_id,hub_id FROM firm_allowed_hubs expect >=1 row, (4) restart backend. Failure modes unchanged: plain restart skips backend-migrate (SchemaNotAtHeadError crash-loop); empty seed fail-closes 403 across the gated routes. No feature flag -- gate unconditional. The two owner smokes (#266 upstream-sanitization; tenancy model-page+schedule 200) remain un-run. Note: the 2026-08-14 wave folds this item's runtime steps into the AUTH-INH deploy packet (docs/2026-08-14__Owner-Action-Packets.md Sec 1) -- one deploy covers both."
+    at: '2026-08-16'
+    resolution: "RESOLVED LIVE 2026-08-15, two environments.\n  LOCAL DEV (docker-db-1/docker-backend-1): backend-migrate run i9j0k1l2m3n4 -> r8s9t0u1v2w3 (10 revisions, exit 0); backend restarted healthy; firm_allowed_hubs = BIMpossible -> b.c2836070-8c23-421c-b5d4-ceedd626c327 all_projects (auto-promoted by j0k1l2m3n4o5 backfill) + 'Unassigned (backfilled)' -> b.11989fa9-... selected_projects. NOTE: the stored step-1 premise was STALE -- the binding already existed (Aug 8/9) and the named firm c0757b61 was wrong (real firm 23291831-a502-429f-b5dd-0db4c6cc7fb9); actual gap was container behind DB head.\n  STAGING (bimpossible-staging-*, PLAT-9 #356 merged as deb3f35, stack run from worktree hub-activation @9879d4f): alembic at head r8s9t0u1v2w3; seeded firm 77914b45-abaf-4cd7-9776-eca3fb67b096 'BIMpossible' -> canonical hub all_projects, 1 active admin membership; enrollment flag ON, ALLOWED_PROJECT_IDS empty, mode=env; DB/redis/network fully isolated (own creds -- staging role cannot reach dev DB). Tenancy smokes run IN the staging backend image against a throwaway migrated bimpossible_test on the STAGING postgres: test_aps_hub_isolation.py + test_project_enrollment.py = 20/20 pass under CI flag state; under staging flag-ON state the one differing test fails BECAUSE enrollment enforcement correctly denies a selected_projects grant without an enrollment row (fail-closed confirmed). APS callback http://localhost:8001/auth/callback verified ALREADY REGISTERED on the app (authorize probe -> signin flow; negative control -> request-error). END-TO-END OAUTH ALREADY COMPLETED (staging access log): GET /auth/callback?code=... redeemed, then authenticated GET /aps/projects?hub_id=b.c2836070... 200, GET /aps/project/b.52dea21b.../top-folders 200 (real project through the tenancy gate), GET /aps/project/b.00000000-0000-0000-0000-000000000000/top-folders 403 (project outside the authorized set denied -- fail-closed LIVE against real APS), GET /account/hubs/discover 200, /account/projects/available 200. Nothing outstanding; live tenancy enforcement confirmed against Autodesk, stronger than the pytest smoke."
   live_check:
   - "docker compose run --rm backend-migrate; then SELECT firm_id,hub_id FROM firm_allowed_hubs (expect >=1 row) BEFORE restarting the backend."
-  - "docker compose run --rm backend-migrate alembic current  # expect d1e2f3a4b5c6, NOT e0f1a2b3c4d5 -- re-derive the head before the run, it has moved twice in two days"
+  - "docker exec <backend> alembic current  # must equal the repo's current single head (re-derive from backend/alembic/versions at run time -- NEVER trust a revision literal written in this store)"
   source: "01_BuildLog/2026-08-05__hub-tenancy-migration-BLOCKED_HANDOFF.md; git delta 08a1f03..a2ea120; alembic graph re-read on origin/main@c371b12 2026-08-07; memory project_hub-tenancy-migration-hold"
   notes_url:
 
 - id: FE-3-10-FLAG
-  title: "Rebuild the frontend with NEXT_PUBLIC_BIMPOSSIBLE_PHASE3_10_ENABLED=1 so room-join and door columns are visible"
+  title: "Phase 3.10 UI flag baked ON -- room-join/door columns LIVE in prod (PR#359 + rebuild + browser smoke)"
   projects: [bimpossible]
-  status: blocked_owner
+  status: live
   owner_gate: true
   unblocks: [WARM-ORIGIN-DOORGAP]
   blocked_by: []
@@ -895,13 +968,17 @@ items:
     ref: "backend/aec/router.py:325 on origin/main -- 'UNCONDITIONAL since 2026-08-04 (owner decision)'; the BACKEND gate was deleted by #244 (fa865d6)"
   - kind: code
     ref: "frontend/app/hooks/useCategoryData.ts:60-66 -- the linked-room columns are read behind PHASE3_10_ENABLED, independent of the backend flag"
+  - kind: pr
+    ref: "BIMpossible #359 MERGED (squash b5c6e64) 2026-08-16T07:04:22Z -- Dockerfile ARG default flipped to 1 (bake Phase 3.10 UI)"
+  - kind: run
+    ref: "Frontend image rebuilt via Refresh-Frontend.ps1 2026-08-15/16 post-merge; prod browser smoke 2026-08-16 on app.yourbimpossible.com (model Sutter MBH_Interiors.rvt, project MBCC - Test - 27): Rooms category renders; Furniture shows the flag-gated 'Room data is still warming up' banner -- both readings only possible with the flag baked ON"
   verification:
     level: verified
-    by: "BOTH HALVES READ ON origin/main. The backend gate is gone; the frontend gate is not. Because the value is a Docker build ARG defaulting to 0, a merge can never turn these columns on -- only an image rebuild passing --build-arg NEXT_PUBLIC_BIMPOSSIBLE_PHASE3_10_ENABLED=1 can, which matches the known 'frontend is baked into the image, merge != live until a rebuild' deploy mechanic. Net effect: P3-10A-GOLIVE and P3-10B-DOORS are both stored as live and both genuinely merged, yet no user can see either result. This is stranded finished value, not a defect."
-    at: 2026-08-06
+    by: "CLOSED LIVE 2026-08-16: PR#359 baked NEXT_PUBLIC_BIMPOSSIBLE_PHASE3_10_ENABLED=1 into the image default, frontend rebuilt via Refresh-Frontend.ps1, and the prod browser smoke observed the flag-gated UI serving (Rooms renders; Furniture warming banner). The stranded finished value this item tracked -- P3-10A/P3-10B merged but invisible -- is now user-visible. || Prior reading 2026-08-06: BOTH HALVES READ ON origin/main. The backend gate is gone; the frontend gate is not. Because the value is a Docker build ARG defaulting to 0, a merge can never turn these columns on -- only an image rebuild can. P3-10A-GOLIVE and P3-10B-DOORS both merged, yet no user can see either result."
+    at: '2026-08-16'
   live_check:
-  - "docker exec <frontend> printenv NEXT_PUBLIC_BIMPOSSIBLE_PHASE3_10_ENABLED  # expect 1 after the rebuild"
-  source: "frontend/Dockerfile + backend/aec/router.py on origin/main, read 2026-08-06"
+  - "docker exec <frontend> printenv NEXT_PUBLIC_BIMPOSSIBLE_PHASE3_10_ENABLED  # expect 1"
+  source: "frontend/Dockerfile + backend/aec/router.py on origin/main; PR#359 (b5c6e64); prod browser smoke 2026-08-16"
   notes_url:
 
 - id: POST-268-FOLLOWUPS
@@ -1334,6 +1411,8 @@ items:
     ref: "workspace #38 (5025f23, merged 2026-08-07) -- adds Step 7/7a/7b to the runbook: register first, OBSERVE the actual task Principal, patch only if the observed LogonType is wrong (S4U lacks network access, so offsite sync to G: would fail every scheduled run while passing manual runs); includes the Set-ScheduledTask -Principal remediation and a forced-run verification reading LastTaskResult + the offsite-sync transcript. This documents the DECISION RULE and procedure only -- it is not an observed registration or an observed unattended run, so the scope note's 'not yet observed by any session' gap on the scheduled-task path STANDS."
   - kind: pr
     ref: "BIMpossible #330 (fdc9384, merged 2026-08-08) -- feat(backup): opt-in current-user principal for the offsite-sync task. The concrete implementation of #38's Principal/LogonType decision rule: a current-user principal has the network access S4U lacks, so a scheduled offsite sync to G: can now actually succeed rather than failing every unattended run while passing manual ones. Landed only -- see verification for the still-open observed-unattended-run gap."
+  - kind: pr
+    ref: "BIMpossible #357 MERGED (784079c, 2026-08-16) -- automates the weekly restore drill (-VerifyRestore on a schedule) without mutating the offsite-sync task. Landed only: no observed unattended scheduled run yet on the real host, so the scheduled-path gap in the scope note still STANDS; the owner-only remainders (RPO/RTO table, named restore operator) are untouched."
   verification:
     level: verified
     by: "The catastrophic unknown this item existed to close -- 'has a restore from this backup ever actually worked' -- is now answered yes, with a timestamped, row-count-matched drill, not a belief. Risk dropped 4 -> 2 accordingly. What remains is genuinely owner-only and much smaller than the original title: (1) the Measured-values table itself flags '-CommandTimeoutSec (1200s) and watchdog staleness thresholds deliberately NOT re-tuned -- single data point; 7-day collection still owed' -- i.e. no formal RPO/RTO figures derived yet, just one raw timing; (2) no restore-operator name found anywhere in the remediation plan doc or PR trail -- picking a human is not a probe this skill can run. Pairs with OPS-DEPLOY-RUNBOOK as before. IMPORTANT SCOPE NOTE added 2026-08-07: #33's 147/147 drill proves the backup+restore MECHANICS (Backup-Db.ps1, invoked manually/directly); it says nothing about the SCHEDULED-TASK path (Register-BackupResilienceTasks.ps1), which #293 shows was still silently registering zero tasks as of the same day, discovered AFTER the drill landed. #293's fix is landed but not live -- no observed run confirms the Task Scheduler now actually fires Backup-Db.ps1 unattended on the real host post-fix. Do not read '-VerifyRestore proven live' in the title as covering the automated schedule; it covers the restore mechanics only. UPDATE 2026-08-13: BIMpossible #330 (fdc9384) adds the opt-in current-user principal for the offsite-sync task -- the implementation of #38's Principal/LogonType decision rule. Still landed, not live: no OBSERVED unattended scheduled run yet confirms Task Scheduler fires Backup-Db.ps1 + offsite sync end to end on the real host post-#330. The owner-only remainders (RPO/RTO table, named restore operator) are unchanged, so this stays blocked_owner."
@@ -1346,10 +1425,10 @@ items:
   notes_url:
 
 - id: OPS-LOCAL-SIGNIN-AUTHLOOP
-  title: "Local sign-in auth-loops, so no signed-in UI can be visually verified before it ships"
+  title: "Local sign-in auth-loop: WORKING-AS-DESIGNED / ENVIRONMENT-CONSTRAINED -- verify signed-in UI on the tunnel, backend OAuth on staging 8001"
   projects: [bimpossible]
-  status: blocked_owner
-  owner_gate: true
+  status: dropped
+  owner_gate: false
   unblocks: []
   blocked_by: []
   effort: S
@@ -1364,12 +1443,13 @@ items:
   - kind: pr
     ref: "BIMpossible #323 (57eb2e5, merged 2026-08-08) AUTH-5 -- a MERGED FIX for this exact symptom, arrived with a DIFFERENT diagnosis. backend/auth_router.py now drops prompt=login on the self-heal retry only (is_retry True -> omit prompt entirely; is_retry False -> still prompt=login, preserving AUTH-4's account-picker guarantee). Confirmed on origin/main at auth_router.py:146-183."
   verification:
-    level: contradicted
-    by: "TWO COMPETING DIAGNOSES OF ONE SYMPTOM, both unresolved by probe -- surfaced, not picked.\n  READING A (stored, 2026-08-06, level claimed): the local .env carries production OAuth callbacks together with SECURE_COOKIES=1, so the local stack can never hold a session. Source is 01_BuildLog/2026-08-05__product-risk-assessment.md read as prose; .env is a protected file and was never read.\n  READING B (PR #323, 2026-08-08, merged): not an environment defect at all -- since AUTH-3 the OAuth CSRF state is cookie-only (aps_oauth_state, Max-Age = _STATE_TTL), so a slow credential+MFA entry outlives the cookie, /auth/callback sees 'states held=0' and self-heals to /auth/login?retried=1; the retry then re-sent prompt=login, forcing the whole slow dance again. #323 breaks that cycle.\n  Neither reading has been settled by a probe: nobody has signed in at the local stack since #323 merged. If B is the whole cause the item is now closed by a merge; if A also holds, #323 changes nothing locally. Status stays blocked_owner because only the owner can run the one probe that decides it (live_check below), and .env stays unread.\n  Retained original assessment: STRUCTURAL VERIFICATION GAP, not a defect in any one PR. Three merged frontend changes in this delta are signed-in-only surfaces, so CI green is the ONLY evidence any of them exists visually. Reported as claimed: the .env is protected and was not read, so the exact cause is the risk assessment's reading, not a probe of mine. This is the same class of finding the Phase 15a row already records ('Stage A can never be run through the production web UI pre-merge') -- but that one was structural and unavoidable, and this one is a fixable local-environment problem. Fixing it converts every future frontend merge from 'CI says it compiles' to 'I have seen it'. unblocks empty because no stored item is gated on it; its value is a permanent raise in the evidence floor, which the cone cannot express."
+    level: verified
+    by: "FORMERLY CONTRADICTED (settled 2026-08-15, see resolution). Original record: TWO COMPETING DIAGNOSES OF ONE SYMPTOM, both unresolved by probe -- surfaced, not picked.\n  READING A (stored, 2026-08-06, level claimed): the local .env carries production OAuth callbacks together with SECURE_COOKIES=1, so the local stack can never hold a session. Source is 01_BuildLog/2026-08-05__product-risk-assessment.md read as prose; .env is a protected file and was never read.\n  READING B (PR #323, 2026-08-08, merged): not an environment defect at all -- since AUTH-3 the OAuth CSRF state is cookie-only (aps_oauth_state, Max-Age = _STATE_TTL), so a slow credential+MFA entry outlives the cookie, /auth/callback sees 'states held=0' and self-heals to /auth/login?retried=1; the retry then re-sent prompt=login, forcing the whole slow dance again. #323 breaks that cycle.\n  Neither reading has been settled by a probe: nobody has signed in at the local stack since #323 merged. If B is the whole cause the item is now closed by a merge; if A also holds, #323 changes nothing locally. Status stays blocked_owner because only the owner can run the one probe that decides it (live_check below), and .env stays unread.\n  Retained original assessment: STRUCTURAL VERIFICATION GAP, not a defect in any one PR. Three merged frontend changes in this delta are signed-in-only surfaces, so CI green is the ONLY evidence any of them exists visually. Reported as claimed: the .env is protected and was not read, so the exact cause is the risk assessment's reading, not a probe of mine. This is the same class of finding the Phase 15a row already records ('Stage A can never be run through the production web UI pre-merge') -- but that one was structural and unavoidable, and this one is a fixable local-environment problem. Fixing it converts every future frontend merge from 'CI says it compiles' to 'I have seen it'. unblocks empty because no stored item is gated on it; its value is a permanent raise in the evidence floor, which the cone cannot express."
     at: '2026-08-08'
+    resolution: "CONTRADICTION SETTLED 2026-08-15 by direct probe of the RUNNING local backend (no .env read, no credentials): GET http://127.0.0.1:8000/auth/login redirects to Autodesk with redirect_uri=https://app.yourbimpossible.com/auth/callback -- the PRODUCTION tunnel. So the OAuth round-trip lands on prod and localhost:3000 never receives a session cookie; the 'loop' is the documented design (README.md:25 'localhost can't hold a login'; docker-compose.override.yml explicitly forbids the localhost FRONTEND_URL 'fix' because it splits the cookie origin). READING A CONFIRMED as environment-constrained-by-design, not a defect; READING B (#323) fixed a real but separate retry-loop on the tunnel path. RESOLUTION: dropped as a defect. Standing routing: signed-in FRONTEND verification = tunnel https://app.yourbimpossible.com (prod environment task); backend OAuth/tenancy verification = isolated staging backend http://localhost:8001 whose callback http://localhost:8001/auth/callback is registered on the APS app (probe-verified 2026-08-15; staging has no frontend). Local 8000 remains type-check/unit-test only, per README."
   live_check:
-  - "Sign in at the local stack and load /account; a loop back to the login page reproduces it. Post-#323 this probe now DISCRIMINATES: still looping => reading A (env), signs in => reading B (state-cookie TTL) was the cause and this item closes."
-  source: "01_BuildLog/2026-08-05__product-risk-assessment.md; PRs #246 / #249 / #259; contradicted by PR #323 (AUTH-5) 2026-08-08"
+  - "curl -sI http://127.0.0.1:8000/auth/login | grep -i location  # redirect_uri still the prod tunnel => still working-as-designed"
+  source: "01_BuildLog/2026-08-05__product-risk-assessment.md; PRs #246 / #249 / #259; PR #323 (AUTH-5); live probe of running backend 2026-08-15; README.md:25; docker/docker-compose.override.yml"
   notes_url:
 
 - id: PROD-DERIV-3
@@ -2109,10 +2189,20 @@ items:
     ref: "BIMpossible #340 (a2344bd) -- Verify-Deploy.ps1, a READ-ONLY post-deploy identity smoke. This is an ops script whose value only exists when RUN on the prod host; no observed run yet, so it is the one landed-not-live piece here. Pairs with OPS-DEPLOY-RUNBOOK (walk it during the runbook pass) and would raise the evidence floor OPS-LOCAL-SIGNIN-AUTHLOOP describes."
   - kind: pr
     ref: "BIMpossible #341 (21e145d) -- fixes a flaky account-prefs test (CI-only, self-activating)."
+  - kind: pr
+    ref: "BIMpossible #349 (8118589, merged 2026-08-14) -- stops locust's gevent monkey.patch_all() (imported at collection by test_synthetic_load_host_guard.py) from DEADLOCKING the full pytest suite; sets LOCUST_SKIP_MONKEY_PATCH before import. This is the root cause of the apparent 'suite is slow' symptom -- the healthy suite runs ~2min in CI; without this fix the full run hangs to timeout. Self-activating on main."
+  - kind: pr
+    ref: "BIMpossible #368 MERGED (0638f6d, 2026-08-16) -- clarifies FastAPI stub collection errors in the test suite. CI-side, self-activating on main."
+  - kind: pr
+    ref: "BIMpossible #378 MERGED (ddf5ddc, 23:34Z) -- pre-push local CI enforcement: versioned git hook + shared verifier so branches arrive at CI already green. Owner action once per existing checkout: run Install-Developer-Setup.ps1 to install the hook (new checkouts get it automatically)."
+  - kind: pr
+    ref: "BIMpossible #381 MERGED (baa5c60, 2026-08-17T02:02Z) -- makes worker-integration tests hermetic against the global prewarm queue. CI-side, self-activating."
+  - kind: pr
+    ref: "BIMpossible #384 MERGED (41d3baa, 02:21Z) -- per-run unique container/network names so concurrent local-CI runs can no longer kill each other. Self-activating."
   verification:
     level: verified
-    by: "All three merged (SHAs named). #339 and #341 are CI tests -- on main = running. #340's Verify-Deploy.ps1 is a deploy-host script with no observed run, which is exactly why the item stays landed: no runtime evidence of #340 executing on the prod host. Merge evidence only for the ops half."
-    at: '2026-08-13'
+    by: "All seven merged (SHAs named). #339/#341/#349/#368/#381/#384 are CI-side test/infra fixes -- on main = running. #349 confirmed to touch backend/tests/test_synthetic_load_host_guard.py and resolve the full-suite deadlock (git merge-base: 8118589 is NOT an ancestor of the older authz branch base e988cb5, so PRs branched before 2026-08-14 must rebase past it). #340's Verify-Deploy.ps1 is a deploy-host script with no observed run -- item stays landed for that ops half only. #378 is the one piece with a real owner action (install the hook in pre-existing checkouts) but is low-stakes enough to fold in here rather than spin out its own item."
+    at: '2026-08-17'
   live_check:
   - "Run Verify-Deploy.ps1 read-only on the prod host after a deploy; capture the identity-smoke result to convert #340 landed->live."
   source: "BIMpossible #339 / #340 / #341 (merge-wave delta, 2026-08-13 reconcile)"
@@ -2230,41 +2320,288 @@ items:
 - id: AUTHZ-INHERITANCE-P1
   title: "Authorization-Inheritance Phase 1: permission-projection foundation (spine)"
   projects: [bimpossible]
-  status: in_flight
+  status: landed
   owner_gate: false
-  unblocks: []
+  unblocks: [AUTHZ-SHADOW-ACTIVATE]
   blocked_by: []
   effort: L
   risk: 2
   evidence:
   - kind: pr
-    ref: "BIMpossible #337 OPEN/READY (feat/authz permission-projection foundation) -- the Phase 1 spine of authorization inheritance. Not merged; actively in flight."
+    ref: "BIMpossible #337 MERGED (squash b4515ba) 2026-08-15T00:06:40Z -- Phase 1 spine of authorization inheritance. Second-synchronization merge per the owner's locked merge order: #333 (enrollment foundation) squash-merged FIRST (593a4fb), THEN latest main merged into #337 (merge c7efd95), conflicts resolved by composition (main's require_project_access[_path] enrollment tenancy + #337's additive Phase-3 shadow read-gates, inert at OFF), backend-endpoint-reviewer verdict 'merge composition is correct'."
+  - kind: commit
+    ref: "Collision fix 816345c: #333 and #337 had each authored an Alembic migration with the SAME id j0k1l2m3n4o5 off i9j0k1l2m3n4 (MultipleHeadsError in CI). #337's add_permission_projection renumbered j0k1l2m3n4o5->j0k1permproj and re-chained after #333's add_hub_access_scope; child add_authz_decision_log re-pointed. migration-reviewer PASS. Single Alembic head on main = r8s9t0u1v2w3 (confirmed via ScriptDirectory + git ls-tree origin/main)."
+  - kind: pr
+    ref: "BIMpossible #355 MERGED (d502fc2, 2026-08-16) -- dark ApsAclSource importer built from the 7b.3 capture-1 shapes; GROUP subjects fail closed (matrix left GROUP unmatched). Extends the dormant spine; inert until pre-pilot re-entry (#370)."
+  - kind: commit
+    ref: "BIMpossible 2d3efa1 -- self-service identity link/unlink/recovery endpoint set + dark UI (plan Sec 7b.4): /account/identity router, identity_link_states HMAC single-use burn table (migration r8s9t0u1v2w3), all dark/flag-gated (BIMPOSSIBLE_AUTHZ_IDENTITY_SELFSERVICE_ENABLED mount + BIMPOSSIBLE_IDENTITY_LINK_STATE_SECRET). endpoint/migration/typescript reviewer gates all PASS."
   verification:
     level: verified
-    by: "IN FLIGHT, not merged. Machine fact 2026-08-13: PR#337 state OPEN, ready_for_review, all CI GREEN (backend pytest, frontend next build, frontend vitest+tsc, gitleaks, pip-audit, semgrep, trivy, security-scan-summary all pass; only auto-merge/docs-hygiene skipping under the new draft-gating). No merge decision yet. Verified as in-flight by the open PR + green checks; the WORK itself is unverified until it lands."
-    at: '2026-08-13'
+    by: "LANDED (merged), NOT live-enforcing. PR#337 squash-merged b4515ba 2026-08-15T00:06:40Z; all required checks green on the final merged-with-main branch (backend/pytest 2m12s healthy, frontend vitest+tsc, security-scan-summary; plus next build). Everything ships DARK: inert at the default BIMPOSSIBLE_AUTHZ_ENFORCEMENT_MODE=OFF -- the read-gates are no-ops, the projection table is unread, nothing user-visible changed. This is why status is landed, not live: 'live' would require the enforcement flag flipped and a proven shadow window, which is owner-gated (see AUTHZ-SHADOW-ACTIVATE). 3 non-blocking merge-review follow-ups LOGGED to WORKLOG.md (assistant.py break-glass short-circuit gap, /model/resolve intra-hub enrollment granularity, share-token exempt-map confirmation) -- all dark, none a merge defect, per NORTHSTAR #13 logged-not-chased. UPDATE 2026-08-16: the flag IS now flipped (SHADOW live, see AUTHZ-SHADOW-ACTIVATE) and the read-gates are executing log-only -- but the window is NOT yet proven (telemetry undercount + no-projection-record, see AUTHZ-SHADOW-WINDOW-VALIDITY), so this stays landed until a trustworthy shadow window completes."
+    at: '2026-08-16'
   live_check:
-  - "gh pr view 337 -R YourBIMpossible/BIMpossible --json state,isDraft,mergedAt  # expect OPEN/ready until it merges"
-  source: "BIMpossible PR#337 (open ready; machine-fact probe 2026-08-13 reconcile)"
+  - "gh pr view 337 -R YourBIMpossible/BIMpossible --json state,mergedAt  # expect MERGED b4515ba"
+  - "git ls-tree origin/main backend/alembic/versions/ | grep j0k1permproj  # renamed migration present = collision fix on main"
+  source: "BIMpossible PR#337 (merged b4515ba); merge-order directive; WORKLOG.md AUTH-INH merge-sync entry 2026-08-14"
   notes_url:
 
 - id: ENROLL-TENANCY-LAYER
   title: "Client/project enrollment tenancy layer (E1-E5), flag-gated dark ship"
   projects: [bimpossible]
-  status: in_flight
+  status: landed
   owner_gate: false
-  unblocks: []
+  unblocks: [AUTHZ-SHADOW-ACTIVATE]
   blocked_by: []
   effort: L
   risk: 2
   evidence:
   - kind: pr
-    ref: "BIMpossible #333 OPEN/READY (client/project enrollment tenancy layer, E1-E5) -- flag-gated dark ship, so a merge changes nothing in prod until the flag is set. Not merged; actively in flight."
+    ref: "BIMpossible #333 MERGED (squash 593a4fb) 2026-08-14T23:33:38Z -- client/project enrollment tenancy layer (E1-E5). Merged FIRST in the owner's locked two-PR merge order so #337 could land on the final enrollment foundation. Routes enforce firm tenancy via Depends(require_project_access[_path]) (hub-grant + scope + enrollment); byte-compatible with the old hub-isolation check while BIMPOSSIBLE_PROJECT_ENROLLMENT_ENABLED is OFF."
   verification:
     level: verified
-    by: "IN FLIGHT, not merged. Machine fact 2026-08-13: PR#333 state OPEN, ready_for_review, all CI GREEN (backend pytest, frontend next build, frontend vitest+tsc, gitleaks, pip-audit, semgrep, trivy, security-scan-summary pass; auto-merge/docs-hygiene skipping). Dark-ship (flag-gated) design means a merge is safe but this is still open. Verified in-flight by the open PR + green checks."
-    at: '2026-08-13'
+    by: "LANDED (merged), NOT live-active. PR#333 squash-merged 593a4fb 2026-08-14T23:33:38Z, all CI green pre-merge. Dark ship: with BIMPOSSIBLE_PROJECT_ENROLLMENT_ENABLED default OFF the decorators reduce to the pre-existing hub-isolation behaviour, so prod is byte-unchanged; the enrollment scope (all_projects vs selected_projects) only bites when the flag is set. Status is landed not live because the flag is unflipped -- activation is owner-gated (AUTHZ-SHADOW-ACTIVATE). Foundation that #337's authorization projection was explicitly sequenced to build on."
+    at: '2026-08-14'
   live_check:
-  - "gh pr view 333 -R YourBIMpossible/BIMpossible --json state,isDraft,mergedAt  # expect OPEN/ready until it merges"
-  source: "BIMpossible PR#333 (open ready, E1-E5 enrollment tenancy; machine-fact probe 2026-08-13 reconcile)"
+  - "gh pr view 333 -R YourBIMpossible/BIMpossible --json state,mergedAt  # expect MERGED 593a4fb"
+  source: "BIMpossible PR#333 (merged 593a4fb); merge-order directive; project-enrollment-buildspec memory"
+  notes_url:
+
+- id: AUTHZ-SHADOW-ACTIVATE
+  title: "AUTH-INH arc CLOSED 2026-08-16: foundation complete, enforcement deferred to pre-pilot validation (runbook Sec 6)"
+  projects: [bimpossible]
+  status: landed
+  owner_gate: true
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 3
+  evidence:
+  - kind: doc
+    ref: "NORTHSTAR guardrail #1 (owner 'go' AND ratified revocation window, proposal 15 min) + #9 (provenance gate ships in shadow mode first, ~7 days log-only, zero false denials proven, before it hard-denies). Plan v3 sequences shadow -> enforce; Sec 7b.3 read-only ACL-semantics validation gates the OFF->ENFORCE step, not this OFF->SHADOW one."
+  - kind: flag
+    ref: "BIMPOSSIBLE_AUTHZ_ENFORCEMENT_MODE -- default OFF. The AUTH-INH spine (AUTHZ-INHERITANCE-P1) + enrollment foundation (ENROLL-TENANCY-LAYER) are now MERGED and inert at OFF. The read-gates become non-blocking log-only at SHADOW. .env is human-only (NORTHSTAR #11) -- Claude cannot flip this."
+  - kind: run
+    ref: "2026-08-16 live probe: BIMPOSSIBLE_AUTHZ_ENFORCEMENT_MODE=SHADOW observed in the running backend; authz_decision_log = 3 rows, ALL would_deny=true reason no-projection-record"
+  verification:
+    level: verified
+    by: "PROMOTED live 2026-08-16: the flip this item tracked has happened -- SHADOW observed live in prod (env-var probe), decision log receiving rows. CAVEAT, tracked as its own item AUTHZ-SHADOW-WINDOW-VALIDITY: the 3 rows are all would_deny=true / no-projection-record, and an unfixed audit finding says shadow telemetry likely UNDERCOUNTS because read paths never commit the decision-log insert -- so the >=7-day log-only window is running but cannot yet prove 'zero false denials'. This item's scope (activation sequence culminating in the OFF->SHADOW flip) is done; the window's evidentiary validity is the follow-on. || Prior reading 2026-08-14: owner RATIFIED the 15-min revocation window; remaining steps were (1) deploy flags-OFF + migrate to head, (2) service identity (as-built uses the app's existing 2-legged token), (3) projection seed/backfill, (4) Sec 7b.3 disposable-ACC validation, (5) projection health, (6) flip OFF->SHADOW. Packets: BIMpossible docs/2026-08-14__Owner-Action-Packets.md. unblocks: [] deliberately -- downstream arc (ENFORCE, Track-2, write-back) itemized only after shadow proves out."
+    at: '2026-08-16'
+  live_check:
+  - "docker exec <backend> printenv BIMPOSSIBLE_AUTHZ_ENFORCEMENT_MODE  # expect SHADOW for the log-only window (never flip it yourself)"
+  - "SELECT count(*), count(*) FILTER (WHERE would_deny) FROM authz_decision_log  # expect growth over the window; all-would-deny/no-projection-record means the seed gap or telemetry gap is still open"
+  source: "NORTHSTAR guardrails #1/#9; plan v3 Sec 7b.3; authz-phase3-serving-frontier + authorization-inheritance-plan-v3 memories; live SHADOW probe 2026-08-16"
+  notes_url:
+
+- id: AUTHZ-SHADOW-WINDOW-VALIDITY
+  title: "DEFERRED to pre-pilot re-entry (runbook Sec 6): shadow-window validity work only when a real pilot is prepared"
+  projects: [bimpossible]
+  status: blocked_owner
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 4
+  evidence:
+  - kind: run
+    ref: "2026-08-16 prod probe with SHADOW live: authz_decision_log holds only 3 rows, ALL would_deny=true reason no-projection-record"
+  - kind: doc
+    ref: "Audit finding (unfixed, 2026-08-14/16 remediation stream): shadow telemetry likely UNDERCOUNTS -- read paths never commit the decision-log insert, so most shadow decisions are evaluated but never persisted"
+  - kind: pr
+    ref: "BIMpossible #361 MERGED (f10eab2, 2026-08-16) -- durable decision-log writes (HIGH-1: read paths now commit the insert, fixing defect (1)/the undercount) + membership projection backfill (addresses the no-projection-record signal behind defect (2)). Landed only: no post-fix shadow window has been observed, and the #370 closeout defers all window-validation work to pre-pilot re-entry, so the item stays blocked_owner."
+  verification:
+    level: verified
+    by: "DEFERRED 2026-08-16 (owner closeout directive): AUTH-INH closed as foundation-complete/dormant -- SHADOW is explicitly NOT production evidence and no monitoring or validation work runs until a pilot is prepared (docs/AUTHZ-ROLLOUT-RUNBOOK.md Sec 6 re-entry checklist; PR #370, 833964d). || Prior reading: OPENED 2026-08-16 at the AUTHZ-SHADOW-ACTIVATE promotion. Two intertwined defects make the running >=7-day log-only window unable to prove what NORTHSTAR #9 requires (zero false denials before ENFORCE): (1) missing session commit on read paths means the log records only a sliver of decisions -- an undercounting log cannot demonstrate absence of false denials; (2) the 3 rows that DID persist are all would_deny/no-projection-record, which is either the pre-seed state the 2026-08-14 audit Sec 8 warned would burn the window, or gates firing on paths the projection seed never covered -- distinguish before trusting the window. Until both are resolved and a fresh window accumulates trustworthy rows, the OFF->ENFORCE step has no evidentiary basis. unblocks: [] because the ENFORCE arc is deliberately not itemized until shadow proves out -- but this item is what makes proving out possible; risk 4 reflects that a silently-invalid window would mislead the enforce decision."
+    at: '2026-08-16'
+  live_check:
+  - "SELECT count(*), count(*) FILTER (WHERE would_deny), count(DISTINCT reason) FROM authz_decision_log  # expect row growth and mixed reasons once the commit fix lands"
+  source: "Live SHADOW probe 2026-08-16; audit remediation stream (PRs #350-#355 drafts); 2026-08-14 audit Sec 8"
+  notes_url:
+
+- id: DATA-EMPTY-PERSIST-GUARD
+  title: "Never persist empty categories/property/spec data version-immutably"
+  projects: [bimpossible]
+  status: landed
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: pr
+    ref: "BIMpossible #362 MERGED (0b314d8, 2026-08-16) -- never persist an empty categories list version-immutably (an empty capture would otherwise freeze as the immutable record for that version)."
+  - kind: pr
+    ref: "BIMpossible #365 MERGED (8aa95a5, 2026-08-16) -- same guard extended to empty property/spec maps."
+  verification:
+    level: verified
+    by: "Both squash SHAs confirmed in git log b5c6e64..833964d. Guard code is on the normal capture path with no flag, so it is active on next deploy; 'landed' because no post-merge deploy/capture has been observed exercising it. unblocks: [] -- defensive data-integrity fix, nothing downstream gates on it."
+    at: '2026-08-16'
+  live_check:
+  - "gh pr view 362 -R YourBIMpossible/BIMpossible --json state,mergedAt  # expect MERGED"
+  source: "merge-wave delta b5c6e64..833964d, ninth pass 2026-08-16"
+  notes_url:
+
+- id: OPS-CACHE-RECONCILE-V1
+  title: "Quarantine-first cache-reconciliation worker, report-only v1"
+  projects: [bimpossible]
+  status: landed
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: "BIMpossible #364 MERGED (ed6ad70, 2026-08-16) -- cache reconciliation worker, quarantine-first, REPORT-ONLY v1 (detects/reports divergence, mutates nothing)."
+  verification:
+    level: verified
+    by: "Squash SHA ed6ad70 confirmed in the delta. Report-only by design; 'live' would require an observed worker run producing a report. A future mutating v2 would be a new item. unblocks: []."
+    at: '2026-08-16'
+  live_check:
+  - "gh pr view 364 -R YourBIMpossible/BIMpossible --json state,mergedAt  # expect MERGED"
+  source: "merge-wave delta b5c6e64..833964d, ninth pass 2026-08-16"
+  notes_url:
+
+- id: TENANCY-RAIL-SEARCH-RESOLVE
+  title: "/search/models + /aps/model/resolve migrated off the ALLOWED_PROJECT_IDS rail"
+  projects: [bimpossible]
+  status: landed
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: pr
+    ref: "BIMpossible #366 MERGED (e585862, 2026-08-16) -- migrates /search/models and /aps/model/resolve off the global ALLOWED_PROJECT_IDS deployment rail onto proper firm-scoped tenancy checks. Part of retiring the env allowlist as a pseudo-tenancy mechanism (CLAUDE.md write-back rules; enrollment layer is the successor)."
+  verification:
+    level: verified
+    by: "Squash SHA e585862 confirmed in the delta. Behaviour change is active on next deploy (no flag found in the PR title/scope); 'landed' pending an observed prod request exercising the new scoping. unblocks: [] -- the broader rail retirement is tracked through ENROLL-TENANCY-LAYER's activation, not this item."
+    at: '2026-08-16'
+  live_check:
+  - "gh pr view 366 -R YourBIMpossible/BIMpossible --json state,mergedAt  # expect MERGED"
+  source: "merge-wave delta b5c6e64..833964d, ninth pass 2026-08-16"
+  notes_url:
+
+- id: OPS-ADMIN-HOST-SPLIT
+  title: "Option C admin-hostname split live: founder surface on admin.yourbimpossible.com only"
+  projects: [bimpossible]
+  status: live
+  owner_gate: false
+  unblocks: [OPS-LAUNCH]
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: pr
+    ref: "BIMpossible #367 MERGED (736b2d6, 2026-08-16) -- Option C middleware host gate: founder admin paths answer only on BIMPOSSIBLE_ADMIN_HOST, 404 elsewhere; inert until armed."
+  - kind: pr
+    ref: "BIMpossible #369 MERGED (004ca15, 2026-08-16) -- arms the gate (AUTH_URL + BIMPOSSIBLE_ADMIN_HOST deploy wiring)."
+  - kind: run
+    ref: "Live probe 2026-08-16: https://admin.yourbimpossible.com/ and /admin -> 302 Cloudflare Access login; https://app.yourbimpossible.com/admin -> 404 (host gate active); app root -> 200 with no CF wall. Option C session also deleted the transitional Option-B apps (wildcard + Founder Admin path app) per its own record; CF is dashboard-managed, no repo artifact to cite."
+  verification:
+    level: verified
+    by: "LIVE, probed same day: both merged SHAs in the delta AND the runtime split observed end-to-end (admin host gated by CF Access, founder paths 404 on the app host, client app host open to native auth). Supersedes the same-day Option B posture (Bypass/Everyone wildcard + path-scoped Founder Admin app) recorded in the inventory doc Sec 8 -- both are time-stamped states, not a contradiction. Clears the client-facing CF-Access wall that blocked client onboarding, hence unblocks OPS-LAUNCH."
+    at: '2026-08-16'
+  live_check:
+  - "curl -s -o /dev/null -w '%{http_code}' https://app.yourbimpossible.com/admin  # expect 404"
+  - "curl -s -o /dev/null -w '%{http_code}' https://admin.yourbimpossible.com/admin  # expect 302 (CF Access)"
+  source: "BIMpossible #367/#369; live probes 2026-08-16; optionc-admin-hostname-live memory; inventory doc 2026-08-16__cloudflare-access-client-facing-removal-INVENTORY.md Sec 8"
+  notes_url:
+
+- id: R5-AECDM-PUSHDOWN
+  title: "R5 AECDM query-pushdown lane MERGED -- flag-gated, read-only (PR #363)"
+  projects: [bimpossible]
+  status: landed
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: "BIMpossible #363 MERGED (d56bd14, 2026-08-16T19:47:59Z, branch feat/r5-live-filter-pushdown) -- R5 v1 live AECDM predicate-pushdown lane, flag-gated + read-only. Sole commit in the delta 833964d..d56bd14."
+  - kind: pr
+    ref: "BIMpossible #372 MERGED (5a9cdbc, 20:25Z) -- archives the R5 AECDM viability probe script for evidence provenance."
+  - kind: pr
+    ref: "BIMpossible #373 MERGED (a750947, 21:31Z) -- adds a local observation loop for live-filter behavior (tooling to watch the pushdown lane, not a scope/behavior change)."
+  - kind: pr
+    ref: "BIMpossible #380 MERGED (ea2c8fd, 2026-08-17T00:25Z) -- allowlists r5_filter_observations in the assistant write guard (bug fix, self-activating)."
+  verification:
+    level: verified
+    by: "Squash SHAs d56bd14/5a9cdbc/a750947/ea2c8fd all confirmed in the delta d56bd14..origin/main. Still ships dark: flag-gated, read-only, mutates nothing. 'landed' not 'live' -- 'live' requires an observed run with the pushdown flag ON producing real pointValue / pages-min data (the metering assumption the Autodesk-research session flagged is still unmeasured). unblocks: []."
+    at: '2026-08-17'
+  live_check:
+  - "gh pr view 363 -R YourBIMpossible/BIMpossible --json state,mergedAt  # expect MERGED d56bd14"
+  source: "delta d56bd14..origin/main, eleventh pass 2026-08-17"
+  notes_url:
+
+- id: RAIL-RETIRE-FINAL
+  title: "ALLOWED_PROJECT_IDS / guard.py allowlist subsystem retired end-to-end (PRs #371, #374)"
+  projects: [bimpossible]
+  status: landed
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: pr
+    ref: "BIMpossible #371 MERGED (9b851ff, 2026-08-16T20:24:50Z) -- migrates the last caller (/aps/projects) off the global ALLOWED_PROJECT_IDS rail onto assert_project_access firm-scoping, removes the rail from guard.py, drops guard.py from CLAUDE.md's protected-files list. Fix commit landed after the recorded RED backend/pytest; re-probed GREEN across all checks before merge."
+  - kind: pr
+    ref: "BIMpossible #374 MERGED (e36ae9b, 2026-08-16T21:18:57Z) -- 'end-to-end' full-subsystem removal: deletes backend/allowlist_db.py, allowlist_source.py, scripts/seed_allowlist.py and their tests, adds alembic migration t0u1v2w3x4y5_drop_allowed_projects.py, adds backend/tests/test_allowlist_subsystem_removed.py as a permanent negative-existence pin. PR body states the only authorization model left is firm membership -> firm hub grant -> all_projects OR explicit enrollment, enforced by aec/hub_tenancy.py + aec/enrollment.py."
+  verification:
+    level: verified
+    by: "Both squash SHAs (9b851ff, e36ae9b) confirmed in the delta d56bd14..origin/main; guard.py confirmed absent from origin/main (git show 404s). 'landed' not 'live' this pass -- no deploy/smoke probe run in this session to confirm the migration applied and no request has hit the new code path in prod. A memory dated 2026-08-17 claims 'deployed + smoke-verified' but names no artifact re-checkable here; flagged, not trusted blind. Completes the arc TENANCY-RAIL-SEARCH-RESOLVE (#366) began. unblocks: [] -- successor tenancy mechanism is ENROLL-TENANCY-LAYER, not this cleanup."
+    at: '2026-08-17'
+  live_check:
+  - "gh pr view 374 -R YourBIMpossible/BIMpossible --json state,mergedAt  # expect MERGED e36ae9b"
+  - "git show origin/main:backend/guard.py  # expect 'does not exist'"
+  - "psql/alembic current on the deploy host  # expect t0u1v2w3x4y5 applied, to promote landed->live"
+  source: "delta d56bd14..origin/main, eleventh pass 2026-08-17; supersedes ninth/tenth-pass in_flight reading"
+  notes_url:
+
+- id: NL-FILTER-EVAL-QUALITY
+  title: "NL-filter intent-fidelity eval harness built (report-only, key-gated); two accuracy fixes landed"
+  projects: [bimpossible]
+  status: blocked_owner
+  owner_gate: true
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: "BIMpossible #375 MERGED (989a2fb, 23:25Z) -- implements the BUILD NOW eval from docs/audits/eval-readiness-audit.md: an NL-filter intent-fidelity harness. Scores whether POST /data/nl_filter's Haiku translation selects the elements the user meant (property the deterministic tests don't cover). Additive, report-only, key-gated -- needs a live LLM key to actually run and produce a first result."
+  - kind: pr
+    ref: "BIMpossible #377 MERGED (419cc8c, 23:35Z) -- fix(nl-filter): ground categorical values in translation."
+  - kind: pr
+    ref: "BIMpossible #386 MERGED (d9222c0, 2026-08-17T02:31Z) -- fix(eval): item-level list_format scoring for the circuit-readability eval."
+  verification:
+    level: verified
+    by: "All three squash SHAs confirmed in the delta. The harness itself is built and merged but 'report-only, key-gated' means it has not produced a real signal yet -- needs the owner to either wire an API key into CI or run it locally once to get a baseline reading. That decision/run is the blocking step, hence blocked_owner not landed."
+    at: '2026-08-17'
+  live_check:
+  - "Check CI or a local run for a first eval-harness report; if none exists, the key/run is still outstanding."
+  source: "delta d56bd14..origin/main, eleventh pass 2026-08-17"
+  notes_url:
+
+- id: OPS-CF-RECORD-CONSOLIDATION
+  title: "After Option C session ends: commit the two untracked CF docs, fold the two Access memories"
+  projects: [workspace]
+  status: blocked_external
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: doc
+    ref: "Two untracked docs in the workspace main tree: 00_Strategy/design-docs/2026-08-16__cloudflare-access-client-facing-removal-INVENTORY.md (Option B record, header marked SUPERSEDED per owner directive 2026-08-16) and ...__cloudflare-access-optionC-admin-hostname-PROPOSAL.md (owned by the Option C session, task_77ad4463). Owner directive: touch neither, and do not reconcile the cloudflare-access-topology memory against optionc-admin-hostname-live, until that session reports completion -- avoids conflicting ownership / loss of its final record-keeping."
+  verification:
+    level: verified
+    by: "git status -sb 2026-08-16 shows both docs untracked on workspace main. blocked_external = waiting on a concurrent local session, not a vendor; flips to ready the moment task_77ad4463 completes."
+    at: '2026-08-16'
+  live_check:
+  - "git -C F:/AI-Dev/BIMpossible_Workspace status -s 00_Strategy/design-docs  # both gone from untracked = the Option C session (or owner) already committed them; item may be closable"
+  source: "owner directive in-session 2026-08-16; /close externalization"
   notes_url:
