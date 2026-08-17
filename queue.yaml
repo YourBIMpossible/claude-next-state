@@ -1409,7 +1409,7 @@ items:
 - id: OPS-BACKUP-RESTORE-DRILL
   title: "-VerifyRestore proven live (147/147 rows); RPO/RTO table + named restore operator still open"
   projects: [bimpossible, workspace]
-  status: landed
+  status: live
   owner_gate: true
   unblocks: [OPS-LAUNCH]
   blocked_by: []
@@ -1438,14 +1438,18 @@ items:
     ref: "BIMpossible #357 MERGED (784079c, 2026-08-16) -- automates the weekly restore drill (-VerifyRestore on a schedule) without mutating the offsite-sync task. Landed only: no observed unattended scheduled run yet on the real host, so the scheduled-path gap in the scope note still STANDS; the owner-only remainders (RPO/RTO table, named restore operator) are untouched."
   - kind: doc
     ref: 'workspace 682171b (2026-08-17) -- section 6a: RPO 24h / RTO 8h / primary operator Zeriah Tatro / backup TBD, owner-ratified'
+  - kind: probe
+    ref: '2026-08-16 23:27-23:28 local: scheduled-task backup exit 0 (19264 KB, 66 tables, verified); -VerifyRestore drill PASS 147/147 in 12s vs throwaway container; backup-health.json all-green'
+  - kind: doc
+    ref: workspace 01_BuildLog/2026-08-06__backup-resilience-remediation-plan.md sections 6a/6b (commit c3d0c9c) -- final operator policy + observed evidence table
   verification:
     level: verified
-    by: "Owner-only blockers RESOLVED 2026-08-17: owner ratified RPO 24h, RTO 8h, primary restore operator Zeriah Tatro, backup restore operator deliberately TBD (fill-in table added). Documented in 01_BuildLog/2026-08-06__backup-resilience-remediation-plan.md section 6a (workspace commit 682171b). Restore MECHANICS proven (147/147 drill, ~26s, far inside the 8h RTO). Remaining before live: one OBSERVED unattended scheduled backup run on the real host post-#293/#330 (validates the daily-cadence assumption behind RPO 24h) -- an evidence wait, not an owner decision. Backup-operator TBD is by owner design, not a blocker."
+    by: "CLOSED 2026-08-17 overnight. Owner policy final: RPO 24h, RTO 8h, primary restore operator Zeriah Tatro, backup restore operator NONE CURRENTLY DESIGNATED (primary remains accountable). The open evidence gap -- an observed unattended scheduled backup run post-#293/#330 -- is closed: BIMpossible-PgBackup (principal Zeria/Interactive) fired on its own timer 2026-08-16 02:00:01 exit 0, and a Task Scheduler-triggered run of the same registered action at 23:27 produced a verified 19,264 KB / 66-table dump in 2s with retention pruning; backup-health.json advanced. Isolated restore drill (Backup-Db.ps1 -VerifyRestore) at 23:28: PASS, throwaway container (production DB untouched), named_deliverables 147/147, 12s end-to-end. Offsite sync task green (2-hourly, exit 0). Policy check: daily cadence => RPO 24h met; 2s backup + 12s restore << 8h RTO. Evidence recorded in remediation plan sections 6a/6b (workspace). REMAINING DEFECT (separate, flagged): BIMpossible-Backup-WeeklyRestoreDrill task action points at the deleted drill-validate worktree path and has never run (267011); repair = elevated re-run of Register-BackupResilienceTasks.ps1 -WeeklyRestoreDrill from the repo root. Manual/on-demand drills unaffected."
     at: '2026-08-17'
   live_check:
-  - "grep -A5 '## 6. Measured values' 01_BuildLog/2026-08-06__backup-resilience-remediation-plan.md  # confirm the drill row is still there and check whether a 7-day collection or RTO/RPO row has since been added"
-  - "grep -i 'restore operator' 01_BuildLog/2026-08-06__backup-resilience-remediation-plan.md 01_BuildLog/2026-08-05__product-risk-assessment.md  # currently 0 hits anywhere"
-  - "Get-ScheduledTask -TaskName '*BackupResilience*' | Select TaskName,State  # on the real host, post-#293: confirm both tasks actually registered (State != absent) -- this has not yet been observed by any session"
+  - 'Get-Content F:/AI-Dev/BIMpossible/_db-backups/backup-health.json  # last_successful_backup + last_successful_restore_test should be < 8 days old'
+  - "(Get-ScheduledTaskInfo -TaskName 'BIMpossible-PgBackup').LastTaskResult  # expect 0"
+  - "(Get-ScheduledTask -TaskName 'BIMpossible-Backup-WeeklyRestoreDrill').Actions[0].Arguments  # DEFECT until it references F:/AI-Dev/BIMpossible/Backup-Db.ps1 (not a worktree path)"
   source: "01_BuildLog/2026-08-05__product-risk-assessment.md W4/W5; workspace PR#26/#33; BIMpossible PR#286/#288/#292/#293; sync pass 2026-08-07"
   notes_url:
 

@@ -40,9 +40,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-17 @ `e9a424e` PR#390 · `addi
 [POST-268-FOLLOWUPS] Merge the three post-#268 follow-up PRs -- reviewed, three-lane green, awaiting checks
        unblocks 2 · S · bimpossible · VERIFIED 2026-08-07 · BIMpossible #269 (1887583), #270 (f6f0044), #271 (428889c) -- all ME…
 
-[OPS-BACKUP-RESTORE-DRILL] -VerifyRestore proven live (147/147 rows); RPO/RTO table + named restore operator still open
-       unblocks 1 · S · bimpossible+workspace · VERIFIED 2026-08-17 · 01_BuildLog/2026-08-05__product-risk-assessment.md finding W4/W5 (or…
-
 [OPS-RESIDENCY-DOC] Data residency/retention policy PUBLISHED -- /data-policy page live, bs-5 closed
        unblocks 1 · S · bimpossible · CLAIMED 2026-08-04 · BIMpossible_ProgramPlan_2026-05-25.md, Commercial Launch Prerequisit…
 
@@ -203,6 +200,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-17 @ `e9a424e` PR#390 · `addi
 
 [P3-10A-GOLIVE] Cross-Model Room Join LIVE -- rollout flag DELETED, path unconditional (PR#244)
        unblocks 1 · S · bimpossible · VERIFIED 2026-08-06 · BIMpossible_PHASE-STATUS.md Phase 3 sub-phase notes, Phase 3.10a row
+
+[OPS-BACKUP-RESTORE-DRILL] -VerifyRestore proven live (147/147 rows); RPO/RTO table + named restore operator still open
+       unblocks 1 · S · bimpossible+workspace · VERIFIED 2026-08-17 · 01_BuildLog/2026-08-05__product-risk-assessment.md finding W4/W5 (or…
 
 [OPS-TENANCY-DOC] Write the multi-tenant data-isolation strategy doc (audit's required TEST already shipped in PR#243)
        unblocks 1 · S · bimpossible · VERIFIED 2026-08-17 · BIMpossible_ProgramPlan_2026-05-25.md, Commercial Launch Prerequisit…
