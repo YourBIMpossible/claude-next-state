@@ -2,17 +2,20 @@
 
 # /next — work-item queue
 
-Generated 2026-08-16 (synced). Ranked by critical path (transitive `unblocks` cone), tiebreak:
+Generated 2026-08-17 (synced). Ranked by critical path (transitive `unblocks` cone), tiebreak:
 owner-gated+S effort, then effort, then risk, then id. Full algorithm:
 `~/.claude/skills/next/reference/item-model.md`.
 
-Scope: `all`. Watermarks: `bimpossible` = 2026-08-17 @ `e9a424e` PR#390 · `addins` = 2026-08-16 @ `a0a4e07` PR#64 · `workspace` = 2026-08-08 @ `1a3021d` PR#40.
+Scope: `all`. Watermarks: `bimpossible` = 2026-08-17 @ `e9a424e` PR#390 · `addins` = 2026-08-16 @ `a0a4e07` PR#64 · `workspace` = 2026-08-17 @ `134f129` PR#61.
 (families/pc-monitor: no items yet — run `init` to derive.)
 
 ## Blocked on you
 
 [P3-8-SLICE23] Merge Phase 3.8 slice 3 (ACC role sync); slice 2 still needs one owner ruling
        unblocks 1 · S · bimpossible · VERIFIED 2026-08-07 · BIMpossible #275 OPEN DRAFT, head feat/phase38-draft-gating-and-acc-…
+
+[PHASE9-REOPENED-SCOPE] Phase 9 reopened ACTIVE 2026-08-17 -- settle cutsheet-to-project link-target design question
+       unblocks 1 · S · bimpossible · CLAIMED 2026-08-17 · BIMpossible_PHASE-STATUS.md row 9 (Product Data Ingestion) -- 'Reope…
 
 [P7-SYNC-GOLIVE] Supervised owner flag-flip: go-live Revit Link sync re-enable (Phase 7 step 2)
        unblocks 0 · S · bimpossible+addins · CLAIMED 2026-08-04 · BIMpossible#187 (2936c32f) + AddIns#11 (be4d6a8f), lockstep, both me…
@@ -129,8 +132,8 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-17 @ `e9a424e` PR#390 · `addi
 [DEP-TRIAGE-2026-08] Nine Dependabot PRs open and waiting -- five are Action bumps the auto-merge policy deliberately holds for review
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · Open as of 2026-08-07 night (gh pr list, all non-draft): github-acti…
 
-[OPS-WORKTREE-DRIFT-REVIEW] Per-repo drift ownership review: workspace uncommitted docs + .tools/state edits, BIMpossible behind-5 + dirty tree
-       unblocks 0 · S · workspace+bimpossible · CLAIMED 2026-08-07 · Observed 2026-08-07 sync pass: workspace main carries 2 untracked do…
+[OPS-WORKTREE-DRIFT-REVIEW] Recurring per-repo drift review: workspace local behind-6/ahead-1 with dirty ledgers + untracked audit docs
+       unblocks 0 · S · workspace+bimpossible · CLAIMED 2026-08-17 · 2026-08-07 (original): workspace carried 2 untracked docs (revitlink…
 
 [TAILWIND-V4-VERIFY] Verify Tailwind v4 migration (#284) live in prod -- Docker image is baked, merge alone doesn't ship it
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-07 · BIMpossible #284 (89f1222, merged 2026-08-07T04:51:18Z) -- replaces …
@@ -155,8 +158,8 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-17 @ `e9a424e` PR#390 · `addi
 
 ## Blocked elsewhere
 
-[OPS-CF-RECORD-CONSOLIDATION] After Option C session ends: commit the two untracked CF docs, fold the two Access memories
-       unblocks 0 · S · workspace · VERIFIED 2026-08-16 · Two untracked docs in the workspace main tree: 00_Strategy/design-do…
+[SHARED-PARAM-REGISTRY] Canonical shared-parameter registry landed (PR#174+hardening) -- generator only, nothing imports it yet
+       unblocks 0 · M · bimpossible · VERIFIED 2026-08-17 · BIMpossible #174 (41c716c, merged 2026-07-06) -- feat(shared-paramet…
 
 [OPS-LAUNCH] Clear the Commercial Launch Prerequisites checklist before first external deployment
        unblocks 0 · L · bimpossible · CLAIMED 2026-08-04 · BIMpossible_ProgramPlan_2026-05-25.md §Commercial Launch Prerequisit…
@@ -278,6 +281,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-17 @ `e9a424e` PR#390 · `addi
 
 [DOC-LEDGER-HYGIENE] Retire stale NEXT.md: superseded banner applied, commit pending
        unblocks 0 · S · bimpossible+workspace · VERIFIED 2026-08-06 · 00_Strategy/NEXT.md header, read 2026-07-26: 'Updated 2026-07-10', p…
+
+[OPS-CF-RECORD-CONSOLIDATION] Option C session ended: both CF Access docs committed to main; Access-memory fold is the residual
+       unblocks 0 · S · workspace · VERIFIED 2026-08-17 · Two untracked docs in the workspace main tree (2026-08-16): 00_Strat…
 
 [SEC-GROUPS-VIEWS-404-EXISTENCE-ORACLE] PATCH/DELETE groups+views: nonexistent id returns 404 but cross-firm id returns 403 -- status-code existence oracle
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · Surfaced by the backend-endpoint-reviewer gate during SEC-GROUPS-403…

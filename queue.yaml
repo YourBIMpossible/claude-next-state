@@ -207,10 +207,34 @@ reconciled:
   # f5d70d9 (audit-matrix unattended-run integrity rules -- RUN DEGRADED banner, coverage-gap
   # section, pre-declared expected failures) -> NO ITEM, self-contained harness hardening with
   # nothing owed downstream, same treatment as 11b79ec last pass.
+  # workspace RE-SYNCED 2026-08-17: delta 1a3021d..134f129 = 34 commits (subagent-walked, diffs read,
+  # not subject lines). Most are prior "chore(next): sync mirror" commits reconciling BIMPOSSIBLE items
+  # (#43 #47 #48 #50 #51 #52 #53 + inline 15de6c1/bc7f17d/eb85abd) -- not workspace's own work; the
+  # bimpossible watermark owns those. Substantive WORKSPACE-repo workstreams in the window, all found
+  # to already have items OR to be closed self-contained housekeeping:
+  #  - R5 pushdown docs (e893b0a/af03dd3) -> item R5-AECDM-PUSHDOWN (doc backfill only, no change)
+  #  - APS-lab cache-reconcile/purge (af03dd3/cf35384) -> memory project_dev-db-cache-hygiene-purge
+  #  - AUTH-INH shadow closeout (0a75756) -> item AUTHZ-SHADOW-ACTIVATE (already CLOSED-arc)
+  #  - hub-activation prod cutover (80cf885/3766d95/1623c5e/ed7af56) -> item HUB-TENANCY-GOLIVE (live)
+  #  - CKA/authz WIP recovery (bbe5230) -> items CKA-PILLAR1/2/3 (docs predate current status)
+  #  - CF anonymous-share/share-v2 (7c931c8/5bbc436/3bee57e/d1aa97c) -> FIX-SHARE-LINK-VIEWER + SHARE-V2
+  #  - groups edit-perm review (02f94be) -> item SEC-GROUPS-EDIT-PERM-ALIGN
+  #  - render_queue.py (873eab0) -> /next meta-tooling, not a work item
+  # CLOSED self-contained housekeeping with no downstream (deliberately NOT added as items -- would be
+  # empty-unblocks noise): 2026-08-17 weekly audit P1a-P7 remediation (e8b4787/67e3148, ~18 findings
+  # all closed, live only in audit-resolution-plan_2026-08-17.md); six ops follow-up flags (b6e2a2c/
+  # 134f129, all closed, ops-followups_2026-08-17.md); Phase 17 App-Integrations phase-number promotion
+  # (d45f86c, pure ledger relabel); docs-hygiene G3/G4 gate clearance (7170b08, CI-gate maintenance).
+  # NEW-but-not-workspace-scoped: client-hub onboarding 3-legged access model + automation-agent concept
+  # (ad7e9b5/549b1b9/20c5a42) -- DECIDED, unbuilt, bimpossible-scoped; already in memory
+  # project_client-onboarding-aps-access-model + roadmap 1.8. Left as a Left-Flag for a bimpossible sync,
+  # not forced into a workspace item. Item changes THIS pass: OPS-CF-RECORD-CONSOLIDATION -> live (both
+  # CF docs committed a70b011/8384a27, Option C session task_77ad4463 done); OPS-WORKTREE-DRIFT-REVIEW
+  # refreshed (the 2026-08-07 named files are all committed; a FRESH 13-file drift exists as of today).
   workspace:
-    at: '2026-08-08'
-    commit: 1a3021d
-    pr: 40
+    at: '2026-08-17'
+    commit: 134f129
+    pr: 61
 
 # Work items.
 items:
@@ -1084,6 +1108,75 @@ items:
   - 'cd F:/AI-Dev/Add-Ins; git grep -n "ConformanceDiagnostic" -- "*.cs"; git grep -n "Type=" -- "*.addin"   # expect the class declaration only, and Application-type manifest entries only -- a PushButtonData or a Type=Command entry means the READER side got wired'
   source: "02_Reference/2026-08-04__SL-Parameter-Coupling-MAP.md; ARCH-FIRM-PARAM-NEUTRALITY split 2026-08-06"
   notes_url:
+
+- id: PHASE9-REOPENED-SCOPE
+  title: "Phase 9 reopened ACTIVE 2026-08-17 -- settle cutsheet-to-project link-target design question"
+  projects: [bimpossible]
+  status: blocked_owner
+  owner_gate: true
+  unblocks: [SHARED-PARAM-REGISTRY]
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+    - kind: doc
+      ref: "BIMpossible_PHASE-STATUS.md row 9 (Product Data Ingestion) -- 'Reopened ACTIVE 2026-08-17 (owner) -- not a pivot, a scope growth'"
+  verification:
+    level: claimed
+    by: >
+      Owner-ledger row read directly 2026-08-17 -- a decision-state claim, no machine artifact
+      applies. Original manufacturer-cutsheet-extraction scope unchanged, frozen at parser 0.3.2
+      (GoldenSet stop-rule already satisfied 2026-07-21 -- that part is done and stable, headroom
+      tickets P9-R1..R5 open but not urgent). NEW as of today: link extracted cutsheet data to
+      specific things inside a project, not just isolated spec values. Row states the link target
+      is undecided -- element / category / deliverable / schedule row -- and must be settled
+      before build starts. Everything downstream of Phase 9, including SHARED-PARAM-REGISTRY's
+      wiring and the pre-existing 'Phase 7 + 6 owner decisions' gate, sits behind this.
+    at: '2026-08-17'
+  live_check:
+    - "grep -A6 '^| 9 ' \"F:\\AI-Dev\\BIMpossible_Workspace\\00_Strategy\\BIMpossible_PHASE-STATUS.md\"  # confirm row 9 still ACTIVE/reopened 2026-08-17 and link-target question still open"
+  source: "BIMpossible_PHASE-STATUS.md row 9"
+  notes_url:
+
+- id: SHARED-PARAM-REGISTRY
+  title: "Canonical shared-parameter registry landed (PR#174+hardening) -- generator only, nothing imports it yet"
+  projects: [bimpossible]
+  status: blocked_dep
+  owner_gate: false
+  unblocks: []
+  blocked_by: [PHASE9-REOPENED-SCOPE]
+  effort: M
+  risk: 2
+  evidence:
+    - kind: pr
+      ref: "BIMpossible #174 (41c716c, merged 2026-07-06) -- feat(shared-parameters): canonical registry + generator: 5 discipline TOML files + guids.lock.toml, generate.py/spf.py, generated/BIMpossible_SharedParameters.txt + generated/category_field_mappings.seed.json, models.py, test_shared_parameters_registry.py"
+    - kind: commit
+      ref: "5e701d5 (2026-07-10) + 9d335d4 (2026-07-11) -- SP-1/SP-2 audit hardening: generator --check now diffs generated artifacts against disk instead of trusting them"
+    - kind: commit
+      ref: "archive tag archive/phase9-cloud-ids-shared-params-parked (b37a2a5, 2026-06-23) -- superseded narrower .txt parser (backend/utils/shared_parameters.py), reconciled+archived 2026-07-24 per its own tag message; not present on any active branch"
+    - kind: run
+      ref: "git grep -rn 'import shared_parameters|from shared_parameters' -- backend/ (excl. backend/shared_parameters/, backend/tests/) on origin/main, 2026-08-17: zero hits"
+    - kind: run
+      ref: "git grep -n 'category_field_mappings' -- backend/aec backend/models*.py on origin/main, 2026-08-17: zero hits -- table does not exist yet"
+  verification:
+    level: verified
+    by: >
+      Registry package is machine-confirmed merged and self-tested (PR#174 + two hardening
+      fixes, all on origin/main). Landed-not-wired is equally machine-confirmed: nothing outside
+      the package's own module+tests imports it, and no category_field_mappings table exists in
+      any model file, so there is no live consumption path yet. This closes the "two unreconciled
+      shared-parameters efforts" gap from a prior audit sweep -- the reconciliation already
+      happened (2026-07-24 archive), this registry is the surviving canonical effort. Also
+      surfaces doc/reality drift, reported not fixed (owner-authored doc, out of sync scope):
+      00_Strategy/Phase9_BuildSpec.md's "Pre-built foundation" section (added 2026-06-16) still
+      names the archived .txt parser as the ready-to-wire foundation and does not mention this
+      registry at all.
+    at: '2026-08-17'
+  live_check:
+    - "git grep -rn \"import shared_parameters\\|from shared_parameters\" -- backend/ | grep -v backend/shared_parameters/ | grep -v backend/tests/  # expect zero hits until something wires it"
+    - "git grep -n \"category_field_mappings\" -- backend/aec backend/models*.py  # expect zero hits until the Phase 9 migration lands"
+  source: "BIMpossible PR#174; BIMpossible_PHASE-STATUS.md row 9; 00_Strategy/Phase9_BuildSpec.md; archive tag archive/phase9-cloud-ids-shared-params-parked"
+  notes_url: "00_Strategy/2026-06-16__SharedParameters_Onboarding_ScanSpec_DRAFT.md"
 
 - id: WRITE-ENGINE-INC2
   title: "Merge Write Engine Increment 2 -- both halves built, CI green, awaiting owner merge decision"
@@ -2025,7 +2118,7 @@ items:
   notes_url:
 
 - id: OPS-WORKTREE-DRIFT-REVIEW
-  title: "Per-repo drift ownership review: workspace uncommitted docs + .tools/state edits, BIMpossible behind-5 + dirty tree"
+  title: "Recurring per-repo drift review: workspace local behind-6/ahead-1 with dirty ledgers + untracked audit docs"
   projects: [workspace, bimpossible]
   status: ready
   owner_gate: false
@@ -2035,15 +2128,17 @@ items:
   risk: 2
   evidence:
   - kind: log
-    ref: "Observed 2026-08-07 sync pass: workspace main carries 2 untracked docs (00_Strategy/design-docs/2026-08-06__revitlink-pipe-transport-investigation.md, 01_BuildLog/2026-08-07__hub-tenancy-VERIFIED-fail-closed.md) plus the uncommitted 2026-08-07 /next sync edits to F:/AI-Dev/.tools/state/queue.yaml + QUEUE.md; BIMpossible local checkout is 5 behind origin/main with M backend/aec/help/open-a-model.md and untracked database/maintenance/2026-08-05__audit-client-data-in-db.sql"
+    ref: "2026-08-07 (original): workspace carried 2 untracked docs (revitlink-pipe-transport-investigation.md, hub-tenancy-VERIFIED-fail-closed.md) + uncommitted /next sync edits; BIMpossible was 5 behind with M open-a-model.md. RESOLVED 2026-08-17: those 2 docs are committed (revitlink-pipe-transport in 32c09a6; hub-tenancy-fail-closed folded into the same prior-session sync), BIMpossible local is now behind-0 and clean except one untracked Invoke-ScheduledConcurrencyAuditRelay.ps1."
+  - kind: log
+    ref: "FRESH DRIFT observed 2026-08-17 (this reconcile, ~13 files): workspace local main is ahead 1 / behind 6 vs origin (unpushed local commit e2244fa 'chore(next): sync mirror -- Phase 9 gap-fill'; origin has #56-#61 the local checkout has not pulled). Working tree dirty: M on 5 tracked files -- BIMpossible_PHASE-STATUS.md, BIMpossible_WAVE-STATUS.md, 2026-06-23__Phase_Canonical_Guide_and_HardRules_v2-Reviewed.md, design-docs/2026-08-06__write-engine-increment2_type-params-string_build-plan.md, 02_Reference/.../BIMpossible_Verification_Checklist.md -- plus untracked: 3 Phase17/Favorites strategy docs, 3 audit-run docs (weekly-full-audit + resolution-plan + weekly-full-audit-run), and two stray dirs 03_Audits/ and audits/. The modified ledgers are owner-maintained (PHASE-STATUS/WAVE-STATUS) -- do NOT touch; the audit docs likely belong to the 2026-08-17 audit session already reconciled to origin via #56-#61, so the local copies may be superseded-by-remote rather than new work."
   verification:
     level: claimed
-    by: "Queued on owner direction 2026-08-07 (post-sync): do NOT pull/reset/stash/delete/commit any of it blind -- first determine per file whether the change is intentional, belongs to an active branch/session, and is already externalized elsewhere (the _backups/_archive recoverability rule applies). The sync-edit half is this store's own uncommitted state; committing it is part of this review, not of any sync."
-    at: '2026-08-07'
+    by: "Owner direction 2026-08-07 stands and applies to the fresh drift too: do NOT pull/reset/stash/delete/commit any of it blind -- first determine per file whether the change is intentional, belongs to an active/prior session, and is already externalized on origin (the local audit docs and the ahead/behind split strongly suggest the 2026-08-17 audit session pushed its work as #56-#61 while this checkout was never fast-forwarded). A safe fast-forward pull is blocked by the local-only mirror commit e2244fa + the dirty ledger files. Resolving this is a supervised per-file review, not an automatic clean."
+    at: '2026-08-17'
   live_check:
-  - "git -C F:/AI-Dev/BIMpossible_Workspace status --short  # expect the 2 untracked docs until reviewed"
-  - "git -C F:/AI-Dev/BIMpossible status --short; git -C F:/AI-Dev/BIMpossible rev-list --count HEAD..origin/main  # expect dirty + behind until reviewed"
-  source: "2026-08-07 /next sync Left-Flags; owner instruction 'Do not clean up automatically'"
+  - "git -C F:/AI-Dev/BIMpossible_Workspace status -sb  # expect ahead 1/behind 6 + dirty ledgers until reviewed"
+  - "git -C F:/AI-Dev/BIMpossible_Workspace log --oneline main..origin/main  # the 6 unpulled origin commits (#56-#61)"
+  source: "2026-08-07 /next sync Left-Flags; refreshed 2026-08-17 reconcile; owner instruction 'Do not clean up automatically'"
   notes_url:
 
 - id: ADDINS-BRANCH-PROTECT
@@ -2671,9 +2766,9 @@ items:
   notes_url:
 
 - id: OPS-CF-RECORD-CONSOLIDATION
-  title: "After Option C session ends: commit the two untracked CF docs, fold the two Access memories"
+  title: "Option C session ended: both CF Access docs committed to main; Access-memory fold is the residual"
   projects: [workspace]
-  status: blocked_external
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -2681,14 +2776,16 @@ items:
   risk: 1
   evidence:
   - kind: doc
-    ref: "Two untracked docs in the workspace main tree: 00_Strategy/design-docs/2026-08-16__cloudflare-access-client-facing-removal-INVENTORY.md (Option B record, header marked SUPERSEDED per owner directive 2026-08-16) and ...__cloudflare-access-optionC-admin-hostname-PROPOSAL.md (owned by the Option C session, task_77ad4463). Owner directive: touch neither, and do not reconcile the cloudflare-access-topology memory against optionc-admin-hostname-live, until that session reports completion -- avoids conflicting ownership / loss of its final record-keeping."
+    ref: "Two untracked docs in the workspace main tree (2026-08-16): 00_Strategy/design-docs/2026-08-16__cloudflare-access-client-facing-removal-INVENTORY.md (Option B record, header marked SUPERSEDED per owner directive) and ...__cloudflare-access-optionC-admin-hostname-PROPOSAL.md (owned by the Option C session, task_77ad4463)."
+  - kind: commit
+    ref: "CLOSED 2026-08-17 (reconcile): both docs are now committed on workspace origin/main -- 8384a27 (docs(optionc): final closeout -- topology, live validation, Access inventory, provenance table; the PROPOSAL doc, +237 lines incl. section 6 final prod topology + all-pass live validation) and a70b011 (docs(optionc): archive Option-B client-facing-removal inventory as SUPERSEDED predecessor; the INVENTORY doc). Neither is untracked any longer. The Option C session (task_77ad4463) reported completion, discharging the blocked_external gate."
   verification:
     level: verified
-    by: "git status -sb 2026-08-16 shows both docs untracked on workspace main. blocked_external = waiting on a concurrent local session, not a vendor; flips to ready the moment task_77ad4463 completes."
-    at: '2026-08-16'
+    by: "git log --all confirms 8384a27 (PROPOSAL) + a70b011 (INVENTORY) both on origin/main; `git status -s 00_Strategy/design-docs` returns only an unrelated write-engine build-plan doc, NOT either CF doc -- both are fully tracked. The commit half of this item is discharged. RESIDUAL (small, owner-safe, non-blocking): the two Access memories (cloudflare-access-topology vs optionc-admin-hostname-live) can now be folded since the Option C record is frozen; that is a memory-hygiene chore, not tracked work, and does not hold this item open."
+    at: '2026-08-17'
   live_check:
-  - "git -C F:/AI-Dev/BIMpossible_Workspace status -s 00_Strategy/design-docs  # both gone from untracked = the Option C session (or owner) already committed them; item may be closable"
-  source: "owner directive in-session 2026-08-16; /close externalization"
+  - "git -C F:/AI-Dev/BIMpossible_Workspace log --oneline --all -- 00_Strategy/design-docs/2026-08-16__cloudflare-access-optionC-admin-hostname-PROPOSAL.md  # expect 8384a27"
+  source: "owner directive in-session 2026-08-16; /close externalization; reconcile 2026-08-17"
   notes_url:
 - id: WIZARD-NEWPROJECT-SETUP
   title: 'New-Project-Setup wizard hardened -- keep-alive-safe provision (#387) + approved fixes wave (#388: combobox, address/client, dup-number advisory, schedule/value/timezone, Option A session-cached consent)'
