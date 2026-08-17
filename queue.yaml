@@ -136,8 +136,8 @@ reconciled:
   # re-fetched at write time; highest PR now 386.
   bimpossible:
     at: '2026-08-17'
-    commit: a3ae3d9
-    pr: 389
+    commit: e9a424e
+    pr: 390
   # bimpossible: post-verification closure 2026-08-17 -- delta 410d7aa..a3ae3d9 = 3 commits.
   #   #387 (b12ef36, wizard keep-alive-safe provision) + #388 (90247f3, wizard approved fixes wave) ->
   #   NEW item WIZARD-NEWPROJECT-SETUP, merge-verified (concurrent wizard session's work; recorded by
@@ -1409,7 +1409,7 @@ items:
 - id: OPS-BACKUP-RESTORE-DRILL
   title: "-VerifyRestore proven live (147/147 rows); RPO/RTO table + named restore operator still open"
   projects: [bimpossible, workspace]
-  status: blocked_owner
+  status: landed
   owner_gate: true
   unblocks: [OPS-LAUNCH]
   blocked_by: []
@@ -1436,10 +1436,12 @@ items:
     ref: "BIMpossible #330 (fdc9384, merged 2026-08-08) -- feat(backup): opt-in current-user principal for the offsite-sync task. The concrete implementation of #38's Principal/LogonType decision rule: a current-user principal has the network access S4U lacks, so a scheduled offsite sync to G: can now actually succeed rather than failing every unattended run while passing manual ones. Landed only -- see verification for the still-open observed-unattended-run gap."
   - kind: pr
     ref: "BIMpossible #357 MERGED (784079c, 2026-08-16) -- automates the weekly restore drill (-VerifyRestore on a schedule) without mutating the offsite-sync task. Landed only: no observed unattended scheduled run yet on the real host, so the scheduled-path gap in the scope note still STANDS; the owner-only remainders (RPO/RTO table, named restore operator) are untouched."
+  - kind: doc
+    ref: 'workspace 682171b (2026-08-17) -- section 6a: RPO 24h / RTO 8h / primary operator Zeriah Tatro / backup TBD, owner-ratified'
   verification:
     level: verified
-    by: "The catastrophic unknown this item existed to close -- 'has a restore from this backup ever actually worked' -- is now answered yes, with a timestamped, row-count-matched drill, not a belief. Risk dropped 4 -> 2 accordingly. What remains is genuinely owner-only and much smaller than the original title: (1) the Measured-values table itself flags '-CommandTimeoutSec (1200s) and watchdog staleness thresholds deliberately NOT re-tuned -- single data point; 7-day collection still owed' -- i.e. no formal RPO/RTO figures derived yet, just one raw timing; (2) no restore-operator name found anywhere in the remediation plan doc or PR trail -- picking a human is not a probe this skill can run. Pairs with OPS-DEPLOY-RUNBOOK as before. IMPORTANT SCOPE NOTE added 2026-08-07: #33's 147/147 drill proves the backup+restore MECHANICS (Backup-Db.ps1, invoked manually/directly); it says nothing about the SCHEDULED-TASK path (Register-BackupResilienceTasks.ps1), which #293 shows was still silently registering zero tasks as of the same day, discovered AFTER the drill landed. #293's fix is landed but not live -- no observed run confirms the Task Scheduler now actually fires Backup-Db.ps1 unattended on the real host post-fix. Do not read '-VerifyRestore proven live' in the title as covering the automated schedule; it covers the restore mechanics only. UPDATE 2026-08-13: BIMpossible #330 (fdc9384) adds the opt-in current-user principal for the offsite-sync task -- the implementation of #38's Principal/LogonType decision rule. Still landed, not live: no OBSERVED unattended scheduled run yet confirms Task Scheduler fires Backup-Db.ps1 + offsite sync end to end on the real host post-#330. The owner-only remainders (RPO/RTO table, named restore operator) are unchanged, so this stays blocked_owner."
-    at: '2026-08-13'
+    by: "Owner-only blockers RESOLVED 2026-08-17: owner ratified RPO 24h, RTO 8h, primary restore operator Zeriah Tatro, backup restore operator deliberately TBD (fill-in table added). Documented in 01_BuildLog/2026-08-06__backup-resilience-remediation-plan.md section 6a (workspace commit 682171b). Restore MECHANICS proven (147/147 drill, ~26s, far inside the 8h RTO). Remaining before live: one OBSERVED unattended scheduled backup run on the real host post-#293/#330 (validates the daily-cadence assumption behind RPO 24h) -- an evidence wait, not an owner decision. Backup-operator TBD is by owner design, not a blocker."
+    at: '2026-08-17'
   live_check:
   - "grep -A5 '## 6. Measured values' 01_BuildLog/2026-08-06__backup-resilience-remediation-plan.md  # confirm the drill row is still there and check whether a 7-day collection or RTO/RPO row has since been added"
   - "grep -i 'restore operator' 01_BuildLog/2026-08-06__backup-resilience-remediation-plan.md 01_BuildLog/2026-08-05__product-risk-assessment.md  # currently 0 hits anywhere"
@@ -1748,6 +1750,28 @@ items:
   - 'grep -rn require_project_in_firm_hub backend/aec/groups.py backend/aec/views.py  # >0 hits (hub gate present); enrollment gate is imperative assert_project_access in the same route bodies'
   source: "named-deliverable-personal-scope-firm-gaps.md finding #3; code confirmed via direct read 2026-08-07 sync pass"
   notes_url:
+- id: SEC-APSISO-TESTS-ENROLLMENT-EXPLICIT
+  title: Make /aps + /data hub-isolation test suites enrollment-explicit (no flag-lane dependence)
+  projects:
+  - bimpossible
+  status: live
+  rank_inputs:
+    impact: 3
+    risk: 1
+    effort: 1
+  added: '2026-08-17'
+  verification:
+    level: verified
+    at: '2026-08-17'
+    by: "PR #390 (squash e9a424e, merged 2026-08-17, all required checks green). Each enrollment-sensitive test now pins BIMPOSSIBLE_PROJECT_ENROLLMENT_ENABLED itself; new coverage: unenrolled->403 enrollment denial (path + query variants), model-resolve scans only enrolled projects with listing-consult treated as a leak, and an all_projects-scope listing-path test. Validated pre-merge against the DEPLOYED backend image on schema-only throwaway DBs (dropped after): focused 11/11 and trio 44/44 with the flag ON and unset. Test-only PR -- no deploy needed; container's baked test files remain at the pre-#390 state until the next backend image rebuild, which is expected and harmless."
+  evidence:
+  - kind: pr
+    ref: 'BIMpossible #390 (e9a424e, merged 2026-08-17) -- enrollment-explicit suites + 3 new denial/scope tests'
+  - kind: probe
+    ref: '2026-08-17 deployed-image runs on throwaway DBs: 11/11 focused, 44/44 trio, flag=1 and unset'
+  live_check:
+  - 'git log origin/main --oneline -1 -- backend/tests/test_aps_hub_isolation.py  # expect e9a424e or later'
+  - "grep -c 'monkeypatch.setenv(_ENROLL_FLAG' backend/tests/test_aps_hub_isolation.py  # >0 = enrollment-explicit suite present"
 
 - id: SEC-GROUPS-PERSONAL-INDEX-FIRMID
   title: "uix_named_deliverables_personal_name_group unique index omits firm_id -- confirmed write-path only, not data corruption"
@@ -1959,6 +1983,8 @@ items:
     ref: 'F:/AI-Dev/.tools/d6-soak/RETIRED.md (2026-08-17) -- decommission record: task unregistered, script inert, soak-log.jsonl preserved, superseded by RAIL-RETIRE-FINAL / PR #374.'
   - kind: doc
     ref: Build log F:/AI-Dev/BIMpossible_Workspace/01_BuildLog/2026-08-08__d6-allowlist-seed-and-soak-start.md closed 2026-08-17 with the 'SUPERSEDED, not promoted' outcome per its own gate (line 82).
+  - kind: doc
+    ref: F:\AI-Dev\.tools\d6-soak\RETIRED.md 2026-08-17 section -- Event Log SOURCE BIMpossible-D6-Soak removed via elevated DeleteEventSource (owner-approved UAC); Application log history preserved; registry key absent
   verification:
     level: verified
     by: "DROPPED 2026-08-17 -- superseded by RAIL-RETIRE-FINAL / PR #374. The soak exclusively monitored the ALLOWED_PROJECT_IDS rail (imports allowlist_source + allowlist_db, reads ALLOWED_PROJECT_IDS); that rail was retired end-to-end (guard.py + both modules deleted, merge e36ae9b, deployed 2026-08-16/17), so the soak could only ALERT on a subsystem that no longer exists. DECOMMISSIONED this closure: scheduled task BIMpossible-D6-Soak-Parity-Check unregistered (confirmed absent); D6-Soak-Check.ps1 left inert; soak-log.jsonl preserved as history; F:/AI-Dev/.tools/d6-soak/RETIRED.md written; build log 2026-08-08__d6-allowlist-seed-and-soak-start.md closed with the SUPERSEDED outcome. No promotion to db mode occurred and none is possible -- there is no allowlist left to soak. Tenancy now lives in firm membership -> hub grant -> project enrollment (aec/hub_tenancy.py)."
@@ -2109,7 +2135,7 @@ items:
 - id: CKA-PILLAR1-HELP-CORPUS
   title: "Client Knowledge Assistant Pillar 1: BM25 help ranker + how-to corpus, waves 1-4 shipped"
   projects: [bimpossible, workspace]
-  status: landed
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -2128,10 +2154,12 @@ items:
     ref: "BIMpossible #328 (04cd5af, merged 2026-08-08) -- Pillar 1 Wave 4: long-tail client-surface audit + 10 help articles. This is the fourth and final wave of the workspace #39 plan, so the 'Wave 4 not seen' gap this item previously named is now closed."
   - kind: code
     ref: 'Corpus size 29 -> 41 .md files: git ls-tree -r origin/main -- backend/aec/help/ counts 41 markdown articles at tip a3ae3d9 (2026-08-17), up from the 29 recorded at the prior watermark. Confirms Wave 4 (#328) plus subsequent article growth landed. Still merge-verified only -- no runtime evidence the DEPLOYED assistant ranks real queries against the corpus, so this stays landed (gap 1 stands).'
+  - kind: probe
+    ref: '2026-08-17: deployed-container search_help_docs 4/4 relevant top-ranked results; 41 docs on disk'
   verification:
     level: verified
-    by: "Merge-verified only, deliberately NOT called live. Probed on BIMpossible origin/main 2026-08-08: backend/aec/help_library.py carries the BM25 ranker, backend/tests/test_help_corpus_guard.py exists. Of the two gaps this item previously named, gap 2 (Wave 4 unseen) is now CLOSED -- #328 landed Wave 4 (long-tail audit + 10 more articles), completing the four-wave workspace #39 plan. Gap 1 STANDS and keeps this at landed: no runtime evidence -- nothing observed shows the DEPLOYED assistant ranking real queries against the corpus, only that the code and all four waves of articles are on main. Cross-repo per reconcile.md: code half (BIMpossible) and decision half (workspace) are one item."
-    at: '2026-08-13'
+    by: "Runtime ranking observation in the deployed backend container, 2026-08-17 overnight sprint: corpus on disk = 41 .md docs (matches the refreshed count); search_help_docs (BM25) called in-container for 4 queries -- 'how do I export a schedule' -> [panel-circuit-export, arch-schedule-export, schedules-overview]; 'circuit readability scanner' -> circuit-qa-scanner first; 'set up a new project wizard' -> project-setup-wizard first; 'door window QA' -> door-window-qa first. 4/4 relevant top hits, no credentials used, no user content touched. Prior verification (corpus refresh 29->41) retained in evidence."
+    at: '2026-08-17'
   live_check:
   - "gh pr list --repo YourBIMpossible/BIMpossible --search 'help corpus' --state merged --json number,title  # Wave 4 (#328) + later article PRs merged"
   - "git ls-tree -r --name-only origin/main -- backend/aec/help/ | grep -c '\\.md$'  # 41 at watermark a3ae3d9 (was 29); further growth = more waves landed"
@@ -2659,7 +2687,7 @@ items:
 - id: WIZARD-NEWPROJECT-SETUP
   title: 'New-Project-Setup wizard hardened -- keep-alive-safe provision (#387) + approved fixes wave (#388: combobox, address/client, dup-number advisory, schedule/value/timezone, Option A session-cached consent)'
   projects: [bimpossible]
-  status: landed
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -2670,9 +2698,11 @@ items:
     ref: 'BIMpossible #387 (squash b12ef36, merged 2026-08-17) -- fix(wizard): survive proxy keep-alive resets on provision + honest outcome recovery. The provision-500 was a proxy<->backend keep-alive reset after the OAuth idle gap; provision now survives it and reports the real outcome instead of a spurious 500.'
   - kind: pr
     ref: 'BIMpossible #388 (squash 90247f3, merged 2026-08-17) -- feat(wizard): approved fixes wave (combobox, address/client, duplicate-number advisory, schedule/value/timezone, Option A session-cached consent; AUTH-5 write-token identity verification preserved).'
+  - kind: probe
+    ref: '2026-08-17 overnight sprint: same-socket 65s-idle keep-alive probe PASS; status endpoint 401-first; poll marker in deployed bundle; 0 500s in 24h logs'
   verification:
     level: verified
-    by: 'Merge-verified only, deliberately NOT called live: both PRs squash-merged to origin/main 2026-08-17 (delta 410d7aa..a3ae3d9 reconcile walk). Built by a concurrent wizard session; this reconciliation records the merges by SHA, it did not run or observe the deployed wizard end-to-end, so no runtime claim is made. Promote to live on a deployed provision smoke.'
+    by: 'Overnight sprint 2026-08-17 deployed smoke, non-mutating by design (no real provision run tonight -- that creates a real ACC project; the original #387 fix WAS validated against a real provision on 2026-08-17 before merge). Evidence tonight, all against the live container: (1) gunicorn cmdline shows --keep-alive 75 --timeout 130; (2) raw-socket keep-alive probe: request 200, 65s idle on the SAME socket, second request 200 -- the old 2s default would have reset; (3) GET /wizard/provision/{job}/status deployed (grep count 1 in container) and returns auth-first 401 on a nonexistent job id (non-enumerating); (4) frontend outcome-poll marker provision/${...}/status present in the deployed /app/.next bundle; (5) /wizard page 200, /wizard/building-types 200, /health 200; (6) zero 500s/tracebacks/worker aborts in 24h of backend logs. The keep-alive reset mechanism the item exists for is verified fixed in production.'
     at: '2026-08-17'
   live_check:
   - "git log origin/main --oneline | grep -E 'b12ef36|90247f3'  # both wizard PRs on main"

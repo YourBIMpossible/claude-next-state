@@ -6,13 +6,10 @@ Generated 2026-08-16 (synced). Ranked by critical path (transitive `unblocks` co
 owner-gated+S effort, then effort, then risk, then id. Full algorithm:
 `~/.claude/skills/next/reference/item-model.md`.
 
-Scope: `all`. Watermarks: `bimpossible` = 2026-08-17 @ `a3ae3d9` PR#389 · `addins` = 2026-08-16 @ `a0a4e07` PR#64 · `workspace` = 2026-08-08 @ `1a3021d` PR#40.
+Scope: `all`. Watermarks: `bimpossible` = 2026-08-17 @ `e9a424e` PR#390 · `addins` = 2026-08-16 @ `a0a4e07` PR#64 · `workspace` = 2026-08-08 @ `1a3021d` PR#40.
 (families/pc-monitor: no items yet — run `init` to derive.)
 
 ## Blocked on you
-
-[OPS-BACKUP-RESTORE-DRILL] -VerifyRestore proven live (147/147 rows); RPO/RTO table + named restore operator still open
-       unblocks 1 · S · bimpossible+workspace · VERIFIED 2026-08-13 · 01_BuildLog/2026-08-05__product-risk-assessment.md finding W4/W5 (or…
 
 [P3-8-SLICE23] Merge Phase 3.8 slice 3 (ACC role sync); slice 2 still needs one owner ruling
        unblocks 1 · S · bimpossible · VERIFIED 2026-08-07 · BIMpossible #275 OPEN DRAFT, head feat/phase38-draft-gating-and-acc-…
@@ -42,6 +39,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-17 @ `a3ae3d9` PR#389 · `addi
 
 [POST-268-FOLLOWUPS] Merge the three post-#268 follow-up PRs -- reviewed, three-lane green, awaiting checks
        unblocks 2 · S · bimpossible · VERIFIED 2026-08-07 · BIMpossible #269 (1887583), #270 (f6f0044), #271 (428889c) -- all ME…
+
+[OPS-BACKUP-RESTORE-DRILL] -VerifyRestore proven live (147/147 rows); RPO/RTO table + named restore operator still open
+       unblocks 1 · S · bimpossible+workspace · VERIFIED 2026-08-17 · 01_BuildLog/2026-08-05__product-risk-assessment.md finding W4/W5 (or…
 
 [OPS-RESIDENCY-DOC] Data residency/retention policy PUBLISHED -- /data-policy page live, bs-5 closed
        unblocks 1 · S · bimpossible · CLAIMED 2026-08-04 · BIMpossible_ProgramPlan_2026-05-25.md, Commercial Launch Prerequisit…
@@ -106,14 +106,8 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-17 @ `a3ae3d9` PR#389 · `addi
 [AUDIT-2026-08-08-REMEDIATION] 2026-08-08 incremental audit: 25 findings resolved, CI green, report + resolution record filed
        unblocks 0 · M · bimpossible+workspace · VERIFIED 2026-08-08 · BIMpossible #324 (3116d10, merged 2026-08-08) -- H-1 slack require_i…
 
-[CKA-PILLAR1-HELP-CORPUS] Client Knowledge Assistant Pillar 1: BM25 help ranker + how-to corpus, waves 1-4 shipped
-       unblocks 0 · M · bimpossible+workspace · VERIFIED 2026-08-13 · BIMpossible #320 (f8791ec) -- ports the docindex BM25 ranker into ba…
-
 [WARM-ORIGIN-DOORGAP] Curtain-panel/unhosted doors have no origin: label them 'no location (curtain panel)' instead of deriving one
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-17 · 01_BuildLog/2026-08-04__doors-join-increment1_RESULTS.md, 'Follow-up…
-
-[WIZARD-NEWPROJECT-SETUP] New-Project-Setup wizard hardened -- keep-alive-safe provision (#387) + approved fixes wave (#388: combobox, address/client, dup-number advisory, schedule/value/timezone, Option A session-cached consent)
-       unblocks 0 · M · bimpossible · VERIFIED 2026-08-17 · BIMpossible #387 (squash b12ef36, merged 2026-08-17) -- fix(wizard):…
 
 [R5-AECDM-PUSHDOWN] R5 AECDM query-pushdown lane MERGED -- flag-gated, read-only (PR #363)
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-17 · BIMpossible #363 MERGED (d56bd14, 2026-08-16T19:47:59Z, branch feat/…
@@ -297,6 +291,12 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-17 @ `a3ae3d9` PR#389 · `addi
 [SEC-GROUPS-VIEWS-HUB-ISOLATION] groups.py + views.py routes check only the global project allowlist, never per-firm hub isolation
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-17 · Source: parallel session's memory record named-deliverable-personal-…
 
+[CKA-PILLAR1-HELP-CORPUS] Client Knowledge Assistant Pillar 1: BM25 help ranker + how-to corpus, waves 1-4 shipped
+       unblocks 0 · M · bimpossible+workspace · VERIFIED 2026-08-17 · BIMpossible #320 (f8791ec) -- ports the docindex BM25 ranker into ba…
+
+[WIZARD-NEWPROJECT-SETUP] New-Project-Setup wizard hardened -- keep-alive-safe provision (#387) + approved fixes wave (#388: combobox, address/client, dup-number advisory, schedule/value/timezone, Option A session-cached consent)
+       unblocks 0 · M · bimpossible · VERIFIED 2026-08-17 · BIMpossible #387 (squash b12ef36, merged 2026-08-17) -- fix(wizard):…
+
 [ADDINS-TDD-CENSUS] Measure Add-Ins logic in the /tdd-excluded Revit-API-bound glue zone vs extracted tested cores
        unblocks 0 · M · addins · VERIFIED 2026-08-08 · Anti-slop coverage plan sec.3: /tdd explicitly excludes Revit-API-bo…
 
@@ -305,3 +305,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-17 @ `a3ae3d9` PR#389 · `addi
 
 [SLOP-AUDIT-SKILL] Repo-agnostic on-demand slop-audit skill: silent-catch census, counter-integrity, tested-but-dead
        unblocks 0 · M · claude-profile+workspace · VERIFIED 2026-08-08 · Anti-slop coverage plan sec.2: PC-Monitor, Finance-Dashboard, Presea…
+
+[SEC-APSISO-TESTS-ENROLLMENT-EXPLICIT] Make /aps + /data hub-isolation test suites enrollment-explicit (no flag-lane dependence)
+       unblocks 0 · M · bimpossible · VERIFIED 2026-08-17 · BIMpossible #390 (e9a424e, merged 2026-08-17) -- enrollment-explicit…
