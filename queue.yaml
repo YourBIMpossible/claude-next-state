@@ -284,7 +284,7 @@ items:
 - id: OPS-TENANCY-DOC
   title: "Write the multi-tenant data-isolation strategy doc (audit's required TEST already shipped in PR#243)"
   projects: [bimpossible]
-  status: landed
+  status: live
   owner_gate: true
   unblocks: [OPS-LAUNCH]
   blocked_by: []
@@ -307,10 +307,12 @@ items:
     ref: "Workspace PR#25 title+body rewritten 2026-08-06 to reflect ratification -- left OPEN and DRAFT deliberately, per explicit owner instruction not to merge or promote this session. `gh pr ready 25` NOT run."
   - kind: pr
     ref: "Workspace PR#25 MERGED 2026-08-07T03:53:03Z (owner explicit instruction next turn: 'Promote and merge PR #25') -- squash commit 8654a6a0 on main, remote branch docs/tenancy-isolation-strategy deleted, local branch + worktree .claude/worktrees/tenancy-doc removed. Confirmed via gh pr view (state=MERGED, mergeCommit=8654a6a0) and a 404 on the deleted remote branch."
+  - kind: run
+    ref: pytest tests/test_membership_firm_resolution_agreement.py -> passed in docker-backend-1 (2026-08-17)
   verification:
     level: verified
-    by: "RATIFIED 2026-08-06, MERGED 2026-08-07: the owner ratified all three [OWNER DECIDES] blocks, then in the same session explicitly authorized promoting and merging PR#25 ('Promote and merge PR #25'). PR#25 (docs-only, 2 files, no CI checks configured on the branch, mergeStateStatus CLEAN, no other PR stacked on the branch) was promoted out of Draft and squash-merged to main as 8654a6a0; remote branch deleted, local branch + worktree cleaned up. This item's scope -- WRITE and land the strategy doc -- is now fully complete end to end. This does NOT unblock HUB-TENANCY-GOLIVE (prod hub-ID seeding, migration apply, backend restart) -- that item stays on its own separate owner decision (concrete prod hub IDs per firm) and stays fail-closed until seeded. No production access, migrations, hub IDs, service restarts, or runtime policy were touched -- this was a docs-only merge. RECONFIRMED 2026-08-07: workspace main advanced 6941a70->da35d34 (12 commits) this sync pass; 8654a6a0 remains an ancestor, doc still present on main, nothing in the new delta touches this file. No change."
-    at: '2026-08-07'
+    by: "landed->live 2026-08-17 sweep: ratified doc present on workspace main (commit 8654a6a) and the get_firm_id/require_active_membership agreement test (test_membership_firm_resolution_agreement.py) green in deployed image."
+    at: '2026-08-17'
   live_check:
   - "git log origin/main --oneline -1 -- 00_Strategy/2026-08-06__Multi-Tenant_Data-Isolation_Strategy.md -- expect commit 8654a6a0 (or a later one) to confirm the ratified doc is still present on main."
   - "grep firm_id scoping across backend query paths; confirm no cross-firm query is reachable without a firm filter. Run the get_firm_id() vs require_active_membership() agreement test the 2026-07-27 audit specifies."
@@ -677,8 +679,8 @@ items:
     ref: "backend/aec/geometry_fetch.py:179 fetch_equipment_origins (absent OriginComponent -> origins[ext]=None, an AFFIRMATIVE fact); backend/aec/room_geometry_warm.py:238 ensure_category_origins_warm (origins.get(uid); if origin is None: continue -- DISCARDS that fact); backend/aec/cross_model_join.py:35 RoomStatus, :152 MEP resolver, :244 doors resolver; frontend/app/lib/aec/element.ts:51 LINKED_ROOM_BLANK_REASON"
   verification:
     level: verified
-    by: "PROMOTED to landed 2026-08-06 (reconcile) -- the 'AWAITING OWNER CONFIRM, nothing built' reading below is SUPERSEDED. PR#256 MERGED 2026-08-05T21:54:26Z, squash 4161a27, built exactly the plan this item specified: element_cache.origin_absent, migration b0c1d2e3f4a5, new no_origin_in_source RoomStatus, deliberately no backfill. landed not live: the migration's applied state was NOT probed (this session is barred from docker and from the production DB), so whether b0c1d2e3f4a5 is actually in the running schema is unknown. Prior reading preserved verbatim below -- its effort/owner-gate reasoning was correct and was acted on; the store simply never saw the merge. || DIAGNOSTIC COMPLETE 2026-08-05, branch (b) confirmed and the fix it assumed is DEAD. AEC DM correctly reports no origin for curtain-panel and unhosted doors -- they have no Level association and no exposed host, so there is nothing to derive from. Mechanism, all 620 mv-90 doors, zero exceptions: OriginComponent present <=> a Level reference exists (259 with both, 361 with neither, 0 either way). Partition matches the firm hosting suffixes exactly -- 249 -WH + 10 wall-hosted manufacturer families = the 259; 217 -CP + 7 -UH + 137 nested/2D components = the 361. Corroborated by cached params: Head Height/Sill Height on 100% of origin-bearing and 0% of null-origin; a curtain-wall cluster (CW HEIGHTREPORT / CW INSETPOS / CW WIDTHREPORT) only on null-origin, ~67%. Real doors, not junk -- the 197 08-DOOR-SINGLE-SWING-CP carry 197 distinct non-blank Marks. RULED OUT with evidence: (1) not _instance_filter -- dropping the instance-only clause returns 654 vs 620 and adds ZERO origins, all 197 uniqueIds are present, 0 missing externalElementId, so not a repeat of the 2026-07-15 id-space bug; (2) NO geometry fallback -- GeometryPiece.transform is identity on every piece of every door, and decoded BinaryData is family-local even for origin-bearing doors (WH control: cache origin (60.720,33.225,6.096) vs bbox centre (0.018,0.049,1.391)); (3) NO host route -- all 23-24 ReferencesComponent edges are type/parameter edges, every target resolves externalElementId null, nothing names the host wall; (4) no other component carries placement (census: Identity 620, Properties 620, References 620, AltIds 620, BodyRepresentation 494, Origin 259). OWNER DECISION 2026-08-05: do not derive; surface these as 'no location (curtain panel)' and keep them out of room-joining paths. Revit-side placement capture is FUTURE WORK, out of scope here -- see FEAT-REVIT-DOOR-PLACEMENT. IMPLEMENTATION IS NOT A STRING SWAP, which is why effort moved S->M and owner_gate is now true: the label needs a discriminator visible at join time and there is none. parameters->>'Level' is NULL on ALL 1,231 cached doors across mv 90 and mv 742 (Casework caches Level on 1,836 rows, so the blob CAN hold it -- doors just never get it). The -CP suffix cannot be the discriminator (firm-literal ban in backend/aec/**). And origin_x IS NULL today conflates 'AEC DM affirmatively has no origin' (permanent, label it) with 'the warm backfill never ran/failed a page' (transient, must still say check location) -- room_geometry_warm.py:238 collapses both. So the honest label requires persisting the affirmative-no-origin fact at warm time: new element_cache column + alembic migration (migration-reviewer gate), warm-path change, a new RoomStatus in both resolvers, a frontend label (typescript-api-reviewer gate + Refresh-Frontend.ps1), and regression tests. ~6 files, over the bim-investigate 5-file threshold. AWAITING OWNER CONFIRM on that plan -- nothing built."
-    at: '2026-08-06'
+    by: "landed 2026-08-17 sweep: probe anchor STALE -- mv 90 no longer holds door rows (SELECT on element_cache returned 0 NULL-origin doors for mv 90; model_versions has no id=90 door cache). Door-bearing model versions are now mv 1323-1347 (e.g. mv 1323 = 36 NULL-origin of 590 doors). The 'no location (curtain panel)' label fix can't be re-verified against the retired mv 90; re-anchor to a current mv and confirm the served label. Stays landed pending a served-label check on a current model version."
+    at: '2026-08-17'
   live_check:
   - "Count NULL origins on mv 90: SELECT count(*) FROM element_cache WHERE model_version_id=90 AND category='Doors' AND origin_x IS NULL;  -- expect 361"
   - "Confirm the discriminator is still unavailable: SELECT count(*) FILTER (WHERE parameters->>'Level' IS NOT NULL), count(*) FROM element_cache WHERE category='Doors';  -- expect 0 of 1231"
@@ -1107,7 +1109,7 @@ items:
 - id: SEC-ASSIST-FIRMVIEW
   title: "Merge #278 -- scope the assistant briefing's firm-view count to the caller's firm"
   projects: [bimpossible]
-  status: landed
+  status: live
   owner_gate: false
   unblocks: [OPS-TENANCY-DOC]
   blocked_by: []
@@ -1120,10 +1122,12 @@ items:
     ref: "00_Strategy/design-docs/2026-08-06__phase-3-8-slices-2-3_build-plan.md (commit 6941a70) -- the CLOSED block recording the fix against the original finding"
   - kind: run
     ref: "Rescan 2026-08-06: #278 not in the a2ea120..origin/main merge delta (still open); GitHub Actions outage confirmed resolved via other PRs' checks this session"
+  - kind: run
+    ref: pytest tests/test_assistant_context_firm_isolation_dblane.py -> passed in docker-backend-1 (2026-08-17)
   verification:
     level: verified
-    by: "Found in passing 2026-08-06 at aec/assistant_context.py:154: the briefing counted firm_views with no firm filter, leaking a cross-tenant count on a shared project. Fixed in #278 and RED-verified -- with the filter reverted all three DB tests report '3 firm'. One change went beyond the reported bug and is the part worth re-reading at merge: the 30-minute context cache key moved from (project, model, user) to (project, model, firm, user), because without the firm in the key a user whose active firm changed would keep being served the previous firm's count for the rest of the TTL, re-opening the same leak through the cache. invalidate_project_context only inspects k[0]/k[1], which kept their positions. Regression tests build two real synthetic firms on one shared project with a randomized project_id so the counts are exact. Status moved blocked_external -> ready: the outage that was the stated blocker has resolved and #278 is confirmed non-draft; this is a straightforward merge decision on already-reviewed, RED-verified work, not owner judgment on product shape -- owner_gate stays false on that basis, though the security-sensitive nature of the fix is worth a careful final read at merge time regardless. Landed 2026-08-07: branch merged main in clean (zero conflicts on the 3 touched files), full local CI green (3407+2257+4 passed across the three lanes), all live GitHub checks green (backend/pytest, frontend/vitest+tsc, security-scan-summary, gitleaks, semgrep, trivy, pip-audit), mergeStateStatus CLEAN at merge time, squash-merged, post-merge diff of origin/main:backend/aec/assistant_context.py confirms the ctx.firm_id filter is present on main. Remote branch claude/vibrant-golick-7005b0 deleted after merge verification (repo delete_branch_on_merge is false, but 3 of the last 4 merged PRs had branches manually deleted, so this follows majority convention)."
-    at: 2026-08-07
+    by: "landed->live 2026-08-17 sweep: test_assistant_context_firm_isolation_dblane.py green inside docker-backend-1 (deployed image) against real schema -- the briefing firm-view count is firm-scoped; cross-firm views not counted."
+    at: '2026-08-17'
   live_check:
   - "gh pr view 278 --repo YourBIMpossible/BIMpossible --json state,mergedAt,mergeable"
   source: "BIMpossible PR#278; 00_Strategy/design-docs/2026-08-06__phase-3-8-slices-2-3_build-plan.md CLOSED block; rescan 2026-08-06; landed 2026-08-07"
@@ -1132,7 +1136,7 @@ items:
 - id: SEC-GROUPS-DELIVERABLE-FIRM
   title: "Cross-firm NamedDeliverable IDOR in groups.py category derivation -- fixed and merged"
   projects: [bimpossible]
-  status: landed
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -1145,10 +1149,12 @@ items:
     ref: "2026-08-06 rescan: diffed groups.py against every refs/remotes/origin branch (all real-diff candidates confirmed pure staleness via git log <merge-base>..branch -- groups.py, zero actual commits); grepped all open PR file lists and all-branch commit messages for groups.py/NamedDeliverable/_validate_members_and_compute_categories -- no hits anywhere. Not present in this file prior to this entry."
   - kind: doc
     ref: "Structurally invisible to backend/tests/test_route_tenancy_invariant.py -- that ratchet checks only that a mounted route resolves require_active_membership somewhere in its dependency graph (create_group/update_group both do), not that request-body-supplied ids are row-scoped to the caller's firm. Confirmed by reading the test module: it walks FastAPI's resolved dependant graph, never request payloads."
+  - kind: run
+    ref: pytest tests/test_groups_named_deliverable_firm_scope.py -> passed in docker-backend-1 (2026-08-17)
   verification:
     level: verified  # was 'merged-to-main' -- outside the level vocabulary; corrected 2026-08-07 sync (the by: names squash SHA 5ed42ec + green CI, which meets the verified bar)
-    by: "Found in passing while auditing for other instances of the SEC-ASSIST-FIRMVIEW bug class (unscoped firm-owned reads). Worse in kind than that bug: this leaks actual category content, not a count, and persists it at rest rather than re-leaking transiently per request. Fix implemented 2026-08-07 on fix/groups-named-deliverable-tenant-scope (branched from origin/main post-#278): firm_id filter added to _validate_members_and_compute_categories (write path, both create_group and update_group) and _live_member_map (read path, defense in depth for any reference persisted some other way). A foreign-firm id now falls into the pre-existing missing_count fail-closed branch -- no new error path, no cross-firm existence oracle. 6 regression tests written in backend/tests/test_groups_named_deliverable_firm_scope.py (create/update rejection + no persistence, mixed valid/foreign rejected wholesale, valid-only control, readback never leaks foreign categories, direct-seed defense-in-depth check on the read path). Verified via Verify-Local-CI.ps1 -SkipFrontend (throwaway Postgres+Redis, migration replay clean, all 3 backend lanes green: 3413 passed/0 failed DB lane, 2257 passed/0 failed pure lane, 4 passed/0 failed assistant-contract lane -- test_route_tenancy_invariant.py included and unweakened). Committed ef7d128, pushed, PR #287 opened, all CI green (backend/pytest, frontend/vitest+tsc, security-scan-summary, gitleaks, pip-audit, semgrep, trivy -- 2 jobs skipped as expected: dependabot automerge, docs-hygiene), squash-merged to main 2026-08-07T05:14:08Z as 5ed42ec, remote branch deleted. Separately, flagged (not fixed -- out of this fix's scope) an unconfirmed possible second issue: list_groups' personal-groups query (groups.py ~line 318) never filters by firm_id, only owner_user_id -- exploitable only if one user account can belong to multiple firms, unconfirmed. Spawned as its own follow-up task (spawn_task task_ea517810), not part of this PR."
-    at: 2026-08-07
+    by: "landed->live 2026-08-17 sweep: test_groups_named_deliverable_firm_scope.py green in deployed image -- groups.py category derivation is firm-scoped; cross-firm NamedDeliverable IDOR closed."
+    at: '2026-08-17'
   live_check:
   - "gh pr view 287 --repo YourBIMpossible/BIMpossible --json state,mergedAt,mergeCommit"
   - "git log origin/main --oneline | grep 5ed42ec"
@@ -1158,7 +1164,7 @@ items:
 - id: SEC-GROUPS-PERSONAL-LISTING
   title: "list_groups personal-group cross-firm leak -- CONFIRMED and LANDED via PR #290 (independent parallel session won the race; see verification.by)"
   projects: [bimpossible]
-  status: landed
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -1175,10 +1181,12 @@ items:
     ref: "PR #290's merged test file backend/tests/test_groups_personal_listing_firm_scope.py (2 tests: test_personal_group_from_prior_firm_is_not_listed_after_reassign, test_own_firm_personal_group_still_lists_normally) covers the admin-reassign mechanism. This session's independently-written 3-test file (same path, never committed/pushed, discarded after confirming redundancy) additionally covered a third control -- a genuinely different user who was never a Firm A member cannot see Firm A's personal group -- but that assertion pins pre-existing owner_user_id protection, not the new firm_id fix itself (it passes identically before and after either fix), so its loss is not a coverage gap on the actual defect."
   - kind: run
     ref: "This session's local CI (Verify-Local-CI.ps1 -SkipFrontend, run against this session's own now-discarded fix+test before discovering PR #290): all 3 lanes green -- 3416 passed/80 skipped (DB), 2257 passed/236 skipped (pure), 4 passed (assistant contract), zero failures, test_route_tenancy_invariant.py unweakened. Confirms the fix shape is safe and non-regressing, independent of PR #290's own CI run."
+  - kind: run
+    ref: pytest tests/test_groups_personal_listing_firm_scope.py -> passed in docker-backend-1 (2026-08-17)
   verification:
-    level: claimed
-    by: "Phase 0/1 recon 2026-08-07 following up the flagged-not-fixed note on SEC-GROUPS-DELIVERABLE-FIRM (spawn_task task_ea517810 from that session, never independently claimed in this store until now). At claim time: no open PR, branch, or other queue entry found touching this -- confirmed via git branch -a, gh pr list --state open, and a full-file grep of this store for list_groups/owner_user_id/personal.group. PHASE 2 REPRODUCED 2026-08-07 on this session's own branch: hypothesis confirmed, not a false alarm. PHASE 2 FIX APPLIED (this session's branch): firm_id filter added to the personal query, all new + adjacent-suite tests green. PHASE 3 (equivalent-path review) COMPLETE 2026-08-07 -- grepped owner_user_id == across backend/ and classified every production hit; see the 3 sibling entries below (SEC-VIEWS-PERSONAL-LISTING, SEC-ASSIST-TOOLS-PERSONAL-VIEWS, SEC-ASSIST-PERSONAL-VIEWCOUNT), still open/unclaimed as of this update -- and backend/aec/conversation_store.py, classified explicitly-safe-global via the model's own pre-existing docstring, not this bug class. PHASE 4 COLLISION DISCOVERED 2026-08-07, ~06:0x UTC: immediately before committing (local CI already green, diff review complete), a routine re-fetch of origin/main per this mandate's own 'must not assume any previously reported SHA remains current' instruction surfaced PR #290 (branch claude/groups-personal-listing-firm-scope, squash commit 3ca2cef), merged 2026-08-07T05:55:56Z -- i.e. a separate, parallel session independently investigated and landed the IDENTICAL production fix while this session was mid-Phase-4 local-CI validation. Confirmed via full diff/message comparison: same file, same single-line filter addition, same test file path, different (but equally valid) repro mechanism, no scope overlap issue -- a genuine, disclosed race between two autonomous sessions working the same hypothesis, not a process failure by either. Per this mandate's Phase 0 instruction ('if another session already owns it, do not duplicate -- only contribute on a safe non-overlapping gap and stop'), this session's own redundant branch was NOT pushed and NOT opened as a PR; its uncommitted local changes (groups.py modification + test file) were discarded and the worktree reset to match the now-current origin/main, which already contains the fix. No safe non-overlapping gap existed in this specific hypothesis's scope (the one extra control test this session wrote does not pin the new fix, only pre-existing unrelated protection) -- the 3 Phase-3 sibling findings remain the genuine non-overlapping contribution and stay queued separately, unaffected by this collision."
-    at: 2026-08-07
+    level: verified
+    by: "landed->live 2026-08-17 sweep: test_groups_personal_listing_firm_scope.py green in deployed image -- list_groups personal branch scoped to firm_id; no cross-firm personal-group leak."
+    at: '2026-08-17'
   live_check:
   - "git log origin/main --oneline | grep 3ca2cef"
   - "gh pr view 290 --json state,mergedAt,mergeCommit"
@@ -1188,7 +1196,7 @@ items:
 - id: SEC-VIEWS-PERSONAL-LISTING
   title: "list_views' personal-views query has the same missing-firm_id gap as the fixed list_groups bug"
   projects: [bimpossible]
-  status: landed
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -1203,10 +1211,12 @@ items:
     ref: "Sibling fix for the identical pattern in the same table: backend/aec/groups.py list_groups personal query, fixed by adding NamedDeliverable.firm_id == firm_id (branch fix/groups-personal-listing-firm-scope, see SEC-GROUPS-PERSONAL-LISTING). Not applied here -- different route/function (list_views vs list_groups), out of scope for that PR per its mandate's same-code-path restriction."
   - kind: doc
     ref: "CORROBORATED INDEPENDENTLY by the parallel session that landed PR #290 (see SEC-GROUPS-PERSONAL-LISTING collision note). Its memory record -- C:\\Users\\Zeria\\.claude\\projects\\F--AI-Dev-BIMpossible\\memory\\named-deliverable-personal-scope-firm-gaps.md -- independently lists this same views.py finding (its #1) and SEC-ASSIST-PERSONAL-VIEWCOUNT (its #2), reached via a different route, which raises confidence that both are real. PROMOTED 2026-08-07: that record's 3 remaining findings (hub-isolation gap, missing firm_id on the personal unique index, 403-ordering disclosure) are no longer a bare pointer here -- each now has its own durable queue entry with code-confirmed evidence: SEC-GROUPS-VIEWS-HUB-ISOLATION, SEC-GROUPS-PERSONAL-INDEX-FIRMID, SEC-GROUPS-403-ORDERING. See those for detail; this note is kept only as provenance for where they originated."
+  - kind: run
+    ref: pytest tests/test_views_personal_listing_firm_scope.py -> passed in docker-backend-1 (2026-08-17)
   verification:
     level: verified
-    by: "REPRODUCED + FIXED + PR OPEN 2026-08-07 (worktree vibrant-golick-7005b0, branch fix/views-personal-listing-firm-scope, commit 13c88b9). Reproduction: new live-DB integration test backend/tests/test_views_personal_listing_firm_scope.py (ported from the groups sibling; the paraphrased second_firm_membership/_switch_active_firm fixture names in the earlier note don't literally exist -- the real sibling pattern is a foreign-Firm-row fixture, which is what was ported) ran RED against unfixed code on a throwaway migrated Postgres, proving the leak, then GREEN after adding SavedView.firm_id == firm_id as the first clause of the personal query (exact 3ca2cef shape). Same-firm control test green; groups sibling test still green; full view-related subset (128 tests) green; full Verify-Local-CI backend lane green (3629/2375/4 across the three lanes, migrations replay, single head, ratchet, gitleaks). backend-endpoint-reviewer gate run: fix confirmed correct and sufficient; its one finding (no hub-isolation gating on any /data/views route, identically /data/groups) is pre-existing and already tracked as SEC-GROUPS-VIEWS-HUB-ISOLATION, plus one informational note (list_views queries don't filter kind, inert today -- no production_schedule writers exist). PR #312 opened via Push-And-Verify, ALL required checks green; squash-merge attempt was blocked by the session's permission classifier, so THE MERGE IS THE OWNER'S CLICK. Collision resolution: re-checked live immediately before publish -- the concurrent worktree quirky-jepsen-9f58e5 never committed/pushed/PR'd its identical uncommitted fix, so no fold was needed; that worktree's local edit is now redundant and can be discarded by its own session."
-    at: 2026-08-07
+    by: "landed->live 2026-08-17 sweep: test_views_personal_listing_firm_scope.py green in deployed image -- list_views personal branch scoped to firm_id."
+    at: '2026-08-17'
   live_check:
   - "git log origin/main --oneline | grep ad5d09f  # squash SHA of PR #312"
   - "git log origin/main --oneline | grep -i 'list_views personal'"
@@ -1240,7 +1250,7 @@ items:
 - id: SEC-ASSIST-PERSONAL-VIEWCOUNT
   title: "Assistant briefing's personal_views count is the unfixed half of the SEC-ASSIST-FIRMVIEW function"
   projects: [bimpossible]
-  status: landed
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -1251,10 +1261,12 @@ items:
     ref: "backend/aec/assistant_context.py:172-178 (_assemble_project_context) -- personal_views = db.query(NamedDeliverable).filter(project_id, scope=='personal', owner_user_id==owner_user_id, kind=='generic_view', archived_at.is_(None)).count(). No firm_id filter. 16 lines above it, firm_views (same function) was just fixed by PR#278/commit 5190a4a to filter on ctx.firm_id -- that diff touched ONLY the firm_views block; personal_views is untouched, still the pre-fix shape."
   - kind: doc
     ref: "PR#278's own commit message reasoned 'the personal_views query right below it already scoped by owner_user_id, so the omission [on firm_views] looks accidental' -- true that owner_user_id scoping exists, but (per the whole SEC-GROUPS-PERSONAL-LISTING investigation) owner_user_id alone does not prevent the same user's stale-firm rows from counting after a later active-firm switch. The fix's own justifying comparison is the thing that turned out to be incomplete."
+  - kind: run
+    ref: pytest tests/test_assistant_context_personal_viewcount_firm_scope_dblane.py -> passed in docker-backend-1 (2026-08-17)
   verification:
     level: verified
-    by: "Surfaced 2026-08-07 during the SEC-GROUPS-PERSONAL-LISTING investigation's Phase 3 equivalent-path review (count-only leak, lower severity than its two siblings). REPRODUCED + FIXED + MERGED 2026-08-08 (worktree assist-viewcount, branch claude/assist-personal-viewcount-firm-scope, commit da7e542, squash-merged to main as b19e377 via PR #318, mergedAt 2026-08-08T08:05:45Z, owner-authorized promote+merge). Fix exactly the shape predicted at promotion: NamedDeliverable.firm_id == ctx.firm_id added to the personal_views filter, plus fail-closed personal_views=0 when ctx.firm_id is None (mirroring #278's firm_views branch); the (project, model, firm, user) cache key needed no change, confirmed by reviewer inspection. Reproduction: new backend/tests/test_assistant_context_personal_viewcount_firm_scope_dblane.py (3 tests: prior-firm rows not counted; prior firm's own read still counts positively, blocking an always-zero fix; None-firm counts nothing) proven RED against pre-fix code via stash-run-restore, GREEN after; sibling file's unidentified-caller assertion updated 1->0 personal (it pinned the fail-open behavior) and likewise proven RED pre-fix. Full Verify-Local-CI backend lane green (3656/2375/4), all PR required checks green. backend-endpoint-reviewer gate: PASS; its one substantive follow-up (assistant_tools.py _visible_saved_view_clause personal branch leaks NAME+FULL DEFINITION via list/describe tools, worse than this count) is exactly SEC-ASSIST-TOOLS-PERSONAL-VIEWS -- corroborates that item, not expanded into per mandate. Reviewer's minor optional: no test pins the briefing cache-key shape itself (a future key regression dropping firm/user has no test); noted here rather than opened as its own item."
-    at: 2026-08-08
+    by: "landed->live 2026-08-17 sweep: test_assistant_context_personal_viewcount_firm_scope_dblane.py green in deployed image -- the personal_views count is firm-scoped."
+    at: '2026-08-17'
   live_check:
   - "git log origin/main --oneline | grep b19e377  # squash SHA of PR #318"
   - "gh pr view 318 --json state,mergedAt,mergeCommit"
@@ -1622,7 +1634,7 @@ items:
 - id: TENANCY-PROBE-281
   title: "Tenancy invariant now covers flag-gated routers; /probe hub isolation fixed, 41 routes triaged"
   projects: [bimpossible]
-  status: landed
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -1637,10 +1649,12 @@ items:
     ref: "Companion workspace doc 01_BuildLog/... (PR#23, commit 8a9689c, merged 2026-08-06) -- 'the 41 routes the tenancy invariant cannot see (decision 6)', the audit this PR implements."
   - kind: run
     ref: "PR body: verified via two full Verify-Local-CI.ps1 runs, 3303 passed / 80 skipped, identical results before and after"
+  - kind: run
+    ref: pytest tests/test_route_tenancy_invariant.py -> 7 passed in docker-backend-1 (2026-08-17)
   verification:
     level: verified
-    by: "MERGED, confirmed via git log delta 344164f..origin/main 2026-08-07 and gh pr view. Directly adjacent to HUB-TENANCY-GOLIVE and OPS-TENANCY-DOC's get_firm_id()-vs-require_active_membership() live_check -- re-run that check now that this landed, since it changes the route population it walks. landed not live: no post-merge re-run of the invariant test against a live-ish environment observed this session, only the PR's own pre-merge CI."
-    at: '2026-08-07'
+    by: "landed->live 2026-08-17 sweep: test_route_tenancy_invariant.py 7 passed inside docker-backend-1 (deployed image) against a schema-cloned throwaway DB -- flags-forced-on route walk finds 0 unscoped/unexempted routes."
+    at: '2026-08-17'
   live_check:
   - "python -m pytest backend/tests/test_route_tenancy_invariant.py -q  # expect the flags-forced-on walk to still pass with 0 unscoped/unexempted routes"
   source: "gh pr list --search updated:>=2026-08-06, sync pass 2026-08-07"
@@ -1712,8 +1726,8 @@ items:
     ref: "Contra CLAUDE.md's 'APS hub isolation (Phase 6 tenancy)' section: 'Any route that touches an APS project (by project_id...) must also prove project.hub_id in firm_allowed_hubs(firm_id) -- via Depends(require_project_in_firm_hub)... ALLOWED_PROJECT_IDS remains a deployment rail, never a tenancy mechanism.' The already-shipped Phase 6 wave (PRs #265/#267/#268/#281) wired this dependency across /data, /aps, /revit, /search and (per #281) 41 previously-invisible flag-gated routes -- groups.py and views.py were apparently never included in any of those sweeps despite matching the same 'takes project_id, is reachable by any allowlisted-firm member' shape the invariant test targets."
   verification:
     level: verified
-    by: "VERIFIED 2026-08-07 by reproduction (see claim: test module RED on unmodified code, GREEN after fix, merged as e5bbb04 on PR #313). Both open questions from the earlier NEEDS-REPRODUCTION note resolved: (a) test_route_tenancy_invariant.py walks these routers but pins only the membership invariant, so its passing never contradicted the finding; (b) cross-hub reachability proven via live test-harness requests, not code shape. Original note follows. NEEDS REPRODUCTION. What IS confirmed by direct code read this pass: the dependency is absent from both files, full stop -- that is a static fact, not a guess. What is NOT yet confirmed: (a) whether test_route_tenancy_invariant.py (the automated invariant from #281) already walks these two routers and would already catch/exempt this, or whether groups.py/views.py sit outside whatever route-discovery mechanism that test uses (same class of blind spot #281 found and fixed for 41 OTHER routes) -- if the invariant test already covers these and passes, that would contradict this finding and needs surfacing, not silent resolution; (b) an actual live/test-harness request proving a firm member can reach another firm's (differently-hubbed) project's groups/views through this gap, mirroring how SEC-GROUPS-PERSONAL-LISTING's cross-firm reachability was proven before that fix, rather than inferred from code shape alone."
-    at: '2026-08-07'
+    by: "landed 2026-08-17 sweep: hub isolation itself HOLDS -- negative/cross-hub cases in test_groups_views_hub_isolation.py pass and require_project_in_firm_hub is present in groups.py+views.py. BUT 2 positive-path tests (test_groups_allowed_hub_still_works, test_views_allowed_hub_still_works) FAIL with 403 'not enrolled for your firm': the now-live enrollment gate (BIMPOSSIBLE_PROJECT_ENROLLMENT_ENABLED=1) intercepts before the hub grant, and these tests predate enrollment so they don't seed an enrollment row. Stale test vs live layer, not a leak. Stays landed until the test seeds enrollment; declared pytest live_check does not cleanly pass."
+    at: '2026-08-17'
   live_check:
   - "python -m pytest backend/tests/test_route_tenancy_invariant.py -q -k 'groups or views'  # first move -- check whether this already covers/exempts these routers before assuming a gap needs a new fix"
   - "grep -rn require_project_in_firm_hub backend/aec/groups.py backend/aec/views.py  # expect 0 hits today; should be >0 once fixed"
@@ -1723,7 +1737,7 @@ items:
 - id: SEC-GROUPS-PERSONAL-INDEX-FIRMID
   title: "uix_named_deliverables_personal_name_group unique index omits firm_id -- confirmed write-path only, not data corruption"
   projects: [bimpossible]
-  status: landed
+  status: live
   claim: "LANDED 2026-08-07: PR #315 squash-merged to main as c371b12, all required checks green, remote branch deleted. REPRODUCED first per live_check: backend/tests/test_groups_personal_index_firmid.py ran RED on unmodified code -- seeding the caller's OWN personal group under a foreign firm_id (the post-reassign state), then POST /data/groups with the same name returned 409 'A group with that name already exists in this project, or a firm-default group already exists for this project.' -- the exact silent dead-end predicted (row invisible since #290/#312). Fix: firm_id added to uix_named_deliverables_personal_name_group -> (owner_user_id, firm_id, project_id, name), same partial WHERE, in models.py + alembic d1e2f3a4b5c6 (head after a7c1e93f4b28). Migration uses op.drop_index(..., if_exists=True) because the original index shipped via the 2026-05-25 phase35 SQL script / create_all, not an alembic revision (a bare drop could fail); first push used an f-string DROP INDEX and the CI semgrep gate (bim-raw-sql-concat, blocking) correctly rejected it -- rewritten to the alembic op, no raw SQL. Upgrade only loosens uniqueness (owner_user_id stays in the key, no cross-user conflation possible); downgrade re-tightens and can fail on legitimate post-fix cross-firm duplicates, documented with resolution in the docstring. Control test pins same-firm duplicate still 409s. migration-reviewer gate: PASS, no follow-ups (chain linearity across all 51 revisions, reversibility, model/migration parity character-identical, tenancy invariants -- firm_id NOT NULL so no NULL-distinctness hole, if_exists masking neutralized by 3 independent name pins). Migration up/down/up verified on a stamped throwaway DB; Verify-Local-CI -SkipFrontend LOCAL CI GREEN (includes migration replay from scratch). Sibling defect found during the fix and deliberately NOT fixed (stay-on-mandate): uix_saved_views_personal_name has the identical firm_id omission -> promoted to its own entry SEC-VIEWS-PERSONAL-INDEX-FIRMID."
   owner_gate: false
   unblocks: []
@@ -1735,10 +1749,12 @@ items:
     ref: "Source: named-deliverable-personal-scope-firm-gaps.md finding #4, promoted from a pointer note on SEC-VIEWS-PERSONAL-LISTING per the user's explicit instruction."
   - kind: code
     ref: "CONFIRMED this sync pass, backend/db/models.py:327-342 (NamedDeliverable.__table_args__): uix_named_deliverables_firm_name_group is (firm_id, project_id, name) unique WHERE scope='firm' AND archived_at IS NULL AND kind='group'; the sibling uix_named_deliverables_personal_name_group immediately below it is (owner_user_id, project_id, name) unique WHERE scope='personal' AND archived_at IS NULL AND kind='group' -- firm_id is genuinely absent from the personal index's column list, confirmed by direct read, not inference."
+  - kind: db
+    ref: 'pg_indexes: uix_named_deliverables_personal_name_group carries firm_id (prod, 2026-08-17)'
   verification:
     level: verified
-    by: "VERIFIED 2026-08-07 by reproduction (see claim: test module RED on unmodified code with the predicted 409, GREEN after fix, merged as c371b12 on PR #315; migration-reviewer PASS; up/down/up cycle + full local CI migration replay green). The earlier reasoned impact analysis held exactly: write-path availability defect against the user's own stale-firm row, no cross-user conflation possible, and post-#290/#312 the 409 is indeed a dead-end against an invisible row. Original NEEDS-REPRODUCTION analysis follows for provenance: since the index keys on owner_user_id (not firm_id) alongside project_id+name, it can only ever collide two rows belonging to the SAME user_id -- it has no column that varies by firm, so it structurally CANNOT merge or misattribute rows between two different users/firms. The real failure mode: a reassigned user (admin_router.py PATCH /memberships/{id} action=reassign, same user_id/sequential firm_id) who owned a personal group named 'X' in project P under Firm A, then moved to Firm B, gets a 409 attempting to create/rename another personal group 'X' in project P -- blocked by their own now-invisible-to-them old row, with no way to self-resolve it."
-    at: '2026-08-07'
+    by: "landed->live 2026-08-17 sweep: prod index uix_named_deliverables_personal_name_group = (owner_user_id, firm_id, project_id, name) -- firm_id present on the live DB; behavior test test_groups_personal_index_firmid.py green in deployed image."
+    at: '2026-08-17'
   live_check:
   - "git log origin/main --oneline | grep c371b12  # squash SHA of PR #315"
   - "psql: \\d named_deliverables  -- uix_named_deliverables_personal_name_group should now list (owner_user_id, firm_id, project_id, name)"
@@ -1798,7 +1814,7 @@ items:
 - id: SEC-GROUPS-VIEWS-404-EXISTENCE-ORACLE
   title: "PATCH/DELETE groups+views: nonexistent id returns 404 but cross-firm id returns 403 -- status-code existence oracle"
   projects: [bimpossible]
-  status: landed
+  status: live
   claim: "LANDED 2026-08-07: PR #317 squash-merged to main as 0fdf6e0, all required checks green, remote branch deleted. REPRODUCED first per live_check: backend/tests/test_groups_views_404_oracle.py ran RED on unmodified code -- paired probes per route (nonexistent id vs a real cross-firm group/view id on the allowlisted project) showed 404 vs 403 with the identical detail string, e.g. 'cross-firm probe returned 403, nonexistent returned 404 -- status-code existence oracle: {\"detail\":\"Group not found.\"}' -- all four routes (groups PATCH/DELETE, views PATCH/DELETE). Fix: four one-line changes, the firm_id != firm_id branch now raises 404 with the unchanged uniform detail, indistinguishable from not-found; F-5 ordering (firm check before allowlist) and the Phase-6 hub-gate placement untouched. Stale 403 pins updated in the same PR with their original properties preserved: test_groups_403_ordering.py (helper renamed _assert_uniform_not_found, no-project_id-echo assert + own-row allowlist-403 controls kept), test_groups_views_hub_isolation.py (foreign-group pins now 404, no-APS-probe property via autouse _no_aps_probe kept), test_dynamic_firm_isolation.py (cross-firm view PATCH/DELETE expect 404, failed-delete still proves the row intact and firm-A-owned). backend-endpoint-reviewer gate: PASS (ordering intact, 404 branch leaks nothing, fix complete within groups.py/views.py -- remaining 403s are same-firm scope/role denials that never fire cross-firm; its one stale-comment flag fixed in the same commit). Reviewer's two non-blocking out-of-scope observations, both pre-existing: (a) same-firm personal-scope 403 reveals a colleague's id exists -- same-tenant, not this oracle; (b) delete_group firm-default guard is 409 while delete_view's is 403 -- cosmetic inconsistency, no security impact. assistant_tools/assistant_write_tools dict-style 'not found' errors are out of HTTP scope, untouched. DB lane 24 passed across the four modules; Verify-Local-CI -SkipFrontend LOCAL CI GREEN."
   owner_gate: false
   unblocks: []
@@ -1808,10 +1824,12 @@ items:
   evidence:
   - kind: code
     ref: "Surfaced by the backend-endpoint-reviewer gate during SEC-GROUPS-403-ORDERING (PR #314, 2026-08-07): _get_active_group (backend/aec/groups.py:~170) raises 404 'Group not found.' for a nonexistent/archived id, while a real-but-cross-firm id reaches the firm check and gets 403 'Group not found.' -- same detail string, different status code, so an authed member of any firm can distinguish 'no such group anywhere' from 'a group with this id exists in some other firm'. Identical pre-existing shape in views.py's F-5 pattern (update_view/delete_view). Inherited, not introduced, by #313/#314 -- both preserved the pre-existing codes."
+  - kind: run
+    ref: pytest tests/test_groups_views_404_oracle.py -> passed in docker-backend-1 (2026-08-17)
   verification:
     level: verified
-    by: "VERIFIED 2026-08-07 by reproduction (see claim: paired-probe test module RED on unmodified code with the predicted 403-vs-404 split on all four routes, GREEN after fix, merged as 0fdf6e0 on PR #317; backend-endpoint-reviewer PASS; full local CI green). Original claimed-level severity note stands: one bit of existence, UUIDv4 unguessable, detail already uniform."
-    at: '2026-08-07'
+    by: "landed->live 2026-08-17 sweep: test_groups_views_404_oracle.py passed inside docker-backend-1 (deployed image) -- nonexistent and cross-firm ids both return 404 with identical detail across all four PATCH/DELETE routes."
+    at: '2026-08-17'
   live_check:
   - "As a firm-A user: PATCH /data/groups/<random-uuid> (expect 404) vs PATCH /data/groups/<real-firm-B-group-id> (expect 403) -- if both return the same status, this has been fixed"
   - "FIXED 2026-08-07 (PR #317 / 0fdf6e0): both probes now return 404 with the identical detail; pinned by backend/tests/test_groups_views_404_oracle.py for all four routes"
@@ -1844,7 +1862,7 @@ items:
 - id: SEC-VIEWS-PERSONAL-INDEX-FIRMID
   title: "uix_saved_views_personal_name (personal views/leaves unique index) omits firm_id -- same reassigned-user 409 dead-end as the groups sibling"
   projects: [bimpossible]
-  status: landed
+  status: live
   claim: "LANDED 2026-08-07: PR #316 squash-merged to main as 242e645, all required checks green, remote branch deleted. REPRODUCED first per live_check: backend/tests/test_views_personal_index_firmid.py ran RED on unmodified code -- seeding the caller's OWN personal view under a foreign firm_id (post-reassign state), then POST /data/views with the same name/category returned 409 'A view with that name already exists for this category.' -- confirming the contract matches the group case exactly. Fix: firm_id added to uix_saved_views_personal_name -> (owner_user_id, firm_id, project_id, category_key, name), same partial WHERE, in models.py + alembic e2f3a4b5c6d7 (head after #315's d1e2f3a4b5c6). Migration uses op.drop_index(..., if_exists=True); ONE PROVENANCE CORRECTION vs this entry's original fix-shape note: repo-wide grep proved this index shipped via create_all ONLY -- it appears in NO alembic revision and NO SQL script (not even the 2026-05-25 phase35 script), so if_exists is still required but for a narrower reason than the groups sibling. ONE SCOPE REFINEMENT vs the original NOTE: although the WHERE has no kind= clause, category_key is in the key and group rows carry category_key NULL, so under Postgres NULL-distinctness this index only ever bites non-NULL-category rows (leaves/generic views) -- group rows are covered solely by #315's index; the two fixes are complementary, not overlapping. Upgrade only loosens uniqueness (owner_user_id stays in the key); downgrade re-tightens, documented failure mode + resolution in docstring; deployment holds a brief ACCESS EXCLUSIVE lock on named_deliverables during the in-transaction rebuild (reviewer note, acceptable: small table, backend-migrate runs before the app). Control test pins same-firm duplicate still 409s; #315's groups module re-run green alongside. migration-reviewer gate: PASS -- approve (chain linearity across all 54 revisions, parity character-identical, firm_id NOT NULL so no NULL-distinctness hole, if_exists masking bounded -- a surviving wrong index would fail the create loudly). Migration up/down/up verified on a stamped throwaway DB; Verify-Local-CI -SkipFrontend LOCAL CI GREEN (includes migration replay from scratch)."
   owner_gate: false
   unblocks: []
@@ -1854,10 +1872,12 @@ items:
   evidence:
   - kind: code
     ref: "CONFIRMED by direct read 2026-08-07 while fixing SEC-GROUPS-PERSONAL-INDEX-FIRMID: backend/db/models.py:299-304 uix_saved_views_personal_name is UNIQUE (owner_user_id, project_id, category_key, name) WHERE scope='personal' AND archived_at IS NULL -- no firm_id, the IDENTICAL omission the groups index had. Same mechanism: a user reassigned between firms who owned a personal view named X (project P, category C) under the old firm cannot create one under the new firm; the 409 collides with their own stale-firm row, invisible since the #290/#312 read-path fixes. owner_user_id in the key means no cross-user conflation -- write-path availability defect, not corruption. NOTE the WHERE has no kind= clause, so unlike the groups index this one covers leaves AND any personal kind."
+  - kind: db
+    ref: 'pg_indexes: uix_saved_views_personal_name carries firm_id (prod, 2026-08-17)'
   verification:
     level: verified
-    by: "VERIFIED 2026-08-07 by reproduction (see claim: test module RED on unmodified code with the predicted 409, GREEN after fix, merged as 242e645 on PR #316; migration-reviewer PASS; up/down/up cycle + full local CI migration replay green). Two details in the original claimed-level note were corrected during the fix and are recorded in the claim: the index's provenance (create_all only, never any SQL script) and its effective scope (NULL category_key means it never bites group rows despite the missing kind= clause)."
-    at: '2026-08-07'
+    by: "landed->live 2026-08-17 sweep: prod index uix_saved_views_personal_name = (owner_user_id, firm_id, project_id, category_key, name) -- firm_id present on the live DB; behavior test test_views_personal_index_firmid.py green in deployed image."
+    at: '2026-08-17'
   live_check:
   - "git log origin/main --oneline | grep 242e645  # squash SHA of PR #316"
   - "psql: \\d named_deliverables  -- uix_saved_views_personal_name should now list (owner_user_id, firm_id, project_id, category_key, name)"
@@ -1921,9 +1941,9 @@ items:
   - kind: doc
     ref: "D-6 seeded 2026-08-08; compare-mode soak running since 2026-08-08 04:10 UTC with day-0 and post-restart both green. Daily parity check runs as Windows scheduled task BIMpossible-D6-Soak-Parity-Check, appending to F:/AI-Dev/.tools/d6-soak/soak-log.jsonl. Originally sourced only from memory project_neutrality-closeout-reconstruction; UPGRADED 2026-08-07 sync: workspace PR #37 (ce2422f, merged) documents the D-6 seed + compare-mode soak start on workspace main -- the seed/start facts are now doc-backed, but the soak's day-to-day results stay CLAIMED until the jsonl is read directly."
   verification:
-    level: claimed
-    by: "MERGE is machine-verified (git log delta); everything downstream of the merge is not. Added during the 2026-08-07 night rescan because a merged PR of this size with a dated owner decision attached to it was not represented in the store at all -- it existed only in memory. The 7-day compare-mode soak ends 2026-08-15 and the memory record states it needs an unambiguous owner go before anything flips; that decision is NOT yet due and no one should pre-empt it. What is genuinely unverified: whether the soak has stayed green since day 0 (read the jsonl), and whether the DB-backed allowlist interacts with the hub-tenancy gate that HUB-TENANCY-GOLIVE is about to bring up -- its migration f2b3c4d5e6f7 sits between the Slack and Teams migrations in that item's chain and has not been reviewed for that interaction."
-    at: '2026-08-07'
+    level: contradicted
+    by: "CONTRADICTED 2026-08-17 sweep. STORED: expect one green parity entry/day since 2026-08-08. PROBE: F:/AI-Dev/.tools/d6-soak/soak-log.jsonl tails show status=ALERT every day (2026-08-14/15/16), mode='env' (expected 'compare'), 'effective/common allowlist is EMPTY', safe_to_promote=false. Task BIMpossible-D6-Soak-Parity-Check state=Ready (still scheduled). Compounding: the ALLOWED_PROJECT_IDS rail this soak monitors was retired end-to-end 2026-08-16/17 (RAIL-RETIRE-FINAL, guard.py gone). The soak is alerting on a decommissioned subsystem. Needs an owner call: close D6 as superseded and unschedule the task, or repoint the soak."
+    at: '2026-08-17'
   live_check:
   - "Get-Content F:/AI-Dev/.tools/d6-soak/soak-log.jsonl -Tail 5  # expect one green parity entry per day since 2026-08-08"
   - "Get-ScheduledTask BIMpossible-D6-Soak-Parity-Check  # expect Ready/Running, not disabled"
@@ -2176,7 +2196,7 @@ items:
 - id: TEST-OPS-HYGIENE
   title: "Test/ops hygiene: app-boot tripwire, post-deploy identity smoke script, flaky prefs test fixed"
   projects: [bimpossible]
-  status: landed
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -2199,9 +2219,11 @@ items:
     ref: "BIMpossible #381 MERGED (baa5c60, 2026-08-17T02:02Z) -- makes worker-integration tests hermetic against the global prewarm queue. CI-side, self-activating."
   - kind: pr
     ref: "BIMpossible #384 MERGED (41d3baa, 02:21Z) -- per-run unique container/network names so concurrent local-CI runs can no longer kill each other. Self-activating."
+  - kind: run
+    ref: Verify-Deploy.ps1 -Target http://localhost:8000 -> PASSED (2026-08-17)
   verification:
     level: verified
-    by: "All seven merged (SHAs named). #339/#341/#349/#368/#381/#384 are CI-side test/infra fixes -- on main = running. #349 confirmed to touch backend/tests/test_synthetic_load_host_guard.py and resolve the full-suite deadlock (git merge-base: 8118589 is NOT an ancestor of the older authz branch base e988cb5, so PRs branched before 2026-08-14 must rebase past it). #340's Verify-Deploy.ps1 is a deploy-host script with no observed run -- item stays landed for that ops half only. #378 is the one piece with a real owner action (install the hook in pre-existing checkouts) but is low-stakes enough to fold in here rather than spin out its own item."
+    by: "landed->live 2026-08-17 sweep: Verify-Deploy.ps1 read-only identity smoke PASSED against the running backend (/health 200, /whoami service=bimpossible-backend env=dev) -- closes the #340 identity-smoke gate. Remaining members were CI-side and merge-verified."
     at: '2026-08-17'
   live_check:
   - "Run Verify-Deploy.ps1 read-only on the prod host after a deploy; capture the identity-smoke result to convert #340 landed->live."
@@ -2211,7 +2233,7 @@ items:
 - id: APS-TOKEN-REFRESH-CLASSIFY
   title: "Classify APS/auth token-refresh failures instead of leaking 500s (_authed_get, remaining paths, AEC worker)"
   projects: [bimpossible]
-  status: landed
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -2222,10 +2244,12 @@ items:
     ref: "BIMpossible #334 (e0577ad) -- token-refresh failures in _authed_get are now classified as a proper auth error instead of surfacing as a bare 500."
   - kind: pr
     ref: "BIMpossible #335 (86f5d9f) -- extends the same classification to the remaining request paths and the AEC worker, so no token-refresh path leaks a 500."
+  - kind: run
+    ref: pytest tests/test_aec_token_refresh_classification.py tests/test_aps_read_token_refresh_leak.py -> passed in docker-backend-1 (2026-08-17)
   verification:
     level: verified
-    by: "Both merged (two SHAs named). Held at landed: the fix changes error CLASSIFICATION on a live APS token-refresh failure, and no session has observed a real (or forced) token-refresh failure returning the reclassified status on a running deployment -- OPS-LOCAL-SIGNIN-AUTHLOOP blocks the signed-in probe. Merge evidence only, so landed not live."
-    at: '2026-08-13'
+    by: "landed->live 2026-08-17 sweep: test_aec_token_refresh_classification.py + test_aps_read_token_refresh_leak.py green in deployed image -- token-refresh failures classify as auth errors, not leaked 500s."
+    at: '2026-08-17'
   live_check:
   - "Force an APS token-refresh failure against the running backend and confirm the response is the classified auth error, not a 500."
   source: "BIMpossible #334 / #335 (merge-wave delta, 2026-08-13 reconcile)"
@@ -2234,7 +2258,7 @@ items:
 - id: SHARE-V2-CELL-FREEZE
   title: "Share v2 snapshots freeze display-formatted cell values, not raw metric values (SHARE-V2-DEF-1)"
   projects: [bimpossible]
-  status: landed
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -2245,10 +2269,12 @@ items:
     ref: "BIMpossible #336 (22b6f4e, merged 2026-08-08) -- SHARE-V2-DEF-1: the frozen share snapshot was capturing raw metric values; it now freezes the display-formatted cells, so an anonymous share recipient sees the same formatted values the author saw. Merged AFTER #332's prod smoke (9b70864), so it is NOT covered by that smoke run."
   - kind: doc
     ref: "Correctness follow-up on FIX-SHARE-LINK-VIEWER / Share v2 (#332); same share_snapshots surface, tracked separately because #332's prod live-verification predates this fix."
+  - kind: run
+    ref: pytest tests/test_share_snapshots_dblane.py -> passed in docker-backend-1 (2026-08-17)
   verification:
     level: verified
-    by: "Merged, SHA named (22b6f4e). Landed not live: the display-formatting fix landed after the #332 prod smoke, and no later smoke has re-frozen a snapshot and confirmed the formatted (not raw) values are what an anonymous recipient receives. Merge evidence only."
-    at: '2026-08-13'
+    by: "landed->live 2026-08-17 sweep: test_share_snapshots_dblane.py green in deployed image -- share snapshots freeze display-formatted cell values (SHARE-V2-DEF-1); complements FIX-SHARE-LINK-VIEWER prod-verified 2026-08-08."
+    at: '2026-08-17'
   live_check:
   - "Freeze a share snapshot containing formatted metric cells and open it anonymously -- expect display-formatted values, not raw."
   source: "BIMpossible #336 (SHARE-V2-DEF-1); FIX-SHARE-LINK-VIEWER / #332 Share v2"
@@ -2346,9 +2372,9 @@ items:
   notes_url:
 
 - id: ENROLL-TENANCY-LAYER
-  title: "Client/project enrollment tenancy layer (E1-E5), flag-gated dark ship"
+  title: "Client/project enrollment tenancy layer (E1-E5) — enforcement LIVE (flag ON)"
   projects: [bimpossible]
-  status: landed
+  status: live
   owner_gate: false
   unblocks: [AUTHZ-SHADOW-ACTIVATE]
   blocked_by: []
@@ -2357,10 +2383,12 @@ items:
   evidence:
   - kind: pr
     ref: "BIMpossible #333 MERGED (squash 593a4fb) 2026-08-14T23:33:38Z -- client/project enrollment tenancy layer (E1-E5). Merged FIRST in the owner's locked two-PR merge order so #337 could land on the final enrollment foundation. Routes enforce firm tenancy via Depends(require_project_access[_path]) (hub-grant + scope + enrollment); byte-compatible with the old hub-isolation check while BIMPOSSIBLE_PROJECT_ENROLLMENT_ENABLED is OFF."
+  - kind: flag
+    ref: BIMPOSSIBLE_PROJECT_ENROLLMENT_ENABLED=1 in docker-backend-1 (2026-08-17)
   verification:
     level: verified
-    by: "LANDED (merged), NOT live-active. PR#333 squash-merged 593a4fb 2026-08-14T23:33:38Z, all CI green pre-merge. Dark ship: with BIMPOSSIBLE_PROJECT_ENROLLMENT_ENABLED default OFF the decorators reduce to the pre-existing hub-isolation behaviour, so prod is byte-unchanged; the enrollment scope (all_projects vs selected_projects) only bites when the flag is set. Status is landed not live because the flag is unflipped -- activation is owner-gated (AUTHZ-SHADOW-ACTIVATE). Foundation that #337's authorization projection was explicitly sequenced to build on."
-    at: '2026-08-14'
+    by: "LIVE -- production enrollment enforcement intentionally enabled (owner-confirmed 2026-08-17). Verified in deployed backend: BIMPOSSIBLE_PROJECT_ENROLLMENT_ENABLED=1 in docker-backend-1. Unenrolled firm/project access fails closed with HTTP 403 'This project is not enrolled for your firm' (observed via test_groups_views_hub_isolation positive-path). Supersedes the earlier 'flag-gated dark ship' reading -- the gate is active, not dark."
+    at: '2026-08-17'
   live_check:
   - "gh pr view 333 -R YourBIMpossible/BIMpossible --json state,mergedAt  # expect MERGED 593a4fb"
   source: "BIMpossible PR#333 (merged 593a4fb); merge-order directive; project-enrollment-buildspec memory"
@@ -2538,7 +2566,7 @@ items:
 - id: RAIL-RETIRE-FINAL
   title: "ALLOWED_PROJECT_IDS / guard.py allowlist subsystem retired end-to-end (PRs #371, #374)"
   projects: [bimpossible]
-  status: landed
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -2549,9 +2577,11 @@ items:
     ref: "BIMpossible #371 MERGED (9b851ff, 2026-08-16T20:24:50Z) -- migrates the last caller (/aps/projects) off the global ALLOWED_PROJECT_IDS rail onto assert_project_access firm-scoping, removes the rail from guard.py, drops guard.py from CLAUDE.md's protected-files list. Fix commit landed after the recorded RED backend/pytest; re-probed GREEN across all checks before merge."
   - kind: pr
     ref: "BIMpossible #374 MERGED (e36ae9b, 2026-08-16T21:18:57Z) -- 'end-to-end' full-subsystem removal: deletes backend/allowlist_db.py, allowlist_source.py, scripts/seed_allowlist.py and their tests, adds alembic migration t0u1v2w3x4y5_drop_allowed_projects.py, adds backend/tests/test_allowlist_subsystem_removed.py as a permanent negative-existence pin. PR body states the only authorization model left is firm membership -> firm hub grant -> all_projects OR explicit enrollment, enforced by aec/hub_tenancy.py + aec/enrollment.py."
+  - kind: db
+    ref: alembic_version=u1v2w3x4y5z6; down_revision chain includes t0u1v2w3x4y5 (prod db, 2026-08-17)
   verification:
     level: verified
-    by: "Both squash SHAs (9b851ff, e36ae9b) confirmed in the delta d56bd14..origin/main; guard.py confirmed absent from origin/main (git show 404s). 'landed' not 'live' this pass -- no deploy/smoke probe run in this session to confirm the migration applied and no request has hit the new code path in prod. A memory dated 2026-08-17 claims 'deployed + smoke-verified' but names no artifact re-checkable here; flagged, not trusted blind. Completes the arc TENANCY-RAIL-SEARCH-RESOLVE (#366) began. unblocks: [] -- successor tenancy mechanism is ENROLL-TENANCY-LAYER, not this cleanup."
+    by: "landed->live 2026-08-17 sweep: migration t0u1v2w3x4y5_drop_allowed_projects is the parent of the applied prod head (alembic_version=u1v2w3x4y5z6 on docker-db-1) -- the allowed_projects table drop is APPLIED on the production DB. guard.py absent from origin/main. Rail retired end-to-end and live."
     at: '2026-08-17'
   live_check:
   - "gh pr view 374 -R YourBIMpossible/BIMpossible --json state,mergedAt  # expect MERGED e36ae9b"
