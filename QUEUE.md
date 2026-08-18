@@ -144,8 +144,8 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-17 @ `e9a424e` PR#390 · `addi
 [DASH-BIMWATCH-WIRING] Wire bimwatch pipeline output into the live dashboard (index.html/data.js have zero references)
        unblocks 0 · S · dashboard · CLAIMED 2026-08-07 · 2026-08-07 session: grepped index.html and data.js in both Dashboard…
 
-[OPS-CLOSEOUT-WANDER-20260817] Closeout wander triage: stale CLAUDE.md backend-mount note; REVIT_LINK_SYNC env=1 confirm; leaked bk-localci pairs
-       unblocks 0 · S · bimpossible · CLAIMED 2026-08-17 · observed 2026-08-17 closeout session 67df33a5
+[OPS-ROLLBACK-RETENTION-20260817] Intentional retention: rollback-20260817 image tags until deploy soak completes 2026-08-18 evening
+       unblocks 0 · S · bimpossible · CLAIMED 2026-08-17 · deploy closed live at alembic c4e7a2b91d38, 2026-08-17 ~22:00 PDT
 
 [SEC-GROUPS-VIEWS-PERSONAL-SAMEFIRM-EXISTENCE-ORACLE] PATCH/DELETE groups+views: same-firm personal-scope 403 lets a colleague infer a personal group/view id exists -- possibly by design
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-07 · Surfaced by the backend-endpoint-reviewer gate during SEC-GROUPS-VIE…
@@ -290,6 +290,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-17 @ `e9a424e` PR#390 · `addi
 
 [OPS-CF-RECORD-CONSOLIDATION] Option C session ended: both CF Access docs committed to main; Access-memory fold is the residual
        unblocks 0 · S · workspace · VERIFIED 2026-08-17 · Two untracked docs in the workspace main tree (2026-08-16): 00_Strat…
+
+[OPS-CLOSEOUT-WANDER-20260817] Closeout wander triage: stale CLAUDE.md backend-mount note; REVIT_LINK_SYNC env=1 confirm; leaked bk-localci pairs
+       unblocks 0 · S · bimpossible · CLAIMED 2026-08-17 · observed 2026-08-17 closeout session 67df33a5
 
 [SEC-GROUPS-VIEWS-404-EXISTENCE-ORACLE] PATCH/DELETE groups+views: nonexistent id returns 404 but cross-firm id returns 403 -- status-code existence oracle
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · Surfaced by the backend-endpoint-reviewer gate during SEC-GROUPS-403…

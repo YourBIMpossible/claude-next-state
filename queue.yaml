@@ -1530,7 +1530,7 @@ items:
 - id: OPS-CLOSEOUT-WANDER-20260817
   title: "Closeout wander triage: stale CLAUDE.md backend-mount note; REVIT_LINK_SYNC env=1 confirm; leaked bk-localci pairs"
   projects: [bimpossible]
-  status: ready
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -1541,9 +1541,30 @@ items:
     ref: "observed 2026-08-17 closeout session 67df33a5"
   verification:
     level: claimed
-    by: "Three untouched observations, one line each: (1) BIMpossible CLAUDE.md 'backend has NO source volume mount / baked image' paragraph is STALE -- docker/docker-compose.yml now bind-mounts ../backend:/app (and ../database, ../revit-relay ro); fix the doc, one PR. (2) BIMPOSSIBLE_REVIT_LINK_SYNC_ENABLED=1 and BIMPOSSIBLE_QA_ENABLED=1 were already set in the live backend env BEFORE tonight's run -- not changed by anyone tonight; owner should confirm intended (P7 go-live is supposed to be supervised-only). (3) Two leaked bk-localci container pairs (62144-485b5, 13092-d02bb) still running at closeout -- reap once confirmed idle."
+    by: "Three untouched observations, one line each: (1) BIMpossible CLAUDE.md 'backend has NO source volume mount / baked image' paragraph is STALE -- docker/docker-compose.yml now bind-mounts ../backend:/app (and ../database, ../revit-relay ro); fix the doc, one PR. (2) BIMPOSSIBLE_REVIT_LINK_SYNC_ENABLED=1 and BIMPOSSIBLE_QA_ENABLED=1 were already set in the live backend env BEFORE tonight's run -- not changed by anyone tonight; owner should confirm intended (P7 go-live is supposed to be supervised-only). (3) Two leaked bk-localci container pairs (62144-485b5, 13092-d02bb) still running at closeout -- reap once confirmed idle. ALL THREE CLOSED 2026-08-17 (owner-directed same night): (1) CLAUDE.md corrected and MERGED via PR #422 -- backend section now states source is bind-mounted, restart-not-rebuild for code, rebuild only for requirements/Dockerfile, migrate job re-run for migrations. (2) REVIT_LINK_SYNC=1 ruled INTENTIONAL CONFIGURATION, retained: it lives in the human-only .env as part of a coherent owner-set flag family (REVIT_LINK/SYNC/WRITE/PANE + REVIT_RELAY_URL/REVIT_MCP_* endpoints); 24h backend-log grep shows zero revit-link/sync activity, so the env flag arms the capability while the actual go-live remains the supervised P7-SYNC-GOLIVE procedure -- no unattended sync ran or runs. (3) ALL bk-localci containers reaped (2 running pairs conclusively orphaned -- owning PIDs 13092/62144 dead -- plus 4 exited(0) pairs) and their networks removed; docker ps -a shows zero rows. Bonus: the untracked relay ps1 self-resolved -- versioned on branch claude/track-relay-script-scheduled-task, open PR #421 (WIP elsewhere, owned by that session)."
     at: 2026-08-17
   live_check:
   - "CLAUDE.md deploy section matches compose reality; leaked bk-localci containers gone; owner has ruled on the REVIT_LINK_SYNC env value."
+  source: "2026-08-17 overnight closeout run (session 67df33a5)"
+  notes_url:
+
+- id: OPS-ROLLBACK-RETENTION-20260817
+  title: "Intentional retention: rollback-20260817 image tags until deploy soak completes 2026-08-18 evening"
+  projects: [bimpossible]
+  status: ready
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: commit
+    ref: "deploy closed live at alembic c4e7a2b91d38, 2026-08-17 ~22:00 PDT"
+  verification:
+    level: claimed
+    by: "Deliberate operational retention, not a leftover: docker-backend:rollback-20260817, docker-frontend:rollback-20260817, docker-backend-migrate:rollback-20260817 preserve the pre-deploy images. Soak boundary: stack healthy for 24h after the 2026-08-17 ~22:00 PDT deploy with no deploy-related backend errors. After 2026-08-18 evening, if healthy: docker image rm the three tags and close this item. If a rollback was needed instead: retag to :latest + docker compose up -d."
+    at: 2026-08-17
+  live_check:
+  - "After 2026-08-18 22:00 PDT with healthy services: the three rollback-20260817 tags are removed and absent from docker image ls."
   source: "2026-08-17 overnight closeout run (session 67df33a5)"
   notes_url:
