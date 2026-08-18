@@ -146,9 +146,11 @@ def build(state_dir: Path, generated_on: date) -> str:
     cones: dict[str, int] = {}
     all_cycles: list[tuple[str, list[str]]] = []
     all_dangling: list[tuple[str, list[str]]] = []
-    for item in items:
+    for item in store.all_items:
         size, cycles, dangling = cone_size(item["id"], unblocks)
         cones[item["id"]] = size
+        if item not in items:
+            continue  # defects are reported for active items only
         if cycles:
             all_cycles.append((item["id"], cycles))
         if dangling:
@@ -192,7 +194,10 @@ def build(state_dir: Path, generated_on: date) -> str:
 
     cutoff = generated_on - timedelta(days=LIVE_WINDOW_DAYS)
     for title, statuses in SECTIONS:
-        bucket = [i for i in items if i.get("status") in statuses]
+        # The Live section draws from BOTH tiers: `live` items migrate to the archive,
+        # but recently verified ones stay visible in the operator view for the window.
+        pool = store.all_items if title.startswith("Live") else items
+        bucket = [i for i in pool if i.get("status") in statuses]
         if title.startswith("Live"):
             bucket = [
                 i

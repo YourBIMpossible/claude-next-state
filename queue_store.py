@@ -170,9 +170,16 @@ def _index_evidence(item: dict, tier: str, pr_idx: dict, sha_idx: dict) -> None:
             texts.append(str(ev.get("url", "") or ""))
     texts.append(str((item.get("verification") or {}).get("by", "") or ""))
     entry = (item["id"], tier)
+    projects = [str(p).lower() for p in (item.get("projects") or [])]
     for text in texts:
         for m in _PR_REF.finditer(text):
-            pr_idx.setdefault(f"{m.group(1).lower()}#{m.group(2)}", []).append(entry)
+            repo = m.group(1).lower()
+            pr_idx.setdefault(f"{repo}#{m.group(2)}", []).append(entry)
+            # Bare "PR#244" refs are repo-ambiguous — index them additionally under
+            # each of the item's projects so probes by project key still hit.
+            if repo in ("pr", "prs"):
+                for proj in projects:
+                    pr_idx.setdefault(f"{proj}#{m.group(2)}", []).append(entry)
         for m in _PR_URL.finditer(text):
             pr_idx.setdefault(f"{m.group(1).lower()}#{m.group(2)}", []).append(entry)
         for m in _SHA.finditer(text.lower()):

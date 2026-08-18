@@ -98,8 +98,12 @@ def test_active_items_and_render_sections(tmp_path):
     )
     out = render_queue.build(tmp_path, date(2026, 8, 17))
     assert "[A1]" in out and "[A2]" in out and "[A3]" in out
-    assert "[Z1]" not in out  # archived items never render
+    # archived live within the 30-day window still shows in the Live section...
+    assert "[Z1]" in out and out.index("[Z1]") > out.index("Live (last 30 days)")
     assert "Blocked on you" in out and "Landed — not verified live" in out
+    # ...but an archived live OUTSIDE the window never renders
+    out_late = render_queue.build(tmp_path, date(2026, 10, 1))
+    assert "[Z1]" not in out_late
 
 
 def test_cones_stable_across_archiving(tmp_path):
@@ -234,6 +238,17 @@ def test_cli_validate_and_probes(tmp_path):
     unknown = subprocess.run([sys.executable, script, "--state-dir", str(tmp_path),
                               "--known-pr", "BIMpossible#78"], capture_output=True, text=True)
     assert unknown.returncode == 2
+
+
+def test_bare_pr_ref_indexed_under_projects(tmp_path):
+    """'PR#244' with no repo name must be findable by the item's project key."""
+    it = _item("Z1", status="live")
+    it["evidence"] = [{"kind": "pr", "ref": "PR#244 squash fa865d6"}]
+    _write_store(tmp_path, [_item("A1")], [it])
+    store = load_store(tmp_path)
+    assert ("Z1", "archive") in store.is_known_pr("bimpossible#244")
+    assert ("Z1", "archive") in store.is_known_pr("PR#244")
+    assert ("Z1", "archive") in store.is_known_commit("fa865d6")
 
 
 # --- real store sanity -------------------------------------------------------
