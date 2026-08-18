@@ -2,7 +2,7 @@
 
 # /next — work-item queue
 
-Generated 2026-08-17 (synced). Ranked by critical path (transitive `unblocks` cone), tiebreak:
+Generated 2026-08-18 (synced). Ranked by critical path (transitive `unblocks` cone), tiebreak:
 owner-gated+S effort, then effort, then risk, then id. Full algorithm:
 `~/.claude/skills/next/reference/item-model.md`.
 

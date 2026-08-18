@@ -767,6 +767,7 @@ items:
   projects:
   - bimpossible
   status: live
+  unblocks: []
   rank_inputs:
     impact: 3
     risk: 1
@@ -784,6 +785,7 @@ items:
   live_check:
   - 'git log origin/main --oneline -1 -- backend/tests/test_aps_hub_isolation.py  # expect e9a424e or later'
   - "grep -c 'monkeypatch.setenv(_ENROLL_FLAG' backend/tests/test_aps_hub_isolation.py  # >0 = enrollment-explicit suite present"
+  source: "BIMpossible PR #390 (squash e9a424e, merged 2026-08-17); backend/tests/test_aps_hub_isolation.py route-level pins; 2026-08-17 enrollment-explicit hub-isolation hardening (sibling of #389 groups/views suite)"
   archived_at: '2026-08-17'
   archived_reason: "status live — closed and verified; provenance retained for dedup"
   source_queue_version: 1
