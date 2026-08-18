@@ -1526,3 +1526,24 @@ items:
   - "docker exec docker-backend-1 alembic current shows c4e7a2b91d38 and all four services healthy after docker compose up -d --build."
   source: "2026-08-17 overnight closeout run (session 67df33a5)"
   notes_url:
+
+- id: OPS-CLOSEOUT-WANDER-20260817
+  title: "Closeout wander triage: stale CLAUDE.md backend-mount note; REVIT_LINK_SYNC env=1 confirm; leaked bk-localci pairs"
+  projects: [bimpossible]
+  status: ready
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: commit
+    ref: "observed 2026-08-17 closeout session 67df33a5"
+  verification:
+    level: claimed
+    by: "Three untouched observations, one line each: (1) BIMpossible CLAUDE.md 'backend has NO source volume mount / baked image' paragraph is STALE -- docker/docker-compose.yml now bind-mounts ../backend:/app (and ../database, ../revit-relay ro); fix the doc, one PR. (2) BIMPOSSIBLE_REVIT_LINK_SYNC_ENABLED=1 and BIMPOSSIBLE_QA_ENABLED=1 were already set in the live backend env BEFORE tonight's run -- not changed by anyone tonight; owner should confirm intended (P7 go-live is supposed to be supervised-only). (3) Two leaked bk-localci container pairs (62144-485b5, 13092-d02bb) still running at closeout -- reap once confirmed idle."
+    at: 2026-08-17
+  live_check:
+  - "CLAUDE.md deploy section matches compose reality; leaked bk-localci containers gone; owner has ruled on the REVIT_LINK_SYNC env value."
+  source: "2026-08-17 overnight closeout run (session 67df33a5)"
+  notes_url:
