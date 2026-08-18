@@ -97,17 +97,19 @@ items:
 
 
 - id: P3-8-SLICE23
-  title: "Merge Phase 3.8 slice 3 (ACC role sync); slice 2 still needs one owner ruling"
+  title: "Phase 3.8 slice 3 (ACC role sync) MERGED dark; slice 2 still needs one owner ruling"
   projects: [bimpossible]
-  status: blocked_owner
-  owner_gate: true
+  status: landed
+  owner_gate: false
   unblocks: [OPS-LAUNCH]
   blocked_by: []
   effort: S
   risk: 2
   evidence:
   - kind: pr
-    ref: "BIMpossible #275 OPEN DRAFT, head feat/phase38-draft-gating-and-acc-sync (807c5fe) -- slice 3 only: GET-only ACC Admin client, POST /data/acc/sync-roles behind require_firm_admin, flag-gated OFF via BIMPOSSIBLE_ACC_ROLE_SYNC_ENABLED"
+    ref: "BIMpossible #275 MERGED 2026-08-17 (owner ruling: merge tonight, dark) -- slice 3 only: GET-only ACC Admin client, POST /data/acc/sync-roles behind require_firm_admin, flag-gated OFF via BIMPOSSIBLE_ACC_ROLE_SYNC_ENABLED"
+  - kind: pr
+    ref: "BIMpossible #415 MERGED 2026-08-17 -- REQUIRED HOTFIX: #275's branch predated the #374 allowlist teardown and imported the deleted guard module, breaking main's pytest on merge (semantic conflict; repo has no require-branches-up-to-date rule). Hotfix swapped in aec.hub_tenancy.assert_project_access, registered BIMPOSSIBLE_ACC_ROLE_SYNC_ENABLED in the tenancy ratchet's ALL_GATING_FLAGS + a PROJECT_EXEMPT Category-A entry, and added a real fail-closed cross-hub pin test"
   - kind: doc
     ref: "00_Strategy/design-docs/2026-08-06__phase-3-8-slices-2-3_build-plan.md (commit 25ea552) -- build plan plus the Outcome section recording what shipped and what did not"
   - kind: commit
@@ -559,10 +561,10 @@ items:
 
 
 - id: PHASE9-REOPENED-SCOPE
-  title: "Phase 9 reopened ACTIVE 2026-08-17 -- settle cutsheet-to-project link-target design question"
+  title: "Phase 9 link-target RULED: cutsheets anchor to individual element (by family type)"
   projects: [bimpossible]
-  status: blocked_owner
-  owner_gate: true
+  status: landed
+  owner_gate: false
   unblocks: [SHARED-PARAM-REGISTRY]
   blocked_by: []
   effort: S
@@ -571,20 +573,21 @@ items:
     - kind: doc
       ref: "BIMpossible_PHASE-STATUS.md row 9 (Product Data Ingestion) -- 'Reopened ACTIVE 2026-08-17 (owner) -- not a pivot, a scope growth'"
   verification:
-    level: claimed
+    level: verified
     by: >
-      Owner-ledger row read directly 2026-08-17 -- a decision-state claim, no machine artifact
-      applies. Original manufacturer-cutsheet-extraction scope unchanged, frozen at parser 0.3.2
-      (GoldenSet stop-rule already satisfied 2026-07-21 -- that part is done and stable, headroom
-      tickets P9-R1..R5 open but not urgent). NEW as of today: link extracted cutsheet data to
-      specific things inside a project, not just isolated spec values. Row states the link target
-      is undecided -- element / category / deliverable / schedule row -- and must be settled
-      before build starts. Everything downstream of Phase 9, including SHARED-PARAM-REGISTRY's
-      wiring and the pre-existing 'Phase 7 + 6 owner decisions' gate, sits behind this.
+      OWNER RULING 2026-08-17 (chat, session 67df33a5): extracted cutsheet data links to the
+      INDIVIDUAL ELEMENT, anchored by family type -- not category, not named deliverable, not
+      schedule row. Rationale accepted: a cutsheet describes a product = a family type; rolls up
+      into schedule rows / categories without committing to a coarser grain. Prior context:
+      manufacturer-cutsheet extraction frozen at parser 0.3.2 (GoldenSet stop-rule satisfied
+      2026-07-21); headroom tickets P9-R1..R5 open, not urgent. LANDED not live: the ruling is
+      recorded here but the owner ledger row 9 has not yet been updated by the owner, and no
+      build has started against it. SHARED-PARAM-REGISTRY and downstream Phase 9 build are
+      now unblocked by decision.
     at: '2026-08-17'
   live_check:
-    - "grep -A6 '^| 9 ' \"F:\\AI-Dev\\BIMpossible_Workspace\\00_Strategy\\BIMpossible_PHASE-STATUS.md\"  # confirm row 9 still ACTIVE/reopened 2026-08-17 and link-target question still open"
-  source: "BIMpossible_PHASE-STATUS.md row 9"
+    - "grep -A6 '^| 9 ' \"F:\\AI-Dev\\BIMpossible_Workspace\\00_Strategy\\BIMpossible_PHASE-STATUS.md\"  # ledger row 9 -- check whether the owner has recorded the element/type ruling yet"
+  source: "Owner ruling in chat 2026-08-17; BIMpossible_PHASE-STATUS.md row 9"
   notes_url:
 
 
@@ -630,23 +633,23 @@ items:
 
 
 - id: WRITE-ENGINE-INC2
-  title: "Merge Write Engine Increment 2 -- both halves built, CI green, awaiting owner merge decision"
+  title: "Write Engine Increment 2 MERGED dark -- BIMpossible #273 + AddIns #54 both landed 2026-08-17"
   projects: [bimpossible, addins]
-  status: blocked_owner
-  owner_gate: true
+  status: landed
+  owner_gate: false
   unblocks: []
   blocked_by: []
   effort: S
   risk: 2
   evidence:
   - kind: pr
-    ref: "BIMpossible #273 OPEN DRAFT, head feat/write-engine-increment2-typeparams, now at e018294 -- backend half: family-TYPE parameter targeting, String-only"
+    ref: "BIMpossible #273 MERGED 2026-08-18T03:25Z (owner ruling 2026-08-17: merge tonight, dark) -- backend half: family-TYPE parameter targeting, String-only. Required a pre-merge re-chain of migration c4e7a2b91d38's down_revision e0f1a2b3c4d5 -> w3x4y5z6a7b8 (main advanced while the PR was open; MultipleHeadsError) -- migration-reviewer PASS, graph edit only"
   - kind: commit
     ref: "e018294 (2026-08-06) -- fixed a semgrep bim-raw-sql-concat finding in c4e7a2b91d38's downgrade(): sa.text(f\"...\") stranded-row COUNT swapped for sa.select/sa.table/sa.column, same query, no raw SQL construction"
   - kind: run
     ref: "gh pr checks 273 2026-08-06 post-fix: backend/pytest, frontend/vitest+tsc, security-scan-summary (semgrep, gitleaks, pip-audit, trivy) all pass -- fully green"
   - kind: pr
-    ref: "BIMpossible-AddIns #54 OPEN DRAFT (3e4fcd4) -- add-in half: applies String edits to family type parameters"
+    ref: "BIMpossible-AddIns #54 MERGED 2026-08-17 (owner ruling: merge tonight, dark) -- add-in half: applies String edits to family type parameters"
   - kind: doc
     ref: "00_Strategy/design-docs/2026-08-06__write-engine-increment2_build-plan.md (commit 99290b1) -- build plan plus Outcome section"
   - kind: log
@@ -663,9 +666,9 @@ items:
 
 
 - id: SEC-ASSIST-TOOLS-PERSONAL-VIEWS
-  title: "Assistant's _visible_saved_view_clause personal branch has no firm_id scope -- feeds tool_list_saved_views + tool_describe_saved_view"
+  title: "FIXED+MERGED: assistant _visible_saved_view_clause personal branch now pins firm_id (PR #416)"
   projects: [bimpossible]
-  status: ready
+  status: landed
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -677,9 +680,9 @@ items:
   - kind: doc
     ref: "This exact function is what SEC-ASSIST-FIRMVIEW's already-merged fix (PR#278, commit 5190a4a, backend/aec/assistant_context.py) cited as the reference for correct behavior: 'ctx.firm_id -- the same identity... the assistant's read tools already scope on via _visible_saved_view_clause'. That statement is only true of the FIRM branch of this function; the PERSONAL branch it sits beside has the identical unscoped-personal-query gap being tracked across this whole investigation (SEC-GROUPS-PERSONAL-LISTING, SEC-VIEWS-PERSONAL-LISTING, SEC-ASSIST-PERSONAL-VIEWCOUNT)."
   verification:
-    level: claimed
-    by: "Surfaced 2026-08-07 during the SEC-GROUPS-PERSONAL-LISTING investigation's Phase 3 equivalent-path review. Not reproduced -- ctx.owner_user_id/ctx.firm_id construction (aec/assistant.py:608-622 per the assistant_context.py comment) was not traced end to end to confirm ctx.owner_user_id can genuinely carry a stale-firm personal view into a later firm context via the assistant tool path specifically (as opposed to the REST path already proven for groups). Classified by code reading only, same reachability shape as the other three findings in this family. Needs its own reproduction (likely via the assistant tool-calling test harness, not the REST test client used for the other three) before any fix is written."
-    at: 2026-08-07
+    level: verified
+    by: "FIXED + MERGED via PR #416 (claude/assist-tools-personal-view-tenancy, squash-merged 2026-08-18T03:25Z). _visible_saved_view_clause's personal branch now requires SavedView.firm_id == ctx.firm_id alongside owner_user_id, and a caller with a user but no firm sees no personal views. Reproduced red-first with three new tests in backend/tests/test_assistant_saved_view_scope.py (foreign-firm personal views hidden from list; describe of own-but-other-firm view is not-found; no-firm caller sees none), then green; full backend suite green in local CI and GitHub required checks. Closes the last open member of the unscoped-personal-query family (SEC-GROUPS-PERSONAL-LISTING / SEC-VIEWS-PERSONAL-LISTING / SEC-ASSIST-PERSONAL-VIEWCOUNT)."
+    at: 2026-08-17
   live_check:
   - "git log origin/main --oneline | grep -i 'assist.*saved.*view\\|visible-saved-view'"
   source: "Phase 3 equivalent-path review of SEC-GROUPS-PERSONAL-LISTING, 2026-08-07"
