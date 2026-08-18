@@ -1,7 +1,9 @@
 # /next — canonical work-item store
 #
-# THIS FILE IS THE SOURCE OF TRUTH. QUEUE.md is generated from it — edit here, not there.
-# Hand-editing is fine and expected; the skill reads and rewrites this file.
+# THIS FILE IS THE SOURCE OF TRUTH for ACTIVE work. QUEUE.md is generated from it — edit here,
+# not there. Hand-editing is fine and expected; the skill reads and rewrites this file.
+# Closed items (live/dropped) migrate to queue-archive.yaml — see README.md; validate any
+# hand edit with: python queue_store.py
 #
 # Schema, status vocabulary, and the ranking algorithm:
 #   ~/.claude/skills/next/reference/item-model.md

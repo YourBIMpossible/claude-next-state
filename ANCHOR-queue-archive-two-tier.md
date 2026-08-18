@@ -37,5 +37,9 @@ Repo is LOCAL-ONLY (no remote) → no push/PR possible; merge to master at the e
 - .gitattributes LF pinning exists only in the MIRROR repo, not here; local git warns LF→CRLF — harmless.
 - Auto-mode classifier blocked a chained verify+commit Bash; split verify and commit into separate calls.
 
-## Next entry point
-Phase A in the worktree: edit queue.yaml reconciled block.
+## Status: ALL PHASES DONE (2026-08-17)
+A d1c7ea6 · B 41cecce (+ claude-profile 1b735ba on chore/scope-governor) · C 305bea8 · D c512414
+· E this commit. Eligibility revised in D: live archives at any age (30-day rule matched only 2
+items — sync refreshes verification.at); Live section renders from both tiers; QUEUE.md
+byte-identical throughout. Remaining: merge lane→master, live-tree verify, remove worktree.
+Mirror publish deliberately left to the next /next sync (normal Push-And-Verify path).
