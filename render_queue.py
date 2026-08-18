@@ -26,6 +26,9 @@ from pathlib import Path
 
 import yaml
 
+import queue_store
+from queue_store import StoreError
+
 EFFORT_ORDER = {"S": 0, "M": 1, "L": 2}
 
 SECTIONS: list[tuple[str, tuple[str, ...]]] = [
@@ -129,14 +132,17 @@ def render_item(item: dict, cones: dict[str, int]) -> list[str]:
 
 
 def build(state_dir: Path, generated_on: date) -> str:
-    store = yaml.safe_load((state_dir / "queue.yaml").read_text(encoding="utf-8"))
+    store = queue_store.load_store(state_dir)
     registry = yaml.safe_load((state_dir / "projects.yaml").read_text(encoding="utf-8"))
 
-    items = store.get("items") or []
+    items = store.active_items
     if not items:
         raise RenderError("queue.yaml holds no items — refusing to render an empty view")
 
-    unblocks = {i["id"]: list(i.get("unblocks") or []) for i in items}
+    # Cones are computed over the UNION of active + archived items so that moving a
+    # closed item into the archive can never change the ranking of active work, and
+    # active `unblocks` references into the archive are not reported as dangling.
+    unblocks = {i["id"]: list(i.get("unblocks") or []) for i in store.all_items}
     cones: dict[str, int] = {}
     all_cycles: list[tuple[str, list[str]]] = []
     all_dangling: list[tuple[str, list[str]]] = []
@@ -148,7 +154,7 @@ def build(state_dir: Path, generated_on: date) -> str:
         if dangling:
             all_dangling.append((item["id"], dangling))
 
-    reconciled = store.get("reconciled") or {}
+    reconciled = store.watermarks
     marks = []
     for key, mark in reconciled.items():
         at = _as_date(mark.get("at"))
@@ -219,7 +225,7 @@ def main() -> int:
     on = date.fromisoformat(args.generated_on) if args.generated_on else date.today()
     try:
         text = build(args.state_dir, on)
-    except (RenderError, KeyError, yaml.YAMLError) as exc:
+    except (RenderError, StoreError, KeyError, yaml.YAMLError) as exc:
         print(f"render failed: {exc}", file=sys.stderr)
         return 1
 
