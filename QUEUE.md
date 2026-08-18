@@ -2,7 +2,7 @@
 
 # /next — work-item queue
 
-Generated 2026-08-18 (synced). Ranked by critical path (transitive `unblocks` cone), tiebreak:
+Generated 2026-08-17 (synced). Ranked by critical path (transitive `unblocks` cone), tiebreak:
 owner-gated+S effort, then effort, then risk, then id. Full algorithm:
 `~/.claude/skills/next/reference/item-model.md`.
 
@@ -135,9 +135,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-17 @ `e9a424e` PR#390 · `addi
 [DEP-TRIAGE-2026-08] Nine Dependabot PRs open and waiting -- five are Action bumps the auto-merge policy deliberately holds for review
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · Open as of 2026-08-07 night (gh pr list, all non-draft): github-acti…
 
-[OPS-DEPLOY-STACK-REFRESH-20260817] Deploy tonight's merged main to the local stack -- images/DB stale vs main 130ba49
-       unblocks 0 · S · bimpossible · CLAIMED 2026-08-17 · BIMpossible#415 #416 #417 #418 #419 (+#273 #275) all MERGED; main ti…
-
 [OPS-WORKTREE-DRIFT-REVIEW] Recurring per-repo drift review: workspace local behind-6/ahead-1 with dirty ledgers + untracked audit docs
        unblocks 0 · S · workspace+bimpossible · CLAIMED 2026-08-17 · 2026-08-07 (original): workspace carried 2 untracked docs (revitlink…
 
@@ -248,6 +245,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-17 @ `e9a424e` PR#390 · `addi
 
 [APS-TOKEN-REFRESH-CLASSIFY] Classify APS/auth token-refresh failures instead of leaking 500s (_authed_get, remaining paths, AEC worker)
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · BIMpossible #334 (e0577ad) -- token-refresh failures in _authed_get …
+
+[OPS-DEPLOY-STACK-REFRESH-20260817] Deploy tonight's merged main to the local stack -- images/DB stale vs main 130ba49
+       unblocks 0 · S · bimpossible · CLAIMED 2026-08-17 · BIMpossible#415 #416 #417 #418 #419 (+#273 #275) all MERGED; main ti…
 
 [RAIL-RETIRE-FINAL] ALLOWED_PROJECT_IDS / guard.py allowlist subsystem retired end-to-end (PRs #371, #374)
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · BIMpossible #371 MERGED (9b851ff, 2026-08-16T20:24:50Z) -- migrates …

@@ -1509,7 +1509,7 @@ items:
 - id: OPS-DEPLOY-STACK-REFRESH-20260817
   title: "Deploy tonight's merged main to the local stack -- images/DB stale vs main 130ba49"
   projects: [bimpossible]
-  status: ready
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -1520,7 +1520,7 @@ items:
     ref: "BIMpossible#415 #416 #417 #418 #419 (+#273 #275) all MERGED; main tip 130ba4934c62"
   verification:
     level: claimed
-    by: "2026-08-17 closeout run: deployment was PREPARED but NOT executed -- the session's permission layer denied every stack-mutating command (docker compose up -d --build, start-local.ps1 -Rebuild, Refresh-Frontend.ps1). Current live state captured: backend container 337ddb7ec6ed (image docker-backend e69a74e30c41, deps current -- requirements/Dockerfile unchanged since #387; code arrives via the ../backend:/app bind mount but gunicorn workers loaded pre-merge code), frontend image ff8eb39a47f3 built 20:40 (may predate #417/#418 content), DB migration revision w3x4y5z6a7b8 with c4e7a2b91d38 (#273, additive) pending. Rollback images tagged: docker-backend:rollback-20260817, docker-frontend:rollback-20260817, docker-backend-migrate:rollback-20260817. Shared checkout clean at main 130ba49 (only untracked Invoke-ScheduledConcurrencyAuditRelay.ps1, outside both build contexts) -- it IS a clean deployment source. Feature flags NOT touched: BIMPOSSIBLE_ACC_ROLE_SYNC_ENABLED unset (OFF). To deploy, run from F:\\AI-Dev\\BIMpossible\\docker: docker compose up -d --build  (rebuilds both images, reruns the one-shot backend-migrate which applies c4e7a2b91d38, restarts backend on the new code). Then verify: alembic current == c4e7a2b91d38, /health 200, :3000 200, docker compose ps all healthy."
+    by: "2026-08-17 closeout run: deployment was PREPARED but NOT executed -- the session's permission layer denied every stack-mutating command (docker compose up -d --build, start-local.ps1 -Rebuild, Refresh-Frontend.ps1). Current live state captured: backend container 337ddb7ec6ed (image docker-backend e69a74e30c41, deps current -- requirements/Dockerfile unchanged since #387; code arrives via the ../backend:/app bind mount but gunicorn workers loaded pre-merge code), frontend image ff8eb39a47f3 built 20:40 (may predate #417/#418 content), DB migration revision w3x4y5z6a7b8 with c4e7a2b91d38 (#273, additive) pending. Rollback images tagged: docker-backend:rollback-20260817, docker-frontend:rollback-20260817, docker-backend-migrate:rollback-20260817. Shared checkout clean at main 130ba49 (only untracked Invoke-ScheduledConcurrencyAuditRelay.ps1, outside both build contexts) -- it IS a clean deployment source. Feature flags NOT touched: BIMPOSSIBLE_ACC_ROLE_SYNC_ENABLED unset (OFF). To deploy, run from F:\\AI-Dev\\BIMpossible\\docker: docker compose up -d --build  (rebuilds both images, reruns the one-shot backend-migrate which applies c4e7a2b91d38, restarts backend on the new code). Then verify: alembic current == c4e7a2b91d38, /health 200, :3000 200, docker compose ps all healthy. CLOSED 2026-08-17: owner executed docker compose up -d --build from docker/ -- backend rebuilt and healthy, db/redis healthy, migration completed, alembic current = c4e7a2b91d38 (head). No feature flags changed; ACC role sync stays dark; no Revit-Link sync; no NL-filter eval. Rollback tags retained."
     at: 2026-08-17
   live_check:
   - "docker exec docker-backend-1 alembic current shows c4e7a2b91d38 and all four services healthy after docker compose up -d --build."
