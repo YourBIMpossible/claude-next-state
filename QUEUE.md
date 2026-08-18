@@ -112,6 +112,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-17 @ `e9a424e` PR#390 · `addi
 [WARM-ORIGIN-DOORGAP] Curtain-panel/unhosted doors have no origin: label them 'no location (curtain panel)' instead of deriving one
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-17 · 01_BuildLog/2026-08-04__doors-join-increment1_RESULTS.md, 'Follow-up…
 
+[P3-6-SPATIAL] Build Phase 3.6 Spatial Relationship Engine v1 (architecturally unblocked)
+       unblocks 0 · M · bimpossible · VERIFIED 2026-08-18 · BIMpossible_PHASE-STATUS.md Phase 3 sub-phase notes, Phase 3.6 row
+
 [R5-AECDM-PUSHDOWN] R5 AECDM query-pushdown lane MERGED -- flag-gated, read-only (PR #363)
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-17 · BIMpossible #363 MERGED (d56bd14, 2026-08-16T19:47:59Z, branch feat/…
 
@@ -131,6 +134,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-17 @ `e9a424e` PR#390 · `addi
 
 [DEP-TRIAGE-2026-08] Nine Dependabot PRs open and waiting -- five are Action bumps the auto-merge policy deliberately holds for review
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · Open as of 2026-08-07 night (gh pr list, all non-draft): github-acti…
+
+[OPS-DEPLOY-STACK-REFRESH-20260817] Deploy tonight's merged main to the local stack -- images/DB stale vs main 130ba49
+       unblocks 0 · S · bimpossible · CLAIMED 2026-08-17 · BIMpossible#415 #416 #417 #418 #419 (+#273 #275) all MERGED; main ti…
 
 [OPS-WORKTREE-DRIFT-REVIEW] Recurring per-repo drift review: workspace local behind-6/ahead-1 with dirty ledgers + untracked audit docs
        unblocks 0 · S · workspace+bimpossible · CLAIMED 2026-08-17 · 2026-08-07 (original): workspace carried 2 untracked docs (revitlink…
@@ -152,9 +158,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-17 @ `e9a424e` PR#390 · `addi
 
 [P7-REVITLINK-MULTIUSER] Scale RevitLink to multi-user (RE-1 defect now fixed; RE-2 capacity limit remains)
        unblocks 0 · M · bimpossible+addins · VERIFIED 2026-08-04 · Verification Checklist item RL_P0_10 (single-pipe/single-secret cons…
-
-[P3-6-SPATIAL] Build Phase 3.6 Spatial Relationship Engine v1 (architecturally unblocked)
-       unblocks 0 · M · bimpossible · CLAIMED 2026-08-04 · BIMpossible_PHASE-STATUS.md Phase 3 sub-phase notes, Phase 3.6 row
 
 ## Blocked elsewhere
 
