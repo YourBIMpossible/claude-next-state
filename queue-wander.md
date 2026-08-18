@@ -48,3 +48,12 @@ Build thresholds (explicit — do not build below them):
 - 2026-08-08 (branch-cleanup closeout): 4 merged PRs still hold their branch, left alone because a concurrent session was actively pushing to both repos at the time — BIMpossible #277 `claude/competent-kalam-977348`; Workspace #20 `claude/drift-stale-correction`, #21 `claude/session-handoff-notes`, #22 `claude/revert-session-handoff-notes`. Sweep them once that session is quiet, using the 4 checks in memory `squash-merge-branch-cleanup-checks` (`--merged`/plain `diff` both lie under squash merge). [WANDER-LINGERING-MERGED-BRANCHES]
 - 2026-08-08 (/next sync): QUEUE.md was hand-rendered every prior sync; this one generated it deterministically from queue.yaml via a script written to the session scratchpad (`render_queue.py` — implements item-model.md's cone ranking + section rules, reports cycles/dangling ids). The scratchpad is session-scoped, so the script dies with it and the next sync hand-renders again into a different shape. RESOLVED 2026-08-08 same day, owner-directed: landed as .tools/state/render_queue.py (local store commit) + workspace draft PR #41; --check verified byte-for-byte against 492e33b. [WANDER-QUEUE-RENDERER]
 - 2026-08-08 (Wave 30 dashboard refresh): Refresh-Dashboard.ps1 ran green overall but sync_activity.py aborted — gh_commits() returned None -> AttributeError at sync_activity.py:74 (build_patch line 99), so activity/lastActivity dates were NOT refreshed that run; waves/phases/DAG/graph-metrics rendered fine. Looks like a transient gh API/rate-limit empty response. Watch the next scheduled refresh; investigate only if it recurs. [WANDER-SYNCACTIVITY-GHNONE]
+
+- Date: 2026-08-17
+- Signal: permission-block
+- Exact task / query: overnight closeout mandated a local-stack deploy; `docker compose up -d --build`, `start-local.ps1 -Rebuild`, and `Refresh-Frontend.ps1` were all denied by the session permission classifier
+- What existing tool was tried: all three sanctioned deploy paths, then stopped per denial guidance
+- Result and cost: deploy prepared but not executed; owner must run one command (queue item OPS-DEPLOY-STACK-REFRESH-20260817)
+- Repeat count: 1
+- Candidate response: settings Bash allow-rule for the repo deploy scripts (start-local.ps1 / Refresh-Frontend.ps1)
+- Threshold to build: per ledger rules -- blocked in 3 separate sessions
