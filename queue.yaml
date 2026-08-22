@@ -2079,7 +2079,7 @@ items:
 - id: REVITLINK-OPAQUE-500-MAPPING
   title: "revit_link error mapping collapses distinct add-in refusals (NOT_SUPPORTED, DOC_NOT_FOUND, AMBIGUOUS_DOCUMENT, SYNC_FAILED) into one opaque INTERNAL_ERROR 500 with no detail"
   projects: [bimpossible]
-  status: blocked_owner
+  status: landed
   owner_gate: true
   unblocks: []
   blocked_by: []
@@ -2090,12 +2090,14 @@ items:
     ref: "backend/revit_link/native_adapter.py _COMMAND_ERROR_MAP (unknown codes fall through to INTERNAL_ERROR) and router.py sync_with_central_confirmed (INTERNAL_ERROR maps to a bare 500 with no server-side log)"
   - kind: pr
     ref: "BUILT 2026-08-19 overnight: BIMpossible#435 (draft, 9c6ddf7) -- AMBIGUOUS_DOCUMENT/NOT_WORKSHARED/SYNC_FAILED mapped to 409/422/502, forward-looking NOT_SUPPORTED->501 for the still-collapsed add-in pipe refusal (Add-Ins/PipeServer.cs side, cross-repo, out of scope here), any 5xx now logs server-side (capped 2000 chars). Backend-only, no Add-Ins change. Awaiting owner review."
+  - kind: pr
+    ref: "MERGED: BIMpossible#435 -> 16df5c9 (2026-08-19)."
   verification:
     level: verified
-    by: "Hit twice in the 2026-08-18/19 P7 walkthrough: an E25_Nudge attempt against a closed document, and the Winchester attempt refused by EventDispatcher.cs's sync_with_central pipe-refusal, both surfaced identically as a blank 500 -- required reading DB audit rows, relay logs, and add-in source to distinguish 'document not open' from 'security refusal' from any future add-in-side error. A frontend/operator debugging this without backend+add-in source access has no way to tell these apart. FIX BUILT SAME NIGHT: backend-endpoint-reviewer gate run on router.py (PASS), Verify-Local-CI.ps1 -BaseRef origin/main LOCAL CI GREEN at 9c6ddf7, full pure-lane pytest 3121 passed/313 skipped. assistant_parameter_writes.py's independent no-default error-classification exhaustiveness gate (_ERROR_CLASSIFICATION) updated to match. NOT MERGED -- NOT_SUPPORTED stays unreachable until an Add-Ins-side PipeServer.cs fix distinguishes NotSupportedException from a real crash (separate, cross-repo, not attempted here)."
+    by: "Hit twice in the 2026-08-18/19 P7 walkthrough: an E25_Nudge attempt against a closed document, and the Winchester attempt refused by EventDispatcher.cs's sync_with_central pipe-refusal, both surfaced identically as a blank 500 -- required reading DB audit rows, relay logs, and add-in source to distinguish 'document not open' from 'security refusal' from any future add-in-side error. A frontend/operator debugging this without backend+add-in source access has no way to tell these apart. FIX BUILT AND MERGED 2026-08-19 (PR#435 -> 16df5c9): typed mappings for AMBIGUOUS_DOCUMENT, NOT_WORKSHARED, SYNC_FAILED; capped error messages; server-side mapped-5xx logging. backend-endpoint-reviewer gate PASS on router.py, Verify-Local-CI.ps1 -BaseRef origin/main LOCAL CI GREEN at 9c6ddf7, full pure-lane pytest 3121 passed/313 skipped. This backend item is landed on its own scope. Remaining Add-Ins PipeServer.cs typed NOT_SUPPORTED propagation is a separate cross-repo follow-up -- not tracked as blocking this item."
     at: 2026-08-19
   live_check:
-  - "Check gh pr view on BIMpossible#435: still draft/open = awaiting owner review; merged = flip to landed. If a future Add-Ins-side PipeServer.cs change starts distinguishing NotSupportedException from other exceptions, wire the resulting distinct pipe-level code through _PIPE_ERROR_MAP to NOT_SUPPORTED (already 501-mapped here) as a small follow-up."
+  - "gh pr view 435 --repo YourBIMpossible/BIMpossible --json state,mergedAt,mergeCommit -- expect state MERGED, mergeCommit 16df5c9."
   source: "2026-08-18/19 P7 supervised walkthrough session"
   notes_url:
 

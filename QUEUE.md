@@ -1,5 +1,4 @@
-wrote F:\AI-Dev\.tools\state\QUEUE.md (427 lines)
-� edit queue.yaml, then regenerate. -->
+<!-- GENERATED from queue.yaml. Do not hand-edit — edit queue.yaml, then regenerate. -->
 
 # /next — work-item queue
 
@@ -17,9 +16,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-18 @ `971caa2` PR#427 · `addi
 
 [ADDINS-JTI-REPLAY-PERSIST] Persist (or TTL-bound) the add-in's process-local syncAuth jti replay cache so an add-in restart inside the 600s attestation TTL cannot re-enable a consumed attestation
        unblocks 0 · S · addins+bimpossible · CLAIMED 2026-08-21 · BIMpossible decision-log/2026-08-21__p7-hardening-followons-queued.m…
-
-[REVITLINK-OPAQUE-500-MAPPING] revit_link error mapping collapses distinct add-in refusals (NOT_SUPPORTED, DOC_NOT_FOUND, AMBIGUOUS_DOCUMENT, SYNC_FAILED) into one opaque INTERNAL_ERROR 500 with no detail
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-19 · backend/revit_link/native_adapter.py _COMMAND_ERROR_MAP (unknown cod…
 
 [ADDINS-DPAPI-PREWARM] First-use DPAPI pre-warm in the add-in verifier to remove the cold-start latency on the first attestation after Revit launch
        unblocks 0 · S · addins · CLAIMED 2026-08-21 · Observed during the 2026-08-19/21 pilots as a one-time delay; not a …
@@ -88,6 +84,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-18 @ `971caa2` PR#427 · `addi
 
 [AUTHZ-SHADOW-ACTIVATE] AUTH-INH arc CLOSED 2026-08-16: foundation complete, enforcement deferred to pre-pilot validation (runbook Sec 6)
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-16 · NORTHSTAR guardrail #1 (owner 'go' AND ratified revocation window, p…
+
+[REVITLINK-OPAQUE-500-MAPPING] revit_link error mapping collapses distinct add-in refusals (NOT_SUPPORTED, DOC_NOT_FOUND, AMBIGUOUS_DOCUMENT, SYNC_FAILED) into one opaque INTERNAL_ERROR 500 with no detail
+       unblocks 0 · S · bimpossible · VERIFIED 2026-08-19 · backend/revit_link/native_adapter.py _COMMAND_ERROR_MAP (unknown cod…
 
 [SEC-ASSIST-TOOLS-PERSONAL-VIEWS] FIXED+MERGED: assistant _visible_saved_view_clause personal branch now pins firm_id (PR #416)
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · backend/aec/assistant_tools.py:295-309 _visible_saved_view_clause: f…
