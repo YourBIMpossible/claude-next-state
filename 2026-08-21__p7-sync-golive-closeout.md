@@ -17,6 +17,7 @@
 |---|---|
 | #442 pilot record (docs-only) | `59df132` |
 | #443 rejection audit + `firm_id` | `d6368c8` |
+| #444 decision-log flag correction (docs-only) | `2b75add` |
 | Prerequisite hardening #440 | `02bd9b6` |
 | Prerequisite hardening #441 | `d77319a` |
 | syncAuth handshake (BIMpossible #433) | `10392e74` |
@@ -32,7 +33,7 @@
 | Schema | `information_schema` confirms column uuid nullable + 5 indexes incl. `firm_created`; 25 existing rows readable |
 | Codes | `SYNC_TOKEN_*` codes importable in the container; `SYNC_REJECTED_STATUS == "rejected"` |
 | Tests | local 210 passed / 7 skipped; Verify-Local-CI GREEN; remote `backend / pytest`, semgrep, `security-scan-summary`, gitleaks pass |
-| **Runtime flag** | **OFF.** `docker-backend-1` (recreated 17:28 PDT by the #443 deploy) holds `BIMPOSSIBLE_REVIT_LINK_SYNC_ENABLED=OFF`; `feature_flag.py` accepts only `1/true/yes`, effective = False (checked in-container). Was truthy at pilot time (16:39 PDT — the sync could not have run otherwise) and was set to `OFF` in `.env` before the redeploy. Earlier close-out text claimed "=1 still effective" — that came from `grep -c` counting the line, not reading its value; corrected. No owner action needed. |
+| **Runtime flag** | **OFF, final.** `docker-backend-1` holds `BIMPOSSIBLE_REVIT_LINK_SYNC_ENABLED=OFF`; `feature_flag.py` accepts only `1/true/yes` → effective **False**, verified in-container. Was truthy only for the pilot window (16:39 PDT); set to `OFF` before the #443 redeploy. The earlier "=1 still effective" claim was a `grep -c` line-count misread, not the env value — formally retracted in the decision log (BIMpossible#444, `2b75add`). Decision-log owner follow-up to unset the flag is satisfied — **no owner flag action remains.** |
 
 ## 4. Teardown
 
@@ -48,10 +49,11 @@
 
 - `P7-SYNC-GOLIVE` — `landed` / `verified`; close-out evidence (merge SHAs, teardown, flag state) attached.
 - `P7-SYNC-REJECTION-AUDIT` — `landed` / `verified` (migration, deploy, tests recorded).
+- Documentation reconciliation: BIMpossible#444 (`2b75add`) corrects the pilot decision log's runtime-flag claim.
 - Deferred follow-ons, each its own queue entry: `ADDINS-NOT-SUPPORTED-PIPE-PROPAGATION` (ready), `AUTHZ-AUDIT-FIRMID-EMPTY-ROOTCAUSE` (ready), `ADDINS-JTI-REPLAY-CROSS-PROCESS` (owner-gated, distinct from `ADDINS-JTI-REPLAY-PERSIST`), `P7-SYNC-COMMENT-CRYPTO-BINDING` (owner-gated), `ADDINS-DPAPI-PREWARM` (owner-gated).
 - BIMpossible: `main` clean at `d6368c8` == `origin/main`. Pruned: local `claude/p7-golive-record`, `claude/p7-sync-rejection-audit`, worktree `.claude/worktrees/p7-sync-rejection-audit`; remote P7 branches already auto-deleted on merge (0 `p7` heads on origin).
 - Add-Ins: local `main` fast-forwarded to `2d66683` == `origin/main`; worktree `.claude/worktrees/p7-golive-pipe-build` removed (no commits). Main checkout sits on `feat/batch-rename-phase1` with 1 dirty file — not this session's work, left untouched.
 - Retained (not mine, observation only): BIMpossible worktrees `design-knowledge-reconciliation-0821`, `phase-5-sheets-planning-b15415`, `site-ui-design-notes-56e276` (all clean); Add-Ins worktrees `design-knowledge-reconciliation-0821`, `exciting-bassi-a29ace`, `sheet-placement-formatting-838ca2`, `.claude-review-pr78`.
 - State store (`F:/AI-Dev/.tools/state`): committed this close-out's `queue.yaml`, `QUEUE.md`, and the two 2026-08-21 reports. **No remote is configured on that repo, so nothing was pushed.**
 
-P7 remote SyncWithCentral pilot and immediate audit hardening are fully closed. Remote sync is deployed-capable but runtime-disabled by default. No active P7 operational work remains. The roadmap is ready for an owner-selected next move.
+P7 remote SyncWithCentral pilot, rejection-audit hardening, runtime teardown, and documentation reconciliation are fully closed. Remote sync is deployed-capable and runtime-disabled by default. No P7 operational work remains.
