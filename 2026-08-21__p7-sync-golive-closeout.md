@@ -32,7 +32,7 @@
 | Schema | `information_schema` confirms column uuid nullable + 5 indexes incl. `firm_created`; 25 existing rows readable |
 | Codes | `SYNC_TOKEN_*` codes importable in the container; `SYNC_REJECTED_STATUS == "rejected"` |
 | Tests | local 210 passed / 7 skipped; Verify-Local-CI GREEN; remote `backend / pytest`, semgrep, `security-scan-summary`, gitleaks pass |
-| **Runtime flag** | **`BIMPOSSIBLE_REVIT_LINK_SYNC_ENABLED=1` is STILL effective in `docker-backend-1`** (env count 1 at close-out). It comes from `.env`, which is human-only — the edit attempt was denied. Owner action: delete the line, then `docker compose up -d` from `docker/`, then confirm `docker exec docker-backend-1 env \| grep SYNC_ENABLED` prints nothing. Repo default stays OFF. |
+| **Runtime flag** | **OFF.** `docker-backend-1` (recreated 17:28 PDT by the #443 deploy) holds `BIMPOSSIBLE_REVIT_LINK_SYNC_ENABLED=OFF`; `feature_flag.py` accepts only `1/true/yes`, effective = False (checked in-container). Was truthy at pilot time (16:39 PDT — the sync could not have run otherwise) and was set to `OFF` in `.env` before the redeploy. Earlier close-out text claimed "=1 still effective" — that came from `grep -c` counting the line, not reading its value; corrected. No owner action needed. |
 
 ## 4. Teardown
 
@@ -42,7 +42,7 @@
 | Relay | Stopped; `:7779` not listening |
 | Revit | No `Revit.exe` process |
 | Browser | No pilot tab (no tab group for this session) |
-| Overrides | No test override remains other than the `.env` flag line above |
+| Overrides | No test override remains |
 
 ## 5. Queue and repository state
 
