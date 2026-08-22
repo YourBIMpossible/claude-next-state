@@ -147,6 +147,27 @@ items:
   notes_url:
 
 
+- id: NL-FILTER-EVAL-CRON-CONFIRM
+  title: "Confirm the nl-filter-eval weekly schedule trigger actually fires (not just workflow_dispatch)"
+  projects: [bimpossible]
+  status: ready
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: "BIMpossible#445 (dfe2a53) fixed DATABASE_URL provisioning; manual workflow_dispatch run 2026-08-22 confirmed 16/16 cases pass, real model calls, no transport errors. The on:schedule trigger (cron 0 9 * * 1) cannot be simulated on demand -- untested until it fires naturally."
+  verification:
+    level: claimed
+    by: "workflow_dispatch proves the job steps work; schedule event itself unverified."
+    at: '2026-08-22'
+  live_check:
+  - "gh run list --workflow=nl-filter-eval --repo YourBIMpossible/BIMpossible --event schedule -- first row after 2026-08-24 09:00 UTC should show a completed run with a real pass-rate report, not a transport-error one."
+  source: "/close 2026-08-22, queued rather than left dangling"
+  notes_url:
+
 - id: P7-SYNC-GOLIVE
   title: "Supervised owner flag-flip: go-live Revit Link sync re-enable (Phase 7 step 2)"
   projects: [bimpossible, addins]

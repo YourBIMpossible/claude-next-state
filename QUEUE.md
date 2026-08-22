@@ -1,4 +1,4 @@
-wrote F:\AI-Dev\.tools\state\QUEUE.md (424 lines)
+wrote F:\AI-Dev\.tools\state\QUEUE.md (427 lines)
 � edit queue.yaml, then regenerate. -->
 
 # /next — work-item queue
@@ -207,6 +207,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-18 @ `971caa2` PR#427 · `addi
 
 [DASH-BIMWATCH-WIRING] Wire bimwatch pipeline output into the live dashboard (index.html/data.js have zero references)
        unblocks 0 · S · dashboard · CLAIMED 2026-08-07 · 2026-08-07 session: grepped index.html and data.js in both Dashboard…
+
+[NL-FILTER-EVAL-CRON-CONFIRM] Confirm the nl-filter-eval weekly schedule trigger actually fires (not just workflow_dispatch)
+       unblocks 0 · S · bimpossible · CLAIMED 2026-08-22 · BIMpossible#445 (dfe2a53) fixed DATABASE_URL provisioning; manual wo…
 
 [OPS-ROLLBACK-RETENTION-20260817] Intentional retention: rollback-20260817 image tags until deploy soak completes 2026-08-18 evening
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-17 · deploy closed live at alembic c4e7a2b91d38, 2026-08-17 ~22:00 PDT
