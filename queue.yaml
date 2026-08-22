@@ -150,10 +150,10 @@ items:
 - id: P7-SYNC-GOLIVE
   title: "Supervised owner flag-flip: go-live Revit Link sync re-enable (Phase 7 step 2)"
   projects: [bimpossible, addins]
-  status: blocked_dep
-  owner_gate: true
+  status: landed
+  owner_gate: false
   unblocks: [P15-15D-MODEL-WRITES]
-  blocked_by: [ADDINS-SYNC-TOKEN-HANDSHAKE]
+  blocked_by: []
   effort: S
   risk: 4
   evidence:
@@ -161,20 +161,24 @@ items:
     ref: "BIMpossible#187 (2936c32f) + AddIns#11 (be4d6a8f), lockstep, both merged"
   - kind: flag
     ref: "BIMPOSSIBLE_REVIT_LINK_SYNC_ENABLED, default OFF -- flag + guard test confirmed present in backend/revit_link/feature_flag.py (grep 2026-07-26)"
+  - kind: live_smoke
+    ref: "PILOT PASS 2026-08-21: one sync 200 (relay id=14cdee9b, audit revit_link_request_log id=25, 8445ms, doc TEST-Stanford_ES3_Lab_S&L_R26.rvt), replay 403 single-use, 0 token-material hits; record: BIMpossible docs/decision-log/2026-08-21__p7-sync-golive-supervised-pilot.md"
+  - kind: pr
+    ref: "Close-out 2026-08-21: pilot record merged BIMpossible#442 -> 59df132; rejection-audit hardening BIMpossible#443 -> d6368c8 (deployed, migration d5f8b3c41e27 applied). Teardown: pipe-off DLL restored (sha256 4fec8329..., Revit closed), relay stopped (:7779 not listening), pilot browser tab closed. FLAG: BIMPOSSIBLE_REVIT_LINK_SYNC_ENABLED still =1 at runtime -- the .env line is owner-only (session edit denied); owner must delete the line + restart backend. Close-out report: F:/AI-Dev/.tools/state/2026-08-21__p7-sync-golive-closeout.md"
   verification:
-    level: contradicted
-    by: "SUPERVISED WALKTHROUGH RUN 2026-08-18/19 (owner present, temporary pipe-server re-enable, explicit go each step): mint -> token consume -> relay RPC -> pipe all verified working end-to-end against TEST_Winchester_ELEC_R25 (list_open_documents + check_sync_conflicts round-tripped correctly: workshared, 0 checkouts, 5000 elements capped). The actual SynchronizeWithCentral call cannot succeed today -- EventDispatcher.cs:112 in the add-in unconditionally refuses method 'sync_with_central' over the pipe (2026-06-09 audit finding C2, intentional hard stop), because the add-in has no in-process handshake to validate the backend's one-time sync token -- SyncWithCentralCommand.cs's own header comment says this refusal must not be removed until that handshake exists. So 'go-live' as scoped (BIMpossible#187 + AddIns#11 merged, flag flippable) is code-complete for the token-mint/consume half but the add-in-side enforcement half was never built; the ledger row calling this go-live-ready was wrong until this handshake lands. TEARDOWN DONE 2026-08-19: pipe-off DLL restored to %APPDATA%/Autodesk/Revit/Addins/2025/BIMpossible.RevitLink.dll (2,584,576 bytes, matches P0-2 audit B-Off ruling), pipe-enabled build preserved as BIMpossible.RevitLink.dll.p7enabled-20260819 for AddIns PR#75 reference, relay.py background task stopped, owner flipped BIMPOSSIBLE_REVIT_LINK_SYNC_ENABLED back off."
-    at: 2026-08-19
+    level: verified
+    by: "SUPERVISED PILOT 2026-08-21 PASS (backend b33fa9b incl. 10392e74; add-in built from AddIns main ae464ec incl. 91a40465, pipe-enabled; relay connected): sync_token 200 -> sync_with_central_confirmed 200 -> relay ok -> Revit synced -> audit row id=25 (user J86MCX345VS26DAB, op sync_with_central, ok); replay of consumed token -> 403 'Token has already been used (single-use)', no second sync/audit row; no token material in backend/relay/add-in logs or audit JSON. Flag-off + pipe-off DLL restore = owner actions pending. PRIOR WALKTHROUGH RUN 2026-08-18/19 (owner present, temporary pipe-server re-enable, explicit go each step): mint -> token consume -> relay RPC -> pipe all verified working end-to-end against TEST_Winchester_ELEC_R25 (list_open_documents + check_sync_conflicts round-tripped correctly: workshared, 0 checkouts, 5000 elements capped). The actual SynchronizeWithCentral call cannot succeed today -- EventDispatcher.cs:112 in the add-in unconditionally refuses method 'sync_with_central' over the pipe (2026-06-09 audit finding C2, intentional hard stop), because the add-in has no in-process handshake to validate the backend's one-time sync token -- SyncWithCentralCommand.cs's own header comment says this refusal must not be removed until that handshake exists. So 'go-live' as scoped (BIMpossible#187 + AddIns#11 merged, flag flippable) is code-complete for the token-mint/consume half but the add-in-side enforcement half was never built; the ledger row calling this go-live-ready was wrong until this handshake lands. TEARDOWN DONE 2026-08-19: pipe-off DLL restored to %APPDATA%/Autodesk/Revit/Addins/2025/BIMpossible.RevitLink.dll (2,584,576 bytes, matches P0-2 audit B-Off ruling), pipe-enabled build preserved as BIMpossible.RevitLink.dll.p7enabled-20260819 for AddIns PR#75 reference, relay.py background task stopped, owner flipped BIMPOSSIBLE_REVIT_LINK_SYNC_ENABLED back off."
+    at: 2026-08-21
   live_check:
-  - "Confirm ADDINS-SYNC-TOKEN-HANDSHAKE lands and EventDispatcher.cs's sync_with_central refusal is removed only in lockstep with it, before attempting another supervised go-live."
-  source: "BIMpossible_PHASE-STATUS.md row 7; decision-log 2026-07-16__phase7-revit-link-sync-reenable-step2.md; 2026-08-18/19 supervised walkthrough session"
+  - "docker exec docker-backend-1 printenv BIMPOSSIBLE_REVIT_LINK_SYNC_ENABLED must be empty/unset (owner flag-off after 2026-08-21 pilot); %APPDATA%/Autodesk/Revit/Addins/2026/BIMpossible.RevitLink.dll should be the pipe-off build (.pipeoff-20260821 backup) unless a pilot is active."
+  source: "BIMpossible_PHASE-STATUS.md row 7; decision-log 2026-07-16__phase7-revit-link-sync-reenable-step2.md; 2026-08-18/19 supervised walkthrough session; 2026-08-21 supervised pilot (PASS)"
   notes_url:
 
 - id: ADDINS-SYNC-TOKEN-HANDSHAKE
   title: "Build in-process sync-token handshake in RevitLink add-in so EventDispatcher can safely allow sync_with_central over the pipe"
   projects: [addins, bimpossible]
-  status: blocked_owner
-  owner_gate: true
+  status: landed
+  owner_gate: false
   unblocks: [P7-SYNC-GOLIVE]
   blocked_by: []
   effort: M
@@ -186,12 +190,16 @@ items:
     ref: "EventDispatcher.cs:112-141 -- hard refusal of 'sync_with_central' over the pipe, explicitly conditioned on this handshake not existing yet (SEC-ADDINS-DEADCITE-1, 2026-07-27 audit)"
   - kind: pr
     ref: "BUILT 2026-08-18 overnight: BIMpossible#433 (mint: backend/revit_link/pipe_attestation.py, HMAC keyed by pane-session token, TTL 600s, PANE_NOT_PAIRED/PANE_AMBIGUOUS pre-relay, SYNC_AUTH_* -> 403 map) + AddIns#78 (verify: Shared/Assistant/SyncAuthVerifier.cs in-process, refusal lifted in the SAME commit af67a83). Both DRAFT, awaiting owner review -- merge together."
+  - kind: pr
+    ref: "REMEDIATION WAVE 2026-08-19 (post code-review of #433/#78/#434/#435, 4 reviews). Confirmed findings resolved or deferred-with-rationale across 4 pushed branches: sync-token-handshake @22bff0d then @7ede907 (R1 per-user pane-index scan-free lookup + pane check BEFORE token consume 4bdb3a5; R2 frozen wire vectors 12b4207; R3 ERROR_HTTP_STATUS pin 7b0b3c8; R7 path-fix ea4beb0; post-rebase test fix 7ede907 -- TestOpaqueErrorMapping pane-binding mock), Add-Ins #78 @e134456 (shared static DPAPI store Instance, verifier order + kind-guarded fields + 120s bounded skew + fail-closed replay cap-4096, C# vector mirror, both TFMs 1939/1939), #434 @665572c (quarantine counter + capped re-queue), #435 @3771f1c (5xx mapping + msg cap + hygiene tests). Verify-Local-CI GREEN on all 3 backend branches; endpoint-reviewer PASS x2; secret scan clean. ReportFindings re-reported with per-finding outcomes on all 4 reviews."
+  - kind: pr
+    ref: "MERGED 2026-08-19: #435 -> 16df5c9, #434 -> 5286981 (each rebased/re-verified/re-CI'd individually), then #433+AddIns#78 merged TOGETHER as the atomic pair after rebasing #433 onto post-#434/#435 main (3-file additive-union conflict resolved by hand in errors.py/native_adapter.py/assistant_parameter_writes.py, re-verified byte-identical wire vectors) and fixing a stale test helper: #433 -> 10392e74, AddIns#78 -> 91a40465. flag confirmed OFF (unset default) on main post-merge."
   verification:
     level: verified
-    by: "Design ratified 2026-08-18 (in-session AskUserQuestion): local signature check keyed by the DPAPI pane-session secret, no network round-trip from the Revit main thread. BUILT SAME NIGHT, machine evidence: BIMpossible Verify-Local-CI.ps1 -BaseRef origin/main at 10d6ee7 = LOCAL CI GREEN (3159+4 pass, exit 0; 21 new pipe_attestation tests); AddIns dotnet test = 1670 pass 0 fail (19 new SyncAuthVerifier refusal-path pins), both TFMs build 0 errors. NOT MERGED, NOT LIVE-SMOKED -- flag stays OFF; supervised go-live is P7-SYNC-GOLIVE."
-    at: '2026-08-18'
+    by: "Design ratified 2026-08-18 (in-session AskUserQuestion): local signature check keyed by the DPAPI pane-session secret, no network round-trip from the Revit main thread. Built 2026-08-18, remediated + rebased + re-verified 2026-08-19, MERGED to main same day: BIMpossible#433 (10392e74) + AddIns#78 (91a40465), both squash-merged after green CI. flag stays OFF (verified unset on main post-merge); supervised go-live is P7-SYNC-GOLIVE."
+    at: '2026-08-19'
   live_check:
-  - "Check gh pr view on BIMpossible#433 and BIMpossible-AddIns#78: still draft/open = awaiting owner review; merged (together) = flip this to landed and P7-SYNC-GOLIVE becomes the next supervised move."
+  - "Confirm BIMpossible#433 (10392e74) and BIMpossible-AddIns#78 (91a40465) are MERGED on their respective mains, and BIMPOSSIBLE_REVIT_LINK_SYNC_ENABLED remains unset/off, before treating P7-SYNC-GOLIVE as unblocked."
   source: "2026-08-18/19 P7 supervised walkthrough session; design-docs/2026-08-18__sync-token-handshake_ANCHOR.md (branch claude/sync-token-handshake)"
   notes_url:
 
@@ -1697,20 +1705,19 @@ items:
   risk: 2
   evidence:
   - kind: doc
-    ref: "BIMpossible_PHASE-STATUS.md, Phase 3 row -- ducts/pipes parameter-write scope named as awaiting a product decision, not yet ruled on"
+    ref: "BIMpossible_PHASE-STATUS.md, Phase 3.10b sub-note -- DECIDED 2026-08-18: from/to pair"
   verification:
     level: verified
-    by: "OWNER RULED 2026-08-18 (in-session AskUserQuestion, /next execution run): ducts/pipes write scope = FROM/TO PAIR (matches PATH-TO-DONE D3 recommended option). Decision is the deliverable; item closes as live. PHASE-STATUS row update drafted for owner to paste (ledger is owner-maintained)."
-    at: '2026-08-18'
-  live_check:
-  - "Re-read BIMpossible_PHASE-STATUS.md Phase 3 row for a ruling; if present, promote to landed/ready with the ruling cited."
-  source: "BIMpossible_PHASE-STATUS.md, Phase 3 -- surfaced by /next BIMpossible roadmap 2026-08-18, UNTRACKED"
+    by: "OWNER RULED 2026-08-18 (in-session AskUserQuestion, /next execution run): ducts/pipes write scope = FROM/TO PAIR (matches PATH-TO-DONE D3 recommended option). Decision is the deliverable; item closes as live. PHASE-STATUS.md Phase 3.10b sub-note now reads \"output shape DECIDED 2026-08-18: from/to pair\" -- ledger paste confirmed landed via BIMpossible_Workspace PR #73 (squash-merged)."
+    at: '2026-08-20'
+  live_check: []
+  source: "BIMpossible_PHASE-STATUS.md, Phase 3 -- surfaced by /next BIMpossible roadmap 2026-08-18, UNTRACKED; ledger-paste closure verified 2026-08-20"
   notes_url:
 
 - id: P3-12-TENANCY-REVISIT
   title: "Re-rule 3.12 tenancy row-isolation call for multi-firm project sharing"
   projects: [bimpossible]
-  status: landed
+  status: live
   owner_gate: true
   unblocks: [P6-CLIENTMGMT-F]
   blocked_by: []
@@ -1718,14 +1725,13 @@ items:
   risk: 3
   evidence:
   - kind: doc
-    ref: "BIMpossible_PHASE-STATUS.md, Phase 3 row 3.12 -- \"PLACED, not ratified\": the original row-level-isolation call needs revisiting now that the target is multi-firm project sharing, not single-firm"
+    ref: "BIMpossible_PHASE-STATUS.md, Phase 3 row 3.12 -- RATIFIED 2026-08-18: extend row-level isolation"
   verification:
     level: verified
-    by: "OWNER RATIFIED 2026-08-18 (in-session AskUserQuestion, /next execution run): EXTEND row-level isolation -- keep per-row firm_id scoping and add a project-membership join for shared projects (no move to a separate ACL store). Unblocks P6-CLIENTMGMT-F. PHASE-STATUS 3.12 ratification note drafted for owner to paste (ledger is owner-maintained). RECONFIRMED 2026-08-18 (later /next pass, same session): PHASE-STATUS.md row 3.12 (line 35) still reads \"PLACED, not ratified\" verbatim -- the owner has not yet pasted the ratification into the ledger. This is expected lag (ledger is owner-maintained, not a contradiction of the decision itself), so status is landed-decision/pending-ledger-paste, not re-opened. P6-CLIENTMGMT-F is unblocked on the decision regardless of the paste."
-    at: '2026-08-18'
-  live_check:
-  - "Re-read BIMpossible_PHASE-STATUS.md Phase 3 row 3.12; once the owner pastes the ratification text, drop this live_check."
-  source: "BIMpossible_PHASE-STATUS.md, Phase 3 (3.12) -- surfaced by /next BIMpossible roadmap 2026-08-18, UNTRACKED"
+    by: "OWNER RATIFIED 2026-08-18 (in-session AskUserQuestion, /next execution run): EXTEND row-level isolation -- keep per-row firm_id scoping and add a project-membership join for shared projects (no move to a separate ACL store). Unblocks P6-CLIENTMGMT-F. PHASE-STATUS.md row 3.12 (line 35) now reads \"Phase 3.12 (RATIFIED 2026-08-18): ... extend row-level isolation\" -- ledger paste confirmed landed via BIMpossible_Workspace PR #73 (squash-merged), closing the pending-ledger-paste gap this item's prior live_check was tracking."
+    at: '2026-08-20'
+  live_check: []
+  source: "BIMpossible_PHASE-STATUS.md, Phase 3 (3.12) -- surfaced by /next BIMpossible roadmap 2026-08-18, UNTRACKED; ledger-paste closure verified 2026-08-20"
   notes_url:
 
 - id: P5-6-VISUAL-MODEL-GRAPH
@@ -1802,14 +1808,14 @@ items:
   risk: 2
   evidence:
   - kind: doc
-    ref: "BIMpossible_PHASE-STATUS.md, Phase 6 row Client-Mgmt F -- PLACED not ratified; ledger states it \"depends on Phase 3's proposed 3.12 tenancy re-decision\""
+    ref: "BIMpossible_PHASE-STATUS.md, Phase 6 row Client-Mgmt F -- PLACED not ratified; ledger now cites Phase 3's 3.12 tenancy re-decision as RATIFIED 2026-08-18"
   verification:
     level: claimed
-    by: "3.12 dependency CLEARED 2026-08-18: owner ratified extend-row-isolation (see P3-12-TENANCY-REVISIT). F is now buildable; still PLACED-not-ratified in the ledger, but the stated blocker is gone. Phase 13 T5 remains downstream of F."
-    at: '2026-08-18'
+    by: "3.12 dependency CLEARED 2026-08-18: owner ratified extend-row-isolation (see P3-12-TENANCY-REVISIT). PHASE-STATUS.md Phase 6 row confirmed 2026-08-20 to cite the 3.12 ratification by name (\"RATIFIED 2026-08-18 -- extend row-level isolation; F is now unblocked on this axis\"). F itself remains PLACED-not-ratified in the ledger -- that is F's own status, unrelated to the 3.12 dependency, which is fully cleared."
+    at: '2026-08-20'
   live_check:
-  - "Re-read BIMpossible_PHASE-STATUS.md Phase 6 row Client-Mgmt F; confirm 3.12 status before treating as unblocked."
-  source: "BIMpossible_PHASE-STATUS.md, Phase 6 (Client-Mgmt F) -- surfaced by /next BIMpossible roadmap 2026-08-18, UNTRACKED"
+  - "Re-read BIMpossible_PHASE-STATUS.md Phase 6 row Client-Mgmt F for F's own ratification, separate from the (now-cleared) 3.12 dependency."
+  source: "BIMpossible_PHASE-STATUS.md, Phase 6 (Client-Mgmt F) -- surfaced by /next BIMpossible roadmap 2026-08-18, UNTRACKED; 3.12-dependency closure verified 2026-08-20"
   notes_url:
 
 - id: P8-HUB-ACTIVATION-RUNBOOK
@@ -1899,10 +1905,10 @@ items:
 - id: P13-WRITE-ENGINE-INC3
   title: "Build Write Engine Increment 3, sequenced after Increment 2 ships"
   projects: [bimpossible, addins]
-  status: blocked_dep
-  owner_gate: false
+  status: blocked_owner
+  owner_gate: true
   unblocks: []
-  blocked_by: [WRITE-ENGINE-INC2]
+  blocked_by: []
   effort: M
   risk: 2
   evidence:
@@ -1913,6 +1919,7 @@ items:
     by: "WRITE-ENGINE-INC2's own verification prose states its unblocks stays empty deliberately (\"product depth, not a dependency\") -- that ruling is honored here and not overridden; this item's blocked_by names the true build-sequencing fact without adding INC3 to INC2's unblocks."
     at: '2026-08-18'
   live_check:
+  - "2026-08-21: INC2 dependency cleared (landed). BLOCKED ON OWNER: Increment 3 has no scope definition anywhere in queue/ledger -- owner must name the increment's contents before a build session starts."
   - "Confirm WRITE-ENGINE-INC2 (#273 / AddIns#54) has actually merged and deployed before starting Increment 3."
   source: "BIMpossible_PHASE-STATUS.md, Phase 13 -- surfaced by /next BIMpossible roadmap 2026-08-18, UNTRACKED"
   notes_url:
@@ -1928,14 +1935,14 @@ items:
   risk: 2
   evidence:
   - kind: doc
-    ref: "BIMpossible_PHASE-STATUS.md, Phase 13 -- proposed cross-firm-approval T5, PLACED not ratified; ledger states it \"explicitly depends on F and is itself still unbuilt\""
+    ref: "BIMpossible_PHASE-STATUS.md, Phase 13 -- proposed cross-firm-approval T5, PLACED not ratified; depends on F (Phase 6), which depends on the 3.12 tenancy ruling (Phase 3, RATIFIED 2026-08-18)"
   verification:
     level: claimed
-    by: "Ledger-stated dependency on Client-Mgmt F (Phase 6), which in turn depends on the 3.12 tenancy ruling (Phase 3) -- a real three-item chain, all PLACED not ratified."
-    at: '2026-08-18'
+    by: "Chain re-checked 2026-08-20: 3.12 (Phase 3) is RATIFIED 2026-08-18 -- extend row-level isolation (see P3-12-TENANCY-REVISIT), so F's 3.12 dependency is cleared. F and T5 themselves both remain PLACED-not-ratified in the ledger -- that is their own status, not a blocked dependency."
+    at: '2026-08-20'
   live_check:
-  - "Re-read BIMpossible_PHASE-STATUS.md Phase 13 row T5; confirm Client-Mgmt F status before treating as unblocked."
-  source: "BIMpossible_PHASE-STATUS.md, Phase 13 (T5) -- surfaced by /next BIMpossible roadmap 2026-08-18, UNTRACKED"
+  - "Re-read BIMpossible_PHASE-STATUS.md Phase 13 row T5 and Phase 6 row F for their own ratification status (the 3.12 dependency is cleared)."
+  source: "BIMpossible_PHASE-STATUS.md, Phase 13 (T5) -- surfaced by /next BIMpossible roadmap 2026-08-18, UNTRACKED; 3.12-dependency closure verified 2026-08-20"
   notes_url:
 
 - id: P13-T6-REASON-TAG
@@ -1949,16 +1956,16 @@ items:
   risk: 1
   evidence:
   - kind: doc
-    ref: "BIMpossible_PHASE-STATUS.md, Phase 13 -- proposed reason/criteria tag T6, PLACED not ratified; not dependent on Client-Mgmt F, an independent approval-flow addition"
+    ref: "BIMpossible_PHASE-STATUS.md, Phase 13 -- reason/criteria tag T6 RATIFIED 2026-08-18 (\"build it\"); not dependent on Client-Mgmt F, an independent approval-flow addition"
   - kind: pr
     ref: "BIMpossible #429 OPEN (2026-08-18, branch claude/t6-reason-tag, commit 6615119) -- nullable change_set.approval_reason (migration d5f8b3c62e49), reason threaded through /approve + atomic /save auto-approve ('self-approval: <reason>' history marker), optional Reason input in the Edit-value dialog. 39 DB-lane + 1849 frontend tests green; all three gate agents PASS."
   verification:
     level: verified
-    by: "OWNER RATIFIED 2026-08-18 (in-session AskUserQuestion): build it. BUILT same session; PR #429 open awaiting merge. Ledger ratification note drafted for owner to paste."
-    at: '2026-08-18'
+    by: "OWNER RATIFIED 2026-08-18 (in-session AskUserQuestion): build it. BUILT same session; ledger paste confirmed landed via BIMpossible_Workspace PR #73 (squash-merged) -- Phase 13 row now reads RATIFIED. PR #429 re-checked 2026-08-20: still OPEN, not merged -- work stays in_flight until it lands."
+    at: '2026-08-20'
   live_check:
   - "gh pr view 429 -- merged? then landed; deployed (backend restart + Refresh-Frontend) before live."
-  source: "BIMpossible_PHASE-STATUS.md, Phase 13 (T6) -- surfaced by /next BIMpossible roadmap 2026-08-18, UNTRACKED"
+  source: "BIMpossible_PHASE-STATUS.md, Phase 13 (T6) -- surfaced by /next BIMpossible roadmap 2026-08-18, UNTRACKED; ledger-ratification text refreshed 2026-08-20, PR #429 still open"
   notes_url:
 
 - id: P14-14G-RESIDENCY-REDACTION
@@ -2027,10 +2034,10 @@ items:
 - id: P15-15D-MODEL-WRITES
   title: "Build AI-assisted model writes (15d), gated on Phase 7 go-live"
   projects: [bimpossible, addins]
-  status: blocked_dep
+  status: blocked_owner
   owner_gate: true
   unblocks: []
-  blocked_by: [P7-SYNC-GOLIVE]
+  blocked_by: []
   effort: L
   risk: 3
   evidence:
@@ -2071,8 +2078,8 @@ items:
 - id: AUTHZ-AUDIT-POISON-BATCH-FLOOD
   title: "authz shadow-audit poison row (firm_id='', principal 'service', reason 'wizard.account_read') fails UUID cast and re-queues the whole ~500-row batch every ~2s, flooding backend logs"
   projects: [bimpossible]
-  status: blocked_owner
-  owner_gate: true
+  status: landed
+  owner_gate: false
   unblocks: []
   blocked_by: []
   effort: S
@@ -2082,12 +2089,14 @@ items:
     ref: "aec/authz/audit.py flush_pending -- batch insert fails with psycopg2.errors.InvalidTextRepresentation: invalid input syntax for type uuid: \"\" on firm_id=''; whole batch (~500 rows incl. legitimate no-projection-record denials) never clears and re-queues on every flush interval"
   - kind: pr
     ref: "BUILT 2026-08-19 overnight: BIMpossible#434 (draft, 48fdb29) -- flush_pending now quarantines a row that fails to insert instead of re-queuing the whole batch forever. Awaiting owner review."
+  - kind: pr
+    ref: "MERGED: #434 -> 5286981 (2026-08-19, quarantine); ROOT CAUSE FIXED: #440 -> 02bd9b6 (2026-08-21) guard.py:112/174 firm_id='' emission + bounded observable quarantine sample buffer in aec/authz/audit.py"
   verification:
     level: verified
-    by: "Observed live in docker-backend-1 logs throughout the 2026-08-18/19 P7 session -- same traceback recurring every ~2s for hours, drowning out real sync/relay log lines (had to grep -v it to find the actual sync error). FIX BUILT SAME NIGHT: Verify-Local-CI.ps1 -BaseRef origin/main LOCAL CI GREEN at 48fdb29, full pure-lane pytest green. NOT MERGED -- the root emission site for firm_id='' (which write path produces it) was not tracked down; this fix stops the flood/starvation regardless of root cause but does not explain why that row exists."
+    by: "CLOSED 2026-08-21: #434 merged (5286981) and root emission site fixed in #440 (02bd9b6) with tests test_guard_emergency_deny.py / test_authz_audit_stream_worker.py. || Observed live in docker-backend-1 logs throughout the 2026-08-18/19 P7 session -- same traceback recurring every ~2s for hours, drowning out real sync/relay log lines (had to grep -v it to find the actual sync error). FIX BUILT SAME NIGHT: Verify-Local-CI.ps1 -BaseRef origin/main LOCAL CI GREEN at 48fdb29, full pure-lane pytest green. NOT MERGED -- the root emission site for firm_id='' (which write path produces it) was not tracked down; this fix stops the flood/starvation regardless of root cause but does not explain why that row exists."
     at: 2026-08-19
   live_check:
-  - "Check gh pr view on BIMpossible#434: still draft/open = awaiting owner review; merged = flip to landed. Root-cause the firm_id='' emission site as a still-open follow-up if it recurs after merge."
+  - "docker logs docker-backend-1 --since 1h | grep -c InvalidTextRepresentation must be 0 after #440 deploy."
   source: "2026-08-18/19 P7 supervised walkthrough session (previously noted pre-compaction, now filed)"
   notes_url:
 
@@ -2131,4 +2140,176 @@ items:
   live_check:
   - "Re-read BIMpossible_PHASE-STATUS.md Phase 17 row 17.0 and the cited governance/migration docs for a go decision or partial build."
   source: "BIMpossible_PHASE-STATUS.md, Phase 17 (17.0) -- surfaced by /next BIMpossible roadmap 2026-08-18, UNTRACKED"
+  notes_url:
+
+- id: AUTHZ-AUDIT-ROW-SIGNING
+  title: "Sign authz AuditRecord (actor_type/principal_id) at record time so audit rows are tamper-evident, matching the syncAuth attestation leg"
+  projects: [bimpossible]
+  status: blocked_owner
+  owner_gate: true
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 2
+  evidence:
+  - kind: doc
+    ref: "BIMpossible decision-log/2026-08-21__p7-hardening-followons-queued.md Follow-on 1 (PROPOSED, not built): rows are self-asserted by the caller; nothing binds a queued AuthzDecisionLog row to the guard decision that produced it"
+  verification:
+    level: claimed
+    by: "Queued 2026-08-21 from P7 hardening pass; needs owner call on signing scheme (server-held key, sign at record_decision/_enqueue, verify at read/report)."
+    at: 2026-08-21
+  live_check:
+  - "grep -nE 'signature|hmac' backend/aec/authz/audit.py — absent = still unbuilt."
+  source: "P7 hardening pass 2026-08-21 (#440/#441)"
+  notes_url:
+
+- id: ADDINS-JTI-REPLAY-PERSIST
+  title: "Persist (or TTL-bound) the add-in's process-local syncAuth jti replay cache so an add-in restart inside the 600s attestation TTL cannot re-enable a consumed attestation"
+  projects: [addins, bimpossible]
+  status: blocked_owner
+  owner_gate: true
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: doc
+    ref: "BIMpossible decision-log/2026-08-21__p7-hardening-followons-queued.md Follow-on 2 (PROPOSED): backend/revit_link/pipe_attestation.py DEFAULT_TTL_SECONDS=600; C# verifier replay cache is in-process only"
+  verification:
+    level: claimed
+    by: "Queued 2026-08-21; owner design call: file/registry-backed jti cache scoped to pane session vs shorter TTL. Note the backend one-time sync token is independently single-use (pilot replay 403), so exposure is limited to the attestation leg."
+    at: 2026-08-21
+  live_check:
+  - "Locate the C# jti cache in BIMpossible-AddIns (EventDispatcher/PipeServer verifier) and check for a persistence backend."
+  source: "P7 hardening pass 2026-08-21 (#440/#441)"
+  notes_url:
+
+- id: ADDINS-NOT-SUPPORTED-PIPE-PROPAGATION
+  title: "Propagate the typed NOT_SUPPORTED classification through PipeServer.cs so the add-in answers unsupported pipe methods with the typed code instead of a generic error"
+  projects: [addins, bimpossible]
+  status: ready
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: doc
+    ref: "Deferred from P7 hardening pass 2026-08-21 (BIMpossible#440 typed NOT_SUPPORTED mapping on the backend; AddIns#81 did not extend it through PipeServer.cs)"
+  verification:
+    level: claimed
+    by: "Queued at P7 close-out 2026-08-21; not built."
+    at: 2026-08-21
+  live_check:
+  - "grep NOT_SUPPORTED in BIMpossible-AddIns BIMpossible.RevitLink/**/PipeServer.cs — absent = still open."
+  source: "P7 close-out 2026-08-21"
+  notes_url:
+
+- id: AUTHZ-AUDIT-FIRMID-EMPTY-ROOTCAUSE
+  title: "Root-cause the original producer of firm_id='' in authz audit batches (the poison quarantined by #440) and fix it at the source"
+  projects: [bimpossible]
+  status: ready
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: doc
+    ref: "BIMpossible#440 (02bd9b6) quarantines poisoned rows (AUTHZ-AUDIT-POISON-BATCH-FLOOD) but the caller that emitted firm_id='' was not identified"
+  verification:
+    level: claimed
+    by: "Queued at P7 close-out 2026-08-21; investigation not started."
+    at: 2026-08-21
+  live_check:
+  - "Search backend/aec for call sites passing a possibly-empty firm string into the authz audit writer; confirm none can yield ''."
+  source: "P7 close-out 2026-08-21"
+  notes_url:
+
+- id: ADDINS-JTI-REPLAY-CROSS-PROCESS
+  title: "Durable cross-process/restart replay semantics for the add-in syncAuth jti cache — only if a multi-process Revit topology becomes supported"
+  projects: [addins]
+  status: blocked_owner
+  owner_gate: true
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 2
+  evidence:
+  - kind: doc
+    ref: "Distinct from ADDINS-JTI-REPLAY-PERSIST (single-process restart inside TTL). This one is the multi-process case; no such topology is supported today."
+  verification:
+    level: claimed
+    by: "Queued at P7 close-out 2026-08-21 as a conditional follow-on."
+    at: 2026-08-21
+  live_check:
+  - "Is more than one Revit process per pane session supported? No = stays parked."
+  source: "P7 close-out 2026-08-21"
+  notes_url:
+
+- id: P7-SYNC-COMMENT-CRYPTO-BINDING
+  title: "Cryptographically bind the sync approval/comment text into the one-time sync token / attestation — only if that text becomes security-relevant"
+  projects: [bimpossible, addins]
+  status: blocked_owner
+  owner_gate: true
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: doc
+    ref: "Today the token binds firm/user/document_title only (backend/revit_link/sync_token.py); comment is free text passed to SynchronizeWithCentral and is not an authorization input."
+  verification:
+    level: claimed
+    by: "Queued at P7 close-out 2026-08-21 as a conditional follow-on."
+    at: 2026-08-21
+  live_check:
+  - "Does any policy or audit consumer treat the sync comment as trusted? No = stays parked."
+  source: "P7 close-out 2026-08-21"
+  notes_url:
+
+- id: ADDINS-DPAPI-PREWARM
+  title: "First-use DPAPI pre-warm in the add-in verifier to remove the cold-start latency on the first attestation after Revit launch"
+  projects: [addins]
+  status: blocked_owner
+  owner_gate: true
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: doc
+    ref: "Observed during the 2026-08-19/21 pilots as a one-time delay; not a correctness issue. Owner call whether the latency is worth the code."
+  verification:
+    level: claimed
+    by: "Queued at P7 close-out 2026-08-21 as an optional improvement."
+    at: 2026-08-21
+  live_check:
+  - "Time the first vs second attestation after a Revit launch with the add-in log; if the delta is not user-visible, retire."
+  source: "P7 close-out 2026-08-21"
+  notes_url:
+
+- id: P7-SYNC-REJECTION-AUDIT
+  title: "Audit typed sync-token rejections (403 replay/expired/scope) in revit_link_request_log and carry firm_id on sync audit rows"
+  projects: [bimpossible]
+  status: landed
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: live_smoke
+    ref: "2026-08-21 pilot: replay -> 403 'Token has already been used (single-use)' produced NO revit_link_request_log row (rejection happens in router before engines.execute_sync); successful row id=25 has user_id but the table has no firm_id column"
+  - kind: pr
+    ref: "BIMpossible#443 merged -> d6368c8 (2026-08-21): typed SYNC_TOKEN_* codes on SyncTokenError family, router audits rejections as status=rejected after all gates (degrade-don't-block), revit_link_request_log.firm_id nullable UUID (migration d5f8b3c41e27, idempotent+reversible, ORM index declared), _coerce_firm_id nulls garbage. Gates: backend-endpoint-reviewer PASS, migration-reviewer PASS. Verify-Local-CI GREEN; remote CI backend/pytest + semgrep + security-scan-summary pass."
+  - kind: live_smoke
+    ref: "Deployed 2026-08-21 via docker compose up -d: backend-migrate ran c4e7a2b91d38 -> d5f8b3c41e27, alembic current = d5f8b3c41e27 (head); information_schema shows revit_link_request_log.firm_id uuid nullable + ix_revit_link_request_log_firm_created; 25 existing rows readable (row 25 intact, firm_id NULL); backend/frontend/db/redis healthy; codes importable in container. No new sync/replay run (read-only verification)."
+  verification:
+    level: verified
+    by: "Merged d6368c8, migrated, deployed, read-only verified 2026-08-21 (tests: 5 new in tests/revit_link — replay audited w/ SYNC_TOKEN_ALREADY_USED + firm + token absent + no second execute; audit failure keeps 403; secret-missing code; DB-lane firm_id persist + '' -> NULL; _coerce_firm_id unit)."
+    at: 2026-08-21
+  live_check:
+  - "docker exec docker-backend-1 python -m alembic current -> d5f8b3c41e27; a future replayed sync token must produce a revit_link_request_log row with status='rejected' and error_code='SYNC_TOKEN_ALREADY_USED'."
+  source: "P7-SYNC-GOLIVE pilot 2026-08-21"
   notes_url:
