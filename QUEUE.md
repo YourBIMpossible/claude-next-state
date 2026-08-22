@@ -2,7 +2,7 @@
 
 # /next — work-item queue
 
-Generated 2026-08-21 (synced). Ranked by critical path (transitive `unblocks` cone), tiebreak:
+Generated 2026-08-22 (synced). Ranked by critical path (transitive `unblocks` cone), tiebreak:
 owner-gated+S effort, then effort, then risk, then id. Full algorithm:
 `~/.claude/skills/next/reference/item-model.md`.
 
@@ -10,6 +10,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-18 @ `971caa2` PR#427 · `addi
 (families/pc-monitor: no items yet — run `init` to derive.)
 
 ## Blocked on you
+
+[P6-CLIENTMGMT-F] Build cross-firm project sharing (Client-Mgmt F), gated on 3.12
+       unblocks 1 · L · bimpossible · CLAIMED 2026-08-22 · BIMpossible_PHASE-STATUS.md, Phase 6 row Client-Mgmt F -- PLACED not…
 
 [OPS-CLIENTDATA-REMEDIATION] Client-data remediation: quarantine delete, PDF triage, de-ID pass, DB audit
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-07 · decision-log/2026-08-05__client-data-remediation.md -- Open Items ch…
@@ -183,9 +186,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-18 @ `971caa2` PR#427 · `addi
 
 ## Next up
 
-[P6-CLIENTMGMT-F] Build cross-firm project sharing (Client-Mgmt F), gated on 3.12
-       unblocks 1 · L · bimpossible · CLAIMED 2026-08-20 · BIMpossible_PHASE-STATUS.md, Phase 6 row Client-Mgmt F -- PLACED not…
-
 [OPS-DEPLOY-RUNBOOK] Walk the deploy/rollback runbook draft on the prod host; fill VERIFY blanks
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-04 · Carried-open finding across multiple audit cycles, per BIMpossible_P…
 
@@ -246,7 +246,7 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-18 @ `971caa2` PR#427 · `addi
        unblocks 0 · L · bimpossible · CLAIMED 2026-08-04 · BIMpossible_ProgramPlan_2026-05-25.md §Commercial Launch Prerequisit…
 
 [P13-T5-CROSSFIRM-APPROVAL] Build cross-firm approval flow (T5), depends on Client-Mgmt F
-       unblocks 0 · L · bimpossible · CLAIMED 2026-08-20 · BIMpossible_PHASE-STATUS.md, Phase 13 -- proposed cross-firm-approva…
+       unblocks 0 · L · bimpossible · CLAIMED 2026-08-22 · BIMpossible_PHASE-STATUS.md, Phase 13 -- proposed cross-firm-approva…
 
 ## Parked
 

@@ -867,6 +867,8 @@ items:
     ref: "01_BuildLog/2026-08-06__revit-relay-multitenancy-triage.md -- 'RESOLVED 2026-08-06 (PR B): option 3 taken formally, option 1 rejected, option 2 named as the eventual fix'"
   - kind: pr
     ref: "BIMpossible #270 (f6f0044) -- MERGED 2026-08-06; records the defer plus a multi-firm startup tripwire in revit_link/feature_flag.py: warn_if_multi_firm_single_relay, now live on main"
+  - kind: code
+    ref: "backend/revit_link/router.py -- security-engineer finding #8 on PR#447 (2026-08-21): the /revit routes check membership but carry no per-project gate (no assert_project_access / write=True), so they sit outside the cross-firm write-denial sweep. Pre-existing, share-independent; fold into option 2 when a trigger fires."
   verification:
     level: verified
     by: "DELIBERATELY DEFERRED with named triggers, not overlooked. A relay_bindings table is a data-model change and therefore CONFIRM-gated even under overnight autonomy, so option 1 was rejected on process grounds and option 3 (formal defer + tripwire) was taken. #268 added an imperative membership check on the six live /revit routes, which NARROWS but does not close the gap -- the relay itself still routes globally. Residual accepted risk, stated plainly: same-desktop cross-firm access on a one-operator deployment. Build option 2 when ANY of three triggers fires: a second Revit desktop is paired, a second firm is onboarded with the flag on, or the relay is bound off loopback. Distinct from P7-REVITLINK-MULTIUSER, which is about pipe-instance capacity (RE-2) -- that path is proven compiled out, this one is live. #270 merged 2026-08-06 so the tripwire code is now on main; its runtime firing has still not been observed (no docker/log access this session), so the code being present is landed evidence, not live evidence."
@@ -1821,7 +1823,7 @@ items:
 - id: P6-CLIENTMGMT-F
   title: "Build cross-firm project sharing (Client-Mgmt F), gated on 3.12"
   projects: [bimpossible]
-  status: ready
+  status: blocked_owner
   owner_gate: true
   unblocks: [P13-T5-CROSSFIRM-APPROVAL]
   blocked_by: []
@@ -1830,13 +1832,20 @@ items:
   evidence:
   - kind: doc
     ref: "BIMpossible_PHASE-STATUS.md, Phase 6 row Client-Mgmt F -- PLACED not ratified; ledger now cites Phase 3's 3.12 tenancy re-decision as RATIFIED 2026-08-18"
+  - kind: pr
+    ref: "BIMpossible PR#447 MERGED (squash) to main at bf709a0, 2026-08-22, feat/crossfirm-project-sharing -- project_share_grants + migration 1f617e094d19 (single head, replay clean); aec/cross_firm_sharing.py grant/revoke/list + audit (project.share/unshare/.denied, project.shared_read daily-deduped, project.shared_write.denied per attempt); write-path sweep (every mutation route write=True, pinned by test_cross_firm_write_denial.py); owner-admin API GET/POST/DELETE /account/projects/{id}/shares + /admin/firms/{firm}/projects/{id}/shares twin; GET /account/shared-projects; /search/models admits shared projects with hubId nulled; frontend /account shared section + ?shared=1 read-only project/model pages. Verify-Local-CI.ps1 -BaseRef origin/main exit 0 at 37271de pre-merge (DB 4817 / pure 3234 / contract 4 / vitest 1866; next build 0; model route 202.7 KB gz). Agent gates: endpoint-reviewer PASS, migration-reviewer PASS, typescript-api-reviewer PASS, security-engineer SHIP-WITH-FIXES (1/2/3/5/7 fixed; 4 UUID oracle + 6 firm-FK CASCADE accepted; 8 relay gate -> RELAY-MULTITENANCY)."
+  - kind: deploy
+    ref: "2026-08-22 live deploy from dedicated worktree F:\\AI-Dev\\BIMpossible\\.claude\\worktrees\\deploy-p6 (detached at bf709a0, retained as the standing deploy source; canonical checkout was never used as the bind-mount source). docker compose -p docker up -d --build reused the existing docker-* project/volumes/network/ports/env files; docker-db-1/docker-redis-1 kept running throughout (docker_postgres_data/docker_redis_data untouched); docker-backend-1/docker-frontend-1 healthy post-deploy. Live `alembic current` = 1f617e094d19 (head). BIMPOSSIBLE_CROSS_FIRM_SHARING_ENABLED=1 confirmed set inside the running backend container. Stray bimpossible-* containers/volumes/network from an earlier mis-scoped deploy attempt removed after owner confirmation; live docker-* resources untouched."
   verification:
     level: claimed
-    by: "3.12 dependency CLEARED 2026-08-18: owner ratified extend-row-isolation (see P3-12-TENANCY-REVISIT). PHASE-STATUS.md Phase 6 row confirmed 2026-08-20 to cite the 3.12 ratification by name (\"RATIFIED 2026-08-18 -- extend row-level isolation; F is now unblocked on this axis\"). F itself remains PLACED-not-ratified in the ledger -- that is F's own status, unrelated to the 3.12 dependency, which is fully cleared."
-    at: '2026-08-20'
+    by: "MERGED + DEPLOYED, LIVE VERIFICATION PENDING. Code: merged to main (bf709a0) and deployed. Migration: applied and verified at head 1f617e094d19 in the live stack. Flag: BIMPOSSIBLE_CROSS_FIRM_SHARING_ENABLED=1 enabled and runtime-confirmed inside the backend container. Live behavioural verification: PENDING -- the supervised two-firm smoke (owner-admin grants a read share -> grantee discovers only that project -> grantee reads project/model read-only -> every grantee write denied at UI and backend -> owner revokes -> grantee loses access immediately -> owner-firm audit shows grant/read/denied-writes/revoke) has not been run. Do not treat this item as landed until that smoke is recorded. Pre-existing, not this PR: tests/test_admin_router.py two api-key tests fail on main (KeyError has_key)."
+    at: '2026-08-22'
   live_check:
+  - "gh pr view 447 --json state,mergedAt -- already MERGED at bf709a0; this only re-confirms, doesn't gate."
+  - "docker exec docker-backend-1 python -m alembic current -- expect 1f617e094d19 (head); docker exec docker-backend-1 sh -c 'echo $BIMPOSSIBLE_CROSS_FIRM_SHARING_ENABLED' -- expect 1."
   - "Re-read BIMpossible_PHASE-STATUS.md Phase 6 row Client-Mgmt F for F's own ratification, separate from the (now-cleared) 3.12 dependency."
-  source: "BIMpossible_PHASE-STATUS.md, Phase 6 (Client-Mgmt F) -- surfaced by /next BIMpossible roadmap 2026-08-18, UNTRACKED; 3.12-dependency closure verified 2026-08-20"
+  - "Confirm the supervised two-firm smoke has been run and recorded before flipping this item to landed."
+  source: "BIMpossible_PHASE-STATUS.md, Phase 6 (Client-Mgmt F) -- surfaced by /next BIMpossible roadmap 2026-08-18, UNTRACKED; 3.12-dependency closure verified 2026-08-20; slice 1 drafted 2026-08-21; merged + deployed 2026-08-22, two-firm smoke owner-gated"
   notes_url:
 
 - id: P8-HUB-ACTIVATION-RUNBOOK
@@ -1959,11 +1968,12 @@ items:
     ref: "BIMpossible_PHASE-STATUS.md, Phase 13 -- proposed cross-firm-approval T5, PLACED not ratified; depends on F (Phase 6), which depends on the 3.12 tenancy ruling (Phase 3, RATIFIED 2026-08-18)"
   verification:
     level: claimed
-    by: "Chain re-checked 2026-08-20: 3.12 (Phase 3) is RATIFIED 2026-08-18 -- extend row-level isolation (see P3-12-TENANCY-REVISIT), so F's 3.12 dependency is cleared. F and T5 themselves both remain PLACED-not-ratified in the ledger -- that is their own status, not a blocked dependency."
-    at: '2026-08-20'
+    by: "BLOCKED until ALL of: (1) PR#447 (F) merged -- DONE, bf709a0; (2) deployed with migration 1f617e094d19 verified live -- DONE, 2026-08-22; (3) BIMPOSSIBLE_CROSS_FIRM_SHARING_ENABLED=1 runtime-confirmed -- DONE, 2026-08-22; (4) supervised two-firm smoke recorded (owner-admin grants a read share -> grantee discovers only that project -> grantee reads project/model read-only -> every grantee write denied at UI and backend -> owner revokes -> grantee loses access immediately -> owner-firm audit shows grant/read/denied-writes/revoke) -- PENDING, not yet run. Conditions 1-3 complete; condition 4 is the sole remaining gate. F ships READ-ONLY by design: scope vocabulary is {read}; T5 must widen it to a cross-firm write scope with an owner decision on what it may mutate (approval only, never parameter writes) and record actor firm vs owner firm from the share row in the change-set flow. F and T5 remain PLACED-not-ratified in the ledger (2026-08-20 chain check; 3.12 cleared 2026-08-18)."
+    at: '2026-08-22'
   live_check:
+  - "gh pr view 447 --json state,mergedAt -- already MERGED at bf709a0. T5 unblocks only once the P6-CLIENTMGMT-F item records the two-firm smoke as passed."
   - "Re-read BIMpossible_PHASE-STATUS.md Phase 13 row T5 and Phase 6 row F for their own ratification status (the 3.12 dependency is cleared)."
-  source: "BIMpossible_PHASE-STATUS.md, Phase 13 (T5) -- surfaced by /next BIMpossible roadmap 2026-08-18, UNTRACKED; 3.12-dependency closure verified 2026-08-20"
+  source: "BIMpossible_PHASE-STATUS.md, Phase 13 (T5) -- surfaced by /next BIMpossible roadmap 2026-08-18, UNTRACKED; 3.12-dependency closure verified 2026-08-20; P6 merged+deployed 2026-08-22, still blocked on the recorded two-firm smoke"
   notes_url:
 
 - id: P13-T6-REASON-TAG
