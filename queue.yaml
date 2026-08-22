@@ -1948,7 +1948,7 @@ items:
 - id: P13-T6-REASON-TAG
   title: "Add reason/criteria tag to approval flow (T6)"
   projects: [bimpossible]
-  status: in_flight
+  status: landed
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -1958,14 +1958,17 @@ items:
   - kind: doc
     ref: "BIMpossible_PHASE-STATUS.md, Phase 13 -- reason/criteria tag T6 RATIFIED 2026-08-18 (\"build it\"); not dependent on Client-Mgmt F, an independent approval-flow addition"
   - kind: pr
-    ref: "BIMpossible #429 OPEN (2026-08-18, branch claude/t6-reason-tag, commit 6615119) -- nullable change_set.approval_reason (migration d5f8b3c62e49), reason threaded through /approve + atomic /save auto-approve ('self-approval: <reason>' history marker), optional Reason input in the Edit-value dialog. 39 DB-lane + 1849 frontend tests green; all three gate agents PASS."
+    ref: "BIMpossible#429 merged -> f0796ef (2026-08-21, squash): nullable change_set.approval_reason (migration d5f8b3c62e49), reason threaded through /approve + atomic /save auto-approve ('self-approval: <reason>' history marker), optional Reason input (max 1000 chars) in the Edit-value dialog. Rebased onto post-#443 main same session: down_revision manually re-pointed c4e7a2b91d38 -> d5f8b3c41e27 (no Alembic merge revision), chain confirmed linear c4e7a2b91d38 -> d5f8b3c41e27 -> d5f8b3c62e49 via `alembic heads`/`alembic history`. Gates: migration-reviewer PASS (cosmetic-only docstring nit), backend-endpoint-reviewer PASS (tenancy/injection/error-shape all clear). Verify-Local-CI GREEN (backend 3206 passed incl. migration round-trip + single-head check; frontend lint/tsc/vitest/audit-ci/next-build green, model route 202KB/207KB budget). Remote CI green: backend/pytest, frontend/next build, frontend/vitest+tsc, semgrep, gitleaks, security-scan-summary."
+  - kind: live_smoke
+    ref: "Deployed 2026-08-21 via `docker compose up -d --build` from docker/ (full rebuild: migration ships): docker-backend-migrate-1 ran d5f8b3c41e27 -> d5f8b3c62e49; `alembic current`/`alembic heads` in docker-backend-1 both report d5f8b3c62e49 (head), single head confirmed. information_schema: change_set.approval_reason is text, is_nullable=YES. backend/frontend healthy (/health 200, :3000 200)."
   verification:
     level: verified
-    by: "OWNER RATIFIED 2026-08-18 (in-session AskUserQuestion): build it. BUILT same session; ledger paste confirmed landed via BIMpossible_Workspace PR #73 (squash-merged) -- Phase 13 row now reads RATIFIED. PR #429 re-checked 2026-08-20: still OPEN, not merged -- work stays in_flight until it lands."
-    at: '2026-08-20'
+    by: "Merged f0796ef, migrated, deployed, live-verified 2026-08-21: single Alembic head, approval_reason column present+nullable in the running DB, backend+frontend healthy post-deploy."
+    at: '2026-08-21'
   live_check:
-  - "gh pr view 429 -- merged? then landed; deployed (backend restart + Refresh-Frontend) before live."
-  source: "BIMpossible_PHASE-STATUS.md, Phase 13 (T6) -- surfaced by /next BIMpossible roadmap 2026-08-18, UNTRACKED; ledger-ratification text refreshed 2026-08-20, PR #429 still open"
+  - "docker exec docker-backend-1 python -m alembic heads -> d5f8b3c62e49 (head), exactly one line."
+  - "select is_nullable from information_schema.columns where table_name='change_set' and column_name='approval_reason' -> YES."
+  source: "BIMpossible_PHASE-STATUS.md, Phase 13 (T6) -- surfaced by /next BIMpossible roadmap 2026-08-18, UNTRACKED; landed+verified 2026-08-21 via BIMpossible#429"
   notes_url:
 
 - id: P14-14G-RESIDENCY-REDACTION

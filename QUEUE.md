@@ -1,4 +1,5 @@
-<!-- GENERATED from queue.yaml. Do not hand-edit — edit queue.yaml, then regenerate. -->
+wrote F:\AI-Dev\.tools\state\QUEUE.md (424 lines)
+� edit queue.yaml, then regenerate. -->
 
 # /next — work-item queue
 
@@ -139,6 +140,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-18 @ `971caa2` PR#427 · `addi
 [OPS-REFRESH-FRONTEND-NODEPS] Fixed: Refresh-Frontend.ps1 was silently shipping backend code + migrations on a frontend-only deploy
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · BIMpossible #289 (5d8d559, merged 2026-08-07T05:47:09Z) -- docker co…
 
+[P13-T6-REASON-TAG] Add reason/criteria tag to approval flow (T6)
+       unblocks 0 · S · bimpossible · VERIFIED 2026-08-21 · BIMpossible_PHASE-STATUS.md, Phase 13 -- reason/criteria tag T6 RATI…
+
 [P7-SYNC-REJECTION-AUDIT] Audit typed sync-token rejections (403 replay/expired/scope) in revit_link_request_log and carry firm_id on sync audit rows
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-21 · 2026-08-21 pilot: replay -> 403 'Token has already been used (single…
 
@@ -230,11 +234,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-18 @ `971caa2` PR#427 · `addi
 
 [P17-0-CONTROL-PLANE] Build Integration Control Plane foundation (17.0), gates 17c+ expansion
        unblocks 0 · L · bimpossible · CLAIMED 2026-08-18 · BIMpossible_PHASE-STATUS.md, Phase 17 -- 17.0 Integration Control Pl…
-
-## In flight
-
-[P13-T6-REASON-TAG] Add reason/criteria tag to approval flow (T6)
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-20 · BIMpossible_PHASE-STATUS.md, Phase 13 -- reason/criteria tag T6 RATI…
 
 ## Blocked elsewhere
 
