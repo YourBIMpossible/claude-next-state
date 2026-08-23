@@ -61,14 +61,14 @@ projects:
   - key: dashboard
     name: AI-Dev Dashboard
     aliases: [dash]
-    path: F:\AI-Dev\Dashboard
+    path: F:\AI-Dashboard\Dashboard
     origin: https://github.com/YourBIMpossible/ai-dev-dashboard.git
     active: true
     companions: []
     notes: >
       Renders progress.phases[] from BIMpossible_PHASE-STATUS.md — downstream of the workspace
       ledgers, so ledger staleness surfaces here as wrong published status.
-      NOTE: F:\AI-Dev\Dashboard-auto shares this same origin. Two working copies of one repo —
+      NOTE: F:\AI-Dashboard\Dashboard-auto shares this same origin. Two working copies of one repo —
       confirm which is canonical before trusting either; flagged as possible sprawl.
 
   # ---- side tracks -----------------------------------------------------------
@@ -95,7 +95,7 @@ projects:
   - key: pc-monitor
     name: PC-Monitor
     aliases: [monitor]
-    path: F:\AI-Dev\PC-Monitor
+    path: F:\PC-Monitor
     origin: null                   # local only, branch: master
     active: true
     companions: []
@@ -104,7 +104,7 @@ projects:
 
   - key: ai-brain-data
     name: AI-Brain-Data
-    path: F:\AI-Dev\AI-Brain-Data
+    path: F:\AI-Brain-Data
     origin: null
     active: false
 

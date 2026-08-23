@@ -218,7 +218,7 @@ def build(state_dir: Path, generated_on: date) -> str:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--state-dir", type=Path, default=Path(r"F:\AI-Dev\.tools\state"))
+    parser.add_argument("--state-dir", type=Path, default=Path(r"F:\Claude-Tools\state"))
     parser.add_argument("--generated-on", default=None, help="YYYY-MM-DD; defaults to today")
     parser.add_argument(
         "--check",

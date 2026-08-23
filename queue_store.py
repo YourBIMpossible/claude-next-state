@@ -243,7 +243,7 @@ def load_store(state_dir: Path) -> Store:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--state-dir", type=Path, default=Path(r"F:\AI-Dev\.tools\state"))
+    parser.add_argument("--state-dir", type=Path, default=Path(r"F:\Claude-Tools\state"))
     parser.add_argument("--known-pr", help="probe: is 'repo#N' already represented? exit 0=known 2=unknown")
     parser.add_argument("--known-commit", help="probe: is a sha already represented? exit 0=known 2=unknown")
     args = parser.parse_args()
