@@ -6,7 +6,7 @@ Generated 2026-08-22 (synced). Ranked by critical path (transitive `unblocks` co
 owner-gated+S effort, then effort, then risk, then id. Full algorithm:
 `~/.claude/skills/next/reference/item-model.md`.
 
-Scope: `all`. Watermarks: `bimpossible` = 2026-08-18 @ `971caa2` PR#427 · `addins` = 2026-08-16 @ `a0a4e07` PR#64 · `workspace` = 2026-08-17 @ `134f129` PR#61.
+Scope: `all`. Watermarks: `bimpossible` = 2026-08-22 @ `e8efa70` PR#446 · `addins` = 2026-08-16 @ `a0a4e07` PR#64 · `workspace` = 2026-08-17 @ `134f129` PR#61.
 (families/pc-monitor: no items yet — run `init` to derive.)
 
 ## Blocked on you
@@ -82,6 +82,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-18 @ `971caa2` PR#427 · `addi
 [PHASE9-REOPENED-SCOPE] Phase 9 link-target RULED: cutsheets anchor to individual element (by family type)
        unblocks 1 · S · bimpossible · VERIFIED 2026-08-18 · BIMpossible_PHASE-STATUS.md row 9 (Product Data Ingestion) -- 'Reope…
 
+[ADMIN-DOMAIN-AUDIT-INACTIVE-FIRM-GUARD] Audit admin domain registration and block auto-link bootstrap against inactive firms
+       unblocks 1 · S · bimpossible · VERIFIED 2026-08-22 · BIMpossible#449 DRAFT opened 2026-08-22 (fix/domain-audit-firm-guard…
+
 [AUTHZ-INHERITANCE-P1] Authorization-Inheritance Phase 1: permission-projection foundation (spine)
        unblocks 1 · L · bimpossible · VERIFIED 2026-08-16 · BIMpossible #337 MERGED (squash b4515ba) 2026-08-15T00:06:40Z -- Pha…
 
@@ -133,6 +136,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-18 @ `971caa2` PR#427 · `addi
 [AISERVER-OPENCODE-DOCS] Commit AI-Server's uncommitted opencode/local-coding-agent doc updates (PROGRAM_PLAN.md, README.md)
        unblocks 0 · S · ai-server · VERIFIED 2026-08-08 · AI-Server main 2172820 -- 'docs: document opencode local coding-agen…
 
+[AUTHZ-AUDIT-FIRMID-EMPTY-ROOTCAUSE] Root-cause the original producer of firm_id='' in authz audit batches (the poison quarantined by #440) and fix it at the source
+       unblocks 0 · S · bimpossible · VERIFIED 2026-08-22 · BIMpossible#440 (02bd9b6) quarantines poisoned rows (AUTHZ-AUDIT-POI…
+
 [DOC-ALEMBIC-REFS-274] Merge #274 -- fix three surviving database/alembic/versions doc references
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · BIMpossible #274 (469173e) -- MERGED 2026-08-06 to main, by another …
 
@@ -153,6 +159,12 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-18 @ `971caa2` PR#427 · `addi
 
 [PROVIDER-REGISTRY-272] Provider key registry opened to 9 providers -- MERGED, not yet deployed
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-06 · BIMpossible #272 (79e9de5, squash) -- MERGED 2026-08-06; backend/aec…
+
+[SEC-GROUPS-VIEWS-PERSONAL-SAMEFIRM-EXISTENCE-ORACLE] PATCH/DELETE groups+views: same-firm personal-scope 403 lets a colleague infer a personal group/view id exists -- possibly by design
+       unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · Surfaced by the backend-endpoint-reviewer gate during SEC-GROUPS-VIE…
+
+[WINCHESTER-STALE-LINEAGE-LINK] Winchester - TEST project file list still links one TEST_Winchester_ELEC_R25.rvt entry to a dead item lineage (urn n53a4yy6RJu5fBMjDppI8A) -- Autodesk 'couldn't find this item', bounces to Autodesk sign-in
+       unblocks 0 · S · bimpossible · VERIFIED 2026-08-22 · Two links with an identical file_name in the project's file list res…
 
 [DEP-JSYAML-282] Dependabot js-yaml 4.3.0 -> 4.3.1 merged (GHSA-5p4m-2wfm-xmqj, dev-only transitive)
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · BIMpossible #282 MERGED 2026-08-07T02:30:12Z, squash commit 5d0379d3…
@@ -178,6 +190,12 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-18 @ `971caa2` PR#427 · `addi
 [R5-AECDM-PUSHDOWN] R5 AECDM query-pushdown lane MERGED -- flag-gated, read-only (PR #363)
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-17 · BIMpossible #363 MERGED (d56bd14, 2026-08-16T19:47:59Z, branch feat/…
 
+[SEC-DATAFLOW-HARDENING-SCOPE] Backend<->Autodesk data-flow analysis + data-hardening scope doc PUBLISHED (docs-only)
+       unblocks 0 · M · bimpossible · VERIFIED date-unknown · 
+
+[SEC-PDP-SLICE0] PDP Slice 0 no-migration containment bundle MERGED -- Redis blob encryption, conversation tenancy re-check, worker fail-closed on revoked grant, ElementCache hub-key pin
+       unblocks 0 · M · bimpossible · VERIFIED date-unknown · 
+
 [CKA-PILLAR2-FIRM-DOCS] Client Knowledge Assistant Pillar 2: per-firm client documents (upload, extraction, BM25 retrieval, assistant tool)
        unblocks 0 · L · bimpossible · VERIFIED 2026-08-13 · BIMpossible #327 (46520a7, merged 2026-08-08) -- Pillar 2 v1: per-fi…
 
@@ -201,9 +219,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-18 @ `971caa2` PR#427 · `addi
 [ADDINS-NOT-SUPPORTED-PIPE-PROPAGATION] Propagate the typed NOT_SUPPORTED classification through PipeServer.cs so the add-in answers unsupported pipe methods with the typed code instead of a generic error
        unblocks 0 · S · addins+bimpossible · CLAIMED 2026-08-21 · Deferred from P7 hardening pass 2026-08-21 (BIMpossible#440 typed NO…
 
-[AUTHZ-AUDIT-FIRMID-EMPTY-ROOTCAUSE] Root-cause the original producer of firm_id='' in authz audit batches (the poison quarantined by #440) and fix it at the source
-       unblocks 0 · S · bimpossible · CLAIMED 2026-08-21 · BIMpossible#440 (02bd9b6) quarantines poisoned rows (AUTHZ-AUDIT-POI…
-
 [DASH-BIMWATCH-WIRING] Wire bimwatch pipeline output into the live dashboard (index.html/data.js have zero references)
        unblocks 0 · S · dashboard · CLAIMED 2026-08-07 · 2026-08-07 session: grepped index.html and data.js in both Dashboard…
 
@@ -213,17 +228,14 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-18 @ `971caa2` PR#427 · `addi
 [OPS-ROLLBACK-RETENTION-20260817] Intentional retention: rollback-20260817 image tags until deploy soak completes 2026-08-18 evening
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-17 · deploy closed live at alembic c4e7a2b91d38, 2026-08-17 ~22:00 PDT
 
-[SEC-GROUPS-VIEWS-PERSONAL-SAMEFIRM-EXISTENCE-ORACLE] PATCH/DELETE groups+views: same-firm personal-scope 403 lets a colleague infer a personal group/view id exists -- possibly by design
-       unblocks 0 · S · bimpossible · CLAIMED 2026-08-07 · Surfaced by the backend-endpoint-reviewer gate during SEC-GROUPS-VIE…
-
-[WINCHESTER-STALE-LINEAGE-LINK] Winchester - TEST project file list still links one TEST_Winchester_ELEC_R25.rvt entry to a dead item lineage (urn n53a4yy6RJu5fBMjDppI8A) -- Autodesk 'couldn't find this item', bounces to Autodesk sign-in
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-19 · Two links with an identical file_name in the project's file list res…
-
 [ADDINS-HYGIENE] Add-Ins hygiene: finish Glass rollout (conformance-PR dedup DONE 2026-08-04)
        unblocks 0 · M · addins · VERIFIED 2026-08-06 · Add-Ins #10 MERGED 2026-08-04 (squash, main 94b21ab -- Plans 1+2 con…
 
 [ARCH-BIMP-PARAMSET] Activate the BIMP_ shared-parameter set END TO END -- define the set, then wire BOTH the writer (installer) and the reader to real entry points
        unblocks 0 · M · addins · VERIFIED 2026-08-07 · WRITER, dormant: BIMpossible.RevitLink/Conformance/DeliverableParame…
+
+[MODEL-INDEX-DELETION-RECONCILE] model_index_sync has no reconcile/tombstone pass -- index_discovered_models only ADDS rows from all-rvts; a lineage that becomes deleted/renamed in APS is never demoted, so /search/models can keep returning a model the Files view no longer lists
+       unblocks 0 · M · bimpossible · CLAIMED 2026-08-22 · Surfaced 2026-08-22 by the Explore agent while root-causing WINCHEST…
 
 [P7-REVITLINK-MULTIUSER] Scale RevitLink to multi-user (RE-1 defect now fixed; RE-2 capacity limit remains)
        unblocks 0 · M · bimpossible+addins · VERIFIED 2026-08-04 · Verification Checklist item RL_P0_10 (single-pipe/single-secret cons…
@@ -238,6 +250,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-18 @ `971caa2` PR#427 · `addi
        unblocks 0 · L · bimpossible · CLAIMED 2026-08-18 · BIMpossible_PHASE-STATUS.md, Phase 17 -- 17.0 Integration Control Pl…
 
 ## Blocked elsewhere
+
+[ADMIN-DOMAIN-UNKNOWN-FIRM-404] Admin domain registration: return typed 404 for unknown firm instead of 409
+       unblocks 0 · S · bimpossible · CLAIMED 2026-08-22 · Observed during BIMpossible#449 review: POST /admin/domains/{firm_id…
 
 [SHARED-PARAM-REGISTRY] Canonical shared-parameter registry landed (PR#174+hardening) -- generator only, nothing imports it yet
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-17 · BIMpossible #174 (41c716c, merged 2026-07-06) -- feat(shared-paramet…

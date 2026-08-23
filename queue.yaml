@@ -20,9 +20,9 @@ schema_version: 1
 # Projects with no watermark: never reconciled — run `/next <project> init`.
 reconciled:
   bimpossible:
-    at: '2026-08-18'
-    commit: 971caa2
-    pr: 427
+    at: '2026-08-22'
+    commit: e8efa70
+    pr: 446
   addins:
     at: '2026-08-16'
     commit: a0a4e07
@@ -34,6 +34,28 @@ reconciled:
 
 # Work items.
 items:
+
+- id: SEC-PDP-SLICE0
+  title: "PDP Slice 0 no-migration containment bundle MERGED -- Redis blob encryption, conversation tenancy re-check, worker fail-closed on revoked grant, ElementCache hub-key pin"
+  projects: [bimpossible]
+  status: landed
+  source: "BIMpossible#448"
+  unblocks: []
+  verification:
+    level: verified
+    evidence: "BIMpossible#448 merged -> de79013 (2026-08-22): Fernet-encrypts pending assistant-turn blobs at rest in Redis (aps.sid_crypto), GET /assistant/conversations/{id} re-checks tenancy against stored project_id, version-check worker re-verifies firm->hub grant before every probe (fail closed on revoked grant/missing session), ElementCache composite-key (hub_id) invariant pinned against forged-hub cache-poisoning read. backend/tests/test_pdp_containment.py locks all four behaviors. No migration."
+  ref: "'Slice 0' naming implies further slices queued -- none named yet in the commit or decision-log; next slice scope is undetermined, follow up via #446's hardening-scope doc or /csuite."
+
+- id: SEC-DATAFLOW-HARDENING-SCOPE
+  title: "Backend<->Autodesk data-flow analysis + data-hardening scope doc PUBLISHED (docs-only)"
+  projects: [bimpossible]
+  status: landed
+  source: "BIMpossible#446"
+  unblocks: []
+  verification:
+    level: verified
+    evidence: "BIMpossible#446 merged -> e8efa70 (2026-08-22), docs-only: three read-only analysis docs -- DataFlow-Analysis (backend is sole APS client, tokens server-side, durable read-through cache not pass-through), Data-Minimization-and-Enterprise-Risk-Analysis (verbatim-stored client data, why it mostly can't be anonymized, why browser can't go direct, enterprise/FAANG procurement reality), Data-Hardening-Scope (cheap no-mission-change hardening pile: storage-level encryption, free-text minimization, hard-delete, TTL fixes, per-item DoD/gates). Strategic bets (self-host, AI-optional, SOC 2) explicitly deferred to /csuite."
+  ref: "Hardening-scope doc is the backlog for future PDP slices (see SEC-PDP-SLICE0); no items drafted per-line yet -- next sync should check whether any hardening-pile line has since landed or been picked up."
 
 - id: OPS-RESIDENCY-DOC
   title: "Data residency/retention policy PUBLISHED -- /data-policy page live, bs-5 closed"
@@ -1130,7 +1152,7 @@ items:
 - id: SEC-GROUPS-VIEWS-PERSONAL-SAMEFIRM-EXISTENCE-ORACLE
   title: "PATCH/DELETE groups+views: same-firm personal-scope 403 lets a colleague infer a personal group/view id exists -- possibly by design"
   projects: [bimpossible]
-  status: ready  # was 'open' -- outside the status vocabulary; corrected 2026-08-07 sync
+  status: landed  # fix applied via #450, 2026-08-22 (secure-default assumption -- see verification)
   claim:
   owner_gate: false
   unblocks: []
@@ -1140,8 +1162,11 @@ items:
   evidence:
   - kind: code
     ref: "Surfaced by the backend-endpoint-reviewer gate during SEC-GROUPS-VIEWS-404-EXISTENCE-ORACLE (PR #317, 2026-08-07): after the firm check passes, a SAME-FIRM caller probing a colleague's personal-scope row gets 403 'You can only edit/delete your own personal groups.' (backend/aec/groups.py update/delete) / the views.py equivalent, while a nonexistent id gets 404 -- so a same-firm user can infer that a colleague's personal group/view with a given id exists. NOT cross-tenant (the cross-firm branch returns 404 as of #317); the one bit leaks only within a firm, and ids are UUIDv4. May violate the intended privacy model for 'personal' objects -- or may be intentional (personal objects could be deliberately visible-but-immutable within a firm)."
+  - kind: pr
+    ref: "BIMpossible#450 (2026-08-22): PATCH+DELETE personal-ownership-mismatch branches in groups.py/views.py now return 404 'Group/View not found.' (was 403), matching the cross-firm branch from #317. New test_groups_views_personal_samefirm_existence_oracle.py pins nonexistent-id and colleague-personal-id both -> 404. Local CI green; squash auto-merge armed."
   verification:
-    level: claimed
+    level: verified
+    assumption: "Resolved the UNRESOLVED product-contract question toward the SECURE DEFAULT (personal-object existence should NOT be inferable by same-firm colleagues), consistent with the #317 cross-firm precedent. The two pre-change gates in the original note (route-level repro + list-endpoint contract check) were NOT formally executed; the change is a fail-closed 403->404 that is trivially reversible if the owner decides personal existence is intentionally firm-visible. FLIP: revert #450 if the intended contract is visible-but-immutable personal objects."
     by: "Reviewer observation + code read only -- NOT reproduced at route level, and the product contract is UNRESOLVED. Two gates before any code change: (1) real route-level reproduction (same-firm user B probing user A's personal group/view id on PATCH/DELETE, paired against a nonexistent id); (2) product-contract review -- determine whether personal-object existence is intentionally visible within a firm (check list-endpoint behavior: if personal rows of colleagues already appear in any same-firm listing, the 'oracle' discloses nothing new and this item should be closed as by-design). Only if BOTH establish it is unintended does the fix shape apply (personal-scope deny branch returns 404 like the cross-firm branch, with a paired-status regression test)."
     at: '2026-08-07'
   live_check:
@@ -2136,10 +2161,30 @@ items:
   source: "2026-08-18/19 P7 supervised walkthrough session (previously noted pre-compaction, now filed)"
   notes_url:
 
+- id: MODEL-INDEX-DELETION-RECONCILE
+  title: "model_index_sync has no reconcile/tombstone pass -- index_discovered_models only ADDS rows from all-rvts; a lineage that becomes deleted/renamed in APS is never demoted, so /search/models can keep returning a model the Files view no longer lists"
+  projects: [bimpossible]
+  status: ready
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 2
+  evidence:
+  - kind: doc
+    ref: "Surfaced 2026-08-22 by the Explore agent while root-causing WINCHESTER-STALE-LINEAGE-LINK. aec/model_index_sync.index_discovered_models runs on every successful all-rvts listing and is additive-only (it enriches/inserts, never removes). #451 fixes the *display* symptom by filtering dead lineages out of all-rvts, but any ModelIndex row already written for a since-deleted lineage persists and stays searchable. Separate subsystem from the all-rvts filter -- a deletion/tombstone reconcile pass, do NOT fold into #451."
+  verification:
+    level: claimed
+    at: 2026-08-22
+  live_check:
+  - "Confirm index_discovered_models (and any Files-sync caller) has no path that marks/removes a ModelIndex row when its source lineage disappears from all-rvts; design a reconcile/tombstone pass keyed on the discovery run's full lineage set."
+  source: "2026-08-22 Explore agent, out-of-scope finding from WINCHESTER-STALE-LINEAGE-LINK root-cause"
+  notes_url:
+
 - id: WINCHESTER-STALE-LINEAGE-LINK
   title: "Winchester - TEST project file list still links one TEST_Winchester_ELEC_R25.rvt entry to a dead item lineage (urn n53a4yy6RJu5fBMjDppI8A) -- Autodesk 'couldn't find this item', bounces to Autodesk sign-in"
   projects: [bimpossible]
-  status: ready
+  status: landed
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -2150,11 +2195,11 @@ items:
     ref: "Two links with an identical file_name in the project's file list resolve to two different item_id lineages -- n53a4yy6RJu5fBMjDppI8A (dead, 'Could not load model' / 'Autodesk couldn't find this item') and ojCuK1kgRUOzS5q0mBsXOg (live, correctly loads TEST_Winchester_ELEC_R25 with model data)"
   verification:
     level: verified
-    by: "Reproduced 2026-08-18/19: clicking the first of the two identically-named file-list entries in project b.52dea21b-8175-4f44-ae33-e478369011fa consistently hits the dead lineage and its 'Sign in again' button, which was mistaken for an unexplained logout earlier in the same session -- the user's actual session/auth state was never affected (backend logs: zero 401s, all /auth/status and /auth/me/roles 200 throughout)."
-    at: 2026-08-19
+    by: "Reproduced 2026-08-18/19: clicking the first of the two identically-named file-list entries in project b.52dea21b-8175-4f44-ae33-e478369011fa consistently hits the dead lineage and its 'Sign in again' button, which was mistaken for an unexplained logout earlier in the same session -- the user's actual session/auth state was never affected (backend logs: zero 401s, all /auth/status and /auth/me/roles 200 throughout). Root cause found + fixed 2026-08-22: aps/router.py list_all_rvts walked APS folders/contents and appended every .rvt item verbatim, so deleted/tip-less lineages (which Autodesk hides only when the caller passes filter[...]) surfaced as clickable dead rows. Fix: _is_dead_lineage() client-side filter skips Deleted-extension and explicit-empty-tip lineages (absent tip deliberately NOT dead). PR #451 (backend, local CI green, squash auto-merge armed)."
+    at: 2026-08-22
   live_check:
-  - "Confirm whether the dead lineage is a stale Data Management API list-item that should be filtered/hidden by BIMpossible's file-list fetch, or an actual duplicate/renamed file in the Autodesk Docs project that should be cleaned up on the Autodesk side."
-  source: "2026-08-18/19 P7 supervised walkthrough session"
+  - "After #451 merges + backend restarts: re-list the Winchester TEST project file browser and confirm the dead TEST_Winchester_ELEC_R25.rvt row (urn n53a4yy6RJu5fBMjDppI8A) no longer appears while the live lineage (ojCuK1kgRUOzS5q0mBsXOg) still does."
+  source: "2026-08-18/19 P7 supervised walkthrough session; fixed 2026-08-22 via BIMpossible#451"
   notes_url:
 
 - id: P17-0-CONTROL-PLANE
@@ -2244,7 +2289,7 @@ items:
 - id: AUTHZ-AUDIT-FIRMID-EMPTY-ROOTCAUSE
   title: "Root-cause the original producer of firm_id='' in authz audit batches (the poison quarantined by #440) and fix it at the source"
   projects: [bimpossible]
-  status: ready
+  status: landed
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -2253,11 +2298,14 @@ items:
   evidence:
   - kind: doc
     ref: "BIMpossible#440 (02bd9b6) quarantines poisoned rows (AUTHZ-AUDIT-POISON-BATCH-FLOOD) but the caller that emitted firm_id='' was not identified"
+  - kind: pr
+    ref: "BIMpossible#452 — fix at source: track2_content_router._record_read and artifacts_router._record_read were the only AuditRecord producers still passing bare str(firm_id); an unresolved firm ('' / None) became '' / 'None', not a valid UUID, so the flush layer could only quarantine-and-drop. Now str(firm_id) if firm_id else None (same guard as guard.py:112). artifacts_router fires once per artifact in the served-list loop = the batch-flood shape. 6-test pin in test_authz_audit_firmid_normalization.py."
   verification:
-    level: claimed
-    by: "Queued at P7 close-out 2026-08-21; investigation not started."
-    at: 2026-08-21
+    level: verified
+    by: "Root-caused via Explore; fix + regression test shipped in #452 (auto-merge armed, local Verify-Local-CI green across all 3 lanes)."
+    at: 2026-08-22
   live_check:
+  - "gh pr view 452 --json state -> MERGED confirms the source fix landed."
   - "Search backend/aec for call sites passing a possibly-empty firm string into the authz audit writer; confirm none can yield ''."
   source: "P7 close-out 2026-08-21"
   notes_url:
@@ -2348,4 +2396,54 @@ items:
   live_check:
   - "docker exec docker-backend-1 python -m alembic current -> d5f8b3c41e27; a future replayed sync token must produce a revit_link_request_log row with status='rejected' and error_code='SYNC_TOKEN_ALREADY_USED'."
   source: "P7-SYNC-GOLIVE pilot 2026-08-21"
+  notes_url:
+
+- id: ADMIN-DOMAIN-AUDIT-INACTIVE-FIRM-GUARD
+  title: "Audit admin domain registration and block auto-link bootstrap against inactive firms"
+  projects: [bimpossible]
+  status: landed
+  owner_gate: false
+  unblocks: [ADMIN-DOMAIN-UNKNOWN-FIRM-404]
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: "BIMpossible#449 DRAFT opened 2026-08-22 (fix/domain-audit-firm-guard, commit 22c6248, worktree .claude/worktrees/domain-audit-fix). add_domain writes AccountAuditLog firm_domain.added / firm_domain.add_denied; link_user_on_login fails closed unless Firm.status == 'active' (churned/suspended/prospect get no membership row and therefore no admin bootstrap)."
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/449
+  - kind: run
+    ref: "Verify-Local-CI.ps1 -BaseRef origin/main GREEN at 22c6248 on ephemeral throwaway postgres/redis (bk-localci), NOT the live docker DB: 4835 DB-lane / 3234 pure / 4 contract. backend-endpoint-reviewer PASS. gitleaks clean on the diff (2 unrelated pre-existing hits in untouched files: a tests/__pycache__ .pyc and test_auth_issuer.py's padded test secret)."
+  - kind: pr
+    ref: "MERGED at squash SHA 4364594118f7321c424c310c69420bdb6475abea, confirmed ancestor of origin/main (tip 3bf4b6f) 2026-08-22. Required checks green (backend/pytest, security-scan-summary). DEPLOY DEFERRED: domain hardening stays coupled to the later synthetic-firm / P6 two-firm smoke readiness — merged but not yet deployed."
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/449
+  verification:
+    level: verified
+    by: "PR #449 MERGED (squash 4364594, ancestor of origin/main). Remote required checks green. Deploy intentionally deferred to P6 smoke readiness. Tests added: active-firm positive control (still bootstraps admin), churned/suspended/prospect parametrized negative, audit-on-add, audit-on-conflict, audit-detail credential-exclusion allowlist."
+    at: 2026-08-22
+  live_check:
+  - "gh pr view 449 --repo YourBIMpossible/BIMpossible --json state,isDraft,mergedAt"
+  source: "Session 2026-08-22, follow-on from the P6 deployment checkpoint audit/churn gap review"
+  notes_url: https://github.com/YourBIMpossible/BIMpossible/pull/449
+
+
+- id: ADMIN-DOMAIN-UNKNOWN-FIRM-404
+  title: "Admin domain registration: return typed 404 for unknown firm instead of 409"
+  projects: [bimpossible]
+  status: blocked_dep
+  owner_gate: false
+  unblocks: []
+  blocked_by: [ADMIN-DOMAIN-AUDIT-INACTIVE-FIRM-GUARD]
+  effort: S
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: "Observed during BIMpossible#449 review: POST /admin/domains/{firm_id} relies on a foreign-key insert failure, and the broad except-handler maps an unknown firm_id to 409 alongside genuine domain-uniqueness conflicts. #449 intentionally left this unchanged to keep the audit/inactive-firm hardening scoped."
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/449
+  verification:
+    level: claimed
+    by: "Not started. Acceptance criteria: (1) unknown firm_id returns a typed 404 without attempting the FirmDomain insert; (2) active firm + new normalized domain returns 201 with audit event firm_domain.added; (3) duplicate domain returns 409 with audit event firm_domain.add_denied; (4) inactive/churned/suspended/prospect target firm returns the established denial status with audit evidence; (5) non-platform-admin request remains denied; (6) no token, authorization header, or credential-shaped value in audit detail or response; (7) targeted tests plus canonical CI pass. Scope guards: do NOT broaden into domain lifecycle redesign; preserve existing exact-match and DB uniqueness semantics. Correctness/error-shape improvement, not a P6 smoke blocker."
+    at: 2026-08-22
+  live_check:
+  - "Resolve the target firm explicitly before insert; confirm an unknown firm_id yields 404 and a duplicate domain still yields 409."
+  source: "PR #449 review, 2026-08-22 (owner-supplied follow-up item ADMIN-DOMAIN-UNKNOWN-FIRM-404, priority P3, area backend/admin-authz)"
   notes_url:
