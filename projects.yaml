@@ -18,16 +18,16 @@ projects:
   - key: bimpossible
     name: BIMpossible (web platform)
     aliases: [bimp, web, platform]
-    path: F:\AI-Dev\BIMpossible
+    path: F:\BIMpossible
     origin: https://github.com/YourBIMpossible/BIMpossible.git
     active: true
     companions: [addins]           # lockstep partner — items routinely span both
     ledgers:
-      - F:\AI-Dev\BIMpossible_Workspace\00_Strategy\BIMpossible_PHASE-STATUS.md
-      - F:\AI-Dev\BIMpossible_Workspace\00_Strategy\BIMpossible_WAVE-STATUS.md
-    live_state: F:\AI-Dev\BIMpossible_Workspace\00_Strategy\BIMpossible_STATE-LIVE.md
-    audit_dir: F:\AI-Dev\BIMpossible_Workspace\02_Reference\Audit Reports
-    build_log: F:\AI-Dev\BIMpossible_Workspace\01_BuildLog
+      - F:\BIMpossible-Workspace\00_Strategy\BIMpossible_PHASE-STATUS.md
+      - F:\BIMpossible-Workspace\00_Strategy\BIMpossible_WAVE-STATUS.md
+    live_state: F:\BIMpossible-Workspace\00_Strategy\BIMpossible_STATE-LIVE.md
+    audit_dir: F:\BIMpossible-Workspace\02_Reference\Audit Reports
+    build_log: F:\BIMpossible-Workspace\01_BuildLog
     notes: >
       STATE-LIVE.md is auto-generated ~06:00 daily by system\Update-LiveState.ps1 and holds
       deterministic git facts only — prefer it over re-deriving them, but never over a live probe.
@@ -36,13 +36,13 @@ projects:
   - key: addins
     name: BIMpossible Add-Ins (Revit, C#)
     aliases: [add-ins, revit, revitlink]
-    path: F:\AI-Dev\Add-Ins
+    path: F:\BIMpossible-AddIns
     origin: https://github.com/YourBIMpossible/BIMpossible-AddIns.git
     active: true
     companions: [bimpossible]
     ledgers: []
-    audit_dir: F:\AI-Dev\Add-Ins\audits
-    decision_log: F:\AI-Dev\Add-Ins\decision-log
+    audit_dir: F:\BIMpossible-AddIns\audits
+    decision_log: F:\BIMpossible-AddIns\decision-log
     notes: >
       No phase ledger of its own — its status lives in BIMpossible's phase rows plus its own
       audits/ and decision-log/. Ships to four %APPDATA% Revit slots; "merged" is not "deployed"
@@ -51,7 +51,7 @@ projects:
   - key: workspace
     name: BIMpossible Workspace (strategy, ledgers, build log)
     aliases: [ws, strategy, ledgers]
-    path: F:\AI-Dev\BIMpossible_Workspace
+    path: F:\BIMpossible-Workspace
     origin: https://github.com/YourBIMpossible/BIMpossible_Workspace.git
     active: true
     companions: []
@@ -87,7 +87,7 @@ projects:
   - key: families
     name: Families by BIMpossible
     aliases: [fam]
-    path: F:\AI-Dev\Families by BIMpossible
+    path: F:\BIMpossible-Families
     origin: https://github.com/YourBIMpossible/Families-by-BIMpossible.git
     active: true
     companions: []
@@ -123,6 +123,6 @@ projects:
 
   - key: bim-site
     name: BIMpossible Site
-    path: F:\AI-Dev\BIMpossible Site
+    path: F:\BIMpossible-Site
     origin: null
     active: false
