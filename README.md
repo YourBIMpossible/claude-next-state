@@ -63,12 +63,15 @@ a smoke log read, a DB row seen. Most stranded value in this workspace sits betw
 actually reads and writes. Every write is diffable and revertible through its history.
 
 It is also **published as a committed mirror** in the BIMpossible workspace repo at
-`F:\AI-Dev\BIMpossible_Workspace\.tools\state` (Option B, adopted 2026-08-08), so the queue is
+`F:\BIMpossible-Workspace\.tools\state` (Option B, adopted 2026-08-08), so the queue is
 visible, reviewable, and recoverable in GitHub rather than only on this machine. The rule:
 
 - A successful `/next <target> sync` writes this live store, then regenerates `QUEUE.md` from
   `queue.yaml` with `render_queue.py` and **publishes both to the mirror together** (via the
   workspace `Push-And-Verify.ps1`).
+- `projects.yaml` is NOT republished: the mirror's copy was retired 2026-08-22 (it still carries
+  pre-cutover `F:\AI-Dev\*` paths and is kept only as historical state). The registry is read
+  from this folder alone.
 - `QUEUE.md` is generated output — never hand-edited, here or in the mirror.
 - Reproducibility check, from either copy:
 
