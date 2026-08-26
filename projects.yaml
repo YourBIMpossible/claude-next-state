@@ -73,6 +73,20 @@ projects:
 
   # ---- side tracks -----------------------------------------------------------
 
+  - key: evidence-compiler
+    name: Evidence Compiler (deterministic context briefs)
+    aliases: [ec, evidence, compiler]
+    path: F:\Evidence Compiler
+    origin: https://github.com/YourBIMpossible/evidence-compiler.git
+    active: true
+    companions: []
+    notes: >
+      Governed by a locked human-only NORTHSTAR.md at repo root (phases are
+      human-approved via dogfood evidence — /next must never propose creating
+      one). Local untracked planning docs at repo root: WORKLOG.md,
+      DOGFOOD_LOG.md, PHASE-1B-EVIDENCE-QUALITY.draft.md — read them during
+      sync, never commit them. Default branch: master.
+
   - key: ai-server
     name: AI-Server (local LLM inference platform)
     aliases: [server, ollama, inference]

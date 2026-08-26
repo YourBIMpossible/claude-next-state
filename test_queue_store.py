@@ -257,5 +257,5 @@ def test_real_store_loads_and_renders():
     """The actual live store in this worktree must validate and reproduce QUEUE.md."""
     store = load_store(HERE)
     assert len(store.ids) == len(store.active_items) + len(store.archived_items)
-    text = render_queue.build(HERE, date(2026, 8, 17))
+    text = render_queue.build(HERE, date(2026, 8, 24))
     assert (HERE / "QUEUE.md").read_text(encoding="utf-8") == text

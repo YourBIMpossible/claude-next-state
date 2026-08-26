@@ -1,0 +1,65 @@
+# P11-AC7 Versioned Element Snapshots — Owner Decision Package (2026-08-24)
+
+Produced by the 2026-08-23/24 overnight session (read-only code inspection at commit 008e76b + branch
+claude/model-index-tombstone-reconcile worktree). No implementation was done. Queue item:
+`P11-AC7-VERSIONED-SNAPSHOTS` (blocked_owner). AC7 ledger wording: "Optional: report history table
+per model (version → date → finding count)".
+
+## 1. Current behavior
+
+**Hard-delete sites (the blocker):**
+- `backend/aec/cache.py:168-250` — `sweep_superseded_versions()`: bulk-DELETEs every `ElementCache` row whose `model_version_id` belongs to a non-current version (cache.py:213-217), then DELETEs the `ModelVersion` rows themselves (cache.py:218-220) and the versions' `RelationshipPrewarmJob` rows (cache.py:226-230), plus their durable relationships blobs via `schema_persist.invalidate` (cache.py:242-245). Keyed by `(hub_id, project_id, model_urn)` with `version_id != current_version_id` (cache.py:197-205). Runs inside a SAVEPOINT on the caller's transaction.
+- Called from two paths: (a) organically, whenever a new `ModelVersion` row is created on a cache miss — `backend/aec/cache.py:468-471` inside `get_or_refresh_category()`; (b) on user Refresh — `backend/aec/router.py:1143-1146` in `refresh_model()`, which additionally hard-deletes the CURRENT version's `ModelVersion` row (`db.delete(mv)`, router.py:1122-1124, cascading its element rows via the FK) and its prewarm-job rows (router.py:1132-1137), then calls `invalidate_all()` (router.py:1167-1174; defined cache.py:253-337).
+- Motivation is GA-H2 disk growth: each republish re-caches ~20 categories of JSONB; pre-sweep the table grew GBs on 281k/244k-element models (cache.py:181-185).
+
+**What identifies model / version / run:**
+- Model: `(hub_id, project_id, model_urn)` — `ModelVersion` lookup index `ix_model_versions_lookup` (`backend/db/models.py:114`).
+- Version: `ModelVersion.version_id` (the AEC DM `versionNumber` at tip, resolved by `get_element_group_at_tip`, cache.py:375-377), unique per `uq_model_version (hub_id, project_id, model_urn, version_id)` (models.py:113). `element_group_id` and `cached_at` also live on the row (models.py:97-98).
+- Element rows: `ElementCache` — surrogate `id` BigInteger PK, FK `model_version_id` ON DELETE CASCADE (models.py:128-129), denormalized tenancy columns `hub_id/project_id/model_urn/version_id` (models.py:132-135), identity `unique_id` ("stable across versions", models.py:138) unique per `uq_element_version (model_version_id, unique_id)` (models.py:165), full flat `parameters` JSONB (models.py:146), plus origin columns (models.py:152-160). Indexes: `(model_version_id, category)`, `(hub, project, urn, version, category)`, `(hub, project, urn, unique_id)` (models.py:171-173).
+- "Run" record: `RelationshipPrewarmJob` rows keyed `(project_id, model_urn, version_key, category)`; a terminal `done` row is the durable "warm ran, empty is the answer" record (cache.py:404-412, 645-656). There is no independent extraction-run table.
+- Digest already stores one aggregate row per `(project_id, model_urn, version_id)` in `assistant_digests` via `digest_store.upsert` (`backend/aec/digest.py:169-170`; models.py:640) — but it is written only on read and the header comment names the missing capability: "true change-detection is gated on the versioned-snapshot capability that does not yet exist (refresh hard-deletes the prior version's element rows)" (digest.py:5-8). AC7's history table needs, per retained version: `version_id`, a date (`cached_at`), and a finding count (QA `run_model_health` output over that version's elements — health today runs only against the warm current pool, digest.py:178-191).
+
+**Existing retention/purge/tenancy/reconciliation conventions:**
+- Soft-delete precedents: `firm_documents` — `status='deleted'` + `deleted_at` + `purge_after = now + 30d` (owner policy 2026-08-08), then a purge job removes artifacts and hard-deletes (models.py:1990-1991, 2016-2017); `model_index.deleted_at` tombstone, reconcile-set/cleared, every read filters `deleted_at IS NULL` (models.py:66-74, 80).
+- Retention-worker precedent: assistant parameter proposals — env-tunable `BIMPOSSIBLE_ASSISTANT_PROPOSAL_RETENTION_DAYS` (default 365), purged by `assistant_write_reclaim_worker.purge_aged_proposals()` (`backend/aec/assistant_parameter_writes.py:434-459`, `backend/aec/assistant_write_reclaim_worker.py:50-61`).
+- Reconciliation precedent: `cache_reconcile` never deletes — it reports `purge_candidate` rows with a descriptive delete plan; the purge is a separate human-run step, and any active firm tenancy blocks eligibility (`backend/aec/cache_reconcile.py:16-27, 463-497`; `cache_reconcile_state`/`cache_reconcile_log`, models.py:1431, 1465).
+- Tenancy: element data is firm-scoped through route gates + the composite key including `project_id` (cache.py:379-388); any historical store inherits the same requirement.
+- Staleness worker: `stale_sweep_worker` scans `ModelVersion.cached_at` (detection only, no delete) — `backend/aec/stale_sweep_worker.py:25, 56-58`.
+
+## 2. Option A — full immutable per-version snapshot
+
+Keep complete `ElementCache` rows for retained prior versions (stop deleting them in `sweep_superseded_versions`, or move them to a snapshot table / soft-delete flag).
+
+- **Storage / write amplification:** Highest. ~20 categories of flat-JSONB rows per version (parameters blob per element); the exact growth GA-H2 was built to stop — GBs across a few republishes on 281k-element models (cache.py:181-185). Write amplification is zero extra at write time (rows already written once per version); cost is purely retained bytes, multiplied by retention depth.
+- **Read/query complexity:** Lowest. Existing query shapes work unchanged — `filter_by(model_version_id, category)` (cache.py:390-394) against any retained version; QA rules (`run_model_health`) can run verbatim over a historical version's rows to backfill finding counts; true element-level diffs (digest.py's blocked change-detection) become a join on `unique_id` across two `model_version_id`s, directly supported by `uq_element_version`.
+- **Retention & purge story:** Needs a real policy or the GA-H2 disaster returns. Natural fit: N-latest-versions per model (sweep keeps N instead of 1) plus an age cap, purged by extending `stale_sweep_worker` or a new worker per the proposal-retention pattern; per-firm tenancy purge already modeled by `cache_reconcile`'s delete-plan discipline.
+- **Compatibility with current invalidation flow:** Requires surgery at both sweep call sites (cache.py:468, router.py:1143) and a semantic split in `refresh_model`: today Refresh deletes even the CURRENT version's rows (router.py:1122-1124) to force re-fetch — under snapshots that must become "invalidate currency, don't destroy history" (e.g. tombstone or re-fill-in-place), and the prewarm-job "done-row wedge" coupling (rows must die with their data, cache.py:222-230, router.py:1126-1137) has to be rethought for retained versions.
+- **User-facing-now vs infrastructure:** Enables the full future surface (history table, element-level diffs, restore/inspect old version) but is by itself infrastructure; AC7's table still needs a finding-count computation pass per retained version.
+
+## 3. Option B — delta/change-set storage
+
+At sweep time, before deleting a superseded version's rows, compute and store a diff (added/removed `unique_id`s + changed parameter keys) against the incoming version; reconstruct old versions by replaying deltas backwards from current.
+
+- **Storage / write amplification:** Small on disk for typical republishes (most elements unchanged), but adds a heavy compute+write step exactly at the sweep points — the diff must materialize both versions' rows in memory (hundreds of thousands of JSONB rows) inside a path that currently runs as a best-effort SAVEPOINT during a user-facing fill/refresh (cache.py:211-238). Worst case (parameter-wide churn) approaches full-snapshot size anyway.
+- **Read/query complexity:** Highest. Any historical read is a reconstruction (current rows + reverse-apply K deltas); finding counts for the AC7 table require reconstructing each version then running QA rules; a bug in delta application silently corrupts history with no source of truth to re-derive from (the origin rows are gone). There is a partial precedent shape in the `change_set`/`staged_change` tables (models.py:1812, 1865) but those model *proposed writes*, not extraction diffs.
+- **Retention & purge story:** Awkward: deltas form a chain, so purging must truncate from the oldest end only; dropping a middle delta orphans everything older. Age/N-versions policy works but only as chain truncation.
+- **Compatibility with current invalidation flow:** Poor. The delta must be computed *before* `sweep_superseded_versions` deletes, i.e. inside the miss/refresh hot paths; the refresh path's "delete current version's rows too" (router.py:1122-1124) means the baseline for reverse deltas itself gets destroyed and rebuilt, complicating chain anchoring. CORE-3 persist-guard races (cache.py:427-449) add more edge cases.
+- **User-facing-now vs infrastructure:** Infrastructure-only for a long time; even AC7's modest table arrives late because counts require reconstruction. Highest engineering risk of the three.
+
+## 4. Option C — limited version-pinned materialized index
+
+At the moment a version is about to be superseded (and/or when health first runs), persist only aggregates: per-version row of `(version_id, date, element counts per category, QA finding counts / score)` — the minimum for AC7's "version → date → finding count".
+
+- **Storage / write amplification:** Negligible — one small JSONB row per version per model. No unbounded growth concern; GA-H2 stays fully intact (element rows still swept).
+- **Read/query complexity:** Trivial for AC7: `SELECT version, date, findings FROM history WHERE project, model ORDER BY version`. Two existing rails already almost do this: `assistant_digests` is one row per `(project, model, version)` containing `health.failing_count`/`score` (digest.py:87-93, 169-170) but is upsert-per-version and only written when a user reads the digest while the pool is warm; `ModelVersion.cached_at` supplies the date but the row is deleted at sweep. A dedicated `model_version_history` table (or making digest rows write-guaranteed and sweep-surviving) closes the gap. No element-level diffs, no restore — a later Option A can supersede it.
+- **Retention & purge story:** Easy: rows are tiny, so keep-forever is viable; or reuse the proposal-retention env-var pattern (assistant_parameter_writes.py:434-443). Tenancy purge (firm revoked) must include the history table in `cache_reconcile`'s delete plans.
+- **Compatibility with current invalidation flow:** Best. `sweep_superseded_versions` gains one INSERT (snapshot the aggregates) before its DELETEs; no change to refresh semantics, prewarm wedge, or CORE-3 guards. Caveat: the sweep may fire before health ever ran for the old version — finding count is then NULL/"not assessed" unless health results are captured eagerly at warm-complete time.
+- **User-facing-now vs infrastructure:** User-facing immediately — it IS the AC7 history table, deliverable in one PR plus a read endpoint (firm-scoped per the write-back/tenancy rules). It does not unblock digest.py's element-level change-detection (that still needs A or B).
+
+## 5. Three owner decisions
+
+1. **Snapshot authority & version boundary.** What event mints "a version" in the history: the AEC DM `versionNumber` changing at tip (as `ModelVersion.version_id` already records — cache.py:375-377), making AEC DM authoritative? Or does a user Refresh on the *same* version_key (a same-version republish, which today destroys and rebuilds the current version's rows, router.py:1122-1124) also count as a history entry? Decide whether BIMpossible's ModelVersion ledger or Autodesk's version numbering is the source of truth, and whether same-version refreshes append, overwrite, or are invisible.
+
+2. **Retention/purge policy.** How many versions and/or how long (e.g. last N versions, 30/365 days), and whether the knob is global (env var, per the `BIMPOSSIBLE_ASSISTANT_PROPOSAL_RETENTION_DAYS` pattern) or per-firm (a firm-level setting, consistent with per-firm tenancy and the firm_documents 30-day precedent). Also: who executes the purge — an automatic worker (stale_sweep/reclaim pattern) or the human-run cache_reconcile discipline?
+
+3. **First-release product scope.** Ship AC7 as a visible history table only (Option C: version → date → finding count, one endpoint + one small table, element rows still swept), or invest in Option A groundwork now (retain full element rows for N versions) so change-detection/diff/restore — the features digest.py explicitly defers — become possible, accepting the storage bill and the refresh-semantics rework? (Option B is documented for completeness but is the weakest fit with the current invalidation flow.)
