@@ -28,9 +28,9 @@ reconciled:
     commit: eb9d453
     pr: 100
   workspace:
-    at: '2026-08-17'
-    commit: 134f129
-    pr: 61
+    at: '2026-08-26'
+    commit: 6dfc9e1
+    pr: 96
   evidence-compiler:
     at: '2026-08-24'
     commit: 0ef747e7533c7cf714888076f3df6f06dd028b84
@@ -714,10 +714,12 @@ items:
     ref: ".tools/state f5103d5 + workspace edits: all artifacts THIS session produced were de-identified (T4 log, write-engine smoke log, row-13.1 draft, PHASE-STATUS, queue.yaml, 3 memory files); residual scan CLEAN"
   - kind: pr
     ref: "BIMpossible #283 OPEN DRAFT (head claude/client-data-remediation-log, commit 9d89df6) -- formalizes decision-log/2026-08-05__client-data-remediation.md as a tracked file. DISCOVERED THIS PASS: that doc path is cited as evidence on both this item and OPS-CLIENTDATA-REMEDIATION as if already readable on main, but git show origin/main:decision-log/2026-08-05__client-data-remediation.md 404s -- the file only exists on #283's unmerged branch. Prior citations were reading a local/branch copy, not main. Landing #283 is a small, concrete, low-risk unblock (docs-only, 1 file) that would make this item's own evidence trail actually resolvable from main -- distinct from and prior to the 4 owner-only substantive opens below."
+  - kind: commit
+    ref: "workspace 05fe91f (PR#93, 2026-08-25) -- docs-only path correction to 00_Strategy/2026-08-05__client-data-deidentification_PLAN.md: quarantine folder's stated location was stale, corrected to the 2026-08-06 consolidated path (F:\\AI-Dev\\BIMpossible_Workspace\\_to_delete\\2026-08-06__client-data-quarantine, ~1.7GB, verified present); status restated as QUARANTINED, untouched, NOT approved for deletion. Sibling item OPS-CLIENTDATA-REMEDIATION already carries a matching 2026-08-24 owner RETAIN decision citation -- this doc commit brings the plan file's prose in line with what that item already recorded, it does not itself constitute a new decision. The 3-remaining-PDF-sets and S&L_ prefix opens are untouched by this commit -- still open."
   verification:
     level: verified
-    by: "PARKED 2026-08-04 by owner: 'We need to be using these experimental models. There will be a time when all of this must happen. It simply cannot be today.' Deferral is sound -- the product has NO technical dependency on client data (tests assert string literals only; the de-id rename is behavior-neutral), so nothing compounds architecturally by waiting. TWO TOOLING GAPS FOUND + one already fixed: (a) F:/AI-Dev/.tools/state is outside both RepoRoot paths the bulk script scans -- it would be silently missed (handled manually, script needs the path added); (b) 'SLAC-LSCC' WITHOUT a trailing hyphen is absent from the map, so -Verify can report PASSED while that form survives. STILL OPEN from the other session: delete the quarantine folder, rule on 3 remaining client PDF sets, decide the S&L_ prefix (firm-identifying, possibly load-bearing), 14 db dumps / 833MB gitignored retain pre-clean rows. RECONFIRMED 2026-08-07: parked status unchanged (owner deferral stands); #283 discovery above is new."
-    at: '2026-08-07'
+    by: "PARKED 2026-08-04 by owner: 'We need to be using these experimental models. There will be a time when all of this must happen. It simply cannot be today.' Deferral is sound -- the product has NO technical dependency on client data (tests assert string literals only; the de-id rename is behavior-neutral), so nothing compounds architecturally by waiting. TWO TOOLING GAPS FOUND + one already fixed: (a) F:/AI-Dev/.tools/state is outside both RepoRoot paths the bulk script scans -- it would be silently missed (handled manually, script needs the path added); (b) 'SLAC-LSCC' WITHOUT a trailing hyphen is absent from the map, so -Verify can report PASSED while that form survives. STILL OPEN: delete the quarantine folder, rule on 3 remaining client PDF sets, decide the S&L_ prefix (firm-identifying, possibly load-bearing), 14 db dumps / 833MB gitignored retain pre-clean rows. RECONFIRMED 2026-08-07: parked status unchanged (owner deferral stands); #283 discovery above is new. RECONFIRMED 2026-08-26 (workspace sync): none of the 3 live_check triggers fired; quarantine path doc-corrected (#93) but disposition still open per OPS-CLIENTDATA-REMEDIATION's 2026-08-24 RETAIN call -- this item and OPS-CLIENTDATA-REMEDIATION remain known unmerged duplicates (different framing/scope), out of mandate for this sync to dedupe."
+    at: '2026-08-26'
   live_check:
   - "TRIGGERS -- act when ANY fires: (1) first demo to anyone external (a prospect sees whatever is on screen); (2) BEFORE the hosting migration copies ~89k client-derived cache rows to the DigitalOcean droplet; (3) BEFORE the first real customer data lands in the DB -- after that a blanket cache flush is no longer safe and separation becomes surgical."
   - "Interim discipline (costs nothing): remediation doc Rule 3 -- new client-derived material gets a decision-log entry, never a silent add."
@@ -992,6 +994,31 @@ items:
   live_check:
   - "grep -c 'database/alembic/versions' docs/ARCHITECTURE.md docs/plans/TEMPLATE_BUILD_PLAN.md docs/plans/active/phase-3-10a-cross-model-room-join.md  # expect 0 across all three"
   source: "git log a2ea120..origin/main 2026-08-06 (469173e)"
+  notes_url:
+
+
+- id: DOC-PHASESTATUS-191
+  title: "Correct BIMpossible_PHASE-STATUS.md Phase 7 row -- calls PR #191 'open', it MERGED 2026-07-23"
+  projects: [bimpossible]
+  status: ready
+  owner_gate: true
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: pr
+    ref: "BIMpossible #191 'Phase 7 Gate G2: SSA cloud-open spike (hand-run)' -- MERGED 2026-07-23T03:10:25Z (gh pr view 191, this session 2026-08-27). The PHASE-STATUS.md Phase 7 row text still describes it as open."
+  - kind: doc
+    ref: "Already cross-flagged in 00_Strategy/BIMpossible_WAVE-STATUS.md Wave 8 evidence (workspace PR #97, commit 4674f11) -- the WAVE-STATUS side is corrected; PHASE-STATUS is the owner-maintained ledger and stays stale until a close-out/backfill pass edits it."
+  verification:
+    level: verified
+    by: "MERGE CONFIRMED via gh pr view 191 (state MERGED, mergedAt 2026-07-23T03:10:25Z). Documentation-drift finding only -- the substantive Phase 7 posture is unchanged: the DA4R adapter stays unregistered in get_engine() and owner G1/G2 go-live gates remain open, so 'not fully complete' is still correct; only the word 'open' applied to #191 is wrong. /next never writes PHASE-STATUS directly (owner-maintained / close-out-updated), so this records the drift for the next close-out or a backfill pass to fix, not for /next sync to edit."
+    at: '2026-08-27'
+  live_check:
+  - "gh pr view 191 --repo YourBIMpossible/BIMpossible --json state,mergedAt  # expect MERGED 2026-07-23"
+  source: "WaveStatus-PR-Check-Handoff Phase 1 remediation, workspace PR #97 (commit 4674f11); this session 2026-08-27"
   notes_url:
 
 
@@ -1465,10 +1492,12 @@ items:
     ref: "FRESH DRIFT observed 2026-08-17 (this reconcile, ~13 files): workspace local main is ahead 1 / behind 6 vs origin (unpushed local commit e2244fa 'chore(next): sync mirror -- Phase 9 gap-fill'; origin has #56-#61 the local checkout has not pulled). Working tree dirty: M on 5 tracked files -- BIMpossible_PHASE-STATUS.md, BIMpossible_WAVE-STATUS.md, 2026-06-23__Phase_Canonical_Guide_and_HardRules_v2-Reviewed.md, design-docs/2026-08-06__write-engine-increment2_type-params-string_build-plan.md, 02_Reference/.../BIMpossible_Verification_Checklist.md -- plus untracked: 3 Phase17/Favorites strategy docs, 3 audit-run docs (weekly-full-audit + resolution-plan + weekly-full-audit-run), and two stray dirs 03_Audits/ and audits/. The modified ledgers are owner-maintained (PHASE-STATUS/WAVE-STATUS) -- do NOT touch; the audit docs likely belong to the 2026-08-17 audit session already reconciled to origin via #56-#61, so the local copies may be superseded-by-remote rather than new work."
   - kind: log
     ref: "RESOLVED 2026-08-23 (overnight review): all three main checkouts clean and current -- bimpossible main, addins main, and workspace main all show behind-0/ahead-0 vs origin, zero dirty tracked files. Prior 2026-08-17 drift (foreign CI-hardening WIP, unpulled #56-#61, dirty ledgers) is gone; whatever session owned it landed and synced since. One residual: addins main has an untracked NORTHSTAR.link-pdf-roadmap.md -- a north-star charter file, human-only per CLAUDE.md, left untouched. No other repo checked (families, pc-monitor, dashboard, ai-server out of this review's per-repo scope)."
+  - kind: log
+    ref: "CONTRADICTS the 2026-08-23 'all clean' reading -- fresh live_check run 2026-08-26 (this workspace sync) found renewed drift in all three: bimpossible main 4 behind origin + working tree dirty (CLAUDE.md modified); addins main 6 behind origin + 3 dirty tracked files + 6 untracked, including a human-only NORTHSTAR file (do not touch); workspace main up to date (0/0) but 7 untracked 2026-08-26-dated audit-closure docs (likely this session's own estate-56 closure program artifacts, not foreign WIP -- unconfirmed). Per owner standing direction (2026-08-07, reaffirmed 2026-08-17/23) this sync did NOT pull/reset/stash/commit any of it -- left exactly as found for a supervised per-file review."
   verification:
-    level: verified
-    by: "Owner direction 2026-08-07 stands and applies to the fresh drift too: do NOT pull/reset/stash/delete/commit any of it blind -- first determine per file whether the change is intentional, belongs to an active/prior session, and is already externalized on origin (the local audit docs and the ahead/behind split strongly suggest the 2026-08-17 audit session pushed its work as #56-#61 while this checkout was never fast-forwarded). A safe fast-forward pull is blocked by the local-only mirror commit e2244fa + the dirty ledger files. Resolving this is a supervised per-file review, not an automatic clean. UPDATE 2026-08-23: that stale state is gone -- re-checked live, all clean now (see new evidence entry above)."
-    at: '2026-08-23'
+    level: contradicted
+    by: "TWO READINGS, not resolved: (1) 2026-08-23 overnight review found all three checkouts clean (behind-0/ahead-0, no dirty files except one untouched north-star doc). (2) 2026-08-26 live re-run of this item's own live_check found fresh drift in all three -- bimpossible 4-behind+dirty, addins 6-behind+dirty+untracked, workspace 0/0-but-7-untracked. Both readings are real machine facts at their respective timestamps; the gap means drift reaccumulated in the 3 days between checks (consistent with the item's own title: 'recurring'). Per anti-drift contract this is surfaced, not silently resolved -- owner should decide whether recurring drift at this cadence needs an automated/scheduled check rather than ad-hoc /next re-runs."
+    at: '2026-08-26'
   live_check:
   - "git -C F:/BIMpossible status -sb; git -C F:/BIMpossible-AddIns status -sb; git -C F:/BIMpossible-Workspace status -sb  # expect all behind-0/ahead-0, clean"
   source: "2026-08-07 /next sync Left-Flags; refreshed 2026-08-17 reconcile; owner instruction 'Do not clean up automatically'; re-verified clean 2026-08-23 overnight review"
@@ -1519,8 +1548,8 @@ items:
     ref: "workspace #40 (1a3021d, merged 2026-08-08) -- the docs half: incremental audit report (#256->#322 window), triaged second-opinion, resolution record, checklist + _audit-runs rows. Report at BIMpossible_Workspace/02_Reference/Audit and Scan Info/audit-resolution_2026-08-08.md."
   verification:
     level: verified
-    by: "Both halves merged and confirmed as tips of their respective delta walks (BIMpossible 3116d10 is origin/main HEAD; workspace 1a3021d is origin/main HEAD). Held at landed rather than live because the evidence is 'CI green on the PR' -- that is merge evidence, and per reconcile.md landed->live needs runtime evidence. Nothing here has been observed on a running deployment. Audit-ID caution carried from the breach-chain track: audit IDs (H-1, M-3, L-7...) are REUSED across runs, so cite these as ID@2026-08-08 -- an unqualified 'M-3' will collide with a different finding from another run."
-    at: '2026-08-08'
+    by: "Both halves merged and confirmed as tips of their respective delta walks (BIMpossible 3116d10 is origin/main HEAD; workspace 1a3021d is origin/main HEAD). Held at landed rather than live because the evidence is 'CI green on the PR' -- that is merge evidence, and per reconcile.md landed->live needs runtime evidence. Nothing here has been observed on a running deployment. Audit-ID caution carried from the breach-chain track: audit IDs (H-1, M-3, L-7...) are REUSED across runs, so cite these as ID@2026-08-08 -- an unqualified 'M-3' will collide with a different finding from another run. RECURRENCE CHECK 2026-08-26 (workspace sync): compared this run's 25 resolved IDs (H-1..H-3, M-1..M-10, L-1..L-14@2026-08-08) against every subsequent full-audit/closure report through 2026-08-25/26 (estate-56 closure) -- no ID collision found; the only short-ID overlaps (H-03@2026-08-25, L-03/L-13/L-19/L-21@2026-08-25) are confirmed DIFFERENT findings (Add-Ins-repo scoped) via distinct descriptions, not regressions of this run's fixes. Supporting, not proof, per the live_check below -- but two full cycles clean is the strongest signal this item has had since landing."
+    at: '2026-08-26'
   live_check:
   - "ls 'F:/AI-Dev/BIMpossible_Workspace/02_Reference/Audit and Scan Info/audit-resolution_2026-08-08.md'"
   - "Next full audit run: the 25 resolved IDs should not resurface. Recurrence is the only real proof the fixes hold."
@@ -1950,16 +1979,70 @@ items:
   - kind: pr
     ref: "SECURITY/AUTHZ pieces of the same program: #397 hardens tenancy (project-access invariant + firm-scoped wizard hub gate); #407 (SEC-AUTHZLOG-RETENTION-1: batched audit writes + retention worker for authz_decision_log) and #410 (pre-SHADOW release-blocker: decision-log durability re-acceptance) continue the authz decision-log durability line that #361 began -- see AUTHZ-SHADOW-WINDOW-VALIDITY, still deferred to pre-pilot."
   - kind: doc
-    ref: "Program summary in memory audit-resolution-2026-08-17-closed: 74 findings, 9 phases, 11 PRs merged to main (BIMpossible + Workspace); worktrees/branches cleaned up; owner flags + accepted-risk list recorded. Workspace half landed as #56-#61 (audit-run docs + resolution plan), which the local BIMpossible_Workspace checkout has NOT pulled (see OPS-WORKTREE-DRIFT-REVIEW)."
+    ref: "Program summary in memory audit-resolution-2026-08-17-closed: 74 findings, 9 phases, 11 PRs merged to main (BIMpossible + Workspace); worktrees/branches cleaned up; owner flags + accepted-risk list recorded. Workspace half landed as #56-#61 (audit-run docs + resolution plan). STALE as of 2026-08-26: the local BIMpossible_Workspace checkout HAS since pulled and is current with origin/main (confirmed 0 ahead/0 behind at this sync's watermark commit 6dfc9e1) -- the 'has NOT pulled' claim is no longer true, superseded by whatever session landed/synced it between 2026-08-17 and 2026-08-23 per OPS-WORKTREE-DRIFT-REVIEW's own resolved-2026-08-23 entry."
   verification:
     level: verified
-    by: "Program CLOSED per the owner-tracked memory; the BIMpossible-repo PRs are all merged into origin/main and shipped by the 2026-08-17 stack deploy. LANDED not LIVE, same standard as AUDIT-2026-08-08-REMEDIATION: the evidence is 'CI green on the PRs' plus the deploy, which is merge+deploy evidence, not proof each fix behaves on the running deployment -- recurrence in the next full audit is the only real proof the fixes hold. Audit-ID caution: H-/M-/L- and P1a/P1b/SLOP-*/FE-* IDs are REUSED across runs; cite these as ID@2026-08-17. unblocks: [] -- remediation program, nothing stored waits on it."
-    at: '2026-08-17'
+    by: "Program CLOSED per the owner-tracked memory; the BIMpossible-repo PRs are all merged into origin/main and shipped by the 2026-08-17 stack deploy. LANDED not LIVE, same standard as AUDIT-2026-08-08-REMEDIATION: the evidence is 'CI green on the PRs' plus the deploy, which is merge+deploy evidence, not proof each fix behaves on the running deployment -- recurrence in the next full audit is the only real proof the fixes hold. Audit-ID caution: H-/M-/L- and P1a/P1b/SLOP-*/FE-* IDs are REUSED across runs; cite these as ID@2026-08-17. unblocks: [] -- remediation program, nothing stored waits on it. RECURRENCE CHECK 2026-08-26 (workspace sync): FE-1/FE-2/FE-3, RE-2, ARCH-NEW-2, SEC-cloud-1 were carried as ACCEPTED-DEFERRED (never claimed fixed by this 08-17 program) and given a terminal accept-as-designed disposition in the 2026-08-25/26 estate-56 closure (see AUDIT-ESTATE56-CLOSURE-20260826) -- not a regression, a formal ratification of a status this item already held. No other 08-17 ID resurfaced through 2026-08-26."
+    at: '2026-08-26'
   live_check:
   - "Next full audit run: the 2026-08-17 resolved IDs should not resurface -- recurrence is the proof."
   - "gh pr view 397 -R YourBIMpossible/BIMpossible --json state,mergedAt  # expect MERGED (tenancy invariant + wizard hub gate)"
   source: "merged-PR window pr>390; memory audit-resolution-2026-08-17-closed"
   notes_url:
+
+
+- id: AUDIT-ESTATE56-CLOSURE-20260826
+  title: "2026-08-17 audit estate CLOSED 56->0: 2026-08-24/25/26 reconciliation across bimpossible+addins+workspace"
+  projects: [bimpossible, addins, workspace]
+  status: landed
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 2
+  evidence:
+  - kind: doc
+    ref: "workspace 02_Reference/Audit and Scan Info/audit-closure-COMPLETE_2026-08-26.md -- estate = the 2026-08-17 weekly full-audit + everything carried since. Board reconciled 56->0 over three commits: d48a808 (PR#94, 2026-08-25, 56->14), c29de81 (PR#95, held to 1: M-30), 6dfc9e1 (PR#96, 2026-08-26, M-30 closed, estate 0). Doc's own reconciliation asserts open[]==counts per card (bimpossible/addins/site/aiserver/pc-monitor all 0), independently spot-checked by the research pass behind this item -- not re-verified live by this sync beyond that spot-check."
+  - kind: pr
+    ref: "AddIns #107 (fe94288e, MERGED 2026-08-26T17:31:08Z) -- M-30, the last held finding: genuine live-Revit screenshots captured for the 'Place Callout Sheets' guide, replacing placeholder/stock images."
+  - kind: pr
+    ref: "AddIns #106 (c03ef5c) -- HYG-12, activated a doc-reference/docs-budget CI subsystem, closed as held-external-executed."
+  - kind: doc
+    ref: "10 findings closed via formal accept-as-designed ratification (audit-acceptance-records_2026-08-25.md): RE-2, ARCH-NEW-2, FE-1, FE-2, FE-3, SEC-cloud-1 (bimpossible, pre-existing carries from the 2026-08-17 program -- see AUDIT-2026-08-17-REMEDIATION recurrence-check note) + L-03, L-13, L-19, L-21 (addins). Remaining ~42 closed pre-run (fixed/refuted/superseded/already-ratified) -- not individually itemized here, see the COMPLETE doc for the full 56-row table."
+  verification:
+    level: verified
+    by: "PR#107 confirmed MERGED via GitHub API per the closure doc's own signing statement; PR#106 and the three closure commits (d48a808/c29de81/6dfc9e1) confirmed present on workspace origin/main via git log at this sync's watermark. LANDED not LIVE -- same standard as the 08-08/08-17 remediation programs: most of the 56 were hygiene fixes or accept-as-designed ratifications, not exhaustive runtime-verified code changes; recurrence in the next full audit is the proof this holds. Three named out-of-estate items stay OWNER-ONLY, explicitly not this item's scope: (1) backend docs-hygiene / issue #345 -- already tracked under BIMP-P12-OPSDOCS-COMMIT (bimpossible-scoped); that item's own evidence (PR#492 f937315e, PR#493 6ca19125, both merged) says 'no P7/P12 doc/branch-cleanup work remains open', which CONTRADICTS this closure doc's '#345 stays open' claim -- surfaced, not resolved, needs a bimpossible-scoped confirm pass to settle which is current; (2) _cc_build_check/ tracked build DLLs on AddIns origin/main -- pre-existing hygiene debt, no tracked item, owner cleanup, not itemized separately here (too small/undated for its own entry); (3) .env AUTHZ_ENFORCEMENT_MODE SHADOW->ENFORCE flip -- already tracked under AUTHZ-SHADOW-ACTIVATE/AUTHZ-SHADOW-WINDOW-VALIDITY, deferred to pre-pilot re-entry, unaffected by this closure."
+    at: '2026-08-26'
+  live_check:
+  - "git -C F:/BIMpossible-Workspace log --oneline -3  # expect 6dfc9e1, c29de81, d48a808 on main"
+  - "gh pr view 107 -R YourBIMpossible/BIMpossible-AddIns --json state,mergedAt  # expect MERGED 2026-08-26"
+  - "Next full audit run: none of the 56 closed findings should resurface -- recurrence is the proof."
+  source: "workspace PR#93-#96; audit-closure-COMPLETE_2026-08-26.md; audit-acceptance-records_2026-08-25.md"
+  notes_url: null
+
+
+- id: OPS-1-ADDINS-AUDIT-GAP
+  title: "Add-Ins/RevitLink audit dashboard card stuck stale: newer report has no severity/ID scheme to ingest"
+  projects: [workspace, addins]
+  status: blocked_owner
+  owner_gate: true
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: doc
+    ref: "workspace 00_Strategy/Dashboard/strategy_decisions_ledger.md row ops-1 (added commit c75eaf7), category gap, status approved (meaning acknowledged-accurate, not a decided fix -- same pattern as pre-existing row eco-7). The dashboard's Add-Ins/RevitLink audit card still reflects the 2026-08-08 baseline (4 High/Medium items closed) because 00_Strategy/2026-08-22__link-pdf-to-sheets-phase0-audit.md exists but was written with no severity/ID scheme, so it cannot be ingested into the card's counts/open[] structure."
+  - kind: run
+    ref: "check_audit_freshness.py will keep flagging addins.stale: true until resolved -- self-flagging, not silently wrong, but visible staleness on every dashboard render until an owner call is made."
+  verification:
+    level: claimed
+    by: "Ledger row is a judgment source (reconcile.md priority 3), not machine-verified here -- not independently re-run this sync (out of scope: dashboard freshness script, not a repo/PR fact). Two explicit revisit triggers per the ledger row: either a properly severity-scored Add-Ins audit report lands, or the owner decides to fold the 08-22 findings in narratively (history-only, no counts/open[] claim) -- not yet decided which."
+    at: '2026-08-26'
+  live_check:
+  - "python check_audit_freshness.py  # (or equivalent) -- expect addins.stale: true until ops-1 is resolved one way or the other"
+  source: "00_Strategy/Dashboard/strategy_decisions_ledger.md row ops-1 (commit c75eaf7)"
+  notes_url: null
 
 
 - id: OPS-DEPLOY-STACK-REFRESH-20260817
@@ -3046,4 +3129,35 @@ items:
   live_check:
   - "curl -sI https://yourbimpossible.com/data-policy | head -1"
   source: "Split out from OPS-RESIDENCY-DOC's own live_check during /next BIMpossible drill, 2026-08-23 -- OPS-RESIDENCY-DOC stays landed (content-complete, correctly not yet verified live); this item tracks the separate deploy action it was waiting on."
+  notes_url: null
+
+- id: BIMP-P12-OPSDOCS-COMMIT
+  title: "Five finished P7/P10-P12 relay ops closeout docs sit untracked in worktree bimpossible-next-f9990d (branch claude/bimpossible-next-dffbee) -- committing them trips doc-references.json (22 new unresolved: bare BIMpossible-AddIns .cs paths, relay bin/deploy artifact paths) and docs-budget.json (word ceiling, ~110.6k > 110k) simultaneously"
+  projects: [bimpossible]
+  status: landed
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: doc
+    ref: "Untracked files: docs/ops/2026-08-25-revit-dll-deployment-ownership-audit.md, docs/ops/2026-08-26-p7-customer-zero-cutover-execution.md, docs/ops/2026-08-26-p8-p9-relay-runtime-package-candidate.md, docs/ops/2026-08-26-p10-relay-launchconfig-resilience-logisolation-candidate.md, docs/ops/2026-08-26-p11-controlled-deployment-execution.md (the last is the canonical Phase 12A/12B/12C owned-spawn-proof execution log). Content already complete -- Phase 12C owned-spawn acceptance proof PASS, logged 2026-08-26 14:04:59."
+  - kind: ci
+    ref: "2026-08-26 (MERGED): PR #492 merged to main as f937315e (squash). PR #492's original base (commit b5cb4af6, built on unmerged ca548ee1) went CONFLICTING once PR #491 landed its own overlapping doc-references.json/docs-budget.json fix directly on main first -- ca548ee1 itself never merged, only #492 carried its content forward. Fixed by rebasing claude/p12-opsdocs-commit onto current origin/main (`git rebase --onto origin/main ca548ee1 claude/p12-opsdocs-commit`, dropping the redundant ca548ee1 ancestor) as commit acfbefcb, resolving conflicts by keeping main's #491 ignoreRefs/_comment state and appending only the P12-specific additions (9 sibling-repo .cs paths, relay/relay-launch.json, bin/1.1.0/relay.py, bin/1.1.0/relay-manifest.json, _provision-backups/p12a-20260826-112748 -- none of the 6 superseded #487/#488 entries restored, since 5 of 6 are now real tracked files on main and the 6th (tests/test_session_lifecycle.py) is not cited by any of these 5 staged docs). docs-budget.json ceilings re-measured fresh against the rebased tree (108,903 words/91 files, not the stale pre-rebase 110,695/92) and raised to 126,000/105 (~15% headroom). Both checkers green post-rebase: doc-references unresolved 8/baseline 8, docs-budget 108,903/126,000 words (14% headroom), and confirmed green again from the merged main tip (zero diff between the merged commit's tree and local). Three negative tests (fake files under the former Local/Roaming/bin prefixes) re-confirmed caught both pre-rebase and post-rebase. Verify-Local-CI.ps1 -BaseRef origin/main: NO APPLICABLE LANES (docs-only). All required PR checks (backend/pytest, frontend/vitest+tsc skipped via path-filter; security-scan-summary SUCCESS) passed; mergeStateStatus CLEAN. Feature branch claude/p12-opsdocs-commit auto-deleted on merge per repo's deleteBranchOnMerge=true policy. No P12 docs work remains open."
+  - kind: ci
+    ref: "2026-08-26 dry-run: staging all five + committing doc-references.json/docs-budget.json fixes together pushed doc-references.mjs to 30 unresolved (22 new) and docs-budget.mjs total-words to 110,647 > then-ceiling 110,000. Reverted (git reset) rather than absorbed, since fixing both was beyond the narrow docs-hygiene-repair authorization given this session; committed only the 3 originally-authorized files instead (commit ca548ee1)."
+  - kind: doc
+    ref: "2026-08-26 (later): owner said another session is taking over these 5 docs. A follow-up git add attempt in this worktree was blocked by the auto-mode classifier -- same files the prior push authorization had explicitly excluded -- so treated as a real signal and not worked around. Sent handoff-confirmation to peer session file-locations-9ad341-d9 (msg_id 1f0a3a5e-3385-4569-a7a8-8e3c254fc114); files left untouched, untracked, on disk in bimpossible-next-f9990d pending that confirmation."
+  - kind: doc
+    ref: "2026-08-26 (deconfliction reply): file-locations-9ad341-d9 confirmed it is NOT taking these 5 docs -- its worktree is authz-enforcement-rollout (branch claude/authz-enforcement-rollout), read-only preflight for the authz SHADOW-ENFORCE rollout, writes only to BIMpossible-Workspace docs. Item remains unowned; owner needs to name the actual session or pick this up directly. Separately, that session landed its own docs-hygiene fix as PR #491, MERGED to main at 53375b4: raised docs-budget.json ceilings.docFileCount 85->86 and repointed two refs in docs/ops/2026-08-25-p7-relay-session-lifecycle.md. Whoever works this item must rebase onto main@53375b4 FIRST -- docFileCount ceiling is already 86, not 85, before adding these 5 docs' further bump."
+  - kind: ci
+    ref: "2026-08-27 (FINAL CLEANUP, authorized bounded op): the 5 ops docs already landed via #492 (f937315e); the two durable engineering lessons that lived ONLY on obsolete branch claude/bimpossible-next-dffbee (PS 5.1 em-dash/CP-1252 mojibake parse failure; relay probe 404/500 = occupied endpoint, spawn only on genuine refusal) were extracted to docs/decision-log/2026-08-26__p7-relay-lifecycle-engineering-lessons.md + one INDEX.md line via PR #493, MERGED to main squash 6ca19125. Docs checks green (doc-references unresolved 8/baseline 8; docs-budget within ceilings), Verify-Local-CI docs-only NO APPLICABLE LANES, independent code review 0 findings. Obsolete branch retired: remote origin/claude/bimpossible-next-dffbee DELETED, local branch claude/bimpossible-next-dffbee DELETED (was ca548ee1), worktree bimpossible-next-f9990d deregistered from git (prune-clean, no stale admin entry) -- physical dir F:\\BIMpossible\\.claude\\worktrees\\bimpossible-next-f9990d could not be deleted while this session's own process holds it as cwd; delete after session exit with `Remove-Item -Recurse -Force`. Safety branch safety/p12-opsdocs-commit-pre-rebase-20260826 NOT deleted: its tree is NOT fully represented on origin/main (27 files / 1865+ / 499- diverge; distinct tree e195c02c vs 999b80eb) -- it uniquely holds the 3 superseded ops docs AND lacks the relay.py/scripts content that #492 carried; precondition for deletion unmet, left in place. No P7/P12 doc/branch-cleanup work remains open."
+  verification:
+    level: claimed
+    at: '2026-08-26'
+    by: "Same-session discovery, not independently re-checked."
+  live_check:
+  - "cd F:\\BIMpossible\\.claude\\worktrees\\bimpossible-next-f9990d && git status --short docs/ops/ && node scripts/check-doc-references.mjs && node scripts/check-docs-budget.mjs"
+  source: "Surfaced during /close on session d0b39475-e34e-4341-aa0e-764b902547c8, 2026-08-26. Fix needs: (1) doc-references.json ignoreRefs/externalRoots entries for the bare BIMpossible.RevitLink*.cs paths (AddIns sibling repo, cited without the BIMpossible-AddIns/ prefix) and for generated relay build/deploy artifact paths (bin/, bin/1.1.0/*, relay/relay-launch.json, Roaming/Local AppData paths, _provision-backups/*) which are gitignored-by-design; (2) a further docs-budget.json totalDocWords raise (~128k covers it, see reverted edit in this session's transcript). Note: peer session file-locations-9ad341-b6 (Stream A, issue #345) is separately waiting on THIS session's already-committed doc-references.json/docs-budget.json change landing on main -- coordinate before touching either file again."
   notes_url: null
