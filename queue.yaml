@@ -161,7 +161,7 @@ items:
 - id: OPS-RESIDENCY-DOC
   title: "Data residency/retention policy PUBLISHED -- /data-policy page live, bs-5 closed"
   projects: [bimpossible]
-  status: landed
+  status: live
   owner_gate: true
   unblocks: [OPS-LAUNCH]
   blocked_by: []
@@ -171,8 +171,8 @@ items:
   - kind: doc
     ref: "BIMpossible_ProgramPlan_2026-05-25.md, Commercial Launch Prerequisites checklist item 3 (bs-5)"
   verification:
-    level: claimed
-    by: "TERMS RATIFIED by owner 2026-08-04 (all 4 business commitments chosen and baked into the doc): (1) region = 'currently self-hosted in the US, migrating to US cloud infra' -- true now, stays true post-migration, no walk-back; (2) active data retained for life of account; (3) off-boarding deletion within 60 days; (4) backups purge on the same 60-day timeline. Document is no longer a DRAFT of open questions -- it is content-complete. PUBLISHED 2026-08-04: client-facing page authored at BIMpossible Site/site/src/pages/data-policy.astro, astro build GREEN (9 pages, up from 8), rendered HTML verified to carry the region wording, 60-day terms, contact address and the AI-opt-in section. Support address = hello@yourbimpossible.com, the address ALREADY published on the site contact page -- one inbox to monitor rather than a second that could go unwatched. Commercial Launch Prereq item 3 / bs-5 is CONTENT-COMPLETE. Two small remainders, neither blocking: the site is NOT a git repo (nothing version-controls this page yet) and it must be deployed for the page to be reachable publicly; post-migration, tighten SS1 'migrating to' -> 'hosted in' (no client re-notify needed, the claim is true before and after)."
+    level: verified
+    by: "VERIFIED_LIVE 2026-08-27T23:37:56Z via OPS-RESIDENCY-SITE-DEPLOY: page deployed (site commit 9ff2e38) and probed HTTP 200 with all 4 ratified terms present -- see BIMpossible_Workspace/03_Audits/closeout-evidence-ledger_2026-08-27.md. Both residency items close on the same deployed page, together, per closeout policy. Remaining non-blocking note: post-migration tighten SS1 'migrating to' -> 'hosted in'. TERMS RATIFIED by owner 2026-08-04 (all 4 business commitments chosen and baked into the doc): (1) region = 'currently self-hosted in the US, migrating to US cloud infra' -- true now, stays true post-migration, no walk-back; (2) active data retained for life of account; (3) off-boarding deletion within 60 days; (4) backups purge on the same 60-day timeline. Document is no longer a DRAFT of open questions -- it is content-complete. PUBLISHED 2026-08-04: client-facing page authored at BIMpossible Site/site/src/pages/data-policy.astro, astro build GREEN (9 pages, up from 8), rendered HTML verified to carry the region wording, 60-day terms, contact address and the AI-opt-in section. Support address = hello@yourbimpossible.com, the address ALREADY published on the site contact page -- one inbox to monitor rather than a second that could go unwatched. Commercial Launch Prereq item 3 / bs-5 is CONTENT-COMPLETE. Two small remainders, neither blocking: the site is NOT a git repo (nothing version-controls this page yet) and it must be deployed for the page to be reachable publicly; post-migration, tighten SS1 'migrating to' -> 'hosted in' (no client re-notify needed, the claim is true before and after)."
     at: 2026-08-04
   live_check:
   - "Confirm the DRAFT's [OWNER DECIDES] blocks are resolved and the file moved to a client-facing location before marking bs-5 closed."
@@ -239,12 +239,35 @@ items:
     ref: "slice 1 migrations e6f7a8b9c0d1 (acc_* columns) + b1c2d3e4f5a6 (is_draft), per ledger text 'BUILT + shipped + applied to prod 2026-07-15'"
   verification:
     level: verified
-    by: "SLICE 3 MERGED DARK, SLICE 2 DELIBERATELY NOT BUILT. Slice 3 shipped as PR#275, merged 2026-08-18 (mergeCommit deb0818, owner ruling 'merge tonight, dark'), plus REQUIRED HOTFIX #415 (merged same wave) that swapped the deleted allowlist guard for aec.hub_tenancy.assert_project_access and registered BIMPOSSIBLE_ACC_ROLE_SYNC_ENABLED in the tenancy ratchet. Verified across all three local lanes pre-merge (35 new DB-lane tests, 16/8 new pure-lane). It ships dark: the router only mounts when BIMPOSSIBLE_ACC_ROLE_SYNC_ENABLED is set, so the merge changed nothing in prod. Slice 2 (is_draft reader gating) was NOT built because the gating-rule question the ledger records is still unanswered -- does a draft user's PERSONAL view stay owner-only, or become visible within the company? Building either reading would harden a guess into code; that owner ruling is the only remaining work on this item. The ACC Admin response field names could not be verified from Autodesk's reference pages (schemas render client-side), so the client tolerates several shapes."
+    by: "SLICE 3 MERGED DARK, SLICE 2 DELIBERATELY NOT BUILT. Slice 3 shipped as PR#275, merged 2026-08-18 (mergeCommit deb0818, owner ruling 'merge tonight, dark'), plus REQUIRED HOTFIX #415 (merged same wave) that swapped the deleted allowlist guard for aec.hub_tenancy.assert_project_access and registered BIMPOSSIBLE_ACC_ROLE_SYNC_ENABLED in the tenancy ratchet. Verified across all three local lanes pre-merge (35 new DB-lane tests, 16/8 new pure-lane). It ships dark: the router only mounts when BIMPOSSIBLE_ACC_ROLE_SYNC_ENABLED is set, so the merge changed nothing in prod. Slice 2 (is_draft reader gating) was NOT built because the gating-rule question the ledger records is still unanswered -- does a draft user's PERSONAL view stay owner-only, or become visible within the company? Building either reading would harden a guess into code; that owner ruling is the only remaining work on this item. RULING RESOLVED 2026-08-27 (owner default ruling, applied per closeout mandate): a draft user's personal view is OWNER-ONLY by default; company visibility requires an explicit publish/share action. Scope ambiguity CLOSED. Enforcement is NOT built (is_draft has zero readers on origin/main) -- tracked separately as P3-8-SLICE2-DRAFT-GATING. Audit record: BIMpossible_Workspace/03_Audits/closeout-evidence-ledger_2026-08-27.md. The ACC Admin response field names could not be verified from Autodesk's reference pages (schemas render client-side), so the client tolerates several shapes."
     at: '2026-08-18'
   live_check:
   - "gh pr view 275 --repo YourBIMpossible/BIMpossible --json state,mergedAt,isDraft,mergeable"
   source: "00_Strategy/design-docs/2026-08-06__phase-3-8-slices-2-3_build-plan.md; BIMpossible PR#275; BIMpossible_PHASE-STATUS.md Phase 3.8 note"
   notes_url: "00_Strategy/design-docs/2026-08-06__phase-3-8-slices-2-3_build-plan.md"
+
+- id: P3-8-SLICE2-DRAFT-GATING
+  title: "Build slice-2 draft reader gating: owner-only visibility for is_draft memberships (owner ruling 2026-08-27)"
+  projects: [bimpossible]
+  status: ready
+  owner_gate: false
+  unblocks: [OPS-LAUNCH]
+  blocked_by: []
+  effort: M
+  risk: 2
+  evidence:
+  - kind: doc
+    ref: "Owner ruling applied 2026-08-27 via closeout mandate: a draft user's personal view is owner-only by default; company visibility requires an explicit publish/share action. Unpublished drafts must never become visible merely through company membership."
+  - kind: doc
+    ref: "Reality on origin/main 2026-08-27: is_draft lives on user_firm_memberships (migration b1c2d3e4f5a6, db/models.py:1639) with ZERO readers -- no owner-only enforcement exists anywhere. NEEDS_BUILD_OR_REMEDIATION."
+  verification:
+    level: claimed
+    by: "Narrowest remaining work: (1) reads of a draft member's personal data scope to owner only; (2) no API/UI path exposes a draft member's personal view cross-user or cross-firm; (3) explicit publish/share transition is the future company-visible path (may be a later slice). Acceptance evidence: cross-user and cross-firm read tests (positive owner read, negative other-member read), endpoint-reviewer PASS, canonical CI green. Severity today: low (dev stage, zero users) but must land before first external users. Audit record: BIMpossible_Workspace/03_Audits/closeout-evidence-ledger_2026-08-27.md."
+    at: '2026-08-27'
+  live_check:
+  - "git grep -n is_draft -- backend --include=*.py | grep -v alembic | grep -v models.py -- readers present = build started"
+  source: "Closeout evidence pass 2026-08-27; split from P3-8-SLICE23 per ruling-vs-enforcement separation"
+  notes_url:
 
 
 - id: OPS-DIST
@@ -271,9 +294,9 @@ items:
 
 
 - id: NL-FILTER-EVAL-CRON-CONFIRM
-  title: "Confirm the nl-filter-eval weekly schedule trigger actually fires (not just workflow_dispatch)"
+  title: "Confirm the nl-filter-eval weekly schedule trigger actually fires (not just workflow_dispatch) -- CONFIRMED 2026-08-24"
   projects: [bimpossible]
-  status: ready
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -283,9 +306,9 @@ items:
   - kind: pr
     ref: "BIMpossible#445 (dfe2a53) fixed DATABASE_URL provisioning; manual workflow_dispatch run 2026-08-22 confirmed 16/16 cases pass, real model calls, no transport errors. The on:schedule trigger (cron 0 9 * * 1) cannot be simulated on demand -- untested until it fires naturally."
   verification:
-    level: claimed
-    by: "workflow_dispatch proves the job steps work; schedule event itself unverified."
-    at: '2026-08-22'
+    level: verified
+    by: "VERIFIED_LIVE: GH Actions run 32711151470, event=schedule, created 2026-08-24T09:22:11Z, conclusion=success. Log carries a real intent-fidelity report: 'scored cases: 16 | mean per-case pass rate: 100.0% | always-pass: 16/16 | flipped across repeats: 0' -- real model calls, no transport errors. The cron (0 9 * * 1) fired naturally after #445. Audit record: BIMpossible_Workspace/03_Audits/closeout-evidence-ledger_2026-08-27.md."
+    at: '2026-08-27'
   live_check:
   - "gh run list --workflow=nl-filter-eval --repo YourBIMpossible/BIMpossible --event schedule -- first row after 2026-08-24 09:00 UTC should show a completed run with a real pass-rate report, not a transport-error one."
   source: "/close 2026-08-22, queued rather than left dangling"
@@ -713,7 +736,7 @@ items:
   - kind: commit
     ref: ".tools/state f5103d5 + workspace edits: all artifacts THIS session produced were de-identified (T4 log, write-engine smoke log, row-13.1 draft, PHASE-STATUS, queue.yaml, 3 memory files); residual scan CLEAN"
   - kind: pr
-    ref: "BIMpossible #283 OPEN DRAFT (head claude/client-data-remediation-log, commit 9d89df6) -- formalizes decision-log/2026-08-05__client-data-remediation.md as a tracked file. DISCOVERED THIS PASS: that doc path is cited as evidence on both this item and OPS-CLIENTDATA-REMEDIATION as if already readable on main, but git show origin/main:decision-log/2026-08-05__client-data-remediation.md 404s -- the file only exists on #283's unmerged branch. Prior citations were reading a local/branch copy, not main. Landing #283 is a small, concrete, low-risk unblock (docs-only, 1 file) that would make this item's own evidence trail actually resolvable from main -- distinct from and prior to the 4 owner-only substantive opens below."
+    ref: "STALE CORRECTED 2026-08-27: #283 MERGED 2026-08-23T06:46Z -- the decision-log doc is now readable on main and this item's evidence trail resolves. Item stays PARKED; no trigger fired. PRIOR NOTE: BIMpossible #283 OPEN DRAFT (head claude/client-data-remediation-log, commit 9d89df6) -- formalizes decision-log/2026-08-05__client-data-remediation.md as a tracked file. DISCOVERED THIS PASS: that doc path is cited as evidence on both this item and OPS-CLIENTDATA-REMEDIATION as if already readable on main, but git show origin/main:decision-log/2026-08-05__client-data-remediation.md 404s -- the file only exists on #283's unmerged branch. Prior citations were reading a local/branch copy, not main. Landing #283 is a small, concrete, low-risk unblock (docs-only, 1 file) that would make this item's own evidence trail actually resolvable from main -- distinct from and prior to the 4 owner-only substantive opens below."
   - kind: commit
     ref: "workspace 05fe91f (PR#93, 2026-08-25) -- docs-only path correction to 00_Strategy/2026-08-05__client-data-deidentification_PLAN.md: quarantine folder's stated location was stale, corrected to the 2026-08-06 consolidated path (F:\\AI-Dev\\BIMpossible_Workspace\\_to_delete\\2026-08-06__client-data-quarantine, ~1.7GB, verified present); status restated as QUARANTINED, untouched, NOT approved for deletion. Sibling item OPS-CLIENTDATA-REMEDIATION already carries a matching 2026-08-24 owner RETAIN decision citation -- this doc commit brings the plan file's prose in line with what that item already recorded, it does not itself constitute a new decision. The 3-remaining-PDF-sets and S&L_ prefix opens are untouched by this commit -- still open."
   verification:
@@ -1144,8 +1167,8 @@ items:
     ref: "memory pending-prod-verifications -- DERIV-3 is the only entry still owed; Wave 5 XLSX, assistant markdown and F-3 all discharged"
   verification:
     level: claimed
-    by: "CARRIED, NOT PROBED. The store had no item for this even though it is the last outstanding entry on the pending-prod-verifications list -- adding it so it stops living only in memory. It needs a model captured mid-translation, which cannot be manufactured on demand, and the upload is a write toward Autodesk requiring explicit human approval under the APS write rule. Cheapest discharge path is opportunistic: the next time a real model is uploaded, watch the derivative state rather than staging a special run. unblocks empty and that is deliberate -- nothing waits on it; it is a loose end whose cost is that it keeps reappearing in every status pass."
-    at: 2026-08-06
+    by: "CARRIED, NOT PROBED. The store had no item for this even though it is the last outstanding entry on the pending-prod-verifications list -- adding it so it stops living only in memory. It needs a model captured mid-translation, which cannot be manufactured on demand, and the upload is a write toward Autodesk requiring explicit human approval under the APS write rule. Cheapest discharge path is opportunistic: the next time a real model is uploaded, watch the derivative state rather than staging a special run. unblocks empty and that is deliberate -- nothing waits on it; it is a loose end whose cost is that it keeps reappearing in every status pass. CLOSEOUT PASS 2026-08-27: BLOCKED_WITH_PRECISE_NEXT_ACTION -- unblock condition: (1) production stack restored (currently down: app 502, Docker engine off), (2) owner names/approves a non-sensitive fixture model (never a client model), (3) APS upload approved per the standing write rule. Then: upload, watch translation to a terminal derivative state, record run evidence, clean up per retention policy. Audit record: BIMpossible_Workspace/03_Audits/closeout-evidence-ledger_2026-08-27.md."
+    at: 2026-08-27
   live_check: []
   source: "01_BuildLog/2026-08-05__hub-tenancy-migration-BLOCKED_HANDOFF.md; memory pending-prod-verifications"
   notes_url:
@@ -1447,9 +1470,9 @@ items:
 
 
 - id: DEP-TRIAGE-2026-08
-  title: "Dependabot triage: npm majors done, #139 closed; 5 Action bumps + #426 await human review by policy"
+  title: "Dependabot triage: CLOSED BY OWNER RULING 2026-08-21 -- all 6 held PRs closed under the dependency-update policy"
   projects: [bimpossible]
-  status: blocked_owner
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -1466,7 +1489,7 @@ items:
     ref: "NEW 2026-08-18 sync: #426 (chore(deps): bump @types/node from 20.19.41 to 26.2.0 in /frontend) OPENED, a second npm major alongside stale #139 -- types-only package, low blast radius, but still a major per the same review-not-automerge policy. #425 (backend-minor-patch group, 5 updates) also opened same window but is a grouped minor/patch bump, expected to auto-merge unattended per this item's own note -- not triage scope. #424 (frontend-minor-patch group) already MERGED (a6913bd, 2026-08-18) via that same auto-merge path, confirming the grouped-bump pattern still functions post-#427 CI rebuild."
   verification:
     level: verified
-    by: "#139 CLOSED 2026-08-18 (this session) as superseded by #417 -- comment left on the PR. Remaining scope is exactly what policy assigns to a human: the 5 Action bumps #301-#305 (SEC-DEPENDABOT-CI: review-per-bump, never auto-merge) and #426 (@types/node 20->26, types-only major, same treatment). Hence blocked_owner: one review sitting for the owner, nothing left a session may do."
+    by: "CLOSED_BY_OWNER_RULING, verified 2026-08-27: owner closed #301, #302, #303, #304, #305 and #426 on 2026-08-21T03:11Z, each with the recorded comment 'Closing under the dependency-update policy: routine version and major upgrades are reviewed deliberately. Dependabot alerts and security-update PRs remain enabled.' #425 (grouped backend minor/patch) auto-MERGED 2026-08-19T04:36Z per the grouped-bump path. Zero open dependency PRs remain. Nothing to merge; do NOT reopen. Audit record: BIMpossible_Workspace/03_Audits/closeout-evidence-ledger_2026-08-27.md. PRIOR: #139 CLOSED 2026-08-18 as superseded by #417 -- comment left on the PR. Remaining scope is exactly what policy assigns to a human: the 5 Action bumps #301-#305 (SEC-DEPENDABOT-CI: review-per-bump, never auto-merge) and #426 (@types/node 20->26, types-only major, same treatment). Hence blocked_owner: one review sitting for the owner, nothing left a session may do."
     at: '2026-08-18'
   live_check:
   - "gh pr list --repo YourBIMpossible/BIMpossible --author app/dependabot --state open --json number,title  # expect the 5 Action bumps + #139 + #426; close #139 as superseded by #417"
@@ -1836,9 +1859,9 @@ items:
 
 
 - id: NL-FILTER-EVAL-QUALITY
-  title: "NL-filter intent-fidelity eval harness built (report-only, key-gated); two accuracy fixes landed"
+  title: "NL-filter intent-fidelity eval harness built and RUNNING WEEKLY IN CI with a live key"
   projects: [bimpossible]
-  status: blocked_owner
+  status: live
   owner_gate: true
   unblocks: []
   blocked_by: []
@@ -1855,8 +1878,8 @@ items:
     ref: "BIMpossible #430 OPEN (2026-08-18, branch claude/nl-filter-eval-ci) -- .github/workflows/nl-filter-eval.yml: weekly cron + workflow_dispatch, report-only, never a required check; skips with a warning if ANTHROPIC_API_KEY secret absent. Owner still owes the repository secret."
   verification:
     level: verified
-    by: "All three squash SHAs confirmed in the delta. OWNER RULED 2026-08-18: wire the API key into CI (vs local run). Workflow change is a build task; the GitHub secret itself must be added by the owner. Status stays blocked_owner until the secret exists; workflow wiring can proceed in parallel."
-    at: '2026-08-18'
+    by: "STALE-LEDGER CLEARED 2026-08-27: #430 MERGED 2026-08-22T02:38Z; the ANTHROPIC_API_KEY secret exists and works -- scheduled run 32711151470 (2026-08-24, event=schedule, success) made real model calls and produced a real report (16/16 always-pass, 100%). blocked_owner reason (secret owed, #430 open) is obsolete. Audit record: BIMpossible_Workspace/03_Audits/closeout-evidence-ledger_2026-08-27.md. PRIOR: owner ruled 2026-08-18 wire the key into CI."
+    at: '2026-08-27'
   live_check:
   - "Check CI or a local run for a first eval-harness report; if none exists, the key/run is still outstanding."
   source: "delta d56bd14..origin/main, eleventh pass 2026-08-17"
@@ -2233,8 +2256,8 @@ items:
     ref: "2026-08-22 live deploy from dedicated worktree F:\\AI-Dev\\BIMpossible\\.claude\\worktrees\\deploy-p6 (detached at bf709a0, retained as the standing deploy source; canonical checkout was never used as the bind-mount source). docker compose -p docker up -d --build reused the existing docker-* project/volumes/network/ports/env files; docker-db-1/docker-redis-1 kept running throughout (docker_postgres_data/docker_redis_data untouched); docker-backend-1/docker-frontend-1 healthy post-deploy. Live `alembic current` = 1f617e094d19 (head). BIMPOSSIBLE_CROSS_FIRM_SHARING_ENABLED=1 confirmed set inside the running backend container. Stray bimpossible-* containers/volumes/network from an earlier mis-scoped deploy attempt removed after owner confirmation; live docker-* resources untouched."
   verification:
     level: claimed
-    by: "MERGED + DEPLOYED, LIVE VERIFICATION PENDING. Code: merged to main (bf709a0) and deployed. Migration: applied and verified at head 1f617e094d19 in the live stack. Flag: BIMPOSSIBLE_CROSS_FIRM_SHARING_ENABLED=1 enabled and runtime-confirmed inside the backend container. Live behavioural verification: PENDING -- the supervised two-firm smoke (owner-admin grants a read share -> grantee discovers only that project -> grantee reads project/model read-only -> every grantee write denied at UI and backend -> owner revokes -> grantee loses access immediately -> owner-firm audit shows grant/read/denied-writes/revoke) has not been run. Do not treat this item as landed until that smoke is recorded. Pre-existing, not this PR: tests/test_admin_router.py two api-key tests fail on main (KeyError has_key)."
-    at: '2026-08-22'
+    by: "MERGED + DEPLOYED, LIVE VERIFICATION PENDING. Code: merged to main (bf709a0) and deployed. Migration: applied and verified at head 1f617e094d19 in the live stack. Flag: BIMPOSSIBLE_CROSS_FIRM_SHARING_ENABLED=1 enabled and runtime-confirmed inside the backend container. Live behavioural verification: PENDING -- the supervised two-firm smoke (owner-admin grants a read share -> grantee discovers only that project -> grantee reads project/model read-only -> every grantee write denied at UI and backend -> owner revokes -> grantee loses access immediately -> owner-firm audit shows grant/read/denied-writes/revoke) has not been run. Do not treat this item as landed until that smoke is recorded. Pre-existing, not this PR: tests/test_admin_router.py two api-key tests fail on main (KeyError has_key). CLOSEOUT PASS 2026-08-27: production stack is DOWN (app.yourbimpossible.com 502; Docker engine not running) -- the 2026-08-22 'deployed/flag=1' facts describe a stack that is no longer up. Restore-and-verify condition: (1) start the docker-* compose stack healthy, (2) re-confirm alembic head 1f617e094d19 + flag=1 in the running backend, (3) owner-supervised two-firm smoke per the 7-step script, recorded. Audit record: BIMpossible_Workspace/03_Audits/closeout-evidence-ledger_2026-08-27.md."
+    at: '2026-08-27'
   live_check:
   - "gh pr view 447 --json state,mergedAt -- already MERGED at bf709a0; this only re-confirms, doesn't gate."
   - "docker exec docker-backend-1 python -m alembic current -- expect 1f617e094d19 (head); docker exec docker-backend-1 sh -c 'echo $BIMPOSSIBLE_CROSS_FIRM_SHARING_ENABLED' -- expect 1."
@@ -2854,9 +2877,9 @@ items:
   notes_url:
 
 - id: P7-SYNC-COMMENT-CRYPTO-BINDING
-  title: "Cryptographically bind the sync approval/comment text into the one-time sync token / attestation — only if that text becomes security-relevant"
+  title: "Sync comment crypto-binding: CLOSED BY OWNER RULING -- comment is non-authoritative collaboration metadata, no special binding required"
   projects: [bimpossible, addins]
-  status: blocked_owner
+  status: live
   owner_gate: true
   unblocks: []
   blocked_by: []
@@ -2866,11 +2889,11 @@ items:
   - kind: doc
     ref: "Today the token binds firm/user/document_title only (backend/revit_link/sync_token.py); comment is free text passed to SynchronizeWithCentral and is not an authorization input."
   verification:
-    level: claimed
-    by: "Queued at P7 close-out 2026-08-21 as a conditional follow-on."
-    at: '2026-08-23'
+    level: verified
+    by: "CLOSED_BY_OWNER_RULING 2026-08-27: 'Comment text is non-authoritative collaboration metadata and does not require special cryptographic binding unless it influences authorization, tenant routing, approval state, model-write execution, audit-chain integrity, or downstream agent/tool instructions.' Code inspection on origin/main confirms none of those paths consume it: contracts.py:103 free text (max 1000) -> native_adapter.py:546 params -> C# SyncWithCentralCommand.cs:52,70 -> SyncOptions.Comment (Revit sync-history display text only). Pipe attestation binds pane_token+document_title; sync token binds firm/user/document_title; comment is in neither. BOUNDARY (reopens this item): if any future consumer treats the sync comment as trusted input to a security-sensitive decision, binding becomes required work. Audit record: BIMpossible_Workspace/03_Audits/closeout-evidence-ledger_2026-08-27.md."
+    at: '2026-08-27'
   live_check:
-  - "Does any policy or audit consumer treat the sync comment as trusted? No = stays parked."
+  - "Boundary check on any new comment consumer: does it treat the sync comment as trusted input? Yes = reopen."
   source: "P7 close-out 2026-08-21"
   notes_url:
 
@@ -3025,8 +3048,8 @@ items:
     url: "https://github.com/YourBIMpossible/BIMpossible/pull/462"
   verification:
     level: verified
-    by: "LANDED (5 PRs merged 2026-08-23), NOT live-enforcing: BIMPOSSIBLE_DERIVATIVE_PROXY_MODE default OFF, so the per-model proxy is inert. Staging-validated in a real browser session against a real model (PR#462) -- geometry and materials render correctly through the proxy; the one known gap is defect #5, cross-model CDN texture root binding, tracked separately as SEC-PDP-G1-TEXTURE-BINDING (this item unblocks it). Owner-gated: flag flip to activate live routing is a human decision, not yet made."
-    at: '2026-08-23'
+    by: "LANDED (5 PRs merged 2026-08-23), NOT live-enforcing: BIMPOSSIBLE_DERIVATIVE_PROXY_MODE default OFF, so the per-model proxy is inert. Staging-validated in a real browser session against a real model (PR#462) -- geometry and materials render correctly through the proxy; the one known gap is defect #5, cross-model CDN texture root binding, tracked separately as SEC-PDP-G1-TEXTURE-BINDING (this item unblocks it). Owner-gated: flag flip to activate live routing is a human decision, not yet made. CLOSEOUT PASS 2026-08-27: implementation IMPLEMENTATION_ACCEPTED (incl. SEC-PDP-G1-TEXTURE-BINDING ac8ba6f fixing defect #5); flag flip is BLOCKED_WITH_PRECISE_NEXT_ACTION -- production stack is DOWN (app.yourbimpossible.com 502, Docker engine not running) and Phase 5 is on hold, so no consumer needs the proxy live. Unblock = (1) stack restored healthy, (2) owner product decision to enable. Bounded action then: set BIMPOSSIBLE_DERIVATIVE_PROXY_MODE=on in compose env, restart backend; verify authorized 200 + unauthorized/cross-tenant 404 + texture path; rollback = unset + restart. Audit record: BIMpossible_Workspace/03_Audits/closeout-evidence-ledger_2026-08-27.md."
+    at: '2026-08-27'
   live_check:
   - "docker exec <backend> printenv BIMPOSSIBLE_DERIVATIVE_PROXY_MODE  # expect unset/off"
   source: "gh pr view 456/459/460/461/462 --repo YourBIMpossible/BIMpossible; docs/plans/active/pdp-g1-sdk-viewer-proxy.md"
@@ -3109,10 +3132,10 @@ items:
   ref: "CLOSED 2026-08-24. PR#463 squash-merged to main as ac8ba6f. Flag BIMPOSSIBLE_DERIVATIVE_PROXY_MODE remains OFF everywhere; isolated staging stack stays torn down. Remaining related work is tracked separately: SEC-PDP-MODEL-INDEX-PAIRING, PERF-PDP-PROXY-PROJECT-MODEL-LIST, PERF-PDP-PROXY-MISS-SENTINEL-EVICTION."
 
 - id: OPS-RESIDENCY-SITE-DEPLOY
-  title: "Deploy data-policy page to yourbimpossible.com -- built locally, site returns 404"
+  title: "Deploy data-policy page to yourbimpossible.com -- DEPLOYED + VERIFIED LIVE 2026-08-27"
   projects:
   - bimpossible
-  status: blocked_owner
+  status: live
   owner_gate: true
   owner: null
   unblocks: [OPS-LAUNCH]
@@ -3124,7 +3147,7 @@ items:
     ref: "F:\\BIMpossible-Site\\site\\dist\\data-policy\\index.html -- astro build output, content verified 2026-08-23"
   verification:
     level: verified
-    by: "Live-checked 2026-08-23: https://yourbimpossible.com/data-policy returns HTTP 404. Homepage (https://yourbimpossible.com) loads fine but its nav/footer carry no data-policy or privacy link. Local build at F:\\BIMpossible-Site\\site\\dist\\data-policy\\index.html renders correctly with all 4 owner-ratified terms (region wording, 60-day retention/purge, hello@yourbimpossible.com) -- content is not the gap, deployment is. F:\\BIMpossible-Site is not a git repo, so no CI/deploy pipeline exists to trigger; push must be manual."
+    by: "VERIFIED_LIVE 2026-08-27T23:37:56Z: https://yourbimpossible.com/data-policy -> 308 -> /data-policy/ -> HTTP 200, title 'Data Policy -- BIMpossible', region wording ('currently self-hosted in the United States and is migrating to United States cloud infrastructure'), 60-day retention/purge terms, hello@yourbimpossible.com present (Cloudflare email-obfuscated, decoded and confirmed). STALE-LEDGER CORRECTION: F:/BIMpossible-Site/site IS a git repo (origin github.com/YourBIMpossible/bimpossible-site) with Cloudflare Pages auto-deploy on push to main -- the 'not a git repo / manual push' claim was obsolete. Deploy = site commit 9ff2e38 (data-policy page, dedicated commit) + 335c210 (README path fix, separate docs commit), pushed 0594e6e..335c210, local astro build GREEN pre-push (9 pages, up from 8). Audit record: BIMpossible_Workspace/03_Audits/closeout-evidence-ledger_2026-08-27.md. PRIOR RECORD (2026-08-23): https://yourbimpossible.com/data-policy returns HTTP 404. Homepage (https://yourbimpossible.com) loads fine but its nav/footer carry no data-policy or privacy link. Local build at F:\\BIMpossible-Site\\site\\dist\\data-policy\\index.html renders correctly with all 4 owner-ratified terms (region wording, 60-day retention/purge, hello@yourbimpossible.com) -- content is not the gap, deployment is. F:\\BIMpossible-Site is not a git repo, so no CI/deploy pipeline exists to trigger; push must be manual."
     at: '2026-08-23'
   live_check:
   - "curl -sI https://yourbimpossible.com/data-policy | head -1"
