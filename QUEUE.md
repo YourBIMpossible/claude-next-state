@@ -44,6 +44,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-24 @ `b1a17b3` PR#471 · `addi
 [P14-14G-RESIDENCY-REDACTION] Wire residency + redaction into 14g, update proposal doc §6
        unblocks 0 · M · bimpossible · CLAIMED 2026-08-18 · BIMpossible_PHASE-STATUS.md, Phase 14 row 14g -- PLACED not ratified…
 
+[WAVESTATUS-CHECK-DEPLOY] Apply Wave-Status PR-body-check handoff package to BIMpossible + AddIns (advisory-only PRs)
+       unblocks 0 · M · bimpossible+addins · VERIFIED 2026-08-27 · Finalized package at BIMpossible_Workspace/00_Strategy/design-docs/2…
+
 [EC-RELEASE-1] First release PR — versioning, changelog, build verification, PyPI publish
        unblocks 0 · M · evidence-compiler · VERIFIED 2026-08-24 · Maintainer deferred first release until after real dogfooding (WORKL…
 

@@ -1045,6 +1045,27 @@ items:
   notes_url:
 
 
+- id: WAVESTATUS-CHECK-DEPLOY
+  title: "Apply Wave-Status PR-body-check handoff package to BIMpossible + AddIns (advisory-only PRs)"
+  projects: [bimpossible, addins]
+  status: blocked_owner
+  owner_gate: true
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 2
+  evidence:
+  - kind: doc
+    ref: "Finalized package at BIMpossible_Workspace/00_Strategy/design-docs/2026-08-26__WaveStatus-PR-Check-Handoff/ (untracked, deliberately preserved uncommitted per mandate -- NOT in workspace PR #97). 13 fixtures, 12/12 tests passing. Label-gated case-insensitive wave-worthy; PR-body-only; restricted Workspace PR/commit URL patterns; advisory-only; read-only minimal permissions; no cross-repo API calls."
+  verification:
+    level: verified
+    by: "Package built and locally validated this session (node check-wave-status-declaration.test.mjs -> 12/12). NOT applied to either target repo: no authorized clean worktree exists for BIMpossible or BIMpossible-AddIns (all current worktrees hold unrelated in-progress branches, per 2026-08-27 closure-audit), and the mandate forbids manufacturing access. Deferred, not failed. Next action per repo: copy wave-status-check.yml -> .github/workflows/, check-wave-status-declaration.mjs (+.test.mjs +fixtures/) -> scripts/, add proposed PR-template wording, run the 12-case suite, open an advisory-only PR. Requires one combined confirmation (all repos/branches/file-sets/commit-msgs/PR-actions) BEFORE any commit -- was never pre-approved, unlike workspace PR #97."
+    at: '2026-08-27'
+  source: "WaveStatus-PR-Check-Handoff mandate steps 3-5; this session 2026-08-27"
+  notes_url:
+
+
 - id: TEAMS-GATEWAY-W1
   title: "Microsoft Teams assistant gateway MERGED (#276) flag-gated off -- carries the firm-membership + hub-isolation fix"
   projects: [bimpossible]
