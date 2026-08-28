@@ -2,17 +2,17 @@
 
 # /next — work-item queue
 
-Generated 2026-08-27 (synced). Ranked by critical path (transitive `unblocks` cone), tiebreak:
+Generated 2026-08-28 (synced). Ranked by critical path (transitive `unblocks` cone), tiebreak:
 owner-gated+S effort, then effort, then risk, then id. Full algorithm:
 `~/.claude/skills/next/reference/item-model.md`.
 
-Scope: `all`. Watermarks: `bimpossible` = 2026-08-24 @ `b1a17b3` PR#471 · `addins` = 2026-08-23 @ `eb9d453` PR#100 · `workspace` = 2026-08-26 @ `6dfc9e1` PR#96 · `evidence-compiler` = 2026-08-24 @ `0ef747e7533c7cf714888076f3df6f06dd028b84` PR#5.
+Scope: `all`. Watermarks: `bimpossible` = 2026-08-24 @ `b1a17b3` PR#471 · `addins` = 2026-08-23 @ `eb9d453` PR#100 · `workspace` = 2026-08-28 @ `7c5b90d` PR#100 · `evidence-compiler` = 2026-08-24 @ `0ef747e7533c7cf714888076f3df6f06dd028b84` PR#5.
 (pc-monitor: no items yet — run `init` to derive.)
 
 ## Blocked on you
 
 [P6-CLIENTMGMT-F] Build cross-firm project sharing (Client-Mgmt F), gated on 3.12
-       unblocks 1 · L · bimpossible · CLAIMED 2026-08-27 · BIMpossible_PHASE-STATUS.md, Phase 6 row Client-Mgmt F -- PLACED not…
+       unblocks 1 · L · bimpossible · CLAIMED 2026-08-28 · BIMpossible_PHASE-STATUS.md, Phase 6 row Client-Mgmt F -- PLACED not…
 
 [OPS-CLIENTDATA-REMEDIATION] Client-data remediation: quarantine delete, PDF triage, de-ID pass, DB audit
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-24 · decision-log/2026-08-05__client-data-remediation.md -- Open Items ch…
@@ -27,7 +27,7 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-24 @ `b1a17b3` PR#471 · `addi
        unblocks 0 · S · workspace+addins · CLAIMED 2026-08-26 · workspace 00_Strategy/Dashboard/strategy_decisions_ledger.md row ops…
 
 [PROD-DERIV-3] Discharge the DERIV-3 prod verification -- needs a mid-translation model and an APS upload
-       unblocks 0 · S · bimpossible · CLAIMED 2026-08-27 · 01_BuildLog/2026-08-05__hub-tenancy-migration-BLOCKED_HANDOFF.md -- …
+       unblocks 0 · S · bimpossible · CLAIMED 2026-08-28 · 01_BuildLog/2026-08-05__hub-tenancy-migration-BLOCKED_HANDOFF.md -- …
 
 [AUTHZ-SHADOW-WINDOW-VALIDITY] DEFERRED to pre-pilot re-entry (runbook Sec 6): shadow-window validity work only when a real pilot is prepared
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-16 · 2026-08-16 prod probe with SHADOW live: authz_decision_log holds onl…
