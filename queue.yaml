@@ -1046,22 +1046,31 @@ items:
 
 
 - id: WAVESTATUS-CHECK-DEPLOY
-  title: "Apply Wave-Status PR-body-check handoff package to BIMpossible + AddIns (advisory-only PRs)"
+  title: "Wave-Status PR-body-check advisory PRs opened in BIMpossible + AddIns -- awaiting owner review/merge"
   projects: [bimpossible, addins]
   status: blocked_owner
   owner_gate: true
   owner: null
   unblocks: []
   blocked_by: []
-  effort: M
+  effort: S
   risk: 2
   evidence:
+  - kind: pr
+    ref: "BIMpossible #494 'ci: add advisory Wave-Status PR-body check' -- OPEN, ready-for-review, local CI gate green (ops lane)"
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/494
+  - kind: pr
+    ref: "BIMpossible-AddIns #109 'ci: add advisory Wave-Status PR-body check' -- OPEN, ready-for-review, local CI gate green (all 9 test suites + firm-literal ratchet passed)"
+    url: https://github.com/YourBIMpossible/BIMpossible-AddIns/pull/109
   - kind: doc
-    ref: "Finalized package at BIMpossible_Workspace/00_Strategy/design-docs/2026-08-26__WaveStatus-PR-Check-Handoff/ (untracked, deliberately preserved uncommitted per mandate -- NOT in workspace PR #97). 13 fixtures, 12/12 tests passing. Label-gated case-insensitive wave-worthy; PR-body-only; restricted Workspace PR/commit URL patterns; advisory-only; read-only minimal permissions; no cross-repo API calls."
+    ref: "Design source: BIMpossible_Workspace PR #99 (branch docs/wavestatus-handoff-package) at 00_Strategy/design-docs/2026-08-26__WaveStatus-PR-Check-Handoff/. Both target-repo copies are byte-identical to that source and were re-verified against the full 12-case suite (in an isolated scratch dir, test runner/fixtures not committed to either target repo per the design doc's own placement table) immediately before commit -- 12/12 passing against each copy."
   verification:
     level: verified
-    by: "Package built and locally validated this session (node check-wave-status-declaration.test.mjs -> 12/12). NOT applied to either target repo: no authorized clean worktree exists for BIMpossible or BIMpossible-AddIns (all current worktrees hold unrelated in-progress branches, per 2026-08-27 closure-audit), and the mandate forbids manufacturing access. Deferred, not failed. Next action per repo: copy wave-status-check.yml -> .github/workflows/, check-wave-status-declaration.mjs (+.test.mjs +fixtures/) -> scripts/, add proposed PR-template wording, run the 12-case suite, open an advisory-only PR. Requires one combined confirmation (all repos/branches/file-sets/commit-msgs/PR-actions) BEFORE any commit -- was never pre-approved, unlike workspace PR #97."
+    by: "Applied to both target repos this session via fresh throwaway worktrees (<repo>/.claude/worktrees/wave-status-check, branch ci/wave-status-check off origin/main, removed after push). Each repo's own Push-And-Verify.ps1 ran its full local CI gate before pushing (BIMpossible: gitleaks + ops lane incl. YAML lint, green; AddIns: gitleaks + firm-literals ratchet + build + 9 test suites, green) and opened a ready (non-draft) PR. Advisory-only workflow (does not block merge), PR template Wave Status block added to both repos, DELIVERY.md contributor-doc subsection added to BIMpossible only (AddIns has no equivalent doc yet -- noted in its PR body as a deliberate omission, not a gap in the check itself). Neither PR merged; no repo settings changed. Remaining action is entirely the owner's: review and merge (or request changes on) #494 and #109."
     at: '2026-08-27'
+  live_check:
+  - "gh pr view 494 --repo YourBIMpossible/BIMpossible --json state,isDraft,mergeable"
+  - "gh pr view 109 --repo YourBIMpossible/BIMpossible-AddIns --json state,isDraft,mergeable"
   source: "WaveStatus-PR-Check-Handoff mandate steps 3-5; this session 2026-08-27"
   notes_url:
 

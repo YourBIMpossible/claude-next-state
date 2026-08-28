@@ -20,6 +20,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-24 @ `b1a17b3` PR#471 · `addi
 [WARM-ORIGIN-ALLABSENT-ANOMALY] Investigate per-model AEC-DM warm gap: six model versions show 100% origin_absent across all door rows
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-24 · 2026-08-24 probe: mvs 1329 (4/4), 1335 (1128/1128), 1336 (496/496), …
 
+[WAVESTATUS-CHECK-DEPLOY] Wave-Status PR-body-check advisory PRs opened in BIMpossible + AddIns -- awaiting owner review/merge
+       unblocks 0 · S · bimpossible+addins · VERIFIED 2026-08-27 · BIMpossible #494 'ci: add advisory Wave-Status PR-body check' -- OPE…
+
 [ADDINS-DPAPI-PREWARM] First-use DPAPI pre-warm in the add-in verifier to remove the cold-start latency on the first attestation after Revit launch
        unblocks 0 · S · addins · CLAIMED 2026-08-23 · Observed during the 2026-08-19/21 pilots as a one-time delay; not a …
 
@@ -43,9 +46,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-24 @ `b1a17b3` PR#471 · `addi
 
 [P14-14G-RESIDENCY-REDACTION] Wire residency + redaction into 14g, update proposal doc §6
        unblocks 0 · M · bimpossible · CLAIMED 2026-08-18 · BIMpossible_PHASE-STATUS.md, Phase 14 row 14g -- PLACED not ratified…
-
-[WAVESTATUS-CHECK-DEPLOY] Apply Wave-Status PR-body-check handoff package to BIMpossible + AddIns (advisory-only PRs)
-       unblocks 0 · M · bimpossible+addins · VERIFIED 2026-08-27 · Finalized package at BIMpossible_Workspace/00_Strategy/design-docs/2…
 
 [EC-RELEASE-1] First release PR — versioning, changelog, build verification, PyPI publish
        unblocks 0 · M · evidence-compiler · VERIFIED 2026-08-24 · Maintainer deferred first release until after real dogfooding (WORKL…
