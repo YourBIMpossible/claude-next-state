@@ -1046,32 +1046,32 @@ items:
 
 
 - id: WAVESTATUS-CHECK-DEPLOY
-  title: "Wave-Status PR-body-check advisory PRs opened in BIMpossible + AddIns -- awaiting owner review/merge"
+  title: "Wave-Status PR-body-check MERGED live in BIMpossible + AddIns (advisory-only)"
   projects: [bimpossible, addins]
-  status: blocked_owner
-  owner_gate: true
+  status: live
+  owner_gate: false
   owner: null
   unblocks: []
   blocked_by: []
   effort: S
-  risk: 2
+  risk: 1
   evidence:
   - kind: pr
-    ref: "BIMpossible #494 'ci: add advisory Wave-Status PR-body check' -- OPEN, ready-for-review, local CI gate green (ops lane)"
+    ref: "BIMpossible #494 'ci: add advisory Wave-Status PR-body check' -- MERGED (squash, branch deleted) 2026-08-28T00:53:26Z"
     url: https://github.com/YourBIMpossible/BIMpossible/pull/494
   - kind: pr
-    ref: "BIMpossible-AddIns #109 'ci: add advisory Wave-Status PR-body check' -- OPEN, ready-for-review, local CI gate green (all 9 test suites + firm-literal ratchet passed)"
+    ref: "BIMpossible-AddIns #109 'ci: add advisory Wave-Status PR-body check' -- MERGED (squash, branch deleted) 2026-08-28T00:53:29Z"
     url: https://github.com/YourBIMpossible/BIMpossible-AddIns/pull/109
   - kind: doc
     ref: "Design source: BIMpossible_Workspace PR #99 (branch docs/wavestatus-handoff-package) at 00_Strategy/design-docs/2026-08-26__WaveStatus-PR-Check-Handoff/. Both target-repo copies are byte-identical to that source and were re-verified against the full 12-case suite (in an isolated scratch dir, test runner/fixtures not committed to either target repo per the design doc's own placement table) immediately before commit -- 12/12 passing against each copy."
   verification:
     level: verified
-    by: "Applied to both target repos this session via fresh throwaway worktrees (<repo>/.claude/worktrees/wave-status-check, branch ci/wave-status-check off origin/main, removed after push). Each repo's own Push-And-Verify.ps1 ran its full local CI gate before pushing (BIMpossible: gitleaks + ops lane incl. YAML lint, green; AddIns: gitleaks + firm-literals ratchet + build + 9 test suites, green) and opened a ready (non-draft) PR. Advisory-only workflow (does not block merge), PR template Wave Status block added to both repos, DELIVERY.md contributor-doc subsection added to BIMpossible only (AddIns has no equivalent doc yet -- noted in its PR body as a deliberate omission, not a gap in the check itself). Neither PR merged; no repo settings changed. Remaining action is entirely the owner's: review and merge (or request changes on) #494 and #109."
-    at: '2026-08-27'
+    by: "Applied to both target repos via fresh throwaway worktrees (<repo>/.claude/worktrees/wave-status-check, branch ci/wave-status-check off origin/main, removed after push). Each repo's own Push-And-Verify.ps1 ran its full local CI gate before pushing (BIMpossible: gitleaks + ops lane incl. YAML lint, green; AddIns: gitleaks + firm-literals ratchet + build + 9 test suites, green) and opened a ready PR. Both PRs' own wave-status-check GitHub Actions run (live, not just local) reported SUCCESS. Merged by explicit user instruction 2026-08-28 (gh pr merge --squash --delete-branch), confirmed via gh pr list --state merged on both repos. Advisory-only (does not block merge), PR template Wave Status block added to both repos, DELIVERY.md contributor-doc subsection added to BIMpossible only (AddIns has no equivalent doc yet -- noted in its PR body as a deliberate omission)."
+    at: '2026-08-28'
   live_check:
-  - "gh pr view 494 --repo YourBIMpossible/BIMpossible --json state,isDraft,mergeable"
-  - "gh pr view 109 --repo YourBIMpossible/BIMpossible-AddIns --json state,isDraft,mergeable"
-  source: "WaveStatus-PR-Check-Handoff mandate steps 3-5; this session 2026-08-27"
+  - "gh pr list --repo YourBIMpossible/BIMpossible --state merged --search 494 --json number,mergedAt  # expect #494 merged"
+  - "gh pr list --repo YourBIMpossible/BIMpossible-AddIns --state merged --search 109 --json number,mergedAt  # expect #109 merged"
+  source: "WaveStatus-PR-Check-Handoff mandate steps 3-5; this session 2026-08-27/28"
   notes_url:
 
 

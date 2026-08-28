@@ -20,9 +20,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-24 @ `b1a17b3` PR#471 · `addi
 [WARM-ORIGIN-ALLABSENT-ANOMALY] Investigate per-model AEC-DM warm gap: six model versions show 100% origin_absent across all door rows
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-24 · 2026-08-24 probe: mvs 1329 (4/4), 1335 (1128/1128), 1336 (496/496), …
 
-[WAVESTATUS-CHECK-DEPLOY] Wave-Status PR-body-check advisory PRs opened in BIMpossible + AddIns -- awaiting owner review/merge
-       unblocks 0 · S · bimpossible+addins · VERIFIED 2026-08-27 · BIMpossible #494 'ci: add advisory Wave-Status PR-body check' -- OPE…
-
 [ADDINS-DPAPI-PREWARM] First-use DPAPI pre-warm in the add-in verifier to remove the cold-start latency on the first attestation after Revit launch
        unblocks 0 · S · addins · CLAIMED 2026-08-23 · Observed during the 2026-08-19/21 pilots as a one-time delay; not a …
 
@@ -507,6 +504,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-24 @ `b1a17b3` PR#471 · `addi
 
 [TEST-OPS-HYGIENE] Test/ops hygiene: app-boot tripwire, post-deploy identity smoke script, flaky prefs test fixed
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · BIMpossible #339 (e516a0d) -- app-boot smoke tripwire that fails CI …
+
+[WAVESTATUS-CHECK-DEPLOY] Wave-Status PR-body-check MERGED live in BIMpossible + AddIns (advisory-only)
+       unblocks 0 · S · bimpossible+addins · VERIFIED 2026-08-28 · BIMpossible #494 'ci: add advisory Wave-Status PR-body check' -- MER…
 
 [WS-NEXT-VERSIONING] Version /next skill + store + session docs into workspace repo (branch + draft PR)
        unblocks 0 · S · workspace · VERIFIED 2026-08-07 · 2026-08-04__ProductionQueue_Session_Findings.md §3 -- cloud session …
