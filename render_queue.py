@@ -164,12 +164,20 @@ def render_item(item: dict, cones: dict[str, int], dormant: set[str]) -> list[st
     ver = item.get("verification") or {}
     level = str(ver.get("level", "claimed")).upper()
     item_projects = [str(p).lower() for p in (item.get("projects") or [])]
-    is_dormant_scoped = bool(item_projects) and all(p in dormant for p in item_projects)
+    dormant_legs = [p for p in item_projects if p in dormant]
+    is_dormant_scoped = bool(item_projects) and len(dormant_legs) == len(item_projects)
+    is_mixed_dormant = bool(dormant_legs) and not is_dormant_scoped
     if is_dormant_scoped:
         # A dormant-scoped item is unprobed by construction — its live_check is suspended,
         # so no stored verification can be current. Never render it as verified from prior
         # evidence; the badge states the truth (SUSPENDED) regardless of the stored level.
         level = "SUSPENDED"
+    elif is_mixed_dormant and level == "VERIFIED":
+        # Mixed scope: the live leg(s) may be genuinely verified, but the dormant leg is
+        # unprobed and its state is unknown until reassessment. A whole-item VERIFIED badge
+        # would over-claim — downgrade to PARTIAL so the suspended leg is never hidden behind
+        # the active leg's evidence. Non-VERIFIED levels already under-claim and are left as-is.
+        level = "PARTIAL"
     at = _as_date(ver.get("at"))
     at_str = at.isoformat() if at else "date-unknown"
     projects = "+".join(item.get("projects") or [])
@@ -183,6 +191,13 @@ def render_item(item: dict, cones: dict[str, int], dormant: set[str]) -> list[st
         lines.append(
             f"       ⏸ dormant project ({projects}) — probes suspended (non-executable); "
             "state unverifiable until whole-repo reassessment"
+        )
+    elif is_mixed_dormant:
+        active_legs = [p for p in item_projects if p not in dormant]
+        lines.append(
+            f"       ⏸ dormant leg ({'+'.join(sorted(dormant_legs))}) suspended — "
+            f"{'+'.join(active_legs)} leg tracked live; dormant leg unverifiable until "
+            "whole-repo reassessment, so the item is not fully verified"
         )
     gated = sorted(set(str(p).lower() for p in (item.get("affects_projects") or [])) & dormant)
     if gated:
@@ -239,7 +254,7 @@ def build(state_dir: Path, generated_on: date) -> str:
     # Dormant projects referenced by active items — either scoped directly or governed via
     # `affects_projects`. Their constraint is disclosed on the board so no reader mistakes a
     # parked/suspended dormant item for silently-dropped work.
-    dormant = {str(p["key"]).lower() for p in registry["projects"] if p.get("dormant")}
+    dormant = queue_store.load_dormant(state_dir)
     referenced_dormant = sorted(
         d
         for d in dormant

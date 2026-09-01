@@ -297,31 +297,88 @@ def load_dormant(state_dir: Path) -> set[str]:
     return out
 
 
-def dormancy_defects(active_items: list[dict], dormant: set[str]) -> list[str]:
+def load_dormant_targets(state_dir: Path) -> dict[str, str]:
+    """Map each dormant project key -> the normalized path token that marks a command as
+    *targeting* that repo.
+
+    Command-targeting detection is per-project and path-based: a `live_check` command targets a
+    dormant repo iff it names that repo's checkout path. The token is the registry `path`,
+    lowercased with backslashes folded to forward slashes so a single substring test matches both
+    `F:\\BIMpossible-Families` and `F:/BIMpossible-Families`. A dormant entry without a path falls
+    back to its bare key (matched as a token) so the gate still has something to catch — but a path
+    is the reliable signal; the key alone would false-positive on prose. Absent registry => {}."""
+    path = state_dir / PROJECTS_FILE
+    if not path.exists():
+        return {}
+    registry = _load_yaml(path, "project registry")
+    out: dict[str, str] = {}
+    for p in registry.get("projects") or []:
+        if isinstance(p, dict) and p.get("dormant") and p.get("key"):
+            key = str(p["key"]).lower()
+            repo_path = str(p.get("path") or "").strip().lower().replace("\\", "/")
+            out[key] = repo_path or key
+    return out
+
+
+def _command_targets_dormant(command: str, dormant_targets: dict[str, str]) -> list[str]:
+    """Dormant keys whose repo-path token appears in `command` (normalized). A command that
+    merely mentions a live repo is clean; one that references a dormant checkout path is a probe
+    against a reassessment-bound repo and must never be emitted as runnable."""
+    cl = str(command).lower().replace("\\", "/")
+    return sorted(k for k, token in dormant_targets.items() if token and token in cl)
+
+
+def dormancy_defects(active_items: list[dict], dormant_targets: dict[str, str]) -> list[str]:
     """Fail-loud list of active items that would let `/next` touch a dormant repo.
 
-    The safety invariant: an active item scoped ENTIRELY to dormant projects must carry no
-    runnable `live_check` — its probes are suspended, non-executable metadata while the repo
-    is reassessment-bound. A governance item that merely *references* a dormant project via
-    `affects_projects` (while itself scoped to a live project such as `workspace`) is exempt:
-    it is how the dormancy gate stays visible without reactivating the dormant repo.
+    Per-project, not all-or-nothing. Two safety invariants, checked on every item that touches a
+    dormant project (whether scoped ENTIRELY to dormant repos or MIXED with live ones):
 
-    Returns one message per violation; empty when the queue is dormancy-clean. Callers treat
-    a non-empty result as a hard validation failure."""
-    if not dormant:
+    1. **All-dormant item** — every project in `projects` is dormant — must carry no runnable
+       `live_check` at all: with no live leg there is nothing legitimate to probe, so any command
+       is a suspended probe that leaked back in.
+    2. **Mixed-scope item** — at least one dormant leg and at least one live leg — keeps its live
+       legs probeable, but no individual `live_check` command may target a dormant leg's checkout
+       path. The active work stays visible and runnable; only the dormant-targeting command is a
+       violation. This is the mixed-scope bypass the all-dormant check used to miss.
+
+    A governance item that merely *references* a dormant project via `affects_projects` (while its
+    own `projects` are all live) is exempt — that is how the gate stays visible without
+    reactivating the dormant repo.
+
+    Returns one message per violation; empty when the queue is dormancy-clean. Callers treat a
+    non-empty result as a hard validation failure."""
+    if not dormant_targets:
         return []
+    dormant_keys = set(dormant_targets)
     out: list[str] = []
     for item in active_items:
         projects = [str(p).lower() for p in (item.get("projects") or [])]
-        if not projects or not all(p in dormant for p in projects):
+        dormant_legs = [p for p in projects if p in dormant_keys]
+        if not dormant_legs:
             continue
         lc = item.get("live_check")
-        if lc:  # non-empty list or string == a runnable probe against a dormant repo
+        if not lc:
+            continue
+        commands = [lc] if isinstance(lc, str) else list(lc)
+        all_dormant = all(p in dormant_keys for p in projects)
+        if all_dormant:
             out.append(
                 f"active item {item['id']}: scoped to dormant project(s) {projects} but carries a "
                 f"non-empty live_check — dormant-repo probes must be suspended (empty live_check; "
                 f"move command text to non-executable evidence)"
             )
+            continue
+        # Mixed scope: keep live-leg probes, reject any command aimed at a dormant leg.
+        for cmd in commands:
+            hit = _command_targets_dormant(cmd, dormant_targets)
+            if hit:
+                out.append(
+                    f"active item {item['id']}: mixed-scope (dormant legs {dormant_legs}, live legs "
+                    f"{[p for p in projects if p not in dormant_keys]}) but a live_check command "
+                    f"targets dormant project(s) {hit}: {cmd!r} — suspend this command (move to "
+                    f"non-executable evidence); the live-leg probes may remain"
+                )
     return out
 
 
@@ -355,7 +412,7 @@ def main() -> int:
     # Dormancy gate: a dormant-scoped active item with a runnable live_check is a hard
     # failure, not a soft defect — it is the exact condition that would let a drill run a
     # command against a reassessment-bound repo.
-    dorm_defects = dormancy_defects(store.active_items, load_dormant(args.state_dir))
+    dorm_defects = dormancy_defects(store.active_items, load_dormant_targets(args.state_dir))
     if dorm_defects:
         for d in dorm_defects:
             print(f"dormancy violation: {d}", file=sys.stderr)
