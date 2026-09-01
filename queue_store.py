@@ -281,103 +281,168 @@ def load_store(state_dir: Path) -> Store:
 
 
 def load_dormant(state_dir: Path) -> set[str]:
-    """Project keys flagged `dormant: true` in projects.yaml.
+    """Project keys flagged `dormant: true` in projects.yaml — the key-set view of
+    `load_dormant_targets` for callers that only need membership (the renderer).
 
     A dormant project is a checkout under top-down reassessment: `/next` must never emit
     or run a probe against it. Absent registry or absent flag => empty set (no project is
-    dormant), so installations without the flag keep loading unchanged."""
-    path = state_dir / PROJECTS_FILE
-    if not path.exists():
-        return set()
-    registry = _load_yaml(path, "project registry")
-    out: set[str] = set()
-    for p in registry.get("projects") or []:
-        if isinstance(p, dict) and p.get("dormant") and p.get("key"):
-            out.add(str(p["key"]).lower())
-    return out
+    dormant), so installations without the flag keep loading unchanged. Shares
+    `load_dormant_targets`' fail-loud contract: a malformed dormant entry is a StoreError,
+    never a silent skip."""
+    return set(load_dormant_targets(state_dir))
+
+
+# Characters that can extend a path segment or repo name. A candidate match bordered by one
+# of these is part of a LONGER name (`F:/BIMpossible` inside `F:/BIMpossible-Workspace`),
+# not a reference to the dormant checkout.
+_TOKEN_NAME_CHARS = r"a-z0-9_.\-"
 
 
 def load_dormant_targets(state_dir: Path) -> dict[str, str]:
-    """Map each dormant project key -> the normalized path token that marks a command as
-    *targeting* that repo.
+    """Map each dormant project key -> the normalized checkout-path token used to detect
+    commands targeting that repo.
 
-    Command-targeting detection is per-project and path-based: a `live_check` command targets a
-    dormant repo iff it names that repo's checkout path. The token is the registry `path`,
-    lowercased with backslashes folded to forward slashes so a single substring test matches both
-    `F:\\BIMpossible-Families` and `F:/BIMpossible-Families`. A dormant entry without a path falls
-    back to its bare key (matched as a token) so the gate still has something to catch — but a path
-    is the reliable signal; the key alone would false-positive on prose. Absent registry => {}."""
+    The token is the registry `path`, lowercased, backslashes folded to forward slashes, and
+    trailing separators stripped, so one token matches `F:\\BIMpossible-Families`,
+    `F:/BIMpossible-Families`, and subpaths of either. A dormant entry is a machine-read
+    safety gate, so a malformed one fails loud instead of silently leaving the gate off: the
+    entry must carry a `key` and a usable checkout `path` (a real directory path, not a bare
+    drive root — the bare key alone would false-positive on prose and is never used as a
+    fallback). Absent registry => {} (no project is dormant)."""
     path = state_dir / PROJECTS_FILE
     if not path.exists():
         return {}
     registry = _load_yaml(path, "project registry")
     out: dict[str, str] = {}
     for p in registry.get("projects") or []:
-        if isinstance(p, dict) and p.get("dormant") and p.get("key"):
-            key = str(p["key"]).lower()
-            repo_path = str(p.get("path") or "").strip().lower().replace("\\", "/")
-            out[key] = repo_path or key
+        if not (isinstance(p, dict) and p.get("dormant")):
+            continue
+        if not p.get("key"):
+            raise StoreError(
+                f"project registry: dormant entry {p!r} has no 'key' — the dormancy gate "
+                "cannot protect a repo it cannot name; fix the entry, do not drop the flag"
+            )
+        key = str(p["key"]).lower()
+        token = str(p.get("path") or "").strip().lower().replace("\\", "/").rstrip("/")
+        if not token or "/" not in token or re.fullmatch(r"[a-z]:", token):
+            raise StoreError(
+                f"project registry: dormant project '{key}' needs a usable checkout 'path' "
+                f"(got {p.get('path')!r}) — the command gate matches on it, so a missing or "
+                "degenerate path would silently disable or brick the gate"
+            )
+        out[key] = token
     return out
 
 
 def _command_targets_dormant(command: str, dormant_targets: dict[str, str]) -> list[str]:
-    """Dormant keys whose repo-path token appears in `command` (normalized). A command that
-    merely mentions a live repo is clean; one that references a dormant checkout path is a probe
-    against a reassessment-bound repo and must never be emitted as runnable."""
+    """Dormant keys the command references — by full checkout-path token (either separator
+    spelling, subpaths included) or by the checkout's directory name as a standalone
+    segment/name. The directory-name signal catches relative paths
+    (`..\\BIMpossible-Families`), MSYS-style paths (`/f/bimpossible-families`), and GitHub
+    `owner/repo` slugs that reuse the directory name. Both signals are boundary-checked: a
+    token bordered by a name character is a longer, different name (`F:/BIMpossible` never
+    matches `F:/BIMpossible-Workspace`). Static text analysis cannot see every indirection
+    (an environment variable, a subst'd drive, a renamed remote) — this is a tripwire for
+    the realistic spellings, not a sandbox; the dormancy policy itself is the guarantee."""
     cl = str(command).lower().replace("\\", "/")
-    return sorted(k for k, token in dormant_targets.items() if token and token in cl)
+    hits = []
+    for key, token in dormant_targets.items():
+        names = {token, token.rsplit("/", 1)[-1]}
+        if any(
+            re.search(
+                rf"(?<![{_TOKEN_NAME_CHARS}]){re.escape(name)}(?![{_TOKEN_NAME_CHARS}])", cl
+            )
+            for name in names
+            if name
+        ):
+            hits.append(key)
+    return sorted(hits)
 
 
 def dormancy_defects(active_items: list[dict], dormant_targets: dict[str, str]) -> list[str]:
-    """Fail-loud list of active items that would let `/next` touch a dormant repo.
+    """Fail-loud list of active items that would let `/next` touch a dormant repo, or that
+    misstate their verification while one of their legs is dormant.
 
-    Per-project, not all-or-nothing. Two safety invariants, checked on every item that touches a
-    dormant project (whether scoped ENTIRELY to dormant repos or MIXED with live ones):
+    Checked on EVERY active item — declared scope does not exempt a command:
 
     1. **All-dormant item** — every project in `projects` is dormant — must carry no runnable
        `live_check` at all: with no live leg there is nothing legitimate to probe, so any command
        is a suspended probe that leaked back in.
-    2. **Mixed-scope item** — at least one dormant leg and at least one live leg — keeps its live
-       legs probeable, but no individual `live_check` command may target a dormant leg's checkout
-       path. The active work stays visible and runnable; only the dormant-targeting command is a
-       violation. This is the mixed-scope bypass the all-dormant check used to miss.
+    2. **Dormant-targeting command** — no `live_check` command on ANY item may reference a
+       dormant checkout (by path or directory name, see `_command_targets_dormant`), whatever
+       the item's declared legs. A mixed-scope item keeps its live-leg probes; an item with no
+       dormant leg at all is still forbidden — mis-scoping is not a bypass.
+    3. **Stored-level honesty** — a mixed-scope item (dormant + live legs) must not store
+       whole-item `verification.level: verified`: its dormant leg is unprobeable, so the honest
+       stored level is `partial` (item-model.md). Conversely `partial` is reserved for exactly
+       that shape — stored on anything else it is a vocabulary violation.
+    4. **live_check shape** — must be a string or a list of strings; any other shape (a mapping,
+       a scalar) would evade the command scan, so it is itself a defect, never a crash.
 
-    A governance item that merely *references* a dormant project via `affects_projects` (while its
-    own `projects` are all live) is exempt — that is how the gate stays visible without
-    reactivating the dormant repo.
+    A governance item that merely *references* a dormant project via `affects_projects` (while
+    its own `projects` are all live) keeps its live probes — that is how the gate stays visible
+    without reactivating the dormant repo — but rule 2 still applies to its command text.
 
     Returns one message per violation; empty when the queue is dormancy-clean. Callers treat a
     non-empty result as a hard validation failure."""
-    if not dormant_targets:
-        return []
-    dormant_keys = set(dormant_targets)
     out: list[str] = []
     for item in active_items:
         projects = [str(p).lower() for p in (item.get("projects") or [])]
-        dormant_legs = [p for p in projects if p in dormant_keys]
-        if not dormant_legs:
-            continue
+        dormant_legs = [p for p in projects if p in dormant_targets]
+        live_legs = [p for p in projects if p not in dormant_targets]
+        level = str((item.get("verification") or {}).get("level", "")).strip().lower()
+
+        if dormant_legs and live_legs and level == "verified":
+            out.append(
+                f"active item {item['id']}: mixed-scope (dormant legs {dormant_legs}) but stores "
+                f"verification.level: verified — the dormant leg is unprobeable, so whole-item "
+                f"'verified' over-claims; store 'partial' (item-model.md)"
+            )
+        if level == "partial" and not (dormant_legs and live_legs):
+            out.append(
+                f"active item {item['id']}: stores verification.level: partial but is not "
+                f"mixed-dormant-scoped — 'partial' is reserved for items with both a live and a "
+                f"dormant leg (item-model.md)"
+            )
+
         lc = item.get("live_check")
+        if dormant_legs and not live_legs:
+            if lc:
+                out.append(
+                    f"active item {item['id']}: scoped to dormant project(s) {projects} but carries a "
+                    f"non-empty live_check — dormant-repo probes must be suspended (empty live_check; "
+                    f"move command text to non-executable evidence)"
+                )
+            continue
         if not lc:
             continue
-        commands = [lc] if isinstance(lc, str) else list(lc)
-        all_dormant = all(p in dormant_keys for p in projects)
-        if all_dormant:
+        if isinstance(lc, str):
+            commands = [lc]
+        elif isinstance(lc, list) and all(isinstance(c, str) for c in lc):
+            commands = lc
+        else:
             out.append(
-                f"active item {item['id']}: scoped to dormant project(s) {projects} but carries a "
-                f"non-empty live_check — dormant-repo probes must be suspended (empty live_check; "
-                f"move command text to non-executable evidence)"
+                f"active item {item['id']}: live_check must be a string or a list of strings "
+                f"(got {type(lc).__name__}) — any other shape evades the dormancy command scan"
             )
             continue
-        # Mixed scope: keep live-leg probes, reject any command aimed at a dormant leg.
         for cmd in commands:
             hit = _command_targets_dormant(cmd, dormant_targets)
-            if hit:
+            if not hit:
+                continue
+            if dormant_legs:
                 out.append(
                     f"active item {item['id']}: mixed-scope (dormant legs {dormant_legs}, live legs "
-                    f"{[p for p in projects if p not in dormant_keys]}) but a live_check command "
-                    f"targets dormant project(s) {hit}: {cmd!r} — suspend this command (move to "
-                    f"non-executable evidence); the live-leg probes may remain"
+                    f"{live_legs}) but a live_check command targets dormant project(s) {hit}: "
+                    f"{cmd!r} — suspend this command (move to non-executable evidence); the "
+                    f"live-leg probes may remain"
+                )
+            else:
+                out.append(
+                    f"active item {item['id']}: declares no dormant leg yet a live_check command "
+                    f"references dormant project(s) {hit}: {cmd!r} — mis-scoped items are not "
+                    f"exempt from the gate; suspend the command (and declare the leg if the work "
+                    f"truly spans it)"
                 )
     return out
 

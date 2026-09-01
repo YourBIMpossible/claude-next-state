@@ -416,7 +416,8 @@ def test_load_dormant_reads_flag(tmp_path):
     _write_store(tmp_path, [_item("A1")])
     _write_projects(tmp_path, [
         {"key": "bimpossible", "active": True},
-        {"key": "families", "active": False, "dormant": True},
+        {"key": "families", "active": False, "dormant": True,
+         "path": "F:\\BIMpossible-Families"},
     ])
     assert queue_store.load_dormant(tmp_path) == {"families"}
 
@@ -451,7 +452,80 @@ def test_load_dormant_targets_maps_key_to_normalized_path(tmp_path):
          "path": "F:\\BIMpossible-Families"},
     ])
     targets = queue_store.load_dormant_targets(tmp_path)
-    assert targets == {"families": "f:/bimpossible-families"}
+    assert targets == FAM_TARGETS
+
+
+def test_load_dormant_targets_strips_trailing_separator(tmp_path):
+    """A trailing separator on the registry path must not silently disable the gate: the
+    token is rstripped so `F:\\BIMpossible-Families\\` matches the same commands as the
+    canonical spelling."""
+    _write_projects(tmp_path, [
+        {"key": "families", "active": False, "dormant": True,
+         "path": "F:\\BIMpossible-Families\\"},
+    ])
+    assert queue_store.load_dormant_targets(tmp_path) == FAM_TARGETS
+
+
+def test_load_dormant_targets_fails_loud_on_keyless_entry(tmp_path):
+    """A dormant stanza missing `key` must never be silently skipped — that would turn the
+    gate (and the board disclosure) off with zero signal."""
+    _write_projects(tmp_path, [
+        {"name": "families", "active": False, "dormant": True,
+         "path": "F:\\BIMpossible-Families"},
+    ])
+    with pytest.raises(queue_store.StoreError, match="no 'key'"):
+        queue_store.load_dormant_targets(tmp_path)
+
+
+def test_load_dormant_targets_fails_loud_on_missing_path(tmp_path):
+    """No bare-key fallback: a pathless dormant entry is a registry defect, not a weaker
+    match token — the raw key would false-positive on prose (e.g. FAMILIES-DORMANT-REASSESS)."""
+    _write_projects(tmp_path, [
+        {"key": "families", "active": False, "dormant": True},
+    ])
+    with pytest.raises(queue_store.StoreError, match="usable checkout 'path'"):
+        queue_store.load_dormant_targets(tmp_path)
+
+
+def test_load_dormant_targets_fails_loud_on_drive_root_path(tmp_path):
+    """A degenerate path (bare drive root) would match essentially every command; reject it
+    at load instead of bricking every mixed-scope item."""
+    _write_projects(tmp_path, [
+        {"key": "families", "active": False, "dormant": True, "path": "F:\\"},
+    ])
+    with pytest.raises(queue_store.StoreError, match="usable checkout 'path'"):
+        queue_store.load_dormant_targets(tmp_path)
+
+
+def test_command_target_match_is_path_boundary_aware():
+    """A dormant repo whose checkout path is a strict prefix of a sibling's must not flag
+    commands naming the sibling — the real registry has F:\\BIMpossible as a prefix of four
+    sibling checkouts."""
+    targets = {"bimpossible": "f:/bimpossible"}
+    assert queue_store._command_targets_dormant(
+        "git -C F:/BIMpossible-Workspace status -sb", targets) == []
+    assert queue_store._command_targets_dormant(
+        "git -C F:\\BIMpossible-AddIns log --oneline", targets) == []
+    assert queue_store._command_targets_dormant(
+        "git -C F:/BIMpossible status -sb", targets) == ["bimpossible"]
+    assert queue_store._command_targets_dormant(
+        "cat F:/BIMpossible/CLAUDE.md", targets) == ["bimpossible"]   # subpath still matches
+
+
+def test_command_target_match_catches_non_path_spellings():
+    """The gate also matches the checkout's directory name as a standalone segment/name, so
+    gh slugs, relative paths, and MSYS-style paths cannot bypass it."""
+    assert queue_store._command_targets_dormant(
+        "gh pr list --repo YourBIMpossible/BIMpossible-Families", FAM_TARGETS) == ["families"]
+    assert queue_store._command_targets_dormant(
+        "git -C ..\\BIMpossible-Families status -sb", FAM_TARGETS) == ["families"]
+    assert queue_store._command_targets_dormant(
+        "ls /f/bimpossible-families", FAM_TARGETS) == ["families"]
+    # ...while plain prose sharing words with the key stays clean:
+    assert queue_store._command_targets_dormant(
+        'gh issue list --search "FAMILIES-DORMANT-REASSESS"', FAM_TARGETS) == []
+    assert queue_store._command_targets_dormant(
+        "gh pr view 5 --repo YourBIMpossible/evidence-compiler", FAM_TARGETS) == []
 
 
 def test_dormancy_flags_mixed_scope_command_targeting_dormant(tmp_path):
@@ -478,10 +552,66 @@ def test_dormancy_no_defect_mixed_scope_command_targets_only_live(tmp_path):
 
 
 def test_dormancy_active_only_item_never_flagged(tmp_path):
-    """An item with no dormant leg is out of the gate entirely, whatever its live_check says."""
+    """An item whose commands all name live repos is clean, whatever its declared legs."""
     item = _item("ACT", status="ready", projects=["workspace", "bimpossible"],
                  live_check=["git -C F:/BIMpossible-Workspace status -sb"])
     assert queue_store.dormancy_defects([item], FAM_TARGETS) == []
+
+
+def test_dormancy_flags_dormant_command_on_item_with_no_dormant_leg(tmp_path):
+    """Declared scope is not a bypass: an item that omits the dormant leg but whose live_check
+    names the dormant checkout is still a violation — mis-scoping cannot smuggle a probe past
+    the gate."""
+    item = _item("MISSCOPE", status="ready", projects=["workspace"],
+                 affects_projects=["families"],
+                 live_check=["git -C F:/BIMpossible-Families status -sb"])
+    defects = queue_store.dormancy_defects([item], FAM_TARGETS)
+    assert defects and "MISSCOPE" in defects[0] and "families" in defects[0]
+
+
+def test_dormancy_flags_mapping_live_check(tmp_path):
+    """A mapping live_check would iterate keys and evade the command scan, so the shape itself
+    is a defect rather than a silent pass or a crash."""
+    item = _item("MAP", status="ready", projects=["workspace", "families"])
+    item["live_check"] = {"families": "git -C F:/BIMpossible-Families status"}
+    defects = queue_store.dormancy_defects([item], FAM_TARGETS)
+    assert defects and "MAP" in defects[0] and "must be a string or a list" in defects[0]
+
+
+def test_dormancy_flags_scalar_live_check_without_crashing(tmp_path):
+    """A truthy scalar live_check produces a readable defect, never a TypeError traceback."""
+    item = _item("SCALAR", status="ready", projects=["workspace", "families"])
+    item["live_check"] = True
+    defects = queue_store.dormancy_defects([item], FAM_TARGETS)
+    assert defects and "SCALAR" in defects[0]
+
+
+def test_dormancy_flags_mixed_item_stored_verified(tmp_path):
+    """A mixed-scope item may not store whole-item verified: the dormant leg is unprobeable, so
+    the honest stored level is partial (the renderer's PARTIAL badge must have a store to match)."""
+    item = _item("MIXVER", status="ready", projects=["workspace", "families"],
+                 live_check=["git -C F:/BIMpossible-Workspace status -sb"])
+    item["verification"] = {"level": "verified", "by": "workspace leg", "at": "2026-08-30"}
+    defects = queue_store.dormancy_defects([item], FAM_TARGETS)
+    assert defects and "MIXVER" in defects[0] and "over-claims" in defects[0]
+
+
+def test_dormancy_accepts_mixed_item_stored_partial(tmp_path):
+    """`partial` on a genuinely mixed-scope item is the correct stored level — no defect."""
+    item = _item("MIXOK", status="ready", projects=["workspace", "families"],
+                 live_check=["git -C F:/BIMpossible-Workspace status -sb"])
+    item["verification"] = {"level": "partial", "by": "workspace leg", "at": "2026-08-30"}
+    assert queue_store.dormancy_defects([item], FAM_TARGETS) == []
+
+
+def test_dormancy_flags_partial_on_non_mixed_item(tmp_path):
+    """`partial` is reserved for mixed-dormant scope; on an all-live item it is a vocabulary
+    violation (an item with no dormant leg cannot be partially-suspended)."""
+    item = _item("BADPARTIAL", status="ready", projects=["workspace"],
+                 live_check=["git -C F:/BIMpossible-Workspace status -sb"])
+    item["verification"] = {"level": "partial", "by": "x", "at": "2026-08-30"}
+    defects = queue_store.dormancy_defects([item], FAM_TARGETS)
+    assert defects and "BADPARTIAL" in defects[0] and "reserved" in defects[0]
 
 
 def test_cli_hard_fails_on_dormant_runnable_probe(tmp_path):
@@ -530,7 +660,8 @@ def test_render_marks_dormant_item_suspended_and_discloses(tmp_path):
     _write_store(tmp_path, [_item("A1", status="ready"), fam])
     _write_projects(tmp_path, [
         {"key": "bimpossible", "active": True},
-        {"key": "families", "active": False, "dormant": True},
+        {"key": "families", "active": False, "dormant": True,
+         "path": "F:\\BIMpossible-Families"},
     ])
     out = render_queue.build(tmp_path, date(2026, 8, 17))
     assert "Dormant project(s):" in out and "`families`" in out
@@ -546,7 +677,8 @@ def test_render_shows_dormancy_gate_marker(tmp_path):
     _write_store(tmp_path, [_item("A1", status="ready"), gate])
     _write_projects(tmp_path, [
         {"key": "workspace", "active": True},
-        {"key": "families", "active": False, "dormant": True},
+        {"key": "families", "active": False, "dormant": True,
+         "path": "F:\\BIMpossible-Families"},
     ])
     out = render_queue.build(tmp_path, date(2026, 8, 17))
     assert "dormancy gate" in out
@@ -578,11 +710,12 @@ def test_render_mixed_scope_downgrades_verified_to_partial(tmp_path):
 
 
 def test_render_and_validation_agree_on_mixed_scope(tmp_path):
-    """Renderer and store-validation agree: a mixed item with only live-targeting commands passes
-    validation (no dormancy defect) AND renders as not-fully-verified. One truth, two surfaces."""
+    """Renderer and store-validation agree: a mixed item storing the honest `partial` level with
+    only live-targeting commands passes validation (no dormancy defect) AND renders as
+    not-fully-verified. One truth, two surfaces."""
     mix = _item("MIX", status="ready", projects=["workspace", "families"],
                 live_check=["git -C F:/BIMpossible-Workspace status -sb"])
-    mix["verification"] = {"level": "verified", "by": "workspace leg", "at": "2026-08-30"}
+    mix["verification"] = {"level": "partial", "by": "workspace leg", "at": "2026-08-30"}
     _write_projects(tmp_path, [
         {"key": "workspace", "active": True},
         {"key": "families", "active": False, "dormant": True,
