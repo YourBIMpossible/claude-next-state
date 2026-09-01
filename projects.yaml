@@ -103,7 +103,11 @@ projects:
     aliases: [fam]
     path: F:\BIMpossible-Families
     origin: https://github.com/YourBIMpossible/Families-by-BIMpossible.git
-    active: true
+    # dormant 2026-08-31 (owner ruling): no reads/probes/git ops until whole-repo
+    # reassessment -- see queue item FAMILIES-DORMANT-REASSESS
+    active: false
+    dormant: true   # machine-read gate: queue_store hard-fails a runnable live_check on a
+                    # families-scoped item; render marks its items SUSPENDED, never verified
     companions: []
 
   - key: pc-monitor

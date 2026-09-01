@@ -63,14 +63,30 @@ def _as_date(value: object) -> date | None:
     return None
 
 
-def cone_size(item_id: str, unblocks: dict[str, list[str]]) -> tuple[int, list[str], list[str]]:
+def cone_size(
+    item_id: str, unblocks: dict[str, list[str]]
+) -> tuple[int, int, list[str], list[str]]:
     """Transitive closure of `unblocks`, breadth-first.
 
-    Returns (size, cycle_ids, dangling_ids). A revisited id stops that branch and is
-    counted once; an unknown id counts as 1 and is reported. Both are data defects the
-    caller surfaces rather than silently absorbing.
+    Returns (display_size, rank_size, cycle_ids, dangling_ids) — two DISTINCT cone
+    counts, computed in the same walk:
+
+    - `display_size` — every distinct id reached, INCLUDING unknown/dangling ids
+      (each counted once). This is the `unblocks N` shown on the line, per
+      item-model.md ("Unknown ids count as 1 and are reported as dangling references";
+      "`unblocks N` is the cone size").
+    - `rank_size` — only *resolved* nodes (ids that exist in the store), accumulated
+      explicitly during traversal. This is the topology that decides graph shape and
+      cone-ranking. Unknown/dangling/stale ids never enter it, so a dead edge cannot
+      inflate leverage and flip a flat actionable graph to "deep".
+
+    A revisited id stops that branch and is counted once (a cycle); it was already
+    tallied as a resolved node on its first visit, so cycles remain resolved references
+    counted once. Cycles and dangling ids are both data defects the caller surfaces
+    rather than silently absorbing.
     """
     seen: set[str] = set()
+    resolved: set[str] = set()
     cycles: list[str] = []
     dangling: list[str] = []
     queue = deque(unblocks.get(item_id, []))
@@ -83,20 +99,52 @@ def cone_size(item_id: str, unblocks: dict[str, list[str]]) -> tuple[int, list[s
         if nxt not in unblocks:
             dangling.append(nxt)
             continue
+        resolved.add(nxt)
         queue.extend(unblocks[nxt])
-    return len(seen), cycles, dangling
+    return len(seen), len(resolved), cycles, dangling
 
 
-def sort_key(item: dict, cones: dict[str, int]) -> tuple:
+# Statuses an owner can actually move — the set whose cone depth decides "flat vs deep"
+# (item-model.md Step 1). A cone that only runs through non-actionable items is not
+# leverage anyone can spend, so it must not decide graph shape.
+ACTIONABLE_STATUSES = ("ready", "blocked_owner", "landed")
+
+
+def graph_is_flat(items: list[dict], rank_cones: dict[str, int]) -> bool:
+    """Flat graph (item-model.md Step 1): the top actionable *ranking* cone is <= 1, so
+    `cone` carries no ranking signal and degenerates to 'point at the lone sink'. On a
+    flat graph the renderer drops cone as a sort axis; it keeps the inclusive display
+    cone only for the `unblocks N` line.
+
+    Measured over `rank_cones` — resolved edges only. Unknown/dangling/stale unblocks
+    ids never enter this count, so a dead edge can never make a flat actionable graph
+    look deep and reactivate cone-first ordering."""
+    actionable = [rank_cones[i["id"]] for i in items if i.get("status") in ACTIONABLE_STATUSES]
+    return (max(actionable) if actionable else 0) <= 1
+
+
+def sort_key(item: dict, rank_cones: dict[str, int], flat: bool) -> tuple:
+    """Deterministic intra-section order.
+
+    This orders items WITHIN a status section; it does not pick the single #1 move —
+    that is chosen live by the skill using the full anchor-first model (stated focus
+    vs roadmap order + finalization leverage), which reads inputs not in the store
+    (the live phase ledger, dark-feature judgment). Here we use only store-derivable
+    axes. On a deep graph, resolved `cone` leads (real unblock-leverage, item-model.md
+    2a). On a flat graph it is meaningless (2b) and dropped, falling through to the
+    stable tail: stranded owner-gated+S value, then effort, risk, id.
+
+    The cone axis is `rank_cones` — resolved edges only — so a dangling ref that pads
+    an item's displayed cone can never change its ranking position."""
     effort = item.get("effort") or "M"
     owner_gate = bool(item.get("owner_gate"))
-    return (
-        -cones[item["id"]],
+    tail = (
         0 if (owner_gate and effort == "S") else 1,
         EFFORT_ORDER.get(effort, 1),
         -int(item.get("risk") or 0),
         item["id"],
     )
+    return tail if flat else (-rank_cones[item["id"]], *tail)
 
 
 def evidence_snippet(item: dict) -> str:
@@ -112,9 +160,16 @@ def evidence_snippet(item: dict) -> str:
     return ref
 
 
-def render_item(item: dict, cones: dict[str, int]) -> list[str]:
+def render_item(item: dict, cones: dict[str, int], dormant: set[str]) -> list[str]:
     ver = item.get("verification") or {}
     level = str(ver.get("level", "claimed")).upper()
+    item_projects = [str(p).lower() for p in (item.get("projects") or [])]
+    is_dormant_scoped = bool(item_projects) and all(p in dormant for p in item_projects)
+    if is_dormant_scoped:
+        # A dormant-scoped item is unprobed by construction — its live_check is suspended,
+        # so no stored verification can be current. Never render it as verified from prior
+        # evidence; the badge states the truth (SUSPENDED) regardless of the stored level.
+        level = "SUSPENDED"
     at = _as_date(ver.get("at"))
     at_str = at.isoformat() if at else "date-unknown"
     projects = "+".join(item.get("projects") or [])
@@ -124,6 +179,17 @@ def render_item(item: dict, cones: dict[str, int]) -> list[str]:
         f"       unblocks {cones[item['id']]} · {effort} · {projects} · "
         f"{level} {at_str} · {evidence_snippet(item)}",
     ]
+    if is_dormant_scoped:
+        lines.append(
+            f"       ⏸ dormant project ({projects}) — probes suspended (non-executable); "
+            "state unverifiable until whole-repo reassessment"
+        )
+    gated = sorted(set(str(p).lower() for p in (item.get("affects_projects") or [])) & dormant)
+    if gated:
+        lines.append(
+            f"       ⛔ dormancy gate — governs dormant {'+'.join(gated)}; keeps the "
+            "constraint visible without reactivating the repo"
+        )
     if level == "CONTRADICTED":
         # item-model.md: CONTRADICTED renders with both readings beneath it.
         body = " ".join(str(ver.get("by", "")).split())
@@ -143,12 +209,14 @@ def build(state_dir: Path, generated_on: date) -> str:
     # closed item into the archive can never change the ranking of active work, and
     # active `unblocks` references into the archive are not reported as dangling.
     unblocks = {i["id"]: list(i.get("unblocks") or []) for i in store.all_items}
-    cones: dict[str, int] = {}
+    cones: dict[str, int] = {}        # display cone — inclusive of dangling (item-model.md)
+    rank_cones: dict[str, int] = {}   # ranking/shape cone — resolved nodes only
     all_cycles: list[tuple[str, list[str]]] = []
     all_dangling: list[tuple[str, list[str]]] = []
     for item in store.all_items:
-        size, cycles, dangling = cone_size(item["id"], unblocks)
+        size, rank_size, cycles, dangling = cone_size(item["id"], unblocks)
         cones[item["id"]] = size
+        rank_cones[item["id"]] = rank_size
         if item not in items:
             continue  # defects are reported for active items only
         if cycles:
@@ -168,21 +236,52 @@ def build(state_dir: Path, generated_on: date) -> str:
     with_items = {p for i in items for p in (i.get("projects") or [])}
     barren = [k for k in active if k not in with_items and k not in reconciled]
 
+    # Dormant projects referenced by active items — either scoped directly or governed via
+    # `affects_projects`. Their constraint is disclosed on the board so no reader mistakes a
+    # parked/suspended dormant item for silently-dropped work.
+    dormant = {str(p["key"]).lower() for p in registry["projects"] if p.get("dormant")}
+    referenced_dormant = sorted(
+        d
+        for d in dormant
+        if any(
+            d in [str(x).lower() for x in (i.get("projects") or [])]
+            or d in [str(x).lower() for x in (i.get("affects_projects") or [])]
+            for i in items
+        )
+    )
+
+    flat = graph_is_flat(items, rank_cones)
     out: list[str] = [
-        "<!-- GENERATED from queue.yaml. Do not hand-edit — edit queue.yaml, then regenerate. -->",
+        "<!-- GENERATED — DO NOT EDIT.",
+        r"Canonical producer: F:\Claude-Profile\skills\next  (surfaced at ~/.claude/skills/next).",
+        "Regenerate via render_queue.py after editing queue.yaml; never hand-edit this file.",
+        "This is a repo-local read model, not a definition of /next behavior. -->",
         "",
         "# /next — work-item queue",
         "",
-        f"Generated {generated_on.isoformat()} (synced). Ranked by critical path (transitive "
-        "`unblocks` cone), tiebreak:",
-        "owner-gated+S effort, then effort, then risk, then id. Full algorithm:",
-        "`~/.claude/skills/next/reference/item-model.md`.",
+        f"Generated {generated_on.isoformat()} (synced). Anchor-first, leverage-ranked "
+        "(per item-model.md). The single #1 move is chosen live by the skill from the "
+        "anchor (stated focus, else roadmap order) and finalization leverage — not from dependency "
+        "cone. This board is a status-grouped snapshot; within each section it orders by "
+        "owner-gated+S, then effort, risk, id"
+        + (", with `cone` leading only on a deep graph (this store is flat today)."
+           if flat else ", with `cone` leading (deep graph).")
+        + " Full algorithm: `~/.claude/skills/next/reference/item-model.md`.",
         "",
         f"Scope: `all`. Watermarks: {' · '.join(marks)}.",
     ]
     if barren:
         out.append(f"({'/'.join(barren)}: no items yet — run `init` to derive.)")
     out.append("")
+
+    if referenced_dormant:
+        out.append(
+            f"> **Dormant project(s):** {', '.join(f'`{d}`' for d in referenced_dormant)} — "
+            "reassessment-bound. Items scoped to them are parked; their probes are suspended "
+            "(non-executable metadata) and render **SUSPENDED**, never verified. `/next` will "
+            "not run or propose a command against a dormant repo."
+        )
+        out.append("")
 
     if all_cycles or all_dangling:
         out.append("> **Data defects found while ranking** (fix in `queue.yaml`):")
@@ -206,11 +305,11 @@ def build(state_dir: Path, generated_on: date) -> str:
             ]
         if not bucket:
             continue
-        bucket.sort(key=lambda i: sort_key(i, cones))
+        bucket.sort(key=lambda i: sort_key(i, rank_cones, flat))
         out.append(f"## {title}")
         out.append("")
         for item in bucket:
-            out.extend(render_item(item, cones))
+            out.extend(render_item(item, cones, dormant))
             out.append("")
 
     return "\n".join(out).rstrip() + "\n"

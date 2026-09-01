@@ -20,7 +20,8 @@ Contract exposed to consumers (render_queue.py, the /next skill, tests):
     store.all_items         # active + archived (identity/graph union)
     store.ids               # id -> ("active"|"archive", item)
     store.pr_index          # "repo#123" (lowercased repo) -> [(id, tier), ...]
-    store.commit_index      # short-sha (>=7 chars, lowered) -> [(id, tier), ...]
+    store.commit_index      # commit-shaped sha (7–40 hex, != 32; lowered) -> [(id, tier), ...]
+                            #   harvested ONLY from kind: commit|pr evidence — never prose.
     store.watermarks        # reconciled: mapping from queue.yaml
     store.is_known_pr(ref)  / store.is_known_commit(sha) / store.find(id)
 
@@ -54,6 +55,7 @@ import yaml
 
 ACTIVE_FILE = "queue.yaml"
 ARCHIVE_FILE = "queue-archive.yaml"
+PROJECTS_FILE = "projects.yaml"
 
 # item-model.md — closed status vocabulary.
 ACTIVE_STATUSES = {
@@ -83,6 +85,24 @@ ARCHIVE_REQUIRED_META = ("archived_at",)
 _PR_REF = re.compile(r"([A-Za-z0-9_.-]+)\s*#(\d+)")
 _PR_URL = re.compile(r"github\.com/[^/\s]+/([^/\s]+)/pull/(\d+)")
 _SHA = re.compile(r"\b([0-9a-f]{7,40})\b")
+
+# Which evidence entries may feed the COMMIT index. A commit id is harvested ONLY from
+# evidence that explicitly asserts commit/PR identity — never from free prose (a doc/run/
+# log ref or a verification note), where a hex-looking token is far more likely an md5, a
+# blob/tree object sha, or an incidental identifier than a commit. This is the fix for
+# commit_index poisoning: deduplication is driven by declared commit evidence, not by
+# arbitrary hex substrings that happen to appear in narrative text.
+_COMMIT_EVIDENCE_KINDS = {"commit", "pr"}
+
+
+def _is_commit_shaped(token: str) -> bool:
+    """A git (SHA-1) commit id is 7–40 hex chars. Exactly 32 hex is the canonical MD5
+    length and never a git abbreviation anyone writes (a full SHA-1 is 40), so it is
+    rejected outright — this alone drops the md5 provenance hashes that used to be indexed
+    as commits. Tree/blob object shas are also 40 hex and indistinguishable from a commit
+    by shape; they are excluded structurally instead (see `_COMMIT_EVIDENCE_KINDS`) because
+    they occur in prose, not in a `kind: commit` ref."""
+    return 7 <= len(token) <= 40 and len(token) != 32
 
 
 class StoreError(RuntimeError):
@@ -162,16 +182,33 @@ def _check_item(item: object, tier: str, n: int, defects: list[str]) -> dict:
 
 
 def _index_evidence(item: dict, tier: str, pr_idx: dict, sha_idx: dict) -> None:
-    """Harvest PR and commit identity from evidence refs/urls and verification.by."""
-    texts: list[str] = []
-    for ev in item.get("evidence") or []:
-        if isinstance(ev, dict):
-            texts.append(str(ev.get("ref", "") or ""))
-            texts.append(str(ev.get("url", "") or ""))
-    texts.append(str((item.get("verification") or {}).get("by", "") or ""))
+    """Harvest PR and commit identity from evidence.
+
+    PR identity (`repo#N`) is distinctive and low-risk, so it is mined from ALL evidence
+    text plus the verification note. Commit identity is mined ONLY from evidence entries
+    whose `kind` explicitly asserts a commit/PR (`_COMMIT_EVIDENCE_KINDS`), and only for
+    tokens that are commit-shaped (`_is_commit_shaped`). Free prose — doc/run/log refs, a
+    verification note — never contributes to the commit index, so md5 provenance hashes,
+    blob/tree object shas, and incidental hex identifiers can no longer be mistaken for
+    commits during dedup."""
     entry = (item["id"], tier)
     projects = [str(p).lower() for p in (item.get("projects") or [])]
-    for text in texts:
+
+    pr_texts: list[str] = []
+    commit_texts: list[str] = []
+    for ev in item.get("evidence") or []:
+        if not isinstance(ev, dict):
+            continue
+        ref = str(ev.get("ref", "") or "")
+        url = str(ev.get("url", "") or "")
+        pr_texts.append(ref)
+        pr_texts.append(url)
+        if str(ev.get("kind", "")).strip().lower() in _COMMIT_EVIDENCE_KINDS:
+            commit_texts.append(ref)
+            commit_texts.append(url)
+    pr_texts.append(str((item.get("verification") or {}).get("by", "") or ""))
+
+    for text in pr_texts:
         for m in _PR_REF.finditer(text):
             repo = m.group(1).lower()
             pr_idx.setdefault(f"{repo}#{m.group(2)}", []).append(entry)
@@ -182,8 +219,10 @@ def _index_evidence(item: dict, tier: str, pr_idx: dict, sha_idx: dict) -> None:
                     pr_idx.setdefault(f"{proj}#{m.group(2)}", []).append(entry)
         for m in _PR_URL.finditer(text):
             pr_idx.setdefault(f"{m.group(1).lower()}#{m.group(2)}", []).append(entry)
+    for text in commit_texts:
         for m in _SHA.finditer(text.lower()):
-            sha_idx.setdefault(m.group(1), []).append(entry)
+            if _is_commit_shaped(m.group(1)):
+                sha_idx.setdefault(m.group(1), []).append(entry)
 
 
 def load_store(state_dir: Path) -> Store:
@@ -241,6 +280,51 @@ def load_store(state_dir: Path) -> Store:
     )
 
 
+def load_dormant(state_dir: Path) -> set[str]:
+    """Project keys flagged `dormant: true` in projects.yaml.
+
+    A dormant project is a checkout under top-down reassessment: `/next` must never emit
+    or run a probe against it. Absent registry or absent flag => empty set (no project is
+    dormant), so installations without the flag keep loading unchanged."""
+    path = state_dir / PROJECTS_FILE
+    if not path.exists():
+        return set()
+    registry = _load_yaml(path, "project registry")
+    out: set[str] = set()
+    for p in registry.get("projects") or []:
+        if isinstance(p, dict) and p.get("dormant") and p.get("key"):
+            out.add(str(p["key"]).lower())
+    return out
+
+
+def dormancy_defects(active_items: list[dict], dormant: set[str]) -> list[str]:
+    """Fail-loud list of active items that would let `/next` touch a dormant repo.
+
+    The safety invariant: an active item scoped ENTIRELY to dormant projects must carry no
+    runnable `live_check` — its probes are suspended, non-executable metadata while the repo
+    is reassessment-bound. A governance item that merely *references* a dormant project via
+    `affects_projects` (while itself scoped to a live project such as `workspace`) is exempt:
+    it is how the dormancy gate stays visible without reactivating the dormant repo.
+
+    Returns one message per violation; empty when the queue is dormancy-clean. Callers treat
+    a non-empty result as a hard validation failure."""
+    if not dormant:
+        return []
+    out: list[str] = []
+    for item in active_items:
+        projects = [str(p).lower() for p in (item.get("projects") or [])]
+        if not projects or not all(p in dormant for p in projects):
+            continue
+        lc = item.get("live_check")
+        if lc:  # non-empty list or string == a runnable probe against a dormant repo
+            out.append(
+                f"active item {item['id']}: scoped to dormant project(s) {projects} but carries a "
+                f"non-empty live_check — dormant-repo probes must be suspended (empty live_check; "
+                f"move command text to non-executable evidence)"
+            )
+    return out
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--state-dir", type=Path, default=Path(r"F:\Claude-Tools\state"))
@@ -267,6 +351,16 @@ def main() -> int:
 
     for d in store.defects:
         print(f"defect: {d}", file=sys.stderr)
+
+    # Dormancy gate: a dormant-scoped active item with a runnable live_check is a hard
+    # failure, not a soft defect — it is the exact condition that would let a drill run a
+    # command against a reassessment-bound repo.
+    dorm_defects = dormancy_defects(store.active_items, load_dormant(args.state_dir))
+    if dorm_defects:
+        for d in dorm_defects:
+            print(f"dormancy violation: {d}", file=sys.stderr)
+        return 1
+
     a = Counter(i["status"] for i in store.active_items)
     z = Counter(i["status"] for i in store.archived_items)
     print(
