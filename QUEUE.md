@@ -543,7 +543,8 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-31 @ `efe78a20` PR#513 · `add
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-17 · observed 2026-08-17 closeout session 67df33a5
 
 [OPS-SLOPAUDIT-UNPUSHED] 8 slop-audit remediation commits are local-only across 5 repos - push or discard
-       unblocks 0 · S · workspace+dashboard+families · VERIFIED 2026-08-31 · F:/AI-Dev/slop-audit-remediation_2026-08-31.md section 5 (full commi…
+       unblocks 0 · S · workspace+dashboard+families · PARTIAL 2026-08-31 · F:/AI-Dev/slop-audit-remediation_2026-08-31.md section 5 (full commi…
+       ⏸ dormant leg (families) suspended — workspace+dashboard leg tracked live; dormant leg unverifiable until whole-repo reassessment, so the item is not fully verified
 
 [POST-268-FOLLOWUPS] Merge the three post-#268 follow-up PRs -- reviewed, three-lane green, awaiting checks
        unblocks 2 · S · bimpossible · VERIFIED 2026-08-18 · BIMpossible #269 (1887583), #270 (f6f0044), #271 (428889c) -- all ME…
@@ -618,4 +619,5 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-08-31 @ `efe78a20` PR#513 · `add
        unblocks 1 · L · bimpossible · VERIFIED 2026-08-30 · BIMpossible_PHASE-STATUS.md, Phase 6 row Client-Mgmt F -- PLACED not…
 
 [EC-HOOKSAFE-1] Python-native hook-safe launcher shipped to EC core; Node wrapper migrated out of BIMpossible/AddIns/Workspace/Families
-       unblocks 0 · L · evidence-compiler+bimpossible+addins+workspace+families · VERIFIED 2026-08-24 · evidence-compiler#5
+       unblocks 0 · L · evidence-compiler+bimpossible+addins+workspace+families · PARTIAL 2026-08-24 · evidence-compiler#5
+       ⏸ dormant leg (families) suspended — evidence-compiler+bimpossible+addins+workspace leg tracked live; dormant leg unverifiable until whole-repo reassessment, so the item is not fully verified

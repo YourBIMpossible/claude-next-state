@@ -119,7 +119,7 @@ items:
     ref: Families-by-BIMpossible#11
     url: https://github.com/YourBIMpossible/Families-by-BIMpossible/pull/11
   verification:
-    level: verified
+    level: partial
     by: 'All 5 PRs merged 2026-08-24 (core 0ef747e7; BIMpossible 74a014a9; AddIns e0f23bb; Workspace d37cad0; Families
       72e53d5, via disposable worktree, foreign lane branch untouched). Runtime proven non-editable (VCS-pinned
       install off the merged core commit; evidence_compiler.__file__ under site-packages, evidence console script
@@ -5634,7 +5634,7 @@ items:
       d85fb68a, md5 af8996536aa8b442fa2093023a99567a); working trees differ by EOL policy (Families checks out CRLF,
       md5 2338f73fa78546aa4155fd1d6070997e). Never compare working-tree bytes across the pair.'
   verification:
-    level: verified
+    level: partial
     at: '2026-08-31'
     by: 'Live-check contract restored 2026-08-31 (disposition CRD-3, workspace b98c71a): workspace + Site + Profile probes runnable; Families
       leg suspended under the dormancy ruling (state UNKNOWN by declaration, not clean). Zero stranded slop-audit
