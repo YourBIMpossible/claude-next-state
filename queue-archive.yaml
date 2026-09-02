@@ -2198,3 +2198,89 @@ items:
   archived_at: '2026-08-30'
   archived_reason: already shipped in AddIns#74; observed in live request
   source_queue_version: 1
+- id: WARM-ORIGIN-ALLABSENT-ANOMALY
+  title: 'Investigate per-model AEC-DM warm gap: six model versions show 100% origin_absent across all door rows'
+  projects:
+  - bimpossible
+  status: dropped
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: db
+    ref: '2026-08-24 probe: mvs 1329 (4/4), 1335 (1128/1128), 1336 (496/496), 1343 (22/22), 1347 (1/1), 1353 (27/27)
+      all show origin_absent=TRUE for every door row -- implausible for 1128 real doors on mv 1335, including models
+      whose doors DO carry a Level param. Healthy contrast: mv 1323 splits 36/554.'
+  - kind: probe
+    ref: '2026-08-24 read-only comparison (owner-authorized, agent run): premise correction -- mv 1329 is HEALTHY
+      (3,757 with-origin / 15 absent) and drops from the set; the anomaly covers origin-eligible categories only
+      (others are origin_absent NULL by design). True anomalous set (100% absent among eligible, zero real origins):
+      1335, 1336, 1343, 1347, 1353, plus 1355 and 1359 found in the same sweep. Discriminator is the PROJECT, not
+      warm date/discipline: all zero-origin versions belong to six projects first cached mid-August; every version
+      with origins lives in long-standing project b.1598e7dc, and healthy/all-absent warms interleave on 08-16,
+      ruling out a clean code regression. fetch_equipment_origins (geometry_fetch.py:179-212) unchanged 2026-08-08
+      through the warm dates; nearest change 3ce12262 landed after 1335/1336 warmed. Cause: AEC DM returned the
+      elements with no OriginComponent (positive evidence, not fetch failure). Open question: transient (fresh index
+      not yet derived at first warm) vs inherent -- settleable by one read-only AEC DM GraphQL probe on an affected
+      element_group_id. No same-model healthy version exists (each URN has one cached version), so regression-vs-inherent
+      is unproven within-model. Self-heal path exists (ensure_category_origins_warm re-checks origin_x IS NULL)
+      but nothing re-triggers it for already-warmed versions; a rewarm per affected version would apply it. NOT
+      performed -- no mutation authorized.'
+  - kind: db
+    ref: '2026-09-01 read-only probe (Doors, >=10 rows, absent=total): mvs 1335 (1128), 1336 (496), 1343 (22), 1353
+      (27) still 100% origin_absent. Versions under 10 rows (1347, 1355, 1359) not covered by this probe. Anomaly
+      persists; still awaiting the owner-authorized AEC DM GraphQL probe.'
+  - kind: run
+    ref: '2026-09-02 live AEC DM GraphQL probe (owner-authorized, owner-executed via docker exec docker-backend-1
+      python /app/scripts/probe_origin_anomaly.py, borrowed the owner''s active app session with set_current_sid
+      per the discipline_field_probe.py precedent -- the service-identity/2-legged path was tried first and rejected
+      by AEC DM itself with UNAUTHORIZED "Missing user data. Please use valid 3LO token", confirming this query
+      hard-requires a real 3-legged user token). Result: affected mv 1335 Doors 1128 total, 0 with_origin, 1128
+      origin_none. Control mv 1323 Doors 590 total, 554 with_origin, 36 origin_none (healthy, matches the 08-24
+      db-level split). Classification per probe_origin_anomaly.py''s decision table: inherent-missing-origincomponent.
+      Open question SETTLED: NOT a transient fresh-index delay -- AEC DM genuinely returns no OriginComponent for
+      these doors right now, live, so rewarming the six affected versions would reproduce the same absent result,
+      not fix it. No mutation performed.'
+  - kind: log
+    ref: '2026-09-02 code-trace (read-only, same method the sibling WARM-ORIGIN-DOORGAP ticket used to resolve):
+      confirmed the served-label fix already covers these six projects mechanically, with zero per-project gating
+      anywhere in the chain. cross_model_join.py:656-669 builds origin_absent_by_id straight off element_cache.origin_absent
+      for whatever elements the current request scopes to (no project/model_version conditional); _no_origin_status()
+      at line 317 maps origin_absent=True to "no_origin_in_source" for any element, generically; router.py:459-460
+      carries linked_room_status through unconditionally regardless of project; frontend/app/lib/aec/element.ts:64
+      maps no_origin_in_source to "(no location · curtain panel)" via a static status-keyed table, no project branch.
+      Since element_cache.origin_absent is TRUE for these six model versions'' doors (the same column the 2026-09-02
+      live probe confirmed is factually correct -- AEC DM has no OriginComponent), a room-join request against any
+      of them will resolve through the exact same path mv 1323''s doors already use. No code change needed. Not
+      confirmed via an authenticated live HTTP response against one of the six projects'' UI (same residual gap
+      the original WARM-ORIGIN-DOORGAP resolution carries) -- code-trace + existing pinned-suite evidence only (test_cross_model_join_doors.py,
+      test_cross_model_join.py, test_room_geometry_warm.py already pin this exact origin_absent-keyed behavior).'
+  - kind: decision
+    ref: '2026-09-02 owner ruling: DROP -- investigation complete. Finding (verbatim, owner text): Live 3LO AEC-DM
+      probe confirmed OriginComponent is inherently absent for all 1,128 affected Doors; existing WARM-ORIGIN-DOORGAP
+      generic origin_absent rendering already covers the affected records. Residual risk (optional acceptance check,
+      does NOT gate close): UI behavior is code-traced and suite-covered but not yet verified through an authenticated
+      live HTTP/browser response against an affected project.'
+  verification:
+    level: verified
+    by: 'Transient-vs-inherent question settled 2026-09-02: INHERENT, not a fetch/index bug (see the 2026-09-02
+      run evidence above). Follow-up owner question also settled 2026-09-02 by code-trace: the six affected projects''
+      doors are ALREADY covered by WARM-ORIGIN-DOORGAP''s served-label fix -- same origin_absent-keyed path, no
+      per-project gating, no code change needed (see the 2026-09-02 log evidence above). The original mandate --
+      investigation only, no backfill/rewarm/mutation/customer-visible change -- is fully discharged and no further
+      backend work is indicated. Residual: neither this nor the original WARM-ORIGIN-DOORGAP resolution has a live
+      authenticated-browser confirmation, code-trace + pinned-suite only.'
+    at: '2026-09-02'
+  live_check:
+  - SELECT model_version_id, count(*) FILTER (WHERE origin_absent) AS absent, count(*) AS total FROM element_cache
+    WHERE category='Doors' GROUP BY 1 ORDER BY 1; -- anomaly persists while any mv shows absent=total with total
+    > a handful
+  source: WARM-ORIGIN-DOORGAP served-label probe, 2026-08-24 overnight closeout (docs/ops/2026-08-24-p7-cutover-and-hardening-run.md
+    Track E)
+  notes_url: null
+  archived_at: '2026-09-02'
+  archived_reason: 'status dropped -- owner ruling 2026-09-02: investigation-only mandate fully discharged; anomaly
+    inherent upstream; retained for anti-rediscovery history'
+  source_queue_version: 1
