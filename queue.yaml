@@ -4676,7 +4676,7 @@ items:
     audit rows
   projects:
   - bimpossible
-  status: landed
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -4697,15 +4697,28 @@ items:
       = d5f8b3c41e27 (head); information_schema shows revit_link_request_log.firm_id uuid nullable + ix_revit_link_request_log_firm_created;
       25 existing rows readable (row 25 intact, firm_id NULL); backend/frontend/db/redis healthy; codes importable in container.
       No new sync/replay run (read-only verification).'
+  - kind: db
+    ref: '2026-09-02 read-only prod probe: revit_link_request_log has exactly 1 status=''rejected'' row and its error_code
+      is SYNC_TOKEN_ALREADY_USED (created 2026-08-25T21:47Z, i.e. after the 2026-08-21 deploy); firm_id is populated on 2
+      of 41 rows, from the same window. The replay-rejection audit path has fired in production on a real request.'
+  - kind: run
+    ref: '2026-09-02 deployment identity (read-only): docker-backend-1 (image sha256:db00aeef, StartedAt 2026-09-01T22:57:14Z)
+      runs code byte-identical (CRLF-normalized) to origin/main 5248ff86 for every .py under aec/, revit_link/, db/ plus aps/router.py,
+      search/router.py, main.py (214 files). 2026-09-02 isolated throwaway-DB lane (per-run postgres:16-alpine bimpossible_test
+      + redis, backend mounted :ro, db_safety.py not overridden; never docker-db-1): 11 pinned suites for the landed batch
+      -> 104 passed, 29 skipped (all 29 = tests/test_model_resolve.py pure-lane stubs), 0 failed. revit_link suites included.'
   verification:
     level: verified
-    by: 'Merged d6368c8, migrated, deployed, read-only verified 2026-08-21 (tests: 5 new in tests/revit_link — replay audited
-      w/ SYNC_TOKEN_ALREADY_USED + firm + token absent + no second execute; audit failure keeps 403; secret-missing code;
-      DB-lane firm_id persist + '''' -> NULL; _coerce_firm_id unit).'
-    at: 2026-08-21
+    by: 'Promoted landed -> live 2026-09-02 overnight pass: the stored live condition (a replayed sync token producing a revit_link_request_log
+      row with status=''rejected'' + error_code=''SYNC_TOKEN_ALREADY_USED'') is met by a real production row dated 2026-08-25T21:47Z;
+      deployed code identical to origin/main; pinned tests green on an isolated throwaway DB. Prior 2026-08-21 verification
+      retained: #443 merged d6368c8, migration d5f8b3c41e27 applied, read-only schema checks.'
+    at: '2026-09-02'
   live_check:
-  - docker exec docker-backend-1 python -m alembic current -> d5f8b3c41e27; a future replayed sync token must produce a revit_link_request_log
-    row with status='rejected' and error_code='SYNC_TOKEN_ALREADY_USED'.
+  - 'MSYS_NO_PATHCONV=1 docker exec docker-db-1 psql -U bimpossible -d bimpossible -tAc "select count(*) from revit_link_request_log
+    where status=''rejected'' and error_code=''SYNC_TOKEN_ALREADY_USED''"  # read-only  # expect >= 1'
+  - 'MSYS_NO_PATHCONV=1 diff --strip-trailing-cr <(docker exec docker-backend-1 cat //app/revit_link/router.py) <(git -C F:/BIMpossible
+    show origin/main:backend/revit_link/router.py)  # expect no output'
   source: P7-SYNC-GOLIVE pilot 2026-08-21
   notes_url: null
 - id: ADMIN-DOMAIN-AUDIT-INACTIVE-FIRM-GUARD

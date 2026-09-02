@@ -182,9 +182,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 [P13-T6-REASON-TAG] Add reason/criteria tag to approval flow (T6)
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-21 · BIMpossible_PHASE-STATUS.md, Phase 13 -- reason/criteria tag T6 RATI…
 
-[P7-SYNC-REJECTION-AUDIT] Audit typed sync-token rejections (403 replay/expired/scope) in revit_link_request_log and carry firm_id on sync audit rows
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-21 · 2026-08-21 pilot: replay -> 403 'Token has already been used (single…
-
 [P8-HUB-ACTIVATION-RUNBOOK] Write Phase 8 hub-activation runbook per OpenQuestions #5
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-18 · WRITTEN 2026-08-18: BIMpossible_Workspace/00_Strategy/2026-08-18__Ph…
 
@@ -588,6 +585,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 
 [P15-15C-A-CONTEXT-INJECTION] Safe Revit-context injection (15c-A), PR
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-01 · BIMpossible PR #517 (MERGED 2026-09-01 as squash b27b25e0; was branc…
+
+[P7-SYNC-REJECTION-AUDIT] Audit typed sync-token rejections (403 replay/expired/scope) in revit_link_request_log and carry firm_id on sync audit rows
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · 2026-08-21 pilot: replay -> 403 'Token has already been used (single…
 
 [ROUTER-SUPPORT-INDEX-KEY-MISMATCH] RESOLVED by PR #485: support fast-path now keys ModelIndex on the file_urn COLUMN (not item_id); regression tests pin item_id != file_urn
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-31 · Found by Explore agent during P11 QA-history follow-ups session 2026…
