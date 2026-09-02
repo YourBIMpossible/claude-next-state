@@ -4249,7 +4249,7 @@ items:
     re-queues the whole ~500-row batch every ~2s, flooding backend logs
   projects:
   - bimpossible
-  status: landed
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -4266,17 +4266,28 @@ items:
   - kind: pr
     ref: 'MERGED: #434 -> 5286981 (2026-08-19, quarantine); ROOT CAUSE FIXED: #440 -> 02bd9b6 (2026-08-21) guard.py:112/174
       firm_id='''' emission + bounded observable quarantine sample buffer in aec/authz/audit.py'
+  - kind: log
+    ref: '2026-09-02 read-only prod log probe: docker logs docker-backend-1 contains 0 InvalidTextRepresentation lines in
+      the last 24h and 0 since 2026-08-21 (the retained window is short -- ~770 lines, effectively since the 2026-09-01T22:57Z
+      restart -- but the pre-fix flood recurred every ~2s, so an empty window is conclusive for the running build).'
+  - kind: run
+    ref: '2026-09-02 deployment identity (read-only): docker-backend-1 (image sha256:db00aeef, StartedAt 2026-09-01T22:57:14Z)
+      runs code byte-identical (CRLF-normalized) to origin/main 5248ff86 for every .py under aec/, revit_link/, db/ plus aps/router.py,
+      search/router.py, main.py (214 files). 2026-09-02 isolated throwaway-DB lane (per-run postgres:16-alpine bimpossible_test
+      + redis, backend mounted :ro, db_safety.py not overridden; never docker-db-1): 11 pinned suites for the landed batch
+      -> 104 passed, 29 skipped (all 29 = tests/test_model_resolve.py pure-lane stubs), 0 failed. test_guard_emergency_deny.py
+      + test_authz_audit_stream_worker.py included.'
   verification:
     level: verified
-    by: 'CLOSED 2026-08-21: #434 merged (5286981) and root emission site fixed in #440 (02bd9b6) with tests test_guard_emergency_deny.py
-      / test_authz_audit_stream_worker.py. || Observed live in docker-backend-1 logs throughout the 2026-08-18/19 P7 session
-      -- same traceback recurring every ~2s for hours, drowning out real sync/relay log lines (had to grep -v it to find the
-      actual sync error). FIX BUILT SAME NIGHT: Verify-Local-CI.ps1 -BaseRef origin/main LOCAL CI GREEN at 48fdb29, full pure-lane
-      pytest green. NOT MERGED -- the root emission site for firm_id='''' (which write path produces it) was not tracked down;
-      this fix stops the flood/starvation regardless of root cause but does not explain why that row exists.'
-    at: 2026-08-19
+    by: 'Promoted landed -> live 2026-09-02 overnight pass: the stored live condition (0 InvalidTextRepresentation in backend
+      logs after the #440 deploy) is met on the running container; quarantine (#434) + root emission fix (#440) code identical
+      to origin/main; pinned tests green on an isolated throwaway DB. Prior history retained: #434 merged 5286981 2026-08-19,
+      #440 merged 02bd9b6 2026-08-21.'
+    at: '2026-09-02'
   live_check:
-  - 'docker logs docker-backend-1 --since 1h | grep -c InvalidTextRepresentation must be 0 after #440 deploy.'
+  - 'MSYS_NO_PATHCONV=1 docker logs docker-backend-1 --since 24h 2>&1 | grep -c InvalidTextRepresentation  # expect 0'
+  - 'MSYS_NO_PATHCONV=1 diff --strip-trailing-cr <(docker exec docker-backend-1 cat //app/aec/authz/audit.py) <(git -C F:/BIMpossible
+    show origin/main:backend/aec/authz/audit.py)  # expect no output'
   source: 2026-08-18/19 P7 supervised walkthrough session (previously noted pre-compaction, now filed)
   notes_url: null
 - id: MODEL-INDEX-DELETION-RECONCILE

@@ -103,9 +103,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 [SLACK-GATEWAY-W1] Read-only Slack assistant gateway merged, flag-off; migration 9329a1e7be85 now on main
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · BIMpossible #262 MERGED 2026-08-07T04:20:29Z, squash commit dd898899…
 
-[AUTHZ-AUDIT-POISON-BATCH-FLOOD] authz shadow-audit poison row (firm_id='', principal 'service', reason 'wizard.account_read') fails UUID cast and re-queues the whole ~500-row batch every ~2s, flooding backend logs
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-19 · aec/authz/audit.py flush_pending -- batch insert fails with psycopg2…
-
 [AUTHZ-ENFORCE-KEYSTONE-PR530] Merge BIMpossible#530: AUTH-INH ENFORCE keystone + Phase 15c T5 end-to-end test (CKA Phase 18 step 1)
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-01 · BIMpossible#530 OPEN, READY, head 6d64390f, opened 2026-09-02T00:40Z…
 
@@ -488,6 +485,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 
 [APS-TOKEN-REFRESH-CLASSIFY] Classify APS/auth token-refresh failures instead of leaking 500s (_authed_get, remaining paths, AEC worker)
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · BIMpossible #334 (e0577ad) -- token-refresh failures in _authed_get …
+
+[AUTHZ-AUDIT-POISON-BATCH-FLOOD] authz shadow-audit poison row (firm_id='', principal 'service', reason 'wizard.account_read') fails UUID cast and re-queues the whole ~500-row batch every ~2s, flooding backend logs
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · aec/authz/audit.py flush_pending -- batch insert fails with psycopg2…
 
 [DEP-TRIAGE-2026-08] Dependabot triage: CLOSED BY OWNER RULING 2026-08-21 -- all 6 held PRs closed under the dependency-update policy
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-18 · STILL OPEN as of 2026-08-17 (gh pr view, live): github-actions -- #3…
