@@ -1505,12 +1505,13 @@ items:
   source: BIMpossible PR#174; BIMpossible_PHASE-STATUS.md row 9; 00_Strategy/Phase9_BuildSpec.md; archive tag archive/phase9-cloud-ids-shared-params-parked
   notes_url: 00_Strategy/2026-06-16__SharedParameters_Onboarding_ScanSpec_DRAFT.md
 - id: WRITE-ENGINE-INC2
-  title: 'Write Engine Increment 2 MERGED dark -- BIMpossible #273 + AddIns #54 both landed 2026-08-17'
+  title: 'Write Engine Increment 2 (family-type String targeting) merged + deployed incl. #544 per-type outcome fix; owner-gated
+    Task 8 live smoke needed to go live'
   projects:
   - bimpossible
   - addins
   status: landed
-  owner_gate: false
+  owner_gate: true
   unblocks: []
   blocked_by: []
   effort: S
@@ -1572,6 +1573,11 @@ items:
       wording, 9651e14 #544 merged wording), pushed to origin/main. Still landed, not live: Task 8 live smoke (one family-type
       String write on a sample model through the pane, expected distinct per-type outcomes in change-set detail + edit_log/revit_link_request_log
       rows) remains owner-gated.'
+  - kind: doc
+    ref: '2026-09-02 owner_gate set true: the only remaining step is the owner-run Task 8 live smoke (packet in F:/Claude-Tools/reports/2026-09-02__resolve-now-report.md
+      § Owner-gated live-smoke packet: SAMPLE-C-ELEC-R26.rvt, one family-type String parameter via the pipe-ON pane, then
+      verify per-type outcome in GET /change-sets/{id} + edit_log/revit_link_request_log rows and one drift-skip re-apply).
+      After the smoke: promote to live with that evidence.'
   verification:
     level: verified
     by: '2026-09-02: both halves DEPLOYED (backend identical to origin/main in the running container, Increment 2 schema/constraints/partial

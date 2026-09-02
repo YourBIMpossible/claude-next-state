@@ -73,6 +73,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 [REVITLINK-OPAQUE-500-MAPPING] revit_link error mapping collapses distinct add-in refusals (NOT_SUPPORTED, DOC_NOT_FOUND, AMBIGUOUS_DOCUMENT, SYNC_FAILED) into one opaque INTERNAL_ERROR 500 with no detail
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-19 · backend/revit_link/native_adapter.py _COMMAND_ERROR_MAP (unknown cod…
 
+[WRITE-ENGINE-INC2] Write Engine Increment 2 (family-type String targeting) merged + deployed incl. #544 per-type outcome fix; owner-gated Task 8 live smoke needed to go live
+       unblocks 0 · S · bimpossible+addins · VERIFIED 2026-09-02 · BIMpossible #273 MERGED 2026-08-18T03:25Z (owner ruling 2026-08-17: …
+
 [AEC-PREWARM-TIP-PROBE-EMPTY-VERSION] E25_Nudge live tip-probe failure leaves receptacle_schedule perpetually preparing
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-31 · 2026-08-30 backend log, repeated on every poll for E25_Nudge-1800_Ow…
 
@@ -112,9 +115,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 
 [SEC-GROUPS-EDIT-PERM-ALIGN] Align firm-group edit-permission gating in the frontend (GRP-1, GRP-2)
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-13 · BIMpossible #329 (c311e0d, merged 2026-08-08) -- GRP-1/GRP-2 firm-gr…
-
-[WRITE-ENGINE-INC2] Write Engine Increment 2 MERGED dark -- BIMpossible #273 + AddIns #54 both landed 2026-08-17
-       unblocks 0 · S · bimpossible+addins · VERIFIED 2026-09-02 · BIMpossible #273 MERGED 2026-08-18T03:25Z (owner ruling 2026-08-17: …
 
 [ADDINS-AUDIT-0817-HARDENING] Audit-0817 hardening closeout -- pairing identity + installer/write-guard fixes (AddIns #68, #69)
        unblocks 0 · S · addins · VERIFIED 2026-08-23 · AddIns #68 'fix/audit-0817-pane-identity' MERGED 2026-08-23 -> fcfa4…
