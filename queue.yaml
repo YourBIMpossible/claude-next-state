@@ -2940,6 +2940,11 @@ items:
       mounted :ro, db_safety.py not overridden; never docker-db-1): 11 pinned suites for the landed batch -> 104 passed, 29
       skipped (all 29 = tests/test_model_resolve.py pure-lane stubs), 0 failed. test_categories_cache.py + test_property_map_cache.py
       included.'
+  - kind: db
+    ref: '2026-09-02 read-only prod probe (resolve-now audit): the guarded capture path has run in production since the guard
+      merged -- aec_schema_cache rows fetched after 2026-08-16T18:00Z: categories 16, property_map 16, spec_map 30 (latest
+      2026-09-01 22:06Z); 0 rows with an empty body ([] or {}) in the whole table. Runtime exercise of the guard, not just
+      deployed identity.'
   verification:
     level: verified
     by: 'Promoted landed -> live 2026-09-02 overnight pass: the stored live condition (a post-merge deploy running the guard
