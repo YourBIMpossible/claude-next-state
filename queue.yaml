@@ -4622,7 +4622,7 @@ items:
   title: Audit admin domain registration and block auto-link bootstrap against inactive firms
   projects:
   - bimpossible
-  status: landed
+  status: live
   owner_gate: false
   unblocks:
   - ADMIN-DOMAIN-UNKNOWN-FIRM-404
@@ -4644,22 +4644,34 @@ items:
       Required checks green (backend/pytest, security-scan-summary). DEPLOY DEFERRED: domain hardening stays coupled to the
       later synthetic-firm / P6 two-firm smoke readiness — merged but not yet deployed.'
     url: https://github.com/YourBIMpossible/BIMpossible/pull/449
+  - kind: run
+    ref: '2026-09-01 live verification: (1) docker-backend-1 restarted 22:57:14Z today (source bind-mounted, code loaded fresh)
+      -- diff of the live container''s /app/aec/membership.py against origin/main is byte-identical (CRLF only). (2) Prod
+      DB read-only invariant check: zero user_firm_memberships rows with source=domain_match, status=active, joined to a firm
+      with status<>active (query returned no rows). (3) Prod currently has ZERO firms with status<>active that also have a
+      firm_domains row -- the guard has no real-world case to have violated yet in prod, so this is a code-presence + invariant-holds
+      confirmation, not a smoke-tested denial. (4) Running the pinned regression (backend/tests/test_login_firm_autolink.py::test_inactive_firm_verified_domain_creates_no_membership,
+      3 params) inside the container against the live prod DB was refused by db/db_safety.py''s assert_safe_test_db guard
+      (by design) -- not overridden.'
   verification:
     level: verified
-    by: 'PR #449 MERGED (squash 4364594, ancestor of origin/main). Remote required checks green. Deploy intentionally deferred
-      to P6 smoke readiness. Tests added: active-firm positive control (still bootstraps admin), churned/suspended/prospect
-      parametrized negative, audit-on-add, audit-on-conflict, audit-detail credential-exclusion allowlist. CONFIRMED 2026-08-30:
-      gh pr view 449 = MERGED 2026-08-22T09:53Z.'
-    at: '2026-08-30'
+    by: Deployed and code-identical to origin/main as of 2026-09-01 (backend restarted 22:57Z). No prod data currently exercises
+      the guard (no inactive-status firm has a registered domain), so live behavior is proven by code-identity + a clean invariant
+      query, not by an observed denial.
+    at: '2026-09-01'
   live_check:
-  - gh pr view 449 --repo YourBIMpossible/BIMpossible --json state,isDraft,mergedAt
+  - 'docker exec docker-backend-1 cat /app/aec/membership.py | diff --strip-trailing-cr - <(cd F:/BIMpossible && git show
+    origin/main:backend/aec/membership.py)  # expect no diff'
+  - 'docker exec docker-db-1 psql -U bimpossible_app -d bimpossible -t -c "select count(*) from user_firm_memberships m join
+    firms f on f.firm_id=m.firm_id where m.source=''domain_match'' and m.status=''active'' and f.status<>''active'';"  # expect
+    0'
   source: Session 2026-08-22, follow-on from the P6 deployment checkpoint audit/churn gap review
   notes_url: https://github.com/YourBIMpossible/BIMpossible/pull/449
 - id: ADMIN-DOMAIN-UNKNOWN-FIRM-404
   title: 'Admin domain registration: return typed 404 for unknown firm instead of 409'
   projects:
   - bimpossible
-  status: blocked_dep
+  status: ready
   owner_gate: false
   unblocks: []
   blocked_by:
@@ -4681,11 +4693,12 @@ items:
       or credential-shaped value in audit detail or response; (7) targeted tests plus canonical CI pass. Scope guards: do
       NOT broaden into domain lifecycle redesign; preserve existing exact-match and DB uniqueness semantics. Correctness/error-shape
       improvement, not a P6 smoke blocker.'
-    at: 2026-08-22
+    at: '2026-09-01'
   live_check:
   - Resolve the target firm explicitly before insert; confirm an unknown firm_id yields 404 and a duplicate domain still yields
     409.
-  source: 'PR #449 review, 2026-08-22 (owner-supplied follow-up item ADMIN-DOMAIN-UNKNOWN-FIRM-404, priority P3, area backend/admin-authz)'
+  source: 'PR #449 review, 2026-08-22 (owner-supplied follow-up item ADMIN-DOMAIN-UNKNOWN-FIRM-404, priority P3, area backend/admin-authz)
+    -- unblocked 2026-09-01: ADMIN-DOMAIN-AUDIT-INACTIVE-FIRM-GUARD (its blocked_by) confirmed live.'
   notes_url: null
 - id: ADDINS-AUDIT-0817-HARDENING
   title: 'Audit-0817 hardening closeout -- pairing identity + installer/write-guard fixes (AddIns #68, #69)'

@@ -134,9 +134,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 [ADDINS-NOT-SUPPORTED-PIPE-PROPAGATION] Propagate the typed NOT_SUPPORTED classification through PipeServer.cs so the add-in answers unsupported pipe methods with the typed code instead of a generic error
        unblocks 0 · S · addins+bimpossible · VERIFIED 2026-08-23 · Deferred from P7 hardening pass 2026-08-21 (BIMpossible#440 typed NO…
 
-[ADMIN-DOMAIN-AUDIT-INACTIVE-FIRM-GUARD] Audit admin domain registration and block auto-link bootstrap against inactive firms
-       unblocks 1 · S · bimpossible · VERIFIED 2026-08-30 · BIMpossible#449 DRAFT opened 2026-08-22 (fix/domain-audit-firm-guard…
-
 [AISERVER-OPENCODE-DOCS] Commit AI-Server's uncommitted opencode/local-coding-agent doc updates (PROGRAM_PLAN.md, README.md)
        unblocks 0 · S · ai-server · VERIFIED 2026-08-08 · AI-Server main 2172820 -- 'docs: document opencode local coding-agen…
 
@@ -289,6 +286,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 [OPS-WORKTREE-DRIFT-REVIEW] Recurring per-repo drift review: workspace local behind-6/ahead-1 with dirty ledgers + untracked audit docs
        unblocks 0 · S · workspace+bimpossible · VERIFIED 2026-08-31 · 2026-08-07 (original): workspace carried 2 untracked docs (revitlink…
 
+[ADMIN-DOMAIN-UNKNOWN-FIRM-404] Admin domain registration: return typed 404 for unknown firm instead of 409
+       unblocks 0 · S · bimpossible · CLAIMED 2026-09-01 · Observed during BIMpossible#449 review: POST /admin/domains/{firm_id…
+
 [EC-HYGIENE-1] Pull main checkout master to 345e1c7; delete merged lane branches (#1, #2 heads)
        unblocks 0 · S · evidence-compiler · VERIFIED 2026-08-24 · Live probe 2026-08-24: local master at 8bc555b, origin/master at 345…
 
@@ -305,9 +305,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
        unblocks 1 · M · evidence-compiler · VERIFIED 2026-08-24 · F:/Evidence Compiler/DOGFOOD_LOG.md
 
 ## Blocked elsewhere
-
-[ADMIN-DOMAIN-UNKNOWN-FIRM-404] Admin domain registration: return typed 404 for unknown firm instead of 409
-       unblocks 0 · S · bimpossible · CLAIMED 2026-08-22 · Observed during BIMpossible#449 review: POST /admin/domains/{firm_id…
 
 [SHARED-PARAM-REGISTRY] Canonical shared-parameter registry landed (PR#174+hardening) -- generator only, nothing imports it yet
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-17 · BIMpossible #174 (41c716c, merged 2026-07-06) -- feat(shared-paramet…
@@ -506,6 +503,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 
 [ADDINS-RESOLVE-HINT-PROJECT] RevitLink relay: send hint_project_id on GET /aps/model/resolve first resolves
        unblocks 2 · S · addins · VERIFIED 2026-08-30 · BIMpossible#496
+
+[ADMIN-DOMAIN-AUDIT-INACTIVE-FIRM-GUARD] Audit admin domain registration and block auto-link bootstrap against inactive firms
+       unblocks 1 · S · bimpossible · VERIFIED 2026-09-01 · BIMpossible#449 DRAFT opened 2026-08-22 (fix/domain-audit-firm-guard…
 
 [AUDIT-20260831-CI-HYGIENE] 2026-08-31 audit closeout batch: CI/CQ/FE hygiene findings (SEC-CI-LOCAL-1, ARCH-CI-1, CQ-DOC-1, FE-2, FE-3) -- merged, live
        unblocks 0 · S · bimpossible+addins · VERIFIED 2026-09-01 · BIMpossible PR #522 (squash d27d9ef5, MERGED 2026-09-01) body -- clo…
