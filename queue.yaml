@@ -6207,3 +6207,121 @@ items:
   source: Delta scan 2026-09-01; PR body + Workspace 00_Strategy CKA Decision-0=0A plan (ab49443). Phase 18 (Client Knowledge
     Assistant) row in BIMpossible_PHASE-STATUS.md.
   notes_url: null
+- id: CKA-DOCS-UI-PR540
+  title: 'Owner review of draft BIMpossible#540 (CKA Documents placement + management UI): upload defaults, reclassification,
+    inaccessible-linked-project disclosure; then authorize remote CI / merge'
+  projects:
+  - bimpossible
+  status: blocked_owner
+  owner_gate: true
+  owner: null
+  unblocks:
+  - CKA-DOC-ACTIONS-API
+  - CKA-DOCS-CAPABILITY-READ-MODEL
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: https://github.com/YourBIMpossible/BIMpossible/pull/540 (draft, 4 commits on feat/cka-documents-placement-ui; local
+      gate GREEN 2026-09-02, remote CI not authorized)
+  verification:
+    level: verified
+    by: Push-And-Verify exit 0; Verify-Local-CI -BaseRef origin/main green (backend 5457+3621+26, vitest 2036/2036, semgrep OK).
+    at: '2026-09-02'
+  live_check:
+  - gh pr view 540 -R YourBIMpossible/BIMpossible --json isDraft,state,mergeable
+  source: 2026-09-02 owner instruction — keep draft, no changes, review before remote CI/merge.
+  notes_url: null
+- id: CKA-DOC-ACTIONS-API
+  title: 'Backend/API slice on /firm-docs: permitted download, replace/version, archive, restore, re-placement (scope/project
+    change). UI in #540 offers none of these because no contract exists.'
+  projects:
+  - bimpossible
+  status: parked
+  owner_gate: true
+  owner: null
+  unblocks: []
+  blocked_by:
+  - CKA-DOCS-UI-PR540
+  effort: L
+  risk: 3
+  evidence:
+  - kind: pr
+    ref: '#540 Known limitations section'
+  verification:
+    level: claimed
+    by: Recorded as follow-up candidate only; not scoped, not authorized.
+    at: '2026-09-02'
+  live_check: []
+  source: 2026-09-02 owner instruction (follow-up candidate list).
+  notes_url: null
+- id: CKA-DOCS-CAPABILITY-READ-MODEL
+  title: 'Capability-aware UI read model: expose project CONTROL, library_manager, Restricted and Financial eligibility so
+    document controls/classification options render only where the server would permit them'
+  projects:
+  - bimpossible
+  status: parked
+  owner_gate: true
+  owner: null
+  unblocks: []
+  blocked_by:
+  - CKA-DOCS-UI-PR540
+  effort: M
+  risk: 2
+  evidence:
+  - kind: pr
+    ref: '#540 — client can only see is_owner + firm role; CONTROL/library_manager holders see no extra controls; form offers
+      all four classifications and relies on server refusal'
+  verification:
+    level: claimed
+    by: Recorded as follow-up candidate only.
+    at: '2026-09-02'
+  live_check: []
+  source: 2026-09-02 owner instruction (follow-up candidate list).
+  notes_url: null
+- id: CKA-DOCS-DEFAULT-SCOPE-DECISION
+  title: 'Owner decision: default document scope on upload (#540 defaults to Firm Library; alternatives Private or Project)'
+  projects:
+  - bimpossible
+  status: blocked_owner
+  owner_gate: true
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: '#540 UploadForm default scope firm_library'
+  verification:
+    level: claimed
+    by: Decision not yet taken.
+    at: '2026-09-02'
+  live_check: []
+  source: 2026-09-02 owner instruction (follow-up candidate list).
+  notes_url: null
+- id: GITLEAKS-FIXTURE-MODEL-ROUTING-1A
+  title: 'Narrow gitleaks fixture/allowlist correction for synthetic key in backend/tests/test_assistant_model_routing.py:463
+    on feat/ai-model-routing-slice1a — owned by that branch''s session (blocked Push-And-Verify from other branches 2026-09-02)'
+  projects:
+  - bimpossible
+  status: ready
+  owner_gate: false
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: log
+    ref: 'Push-And-Verify on feat/cka-documents-placement-ui: gitleaks FAIL rule=generic-api-key, value sk-firm-INJECTED-9f8e7d
+      (synthetic); overridden with -Force'
+  verification:
+    level: verified
+    by: Observed 2026-09-02; file absent from main and other branches.
+    at: '2026-09-02'
+  live_check:
+  - 'git -C F:/BIMpossible grep -n "sk-firm-INJECTED" feat/ai-model-routing-slice1a -- backend/tests/test_assistant_model_routing.py'
+  source: 2026-09-02 owner instruction (follow-up candidate list); see ASSISTANT-MODEL-ROUTING-1A.
+  notes_url: null
