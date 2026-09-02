@@ -128,9 +128,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 [SEC-GROUPS-EDIT-PERM-ALIGN] Align firm-group edit-permission gating in the frontend (GRP-1, GRP-2)
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-13 · BIMpossible #329 (c311e0d, merged 2026-08-08) -- GRP-1/GRP-2 firm-gr…
 
-[TENANCY-RAIL-SEARCH-RESOLVE] /search/models + /aps/model/resolve migrated off the ALLOWED_PROJECT_IDS rail
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-16 · BIMpossible #366 MERGED (e585862, 2026-08-16) -- migrates /search/mo…
-
 [WRITE-ENGINE-INC2] Write Engine Increment 2 MERGED dark -- BIMpossible #273 + AddIns #54 both landed 2026-08-17
        unblocks 0 · S · bimpossible+addins · VERIFIED 2026-09-02 · BIMpossible #273 MERGED 2026-08-18T03:25Z (owner ruling 2026-08-17: …
 
@@ -509,6 +506,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 
 [TENANCY-PROBE-281] Tenancy invariant now covers flag-gated routers; /probe hub isolation fixed, 41 routes triaged
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · BIMpossible #281 MERGED 2026-08-07T02:48:19Z, squash commit 36412c9c…
+
+[TENANCY-RAIL-SEARCH-RESOLVE] /search/models + /aps/model/resolve migrated off the ALLOWED_PROJECT_IDS rail
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · BIMpossible #366 MERGED (e585862, 2026-08-16) -- migrates /search/mo…
 
 [ADDINS-BRANCH-PROTECT] Protect Add-Ins main: require PRs + firm-literals/test/gitleaks checks, strict up-to-date
        unblocks 0 · S · addins · VERIFIED 2026-08-08 · Applied 2026-08-08 via gh api PUT repos/YourBIMpossible/BIMpossible-…

@@ -2979,7 +2979,7 @@ items:
   title: /search/models + /aps/model/resolve migrated off the ALLOWED_PROJECT_IDS rail
   projects:
   - bimpossible
-  status: landed
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -2990,14 +2990,27 @@ items:
     ref: 'BIMpossible #366 MERGED (e585862, 2026-08-16) -- migrates /search/models and /aps/model/resolve off the global ALLOWED_PROJECT_IDS
       deployment rail onto proper firm-scoped tenancy checks. Part of retiring the env allowlist as a pseudo-tenancy mechanism
       (CLAUDE.md write-back rules; enrollment layer is the successor).'
+  - kind: log
+    ref: '2026-09-02 read-only prod log probe: docker-backend-1 served 2 real GET /search/models requests with HTTP 200 since
+      2026-08-21 on the firm-scoped code path (aps/router.py, search/router.py, aec/hub_tenancy.py byte-identical to origin/main
+      5248ff86). #366 MERGED 2026-08-16T17:24:37Z (e5858629) re-confirmed via gh.'
+  - kind: run
+    ref: '2026-09-02 isolated throwaway-DB lane (per-run postgres:16-alpine bimpossible_test + redis, backend mounted :ro,
+      db_safety.py not overridden; never docker-db-1): 11 pinned suites for the landed batch -> 104 passed, 29 skipped (all
+      29 = tests/test_model_resolve.py pure-lane stubs), 0 failed. test_search_hub_isolation.py + test_aps_hub_isolation.py
+      included; test_model_resolve.py endpoint cases are the 29 pure-lane skips (they run in the DB/app lane).'
   verification:
     level: verified
-    by: 'Squash SHA e585862 confirmed in the delta. Behaviour change is active on next deploy (no flag found in the PR title/scope);
-      ''landed'' pending an observed prod request exercising the new scoping. unblocks: [] -- the broader rail retirement
-      is tracked through ENROLL-TENANCY-LAYER''s activation, not this item.'
-    at: '2026-08-16'
+    by: 'Promoted landed -> live 2026-09-02 overnight pass: the stored live condition (an observed prod request exercising
+      the new scoping) is met by real /search/models 200s on the deployed firm-scoped path; hub-isolation pins green on an
+      isolated throwaway DB. /aps/model/resolve had no request in the retained log window -- same code path, same tenancy
+      dependency, not separately observed.'
+    at: '2026-09-02'
   live_check:
-  - 'gh pr view 366 -R YourBIMpossible/BIMpossible --json state,mergedAt  # expect MERGED'
+  - 'MSYS_NO_PATHCONV=1 docker logs docker-backend-1 --since 240h 2>&1 | grep -c ''GET /search/models''  # expect >= 1 (window
+    is short after a restart)'
+  - 'MSYS_NO_PATHCONV=1 diff --strip-trailing-cr <(docker exec docker-backend-1 cat //app/search/router.py) <(git -C F:/BIMpossible
+    show origin/main:backend/search/router.py)  # expect no output'
   source: merge-wave delta b5c6e64..833964d, ninth pass 2026-08-16
   notes_url: null
 - id: R5-AECDM-PUSHDOWN
