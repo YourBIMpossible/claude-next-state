@@ -2,7 +2,7 @@ schema_version: 1
 reconciled:
   bimpossible:
     at: '2026-09-01'
-    commit: ea42f37f
+    commit: 6b0a3536
     pr: 530
   addins:
     at: '2026-08-31'
@@ -6123,8 +6123,8 @@ items:
   title: 'Merge BIMpossible#529: land the 3 P7 relay closeout docs missing from main'
   projects:
   - bimpossible
-  status: blocked_owner
-  owner_gate: true
+  status: live
+  owner_gate: false
   owner: null
   unblocks: []
   blocked_by: []
@@ -6136,13 +6136,15 @@ items:
       doc-references.json + docs/ops/2026-08-25-p7-customer-zero-transition.md, 2026-08-25-p7-relay-session-lifecycle-full-closeout.md,
       2026-08-25-p7-relay-session-lifecycle-release-closeout.md'
     url: https://github.com/YourBIMpossible/BIMpossible/pull/529
+  - kind: pr
+    ref: BIMpossible#529 MERGED 2026-09-01 (squash) -> 6b0a3536 on main; branch updated to fdfac35d first (was BEHIND), required
+      checks green. Docs-only, so on main = live.
   verification:
     level: verified
-    by: 'gh pr view 529 2026-09-01: OPEN/READY, checks green. Awaiting owner merge.'
+    by: 'gh pr view 529 2026-09-01: MERGED, mergeCommit 6b0a3536.'
     at: '2026-09-01'
   live_check:
-  - 'gh pr view 529 -R YourBIMpossible/BIMpossible --json state,mergedAt,mergeStateStatus  # OPEN until owner merges; MERGED
-    -> promote to live (docs-only)'
+  - cd F:/BIMpossible && git cat-file -e origin/main:docs/ops/2026-08-25-p7-customer-zero-transition.md && echo OK
   source: 'Delta scan 2026-09-01; sibling of BIMP-P12-OPSDOCS-COMMIT (P12 docs landed via #492, these three P7 docs were still
     missing from main).'
   notes_url: null
