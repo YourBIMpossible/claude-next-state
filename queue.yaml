@@ -3709,14 +3709,19 @@ items:
     ref: 'WRITTEN 2026-08-18: BIMpossible_Workspace/00_Strategy/2026-08-18__Phase8_Hub-Activation_Runbook.md -- client-admin
       steps (Forma AEC-DM activation, Custom Integrations client ID, forward-only re-publish, C4R limitation) + internal hub-grant
       steps; flags P8-APS-PUBLISHING-CAP as the unverified assumption.'
+  - kind: commit
+    ref: Workspace 8f2bdf9 (2026-08-18) committed 00_Strategy/2026-08-18__Phase8_Hub-Activation_Runbook.md; contained in origin/main
+      (b256c58) as of 2026-09-02 -- the "not yet committed/pushed" half of the landed reason is closed.
   verification:
     level: verified
-    by: 'Doc exists on disk in Workspace 00_Strategy; content sourced from OpenQuestions #5 + hub_tenancy standing orders.
-      landed not live: not yet committed/pushed in the Workspace repo (owner/next sync), and owner has not reviewed the client-facing
-      wording.'
-    at: '2026-08-18'
+    by: '2026-09-02 overnight pass: runbook is committed and on the Workspace origin/main (8f2bdf9), so the only open condition
+      is the owner review of the client-facing wording -- a human read, not machine-closeable. Stays landed; nothing to deploy.
+      Source note retained: content from OpenQuestions #5 + hub_tenancy standing orders; flags P8-APS-PUBLISHING-CAP as the
+      unverified assumption.'
+    at: '2026-09-02'
   live_check:
-  - Check for a hub-activation runbook doc under 00_Strategy or docs/engineering; if present, this item is stale.
+  - 'git -C F:/BIMpossible-Workspace branch -r --contains 8f2bdf9  # expect origin/main'
+  - test -f F:/BIMpossible-Workspace/00_Strategy/2026-08-18__Phase8_Hub-Activation_Runbook.md && echo present
   source: BIMpossible_PHASE-STATUS.md, Phase 8 -- surfaced by /next BIMpossible roadmap 2026-08-18, UNTRACKED
   notes_url: null
 - id: P8-APS-PUBLISHING-CAP
