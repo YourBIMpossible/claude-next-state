@@ -2,8 +2,8 @@ schema_version: 1
 reconciled:
   bimpossible:
     at: '2026-09-01'
-    commit: 6b0a3536
-    pr: 530
+    commit: b7158ed8
+    pr: 532
   addins:
     at: '2026-08-31'
     commit: d09204e
@@ -6152,8 +6152,8 @@ items:
   title: 'Merge BIMpossible#530: AUTH-INH ENFORCE keystone + Phase 15c T5 end-to-end test (CKA Phase 18 step 1)'
   projects:
   - bimpossible
-  status: blocked_owner
-  owner_gate: true
+  status: landed
+  owner_gate: false
   owner: null
   unblocks: []
   blocked_by: []
@@ -6169,13 +6169,16 @@ items:
   - kind: doc
     ref: 'Workspace ab49443 (2026-09-01) docs(strategy): CKA Decision-0=0A integration plan, WIP gate + reconciliation/closure
       record -- names this as CKA Completion Program Phase 18, step 1.'
+  - kind: pr
+    ref: 'BIMpossible#530 MERGED 2026-09-01 (squash) -> b7158ed8 on main (branch updated twice; main moved under it via #531
+      5c247a53 and #532 2cbfcd02 from another lane). Test-only change: landed, not live -- deployed BIMPOSSIBLE_AUTHZ_ENFORCEMENT_MODE
+      unchanged; promotion to live tracks AUTHZ-SHADOW-WINDOW-VALIDITY / the .env flip.'
   verification:
     level: verified
-    by: 'gh pr view 530 2026-09-01: OPEN/READY, checks green. Awaiting owner merge; deployed BIMPOSSIBLE_AUTHZ_ENFORCEMENT_MODE
-      unchanged (see AUTHZ-SHADOW-WINDOW-VALIDITY).'
+    by: 'gh pr view 530 2026-09-01: MERGED, mergeCommit b7158ed8.'
     at: '2026-09-01'
   live_check:
-  - 'gh pr view 530 -R YourBIMpossible/BIMpossible --json state,mergedAt,mergeStateStatus  # OPEN until owner merges'
+  - cd F:/BIMpossible && git merge-base --is-ancestor b7158ed8 origin/main && echo LANDED
   source: Delta scan 2026-09-01; PR body + Workspace 00_Strategy CKA Decision-0=0A plan (ab49443). Phase 18 (Client Knowledge
     Assistant) row in BIMpossible_PHASE-STATUS.md.
   notes_url: null
