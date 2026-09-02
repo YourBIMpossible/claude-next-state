@@ -57,3 +57,7 @@ Build thresholds (explicit — do not build below them):
 - Repeat count: 1
 - Candidate response: settings Bash allow-rule for the repo deploy scripts (start-local.ps1 / Refresh-Frontend.ps1)
 - Threshold to build: per ledger rules -- blocked in 3 separate sessions
+- 2026-09-01 (pane pairing smoke, AddIns #117 closeout): `AssistantPaneController.PairAsync` generic catch returns "Couldn't reach the server…" for ANY non-PaneApiException (masked today's ArgumentNullException for hours); split the message by exception class or say "Pairing failed: <type>" and point at log.txt. [WANDER-PANE-PAIR-ERROR-TEXT]
+- 2026-09-01 (same): add-in log shows `[RelayLifecycle] Port 7779 is held by another program — relay unavailable` at every Revit start on the dev box; identify the holder (netstat -ano | findstr 7779) — a second Revit or a stale relay host — relay stack is silently off while it persists. [WANDER-RELAY-PORT-7779-HELD]
+- 2026-09-01 (same): pane Sources line repeats the same firm doc once per BM25 hit (5 citations for one answer, each "doc — title > section"); collapse to one entry per document with the section list. Backend `search_firm_docs` limit 5 / citation formatter. [WANDER-PANE-SOURCES-DEDUP]
+- 2026-09-01 (same): two Deploy-Local pipe-ON RevitLink deploys today (16:55 ba91f86, 17:16 9e30429) have no runtime-slot ledger entry — ADDINS-SLOT-LEDGER gap persists; memory `revit-pane-installed-dll-2026-09-01` is the only record. [WANDER-ADDINS-SLOT-LEDGER-20260901]

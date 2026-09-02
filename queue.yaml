@@ -2554,6 +2554,12 @@ items:
       and published through Push-And-Verify this day); bimpossible main 0/0 CLEAN; addins main behind-10 with 3 dirty tracked
       + 7 untracked, unchanged from the fifth reading (still incl. human-only NORTHSTAR.link-pdf-roadmap.md). Remaining known
       drift: addins checkout only, plus the cross-repo strandings tracked by OPS-SLOPAUDIT-UNPUSHED.'
+  - kind: run
+    ref: 'git worktree list 2026-09-02 (BIMpossible): 9 registered worktrees; branches already merged to main and still registered:
+      feat/ai-model-routing-slice1a (#537, pending removal from another shell), test/authinh-enforce-keystone (#530), claude/ci-runtime-closeout-hardening
+      (#536), docs/p7-ops-closeout-docs (#529), claude/ai-model-routing-review-f74a2f (review lane, no PR); plus a detached
+      keen-volhard-8e55c1 at 90cea91f. ai-model-routing-per-kind-defaults already removed. Other sessions may own them --
+      list only, do not prune from here.'
   verification:
     level: verified
     by: 'DE-ESCALATED risk 3 -> 2 on the sixth reading 2026-08-31: the escalation cause (workspace dirty tree blocking Push-And-Verify
@@ -2573,7 +2579,7 @@ items:
       locally and a concurrent session merged PR#106 on the remote. Risk raised 2 -> 3 because the drift now blocks the /next
       mirror publish outright (see the escalation evidence), not because the readings changed. STANDING OWNER QUESTION still
       unanswered (automate/schedule this check, or keep ad-hoc re-runs).'
-    at: '2026-08-31'
+    at: '2026-09-02'
   live_check:
   - 'git -C F:/BIMpossible status -sb; git -C F:/BIMpossible-AddIns status -sb; git -C F:/BIMpossible-Workspace status -sb  #
     expect all behind-0/ahead-0, clean'
@@ -6430,7 +6436,7 @@ items:
   verification:
     level: verified
     by: 'gh pr view 530 2026-09-01: MERGED, mergeCommit b7158ed8.'
-    at: '2026-09-01'
+    at: '2026-09-02'
   live_check:
   - cd F:/BIMpossible && git merge-base --is-ancestor b7158ed8 origin/main && echo LANDED
   source: Delta scan 2026-09-01; PR body + Workspace 00_Strategy CKA Decision-0=0A plan (ab49443). Phase 18 (Client Knowledge
@@ -6465,6 +6471,14 @@ items:
       403/404 path NOT live-exercised (single-user dev stack has no cross-access fixture) -- existing vitest coverage remains
       the proof for that branch. Backend not restarted for #545/#543 (no runtime source change); #544 fix stays loaded from
       the 06:22:59Z process.'
+  - kind: pr
+    ref: 'BIMpossible#540 MERGED 2026-09-02T05:42Z (squash 1d964788). PR body: nothing preselected on upload, Firm Library
+      never a default, Project defaulted only via ?project=<id>.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/540
+  - kind: pr
+    ref: 'BIMpossible#545 OPEN, ready (review/cka-docs-ui-post-merge-fixes): reuse DocApiError.denied, drop dead canShowReclassify
+      param -- post-merge code-review follow-up, no behavior change.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/545
   verification:
     level: verified
     by: 'PR #540 and follow-up #545 merged; #545 rebuilt and deployed on the dev stack. Signed-in /documents hard-reload verified
@@ -6528,11 +6542,11 @@ items:
   source: 2026-09-02 owner instruction (follow-up candidate list).
   notes_url: null
 - id: CKA-DOCS-DEFAULT-SCOPE-DECISION
-  title: 'Owner decision: default document scope on upload (#540 defaults to Firm Library; alternatives Private or Project)'
+  title: 'Default document scope on upload DECIDED: nothing preselected, Firm Library never a default (merged in #540)'
   projects:
   - bimpossible
-  status: blocked_owner
-  owner_gate: true
+  status: live
+  owner_gate: false
   owner: null
   unblocks: []
   blocked_by: []
@@ -6541,19 +6555,24 @@ items:
   evidence:
   - kind: pr
     ref: '#540 UploadForm default scope firm_library'
+  - kind: pr
+    ref: 'BIMpossible#540 body (merged 1d964788): "Nothing is preselected unless the user arrived from a project page ...
+      Firm Library is never a default."'
   verification:
-    level: claimed
-    by: Decision not yet taken.
+    level: verified
+    by: Decision is encoded in the merged PR body and page.test.tsx pins (no preselection without an active project). Ruled
+      by owner review before merge.
     at: '2026-09-02'
-  live_check: []
+  live_check:
+  - gh pr view 540 -R YourBIMpossible/BIMpossible --json state
   source: 2026-09-02 owner instruction (follow-up candidate list).
   notes_url: null
 - id: GITLEAKS-FIXTURE-MODEL-ROUTING-1A
-  title: Narrow gitleaks fixture/allowlist correction for synthetic key in backend/tests/test_assistant_model_routing.py:463
-    on feat/ai-model-routing-slice1a — owned by that branch's session (blocked Push-And-Verify from other branches 2026-09-02)
+  title: 'Synthetic key in test_assistant_model_routing.py:463 replaced by a low-entropy dummy before #537 merged -- gitleaks
+    blocker gone'
   projects:
   - bimpossible
-  status: ready
+  status: live
   owner_gate: false
   owner: null
   unblocks: []
@@ -6564,11 +6583,247 @@ items:
   - kind: log
     ref: 'Push-And-Verify on feat/cka-documents-placement-ui: gitleaks FAIL rule=generic-api-key, value sk-firm-INJECTED-9f8e7d
       (synthetic); overridden with -Force'
+  - kind: commit
+    ref: main:backend/tests/test_assistant_model_routing.py:463 = secret "sk-firm-injected-xxxxxxxxxxxxxxxx" (low-entropy
+      dummy, comment says keeps gitleaks quiet); "sk-firm-INJECTED-9f8e7d" absent from main (git grep exit 1). Merged in b2a24b00
+      (#537).
   verification:
     level: verified
-    by: Observed 2026-09-02; file absent from main and other branches.
+    by: 'git grep on main 2026-09-02: old value absent, dummy present at line 463; #537 merged.'
     at: '2026-09-02'
   live_check:
-  - git -C F:/BIMpossible grep -n "sk-firm-INJECTED" feat/ai-model-routing-slice1a -- backend/tests/test_assistant_model_routing.py
+  - 'git -C F:/BIMpossible grep -c "sk-firm-INJECTED" main -- backend/tests/test_assistant_model_routing.py  # expect exit
+    1 (absent)'
   source: 2026-09-02 owner instruction (follow-up candidate list); see ASSISTANT-MODEL-ROUTING-1A.
   notes_url: null
+- id: ASSISTANT-MODEL-ROUTING-1A
+  title: 'AI model routing slice 1A + per-kind defaults SHIPPED and running on the local stack (#537, #542)'
+  projects:
+  - bimpossible
+  status: live
+  owner_gate: false
+  owner: null
+  unblocks:
+  - ASSISTANT-MODEL-ROUTING-1B-2
+  blocked_by: []
+  effort: M
+  risk: 2
+  evidence:
+  - kind: doc
+    ref: Anchor F:\Claude-Tools\reports\2026-09-01_ai-model-routing-plan.md (rev 3, build-ready; owner decisions O-1/O-2/O-5
+      adopted, O-3 Fable default no, O-4 slice 3). Session prompt 2026-09-01_ai-model-routing-session-prompt.md. Worktree
+      .claude/worktrees/ai-model-routing-slice-1a-413232 on feat/ai-model-routing-slice1a exists at ea42f37f (2026-09-02).
+  - kind: pr
+    ref: 'BIMpossible#537 MERGED 2026-09-02T05:21Z (squash b2a24b00): registry, tagged credential pick, resolver, request
+      builder; Sonnet 5 default, 4.6 deprecated, Haiku fast.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/537
+  - kind: pr
+    ref: 'BIMpossible#542 MERGED 2026-09-02T05:53Z (squash 90cea91f): per-kind model defaults -- closed typed map ASSISTANT_TITLE_MODEL
+      / _LABEL_MODEL / _BACKGROUND_EXTRACTION_MODEL; label + background_extraction kinds remain disabled in code.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/542
+  - kind: run
+    ref: 'Local stack: docker-backend-1 recreated 2026-09-02 06:00Z (container CreatedAt 2026-09-01 23:00:52 PDT) with the
+      six ASSISTANT_* keys present (DEFAULT/BACKGROUND/BACKGROUND_EXTRACTION sonnet-5, TITLE/LABEL haiku-4-5, PLATFORM_TIERS
+      fast,balanced); boot guard 0 problems. Probe this sync: docker exec docker-backend-1 env | grep ^ASSISTANT_ -> all six
+      keys.'
+  - kind: doc
+    ref: 'Owner ruling 2026-09-02: registry id == provider id accepted; a future split is an evolution, not a defect.'
+  - kind: run
+    ref: Backend restarted 2026-09-02 06:22:59Z by another session; six ASSISTANT_* keys intact, healthy.
+  verification:
+    level: verified
+    by: 'gh pr list merged: #537 b2a24b00 + #542 90cea91f on main (main tip 90cea91f). Runtime: backend container recreated
+      after both merges, ASSISTANT_* env observed in the running container, boot guard 0 problems. Status had been written
+      as the non-vocabulary value in_progress by the build session; corrected here.'
+    at: '2026-09-02'
+  live_check:
+  - git -C F:/BIMpossible merge-base --is-ancestor 90cea91f origin/main && echo LANDED
+  - 'docker exec docker-backend-1 sh -c "env | grep -c ^ASSISTANT_"  # expect 6'
+  source: 2026-09-01 owner request (assistant model hardcoded at backend/aec/assistant.py:101); Phase 4 assistant work. PHASE-STATUS
+    Phase 4 row still reads "annotated, no status/pct change" -- re-score due (doc/reality mismatch flagged by sync 2026-09-02).
+  notes_url: null
+- id: ASSISTANT-MODEL-ROUTING-1B-2
+  title: 'AI model routing remaining lane: 1B usage ledger, 1C premium/Opus, slice 2 policy tables + picker, nl_filter onto
+    resolver route'
+  projects:
+  - bimpossible
+  status: ready
+  owner_gate: false
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: L
+  risk: 2
+  evidence:
+  - kind: doc
+    ref: 'Anchor F:\Claude-Tools\reports\2026-09-01_ai-model-routing-plan.md (rev 3, fenced-decisions table: D-7, one ledger,
+      code registry, no Fable, no provider fallbacks on tool traffic, fail-closed on unusable BYOK). 1A (#537) and per-kind
+      defaults (#542) shipped 2026-09-02; nothing of 1B/1C/slice 2 built yet.'
+  - kind: commit
+    ref: '1B usage ledger COMMITTED 2026-09-02 as d08adc95 (feat(assistant): add model routing usage ledger (slice 1B)) on
+      feat/ai-model-routing-1b in worktree keen-volhard-8e55c1; local CI green per that session; push/PR awaiting owner. 1C,
+      slice 2 and nl_filter still unbuilt.'
+  verification:
+    level: verified
+    by: 'git log in F:/BIMpossible/.claude/worktrees/keen-volhard-8e55c1 2026-09-02: d08adc95 present, not on origin; no PR
+      opened.'
+    at: '2026-09-02'
+  live_check:
+  - gh pr list -R YourBIMpossible/BIMpossible --state all --search "model routing" --json number,title,state
+  - 'git -C F:/BIMpossible/.claude/worktrees/keen-volhard-8e55c1 log -1 --format=%h d08adc95  # expect d08adc95 until pushed/merged'
+  source: F:\Claude-Tools\reports\2026-09-01_ai-model-routing-plan.md; ASSISTANT-MODEL-ROUTING-1A closeout 2026-09-02. Phase
+    4 assistant work.
+  notes_url: null
+- id: CKA-DOC-MODEL-PR534
+  title: CKA project/private/multi-project/firm-library document model on AUTH-INH MERGED (#534); migration b7c8d9e0f1a2 applied
+    locally; project scopes dark while gate is not ENFORCE
+  projects:
+  - bimpossible
+  status: landed
+  owner_gate: false
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 3
+  evidence:
+  - kind: pr
+    ref: 'BIMpossible#534 MERGED 2026-09-02T02:58Z (squash 1f59bcf8): aec/firm_docs/policy.py + access, scope/classification
+      model, project reach only via aec.authz.serving.guard_read (Decision 0A, no membership table). Fail-closed: gate OFF/SHADOW
+      would-deny hides project-scoped docs (404).'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/534
+  - kind: db
+    ref: docker exec docker-backend-1 alembic current 2026-09-02 -> b7c8d9e0f1a2 (head); applied by backend-migrate at the
+      06:00Z deploy.
+  - kind: doc
+    ref: 'CKA Completion Program roadmap item 2 (Workspace 00_Strategy CKA Decision-0=0A plan ab49443). unblocks [] deliberately:
+      #540 UI already merged on top; CKA-DOC-ACTIONS-API is parked by owner ruling, not dependency-blocked.'
+  verification:
+    level: verified
+    by: 'Merged SHA 1f59bcf8 on main; migration head observed in the running container. Landed not live: project-scoped behaviour
+      is fail-closed until BIMPOSSIBLE_AUTHZ_ENFORCEMENT_MODE reaches ENFORCE (tracked by AUTHZ-SHADOW-WINDOW-VALIDITY); private/firm_library
+      paths unchanged.'
+    at: '2026-09-02'
+  live_check:
+  - 'docker exec docker-backend-1 alembic current  # expect b7c8d9e0f1a2'
+  - 'docker exec docker-backend-1 printenv BIMPOSSIBLE_AUTHZ_ENFORCEMENT_MODE  # project scopes live only at ENFORCE'
+  source: 'Delta scan 2026-09-02; PR #534 body; Phase 18 (Client Knowledge Assistant) row in BIMpossible_PHASE-STATUS.md --
+    re-score due.'
+  notes_url: null
+- id: HELP-PILLAR1-SURFACE-COVERAGE-PR535
+  title: 'Help Pillar 1: surfaces.json manifest + coverage guards + 48 articles MERGED (#535); backend serving it since the
+    06:00Z restart, not smoke-checked'
+  projects:
+  - bimpossible
+  status: landed
+  owner_gate: false
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: 'BIMpossible#535 MERGED 2026-09-02T03:03Z (squash bb83222a): backend/aec/help/surfaces.json (web + Revit ribbon surfaces,
+      gate + audience:internal), articles declare surfaces: frontmatter, test_help_surface_coverage.py definition-of-done
+      guard.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/535
+  verification:
+    level: verified
+    by: Merged SHA bb83222a on main; backend container recreated after the merge so the corpus is loaded. No runtime probe
+      of a help route this pass -- landed, not live.
+    at: '2026-09-02'
+  live_check:
+  - git -C F:/BIMpossible merge-base --is-ancestor bb83222a origin/main && echo LANDED
+  - ls F:/BIMpossible/backend/aec/help/surfaces.json && python -c "import json;print(len(json.load(open('F:/BIMpossible/backend/aec/help/surfaces.json'))))"
+  source: Delta scan 2026-09-02; CKA roadmap item 3. PHASE-STATUS Phase 4 row (Pillar 1 + Pillar 3 completion) still "pending"
+    -- re-score due.
+  notes_url: null
+- id: CI-RUNTIME-P4P5-XDIST-SHADOW
+  title: 'CI runtime reduction phases 4/5 MERGED (#533 #536 #538 #539 #541 #543): xdist shadow evidence window OPEN from c015e6cc;
+    promote only after >=20 runs AND >=14 days'
+  projects:
+  - bimpossible
+  status: landed
+  owner_gate: false
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: '#533 08aa845c vitest 2 workers + happy-dom off network; #536 00ca052f runtime-reduction closeout; #538 66344674
+      semgrep BIM-rules gate in Verify-Local-CI + no-f-string-SQL rule; #539 f87e2e0e backend parallel pilot + vitest DOM
+      trim; #541 5248ff86 xdist shadow instrumentation + 6 vitest files to node + fetch-guard pin. All MERGED 2026-09-02.'
+  - kind: pr
+    ref: 'BIMpossible#543 OPEN, ready (claude/ci-runtime-review-fixes): applies 15 review findings on #541 -- marker step
+      for shadow failure, samples gate >=20 runs AND >=14 days, report integrity. Evidence window resets at #543 merge; never
+      manufacture samples.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/543
+  - kind: run
+    ref: 'gh run list main 2026-09-02: security-scan success, nl-filter-eval success; serial Run pytest remains the required
+      gate, xdist shadow is continue-on-error.'
+  - kind: pr
+    ref: BIMpossible#543 MERGED 2026-09-02 (c015e6cc) -- window reset; samples accrue from here.
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/543
+  verification:
+    level: verified
+    by: 'Five merge SHAs on main (git log b7158ed8..90cea91f). Landed not live: the xdist promotion decision is time-gated
+      on an evidence window that has not started (#543 unmerged).'
+    at: '2026-09-02'
+  live_check:
+  - 'python F:/BIMpossible/scripts/ci/xdist_shadow_report.py --since 2026-09-02  # samples gate >=20 runs AND >=14 days'
+  source: Delta scan 2026-09-02; memory phase4-xdist-promotion-gate; docs/CI-GATES.md.
+  notes_url: null
+- id: CI-XDIST-EVIDENCE-PR543
+  title: 'BIMpossible#543 MERGED: xdist shadow observation evidence hardened (15 review findings on #541)'
+  projects:
+  - bimpossible
+  status: live
+  owner_gate: false
+  owner: null
+  unblocks:
+  - CI-RUNTIME-P4P5-XDIST-SHADOW
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: BIMpossible#543 OPEN, ready, branch claude/ci-runtime-review-fixes. Reporting-integrity only; required serial gate
+      byte-identical.
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/543
+  - kind: pr
+    ref: 'BIMpossible#543 MERGED 2026-09-02 (squash c015e6cc). Evidence window for xdist promotion starts here: >=20 runs
+      AND >=14 days.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/543
+  verification:
+    level: verified
+    by: 'git log main: c015e6cc on main; gh pr list open = 0.'
+    at: '2026-09-02'
+  live_check:
+  - gh pr view 543 -R YourBIMpossible/BIMpossible --json state,mergedAt
+  source: Delta scan 2026-09-02.
+  notes_url: null
+- id: OPS-AIDEV-ORPHAN-TRANSCRIPTS
+  title: Delete orphan CLI transcripts under ~/.claude/projects/F--AI-Dev-BIMpossible-Workspace once the frozen-clone burn-in
+    ends
+  projects:
+  - workspace
+  status: parked
+  owner_gate: true
+  unblocks: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: doc
+    ref: 'Session "Workspace root path mismatch" 2026-09-01: 122 transcripts there, none mapped to a live sidebar session;
+      only affected session (Documentation RAG setup) archived. Stale ~/.claude.json entries, allowlist patterns and two scheduled-task
+      cwds already repointed. Same pass as deleting the frozen clone F:\AI-Dev\BIMpossible_Workspace.'
+  verification:
+    level: verified
+    by: 'Live check 2026-09-01: all 14 live session records checked against first transcript cwd, none originate at F:\AI-Dev.'
+    at: '2026-09-01'
+  live_check:
+  - Test-Path 'C:\Users\Zeria\.claude\projects\F--AI-Dev-BIMpossible-Workspace'
+  source: memory session-project-root-baked-in-archive-not-repair
