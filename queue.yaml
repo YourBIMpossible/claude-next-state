@@ -3893,6 +3893,11 @@ items:
       bimpossible_test + redis, backend mounted :ro, db_safety.py not overridden; never docker-db-1): 11 pinned suites for
       the landed batch -> 104 passed, 29 skipped (all 29 = tests/test_model_resolve.py pure-lane stubs), 0 failed. test_qa_history_capture_purge.py
       included (grace window, complete-crawl gate, cross-project isolation).'
+  - kind: db
+    ref: '2026-09-02 read-only prod probe (resolve-now audit): model_index max(last_seen) = 2026-09-01 22:04Z (78 rows), so
+      the index crawl that hosts the purge hook has run after the 2026-09-01 deploy; exactly 1 tombstoned row (deleted_at
+      2026-08-30T23:59Z), inside the 30-day grace window, so the hook correctly purged nothing. Hook executes in production;
+      a real purge cannot be observed until a tombstone ages past the window.'
   verification:
     level: verified
     by: 'Promoted landed -> live 2026-09-02 overnight pass: hook deployed on the running crawl path (container identical to
