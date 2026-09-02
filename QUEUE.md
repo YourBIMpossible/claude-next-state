@@ -149,9 +149,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 [MODEL-INDEX-RECONCILE-NAMELESS-RVT-EDGE] model_index_sync reconcile: a discovered rvt with a valid id but momentarily missing/empty name is `continue`d before discovered_ids.add(item_id) (model_index_sync.py:93), so its live row is excluded from the discovered set and the tombstone sweep (model_index_sync.py:131-133) soft-deletes a still-present model until a later crawl returns the name and restores it
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-30 · BIMpossible#485 MERGED 2026-08-25 -> 1dba8553: 'fix(aec): support fa…
 
-[OPS-CACHE-RECONCILE-V1] Quarantine-first cache-reconciliation worker, report-only v1
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-16 · BIMpossible #364 MERGED (ed6ad70, 2026-08-16) -- cache reconciliatio…
-
 [OPS-DOGFOOD-EVIDENCE-HOOK] Gated Evidence Compiler dogfood hook landed -- preserves pre-#'docs/path-modernization-wave1' wiring, hardened
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-24 · BIMpossible#464 MERGED -> 008e76b (main). .claude/scripts/evidence-h…
 
@@ -557,6 +554,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 
 [NL-FILTER-EVAL-CRON-CONFIRM] Confirm the nl-filter-eval weekly schedule trigger actually fires (not just workflow_dispatch) -- CONFIRMED 2026-08-24
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-27 · BIMpossible#445 (dfe2a53) fixed DATABASE_URL provisioning; manual wo…
+
+[OPS-CACHE-RECONCILE-V1] Quarantine-first cache-reconciliation worker, report-only v1
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · BIMpossible #364 MERGED (ed6ad70, 2026-08-16) -- cache reconciliatio…
 
 [OPS-CF-RECORD-CONSOLIDATION] Option C session ended: both CF Access docs committed to main; Access-memory fold is the residual
        unblocks 0 · S · workspace · VERIFIED 2026-08-17 · Two untracked docs in the workspace main tree (2026-08-16): 00_Strat…

@@ -2956,7 +2956,7 @@ items:
   title: Quarantine-first cache-reconciliation worker, report-only v1
   projects:
   - bimpossible
-  status: landed
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -2966,12 +2966,21 @@ items:
   - kind: pr
     ref: 'BIMpossible #364 MERGED (ed6ad70, 2026-08-16) -- cache reconciliation worker, quarantine-first, REPORT-ONLY v1 (detects/reports
       divergence, mutates nothing).'
+  - kind: log
+    ref: '2026-09-02 read-only prod log probe: docker-backend-1 logged a full report-only worker run on 2026-09-01 20:44Z
+      -- ''cache-reconcile: scanning 11 cached project(s) (write=False)'' ... ''cache-reconcile report: 11 project(s) not
+      cleanly tracked'' (4 cache-reconcile lines in the window). cache_reconcile_state / cache_reconcile_log tables hold 0
+      rows, consistent with report-only v1 (mutates nothing). #364 MERGED 2026-08-16T17:06:24Z (ed6ad706) re-confirmed via
+      gh.'
   verification:
     level: verified
-    by: 'Squash SHA ed6ad70 confirmed in the delta. Report-only by design; ''live'' would require an observed worker run producing
-      a report. A future mutating v2 would be a new item. unblocks: [].'
-    at: '2026-08-16'
+    by: 'Promoted landed -> live 2026-09-02 overnight pass: the stored live condition (an observed worker run producing a
+      report) is met by the 2026-09-01 20:44Z run in production logs; worker code identical to origin/main in the container.
+      The report itself (11 projects not cleanly tracked) is an ops finding for the owner, not a defect in this item; a mutating
+      v2 stays a separate item.'
+    at: '2026-09-02'
   live_check:
+  - 'MSYS_NO_PATHCONV=1 docker logs docker-backend-1 --since 240h 2>&1 | grep -c ''cache-reconcile report''  # expect >= 1'
   - 'gh pr view 364 -R YourBIMpossible/BIMpossible --json state,mergedAt  # expect MERGED'
   source: merge-wave delta b5c6e64..833964d, ninth pass 2026-08-16
   notes_url: null
