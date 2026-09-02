@@ -5,9 +5,9 @@ This is a repo-local read model, not a definition of /next behavior. -->
 
 # /next — work-item queue
 
-Generated 2026-09-01 (synced). Anchor-first, leverage-ranked (per item-model.md). The single #1 move is chosen live by the skill from the anchor (stated focus, else roadmap order) and finalization leverage — not from dependency cone. This board is a status-grouped snapshot; within each section it orders by owner-gated+S, then effort, risk, id, with `cone` leading only on a deep graph (this store is flat today). Full algorithm: `~/.claude/skills/next/reference/item-model.md`.
+Generated 2026-09-02 (synced). Anchor-first, leverage-ranked (per item-model.md). The single #1 move is chosen live by the skill from the anchor (stated focus, else roadmap order) and finalization leverage — not from dependency cone. This board is a status-grouped snapshot; within each section it orders by owner-gated+S, then effort, risk, id, with `cone` leading only on a deep graph (this store is flat today). Full algorithm: `~/.claude/skills/next/reference/item-model.md`.
 
-Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `addins` = 2026-08-31 @ `d09204e` PR#115 · `workspace` = 2026-09-01 @ `9a8afb8` PR#112 · `evidence-compiler` = 2026-08-24 @ `0ef747e7533c7cf714888076f3df6f06dd028b84` PR#5 · `dashboard` = 2026-08-31 @ `387eefb` PR#10.
+Scope: `all`. Watermarks: `bimpossible` = 2026-09-02 @ `8cad22b5` PR#548 · `addins` = 2026-08-31 @ `d09204e` PR#115 · `workspace` = 2026-09-01 @ `9a8afb8` PR#112 · `evidence-compiler` = 2026-08-24 @ `0ef747e7533c7cf714888076f3df6f06dd028b84` PR#5 · `dashboard` = 2026-08-31 @ `387eefb` PR#10.
 (pc-monitor: no items yet — run `init` to derive.)
 
 > **Dormant project(s):** `families` — reassessment-bound. Items scoped to them are parked; their probes are suspended (non-executable metadata) and render **SUSPENDED**, never verified. `/next` will not run or propose a command against a dormant repo.
@@ -21,7 +21,7 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-31 · decision-log/2026-08-05__client-data-remediation.md -- Open Items ch…
 
 [WARM-ORIGIN-ALLABSENT-ANOMALY] Investigate per-model AEC-DM warm gap: six model versions show 100% origin_absent across all door rows
-       unblocks 0 · S · bimpossible · VERIFIED 2026-09-01 · 2026-08-24 probe: mvs 1329 (4/4), 1335 (1128/1128), 1336 (496/496), …
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · 2026-08-24 probe: mvs 1329 (4/4), 1335 (1128/1128), 1336 (496/496), …
 
 [ADDINS-DPAPI-PREWARM] First-use DPAPI pre-warm in the add-in verifier to remove the cold-start latency on the first attestation after Revit launch
        unblocks 0 · S · addins · CLAIMED 2026-08-23 · Observed during the 2026-08-19/21 pilots as a one-time delay; not a …
@@ -90,9 +90,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 
 [AUTHZ-ENFORCE-KEYSTONE-PR530] Merge BIMpossible#530: AUTH-INH ENFORCE keystone + Phase 15c T5 end-to-end test (CKA Phase 18 step 1)
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · BIMpossible#530 OPEN, READY, head 6d64390f, opened 2026-09-02T00:40Z…
-
-[DASH-DRIFT-GATE-UNTRACKED] Harden step-0b drift gate against untracked shadowing files (review finding #6)
-       unblocks 0 · S · dashboard · VERIFIED 2026-08-31 · Code review 2026-08-31 finding #6 (PLAUSIBLE): Refresh-Dashboard.ps1…
 
 [FEAT-REVIT-PAIRING-COPY] Revit pairing SHIPPED as Copy/paste-only -- protocol-launch button removed after reliability rework
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · BIMpossible #391 (Send-to-Revit protocol handoff + ?pair=revit deep …
@@ -259,6 +256,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 [EC-HYGIENE-1] Pull main checkout master to 345e1c7; delete merged lane branches (#1, #2 heads)
        unblocks 0 · S · evidence-compiler · VERIFIED 2026-08-24 · Live probe 2026-08-24: local master at 8bc555b, origin/master at 345…
 
+[OPS-PAV-GITLEAKS-PS51-EXIT] Root-cause Push-And-Verify.ps1 gitleaks "failed to run" sentinel artifact under Windows PowerShell 5.1
+       unblocks 0 · S · bimpossible · CLAIMED 2026-09-02 · memory gitleaks-gate-ps51-exit-bug: reproduced 2026-09-01 on #524 an…
+
 [OPS-ROLLBACK-RETENTION-20260817] Intentional retention: rollback-20260817 image tags until deploy soak completes 2026-08-18 evening
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-30 · deploy closed live at alembic c4e7a2b91d38, 2026-08-17 ~22:00 PDT
 
@@ -270,6 +270,8 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 
 [EC-DOGFOOD-2] Continue Evidence Compiler dogfooding toward the next North Star review window
        unblocks 1 · M · evidence-compiler · VERIFIED 2026-08-24 · F:/Evidence Compiler/DOGFOOD_LOG.md
+
+## In flight
 
 [ASSISTANT-MODEL-ROUTING-1B-2] AI model routing remaining lane: 1B usage ledger, 1C premium/Opus, slice 2 policy tables + picker, nl_filter onto resolver route
        unblocks 0 · L · bimpossible · VERIFIED 2026-09-02 · Anchor F:\Claude-Tools\reports\2026-09-01_ai-model-routing-plan.md (…
@@ -435,6 +437,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 [AUTHZ-AUDIT-POISON-BATCH-FLOOD] authz shadow-audit poison row (firm_id='', principal 'service', reason 'wizard.account_read') fails UUID cast and re-queues the whole ~500-row batch every ~2s, flooding backend logs
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · aec/authz/audit.py flush_pending -- batch insert fails with psycopg2…
 
+[DASH-DRIFT-GATE-UNTRACKED] Harden step-0b drift gate against untracked shadowing files (review finding #6)
+       unblocks 0 · S · dashboard · VERIFIED 2026-09-02 · Code review 2026-08-31 finding #6 (PLAUSIBLE): Refresh-Dashboard.ps1…
+
 [DATA-EMPTY-PERSIST-GUARD] Never persist empty categories/property/spec data version-immutably
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · BIMpossible #362 MERGED (0b314d8, 2026-08-16) -- never persist an em…
 
@@ -443,6 +448,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 
 [OPS-ADMIN-HOST-SPLIT] Option C admin-hostname split live: founder surface on admin.yourbimpossible.com only
        unblocks 1 · S · bimpossible · VERIFIED 2026-08-16 · BIMpossible #367 MERGED (736b2d6, 2026-08-16) -- Option C middleware…
+
+[OPS-AIMR1B-GITLEAKS-FIXTURE] Rename or .gitleaksignore the token-shaped fixture on feat/ai-model-routing-1b before that PR goes non-draft
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · Push-And-Verify.ps1 -GitleaksScope AllRefs 2026-09-02: POSSIBLE LEAK…
 
 [OPS-DEPLOY-STACK-REFRESH-20260817] Deploy tonight's merged main to the local stack -- images/DB stale vs main 130ba49
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-17 · BIMpossible#415 #416 #417 #418 #419 (+#273 #275) all MERGED; main ti…
