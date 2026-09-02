@@ -3870,7 +3870,7 @@ items:
     optional retention config UI'
   projects:
   - bimpossible
-  status: landed
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -3886,13 +3886,20 @@ items:
       gains FE-11 guards (drop+warn malformed rows, throw on malformed compare, errorDetailToMessage passthrough). Retention
       config UI deliberately NOT built (out of scope per completion-wave mandate). Prod smoke 2026-08-24: populated state
       + comparison-unavailable line render live.'
+  - kind: run
+    ref: '2026-09-02 read-only deployment probe: docker-frontend-1 (image created 2026-09-01T21:59:54Z) serves a built bundle
+      that contains the ModelHealthHistory ''History is temporarily unavailable'' state string from #478, so the polished
+      component is what production renders. BIMpossible #478 MERGED 2026-08-25T01:58:31Z (dec69859) confirmed via gh.'
   verification:
     level: verified
-    by: 'P11 QA-history completion wave 2026-08-24: PR #478 merged+deployed; vitest state-machine tests pin all states.'
-    at: '2026-08-24'
+    by: 'Promoted landed -> live 2026-09-02 overnight pass: #478 UI is in the running frontend image (bundle grep), the 2026-08-24
+      prod smoke already showed populated + comparison-unavailable states rendering, vitest state-machine tests pin the rest.
+      Prior 2026-08-24 verification retained.'
+    at: '2026-09-02'
   live_check:
-  - Check frontend/app/components/ModelHealthHistory.tsx for an explicit unavailable state; check modelHealthHistory.ts for
-    shape narrowing.
+  - 'MSYS_NO_PATHCONV=1 docker exec docker-frontend-1 sh -c "grep -rl ''History is temporarily unavailable'' /app/.next 2>/dev/null
+    | head -1"  # expect a chunk path'
+  - 'gh pr view 478 -R YourBIMpossible/BIMpossible --json state,mergedAt  # expect MERGED'
   source: 'P11 AC7 delivery pass 2026-08-24 (PR #476)'
   notes_url: null
 - id: ROUTER-SUPPORT-INDEX-KEY-MISMATCH

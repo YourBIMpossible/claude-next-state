@@ -188,9 +188,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 [DEP-JSYAML-282] Dependabot js-yaml 4.3.0 -> 4.3.1 merged (GHSA-5p4m-2wfm-xmqj, dev-only transitive)
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · BIMpossible #282 MERGED 2026-08-07T02:30:12Z, squash commit 5d0379d3…
 
-[P11-QA-HISTORY-UI-POLISH] QA history UI polish: muted history-unavailable state (today hides on fetch failure) + narrow compare payload typing; optional retention config UI
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-24 · typescript-api-reviewer follow-ups on PR #476: hide-on-failure degra…
-
 [P7-RELAY-SESSION-LIFECYCLE] Customer-session relay lifecycle: the Revit add-in owns/activates the localhost relay in the signed-in session -- available when Revit starts, gone cleanly when Revit closes; no Windows service, Scheduled Task, NSSM, machine-wide secret store, or developer-only deploy path
        unblocks 0 · M · bimpossible+addins · VERIFIED 2026-08-30 · Reclassified from P7-RELAY-SERVICE-PERSIST by owner instruction 2026…
 
@@ -615,6 +612,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 
 [DASH-RELEASE-2026-08-31] Dashboard release wave: completion model, UX rework, refresh fixes, review fixes #1-#5
        unblocks 0 · S · dashboard · VERIFIED 2026-08-31 · ai-dev-dashboard #5 (completion model, 753882b), #6 (deploy-endpoint…
+
+[P11-QA-HISTORY-UI-POLISH] QA history UI polish: muted history-unavailable state (today hides on fetch failure) + narrow compare payload typing; optional retention config UI
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · typescript-api-reviewer follow-ups on PR #476: hide-on-failure degra…
 
 [AUDIT-2026-08-31-REMEDIATION] 2026-08-31 weekly audit: unguarded Alembic migrations (High) + 2 code Mediums -- FIXED, merged, live
        unblocks 0 · M · bimpossible+workspace · VERIFIED 2026-09-01 · 02_Reference/Audit and Scan Info/weekly-full-audit_2026-08-31.md (re…
