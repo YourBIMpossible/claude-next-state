@@ -3828,7 +3828,7 @@ items:
   title: Integrate qa_analysis_runs orphan purge into cache_reconcile (models deleted from APS keep history rows until retention)
   projects:
   - bimpossible
-  status: landed
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -3843,14 +3843,26 @@ items:
       integration point). Grace window BIMPOSSIBLE_QA_HISTORY_TOMBSTONE_PURGE_DAYS (default 30); only after a COMPLETE all-rvts
       crawl; (project_id, model_urn)-scoped; restored lineages kept; idempotent; best-effort. Pinned in test_qa_history_capture_purge.py
       incl. cross-project isolation with the same URN.'
+  - kind: run
+    ref: '2026-09-02 deployment identity (read-only): docker-backend-1 (image sha256:db00aeef, StartedAt 2026-09-01T22:57:14Z)
+      runs code byte-identical (CRLF-normalized) to origin/main 5248ff86 for every .py under aec/, revit_link/, db/ plus aps/router.py,
+      search/router.py, main.py (214 files). purge_tombstoned_history is hooked at aec/model_index_sync.py:154-155 (after
+      the tombstone reconcile) on origin/main and in the container. 2026-09-02 isolated throwaway-DB lane (per-run postgres:16-alpine
+      bimpossible_test + redis, backend mounted :ro, db_safety.py not overridden; never docker-db-1): 11 pinned suites for
+      the landed batch -> 104 passed, 29 skipped (all 29 = tests/test_model_resolve.py pure-lane stubs), 0 failed. test_qa_history_capture_purge.py
+      included (grace window, complete-crawl gate, cross-project isolation).'
   verification:
     level: verified
-    by: 'P11 QA-history completion wave 2026-08-24: PR #478 merged+deployed; purge semantics proven by automated tests (no
-      destructive prod exercise).'
-    at: '2026-08-24'
+    by: 'Promoted landed -> live 2026-09-02 overnight pass: hook deployed on the running crawl path (container identical to
+      origin/main) and semantics pinned by the green suite on an isolated throwaway DB. No production purge has been observed
+      (no tombstoned model has aged past the 30-day grace window yet) -- enabled, not yet exercised; a destructive prod exercise
+      is out of scope by design. Prior 2026-08-24 verification retained: #478 merged dec69859.'
+    at: '2026-09-02'
   live_check:
-  - 'Grep backend/aec/model_index_sync.py for purge_tombstoned_history; presence means this landed (original live_check said
-    cache_reconcile -- superseded, the hook lives at the #474 tombstone seam).'
+  - 'git -C F:/BIMpossible grep -n ''purge_tombstoned_history'' origin/main -- backend/aec/model_index_sync.py  # expect a
+    hit'
+  - 'MSYS_NO_PATHCONV=1 diff --strip-trailing-cr <(docker exec docker-backend-1 cat //app/aec/model_index_sync.py) <(git -C
+    F:/BIMpossible show origin/main:backend/aec/model_index_sync.py)  # expect no output'
   source: 'P11 AC7 delivery pass 2026-08-24 (PR #476)'
   notes_url: null
 - id: P11-QA-HISTORY-UI-POLISH

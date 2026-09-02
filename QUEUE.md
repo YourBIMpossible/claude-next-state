@@ -167,9 +167,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 [OPS-REFRESH-FRONTEND-NODEPS] Fixed: Refresh-Frontend.ps1 was silently shipping backend code + migrations on a frontend-only deploy
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · BIMpossible #289 (5d8d559, merged 2026-08-07T05:47:09Z) -- docker co…
 
-[P11-QA-HISTORY-RECONCILE-PURGE] Integrate qa_analysis_runs orphan purge into cache_reconcile (models deleted from APS keep history rows until retention)
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-24 · PR #476 non-goals: retention prunes per-model depth only; nothing re…
-
 [P8-HUB-ACTIVATION-RUNBOOK] Write Phase 8 hub-activation runbook per OpenQuestions #5
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-18 · WRITTEN 2026-08-18: BIMpossible_Workspace/00_Strategy/2026-08-18__Ph…
 
@@ -579,6 +576,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 
 [P11-QA-HISTORY-CAPTURE-PATHS] Snapshot QA history from digest/assistant/coordination-report paths (today only warm model-health serves capture)
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · PR #476 non-goals: coordination-report and digest/assistant paths ru…
+
+[P11-QA-HISTORY-RECONCILE-PURGE] Integrate qa_analysis_runs orphan purge into cache_reconcile (models deleted from APS keep history rows until retention)
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · PR #476 non-goals: retention prunes per-model depth only; nothing re…
 
 [P13-T6-REASON-TAG] Add reason/criteria tag to approval flow (T6)
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · BIMpossible_PHASE-STATUS.md, Phase 13 -- reason/criteria tag T6 RATI…
