@@ -6437,12 +6437,11 @@ items:
     Assistant) row in BIMpossible_PHASE-STATUS.md.
   notes_url: null
 - id: CKA-DOCS-UI-PR540
-  title: 'Owner review of draft BIMpossible#540 (CKA Documents placement + management UI): upload defaults, reclassification,
-    inaccessible-linked-project disclosure; then authorize remote CI / merge'
+  title: 'CKA Documents placement + management UI (BIMpossible#540, follow-up #545): merged and deployed on the dev stack'
   projects:
   - bimpossible
-  status: blocked_owner
-  owner_gate: true
+  status: live
+  owner_gate: false
   owner: null
   unblocks:
   - CKA-DOC-ACTIONS-API
@@ -6468,12 +6467,18 @@ items:
       the 06:22:59Z process.'
   verification:
     level: verified
-    by: Push-And-Verify exit 0; Verify-Local-CI -BaseRef origin/main green (backend 5457+3621+26, vitest 2036/2036, semgrep
-      OK).
+    by: 'PR #540 and follow-up #545 merged; #545 rebuilt and deployed on the dev stack. Signed-in /documents hard-reload verified
+      the current frontend bundle, upload/search/indexed-document/delete affordance, and intended absent reclassify control
+      with no console errors. The denied-access 403/404 branch remains covered by Vitest but was not live-exercised because
+      this dev stack has no inaccessible-document fixture.'
     at: '2026-09-02'
   live_check:
-  - gh pr view 540 -R YourBIMpossible/BIMpossible --json isDraft,state,mergeable
-  source: 2026-09-02 owner instruction — keep draft, no changes, review before remote CI/merge.
+  - 'gh pr view 540 -R YourBIMpossible/BIMpossible --json state,mergedAt  # expect MERGED'
+  - 'gh pr view 545 -R YourBIMpossible/BIMpossible --json state,mergedAt  # expect MERGED'
+  - 'curl -s https://app.yourbimpossible.com/documents | grep -o ''B49anxIYYjIdrQsHu0V3u''  # served frontend build id from
+    the 2026-09-02 rebuild (changes on the next Refresh-Frontend)'
+  source: '2026-09-02 owner instruction: keep draft, no changes, review before remote CI/merge -- resolved by the owner''s
+    review and merge of #540 (1d964788) and #545 (d9e1d9de) on 2026-09-02.'
   notes_url: null
 - id: CKA-DOC-ACTIONS-API
   title: 'Backend/API slice on /firm-docs: permitted download, replace/version, archive, restore, re-placement (scope/project
