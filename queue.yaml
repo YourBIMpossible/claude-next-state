@@ -4599,7 +4599,7 @@ items:
   projects:
   - addins
   - bimpossible
-  status: landed
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -4613,15 +4613,21 @@ items:
     ref: 'AddIns #81 (e98f90e, MERGED 2026-08-21T23:14:23Z) -- PipeServer.cs now catches NotSupportedException separately
       from generic Exception and returns a distinct {Code: NOT_SUPPORTED} wire error instead of the opaque EXECUTION_ERROR/500
       that hid a deliberate DispatchCommand refusal; pending.Abandon() called first per the RE-1 contract.'
+  - kind: run
+    ref: '2026-09-02 read-only deployment probe: AddIns e98f90e (#81, MERGED 2026-08-21T23:14:23Z) is an ancestor of the installed
+      pane build 9f6f3c4b (AddIns #117, deployed to Revit 2024-2027 on 2026-09-01), so the NotSupportedException -> Code=NOT_SUPPORTED
+      catch in PipeServer.cs is in the running DLL (NOT_SUPPORTED appears x2 in PipeServer.cs at origin/main). Backend half:
+      the typed NOT_SUPPORTED -> 501 mapping (#440) is byte-identical between docker-backend-1 and origin/main 5248ff86.'
   verification:
     level: verified
-    by: 'BUILT AND MERGED 2026-08-21: AddIns#81 (e98f90e) adds a catch (NotSupportedException) block in PipeServer.cs ahead
-      of the generic catch, mapping refusals to Code=NOT_SUPPORTED so the backend''s typed NOT_SUPPORTED->501 mapping (BIMpossible#440)
-      now has a real add-in-side source instead of an opaque 500. Diff verified directly (git show e98f90e): 13 lines added,
-      PipeServer.cs only.'
-    at: '2026-08-23'
+    by: 'Promoted landed -> live 2026-09-02 overnight pass: both halves deployed -- add-in catch block in the installed pane
+      DLL, backend 501 mapping in the running container. No production NOT_SUPPORTED refusal has been observed in the retained
+      log window (none expected; it only fires on a deliberate DispatchCommand refusal). Prior 2026-08-23 diff verification
+      of e98f90e retained.'
+    at: '2026-09-02'
   live_check:
-  - grep NOT_SUPPORTED in BIMpossible-AddIns BIMpossible.RevitLink/**/PipeServer.cs — absent = still open.
+  - 'git -C F:/BIMpossible-AddIns merge-base --is-ancestor e98f90e 9f6f3c4b && echo in-installed-build  # expect in-installed-build'
+  - 'git -C F:/BIMpossible-AddIns grep -c NOT_SUPPORTED origin/main -- ''*PipeServer.cs''  # expect >= 1'
   source: P7 close-out 2026-08-21
   notes_url: null
 - id: AUTHZ-AUDIT-FIRMID-EMPTY-ROOTCAUSE
