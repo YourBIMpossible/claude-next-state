@@ -248,9 +248,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 [WARM-ORIGIN-DOORGAP] Curtain-panel/unhosted doors have no origin: label them 'no location (curtain panel)' instead of deriving one
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-24 · 01_BuildLog/2026-08-04__doors-join-increment1_RESULTS.md, 'Follow-up…
 
-[P3-6-SPATIAL] Build Phase 3.6 Spatial Relationship Engine v1 (architecturally unblocked)
-       unblocks 0 · M · bimpossible · VERIFIED 2026-08-18 · BIMpossible_PHASE-STATUS.md Phase 3 sub-phase notes, Phase 3.6 row
-
 [R5-AECDM-PUSHDOWN] R5 AECDM query-pushdown lane MERGED -- flag-gated, read-only (PR #363)
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-17 · BIMpossible #363 MERGED (d56bd14, 2026-08-16T19:47:59Z, branch feat/…
 
@@ -642,6 +639,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 
 [P3-10B-DOORS] Doors room-pair slice LIVE on main -- Increment 1 merged (PR#253); direction is Increment 2
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-06 · BIMpossible PR#253 'feat(3.10b): doors resolve to the room PAIR they…
+
+[P3-6-SPATIAL] Build Phase 3.6 Spatial Relationship Engine v1 (architecturally unblocked)
+       unblocks 0 · M · bimpossible · VERIFIED 2026-09-02 · BIMpossible_PHASE-STATUS.md Phase 3 sub-phase notes, Phase 3.6 row
 
 [SLOP-AUDIT-SKILL] Repo-agnostic on-demand slop-audit skill: silent-catch census, counter-integrity, tested-but-dead
        unblocks 0 · M · claude-profile+workspace · VERIFIED 2026-08-08 · Anti-slop coverage plan sec.2: PC-Monitor, Finance-Dashboard, Presea…

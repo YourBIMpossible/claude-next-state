@@ -965,7 +965,7 @@ items:
   title: Build Phase 3.6 Spatial Relationship Engine v1 (architecturally unblocked)
   projects:
   - bimpossible
-  status: landed
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -979,15 +979,39 @@ items:
   - kind: commit
     ref: ef94f32 -- backend/aec/spatial_relationships.py (pure predicate engine, 370 lines) + cross_model_join.py 3.10a resolver
       migrated onto classify_point_among_regions; tests test_spatial_relationships.py, test_cross_model_join.py
+  - kind: run
+    ref: '2026-09-02T04:45Z verification (read-only, no prod writes). PR #414 squash ef94f32 (merged 2026-08-18T03:27:59Z)
+      is an ancestor of origin/main 5248ff86. Running local dev stack docker-backend-1 (image sha256:db00aeef, StartedAt 2026-09-01T22:57:14Z,
+      after merge): /app/aec/spatial_relationships.py, /app/aec/cross_model_join.py, tests/test_spatial_relationships.py,
+      tests/test_cross_model_join.py all byte-identical to origin/main under CRLF normalization. Delegation proven inside
+      the running container (docker exec, read-only): inspect.getsource(cross_model_join._resolve_one) contains classify_point_among_regions(;
+      engine loaded from /app/aec/spatial_relationships.py. Request path is UNGATED: aec/router.py:740 _phase3_10_active =
+      category in _PHASE3_10_IN_SCOPE_CATEGORIES (unconditional since 2026-08-04 owner decision, router.py:478) -> run_linked_room_join
+      -> assemble_and_resolve -> _resolve_one -> engine; no env flag. Tests: pure lane in the deployed image (docker run --rm
+      docker-backend:latest, backend :ro, no DB): test_spatial_relationships.py + test_cross_model_join.py 52 passed; companions
+      test_cross_model_join_doors.py + test_merge_linked_room_columns.py 28 passed; same 52 passed locally from clean origin/main
+      checkout. DB-aware orchestration test_cross_model_join_assemble.py 12 passed on a per-run throwaway postgres:16-alpine
+      bimpossible_test (never docker-db-1; db_safety.py not overridden); without a DB it fails 11/12 -- environment, not engine.
+      Prod logs (current container window only, from ~20:44Z 2026-09-01): 0 ''room join:'' lines and 0 /api/*elements requests
+      -- stack idle, the request path was not reached; prewarm activity seen is the origin-backfill/finish-schedule side,
+      not the resolver. Ledger note: PHASE-STATUS Phase 3.6 row still says ''not yet functionally live (2026-07-14)'' -- predates
+      the 2026-08-04 unconditional switch and the 08-17 merge; owner-maintained, not edited here. Deployed, ungated and correct;
+      not yet exercised by real /elements traffic in the observed window.'
   verification:
     level: verified
-    by: 'PR #414 squash-merged to origin/main as ef94f32 (gh: state MERGED, mergedAt 2026-08-18T03:27:59Z; git branch -r --contains
-      ef94f32 -> origin/main). Engine landed AND the 3.10a MEP->room resolver now delegates to it in production code. LANDED
-      not LIVE: merged code, no runtime/smoke evidence; the doors 3.10b resolver deliberately NOT migrated (boundary-native
-      scoring preserved). Design note: docs/specs/active/phase-3-6-spatial-relationship-engine.md.'
-    at: 2026-08-18
+    by: 'Code-identity diff (docker-backend-1 vs origin/main, CRLF-normalized, 4 files) + container StartedAt 2026-09-01T22:57:14Z
+      after PR #414 merge + in-container delegation probe + pure suites 52/52 and 28/28 in the deployed image + DB-aware assemble
+      suite 12/12 on an isolated throwaway DB (2026-09-02). Request path ungated (router.py:740). Deployed and correct; not
+      yet observed serving real /elements traffic (0 requests in the current log window).'
+    at: '2026-09-02'
   live_check:
-  - git -C F:/AI-Dev/BIMpossible branch -r --contains ef94f32 | grep origin/main
+  - "MSYS_NO_PATHCONV=1 docker exec docker-backend-1 cat //app/aec/spatial_relationships.py | tr -d '\r' > $TMP/c.txt; git\
+    \ -C F:/BIMpossible show origin/main:backend/aec/spatial_relationships.py | tr -d '\r' > $TMP/m.txt; diff $TMP/c.txt $TMP/m.txt\
+    \  # expect no output (repeat for aec/cross_model_join.py)"
+  - 'docker inspect -f ''{{.State.StartedAt}}'' docker-backend-1  # must be later than 2026-08-18T03:27:59Z (PR #414 merge)'
+  - 'MSYS_NO_PATHCONV=1 docker run --rm -v F:/BIMpossible/backend:/app:ro -w /app --entrypoint sh docker-backend:latest -c
+    ''python -m pytest tests/test_spatial_relationships.py tests/test_cross_model_join.py -q''  # expect 52 passed; test_cross_model_join_assemble.py
+    needs the throwaway-DB lane, never docker-db-1'
   source: BIMpossible_PHASE-STATUS.md Phase 3 sub-phase notes; BIMpossible_ProductionRoadmap_2026-07-26.md §3
   notes_url: null
 - id: OPS-REDIS-P5
