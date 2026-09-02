@@ -6454,6 +6454,18 @@ items:
   - kind: pr
     ref: https://github.com/YourBIMpossible/BIMpossible/pull/540 (draft, 4 commits on feat/cka-documents-placement-ui; local
       gate GREEN 2026-09-02, remote CI not authorized)
+  - kind: pr
+    ref: 'BIMpossible #540 MERGED 2026-09-02 as 1d964788 (CKA Documents placement + management UI); post-merge review follow-up
+      #545 MERGED as d9e1d9de (isDenied reuses DocApiError.denied; canShowReclassify(doc) drops the unused viewer param; vitest
+      39/39; no behavior change).'
+  - kind: run
+    ref: '2026-09-02 dev-stack deploy + UI verification of #545: frontend rebuilt from main d9e1d9de via Refresh-Frontend.ps1
+      (exit 0, image 2026-09-02T06:24:21Z), container healthy, root 200; signed-in app.yourbimpossible.com /documents after
+      hard reload served build id B49anxIYYjIdrQsHu0V3u matching the container; upload form, Firm Library document electrical-standard-TEST.md
+      (Indexed), search and delete affordance rendered; no console errors; reclassify control correctly absent. Denied-access
+      403/404 path NOT live-exercised (single-user dev stack has no cross-access fixture) -- existing vitest coverage remains
+      the proof for that branch. Backend not restarted for #545/#543 (no runtime source change); #544 fix stays loaded from
+      the 06:22:59Z process.'
   verification:
     level: verified
     by: Push-And-Verify exit 0; Verify-Local-CI -BaseRef origin/main green (backend 5457+3621+26, vitest 2036/2036, semgrep
