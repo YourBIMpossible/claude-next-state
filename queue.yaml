@@ -1532,7 +1532,7 @@ items:
   title: 'FIXED+MERGED: assistant _visible_saved_view_clause personal branch now pins firm_id (PR #416)'
   projects:
   - bimpossible
-  status: landed
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -1551,17 +1551,33 @@ items:
       scope on via _visible_saved_view_clause''. That statement is only true of the FIRM branch of this function; the PERSONAL
       branch it sits beside has the identical unscoped-personal-query gap being tracked across this whole investigation (SEC-GROUPS-PERSONAL-LISTING,
       SEC-VIEWS-PERSONAL-LISTING, SEC-ASSIST-PERSONAL-VIEWCOUNT).'
+  - kind: run
+    ref: '2026-09-02T03:23Z verification (read-only). PR #416 (squash 92098505, merged 2026-08-18T03:25:59Z) is an ancestor
+      of origin/main bb83222a. Local dev stack docker-backend-1 (image docker-backend:latest sha256:db00aeef, StartedAt 2026-09-01T22:57:14Z,
+      after merge): /app/aec/assistant_tools.py identical to origin/main under CRLF normalization; test file present. Clause
+      (assistant_tools.py:401-423) pins scope+firm_id+owner_user_id on the personal branch, returns None when no firm; applied
+      in the SQL WHERE before .all()/.first() in tool_list_saved_views/tool_describe_saved_view; no count/pagination surface.
+      firm_id/owner_user_id come from get_firm_id()/get_user_uuid(get_autodesk_user_id()) at all three active ToolContext
+      sites (/chat, /resume, /live-read resume); Slack/Teams sites flag-off (BIMPOSSIBLE_SLACK_ENABLED=0, BIMPOSSIBLE_TEAMS_ENABLED=0).
+      Throwaway-DB run (per-run postgres:16-alpine bimpossible_test + redis, backend mounted :ro, db_safety.py not overridden):
+      pytest tests/test_assistant_saved_view_scope.py -> 6 passed. Covers firm-A own personal + firm view visible; same-owner
+      firm-B personal view not listed and not describable ("View not found.", same as a missing id); user-without-firm and
+      unidentified caller see []. docker logs docker-backend-1 --since merge: 0 list_saved_views/describe_saved_view hits
+      -- deployed and correct, not yet prod-exercised.'
   verification:
     level: verified
-    by: 'FIXED + MERGED via PR #416 (claude/assist-tools-personal-view-tenancy, squash-merged 2026-08-18T03:25Z). _visible_saved_view_clause''s
-      personal branch now requires SavedView.firm_id == ctx.firm_id alongside owner_user_id, and a caller with a user but
-      no firm sees no personal views. Reproduced red-first with three new tests in backend/tests/test_assistant_saved_view_scope.py
-      (foreign-firm personal views hidden from list; describe of own-but-other-firm view is not-found; no-firm caller sees
-      none), then green; full backend suite green in local CI and GitHub required checks. Closes the last open member of the
-      unscoped-personal-query family (SEC-GROUPS-PERSONAL-LISTING / SEC-VIEWS-PERSONAL-LISTING / SEC-ASSIST-PERSONAL-VIEWCOUNT).'
-    at: 2026-08-17
+    by: 'Code-identity diff (docker-backend-1 vs origin/main, CRLF-normalized) + container StartedAt 2026-09-01T22:57:14Z
+      after PR #416 merge + isolated throwaway-DB pinned suite test_assistant_saved_view_scope.py 6/6 (2026-09-02). Firm-A
+      positive; firm-B non-listable/non-describable; no-firm and unidentified fail closed; firm_id/owner_user_id from authenticated
+      membership, not caller input. Deployed and correct; not yet prod-exercised (0 saved-view tool hits in prod logs since
+      merge).'
+    at: '2026-09-02'
   live_check:
-  - git log origin/main --oneline | grep -i 'assist.*saved.*view\|visible-saved-view'
+  - 'MSYS_NO_PATHCONV=1 diff --strip-trailing-cr <(docker exec docker-backend-1 cat //app/aec/assistant_tools.py) <(git -C
+    F:/BIMpossible show origin/main:backend/aec/assistant_tools.py)  # expect no output'
+  - 'docker inspect -f ''{{.State.StartedAt}}'' docker-backend-1  # must be later than 2026-08-18T03:25:59Z (PR #416 merge)'
+  - 'isolated throwaway-DB lane (per-run postgres:16-alpine bimpossible_test, backend mounted :ro): python -m pytest tests/test_assistant_saved_view_scope.py
+    -q  # expect 6 passed; never run against docker-db-1'
   source: Phase 3 equivalent-path review of SEC-GROUPS-PERSONAL-LISTING, 2026-08-07
   notes_url: null
 - id: DOC-ALEMBIC-REFS-274
@@ -6206,122 +6222,4 @@ items:
   - cd F:/BIMpossible && git merge-base --is-ancestor b7158ed8 origin/main && echo LANDED
   source: Delta scan 2026-09-01; PR body + Workspace 00_Strategy CKA Decision-0=0A plan (ab49443). Phase 18 (Client Knowledge
     Assistant) row in BIMpossible_PHASE-STATUS.md.
-  notes_url: null
-- id: CKA-DOCS-UI-PR540
-  title: 'Owner review of draft BIMpossible#540 (CKA Documents placement + management UI): upload defaults, reclassification,
-    inaccessible-linked-project disclosure; then authorize remote CI / merge'
-  projects:
-  - bimpossible
-  status: blocked_owner
-  owner_gate: true
-  owner: null
-  unblocks:
-  - CKA-DOC-ACTIONS-API
-  - CKA-DOCS-CAPABILITY-READ-MODEL
-  blocked_by: []
-  effort: S
-  risk: 1
-  evidence:
-  - kind: pr
-    ref: https://github.com/YourBIMpossible/BIMpossible/pull/540 (draft, 4 commits on feat/cka-documents-placement-ui; local
-      gate GREEN 2026-09-02, remote CI not authorized)
-  verification:
-    level: verified
-    by: Push-And-Verify exit 0; Verify-Local-CI -BaseRef origin/main green (backend 5457+3621+26, vitest 2036/2036, semgrep OK).
-    at: '2026-09-02'
-  live_check:
-  - gh pr view 540 -R YourBIMpossible/BIMpossible --json isDraft,state,mergeable
-  source: 2026-09-02 owner instruction — keep draft, no changes, review before remote CI/merge.
-  notes_url: null
-- id: CKA-DOC-ACTIONS-API
-  title: 'Backend/API slice on /firm-docs: permitted download, replace/version, archive, restore, re-placement (scope/project
-    change). UI in #540 offers none of these because no contract exists.'
-  projects:
-  - bimpossible
-  status: parked
-  owner_gate: true
-  owner: null
-  unblocks: []
-  blocked_by:
-  - CKA-DOCS-UI-PR540
-  effort: L
-  risk: 3
-  evidence:
-  - kind: pr
-    ref: '#540 Known limitations section'
-  verification:
-    level: claimed
-    by: Recorded as follow-up candidate only; not scoped, not authorized.
-    at: '2026-09-02'
-  live_check: []
-  source: 2026-09-02 owner instruction (follow-up candidate list).
-  notes_url: null
-- id: CKA-DOCS-CAPABILITY-READ-MODEL
-  title: 'Capability-aware UI read model: expose project CONTROL, library_manager, Restricted and Financial eligibility so
-    document controls/classification options render only where the server would permit them'
-  projects:
-  - bimpossible
-  status: parked
-  owner_gate: true
-  owner: null
-  unblocks: []
-  blocked_by:
-  - CKA-DOCS-UI-PR540
-  effort: M
-  risk: 2
-  evidence:
-  - kind: pr
-    ref: '#540 — client can only see is_owner + firm role; CONTROL/library_manager holders see no extra controls; form offers
-      all four classifications and relies on server refusal'
-  verification:
-    level: claimed
-    by: Recorded as follow-up candidate only.
-    at: '2026-09-02'
-  live_check: []
-  source: 2026-09-02 owner instruction (follow-up candidate list).
-  notes_url: null
-- id: CKA-DOCS-DEFAULT-SCOPE-DECISION
-  title: 'Owner decision: default document scope on upload (#540 defaults to Firm Library; alternatives Private or Project)'
-  projects:
-  - bimpossible
-  status: blocked_owner
-  owner_gate: true
-  owner: null
-  unblocks: []
-  blocked_by: []
-  effort: S
-  risk: 1
-  evidence:
-  - kind: pr
-    ref: '#540 UploadForm default scope firm_library'
-  verification:
-    level: claimed
-    by: Decision not yet taken.
-    at: '2026-09-02'
-  live_check: []
-  source: 2026-09-02 owner instruction (follow-up candidate list).
-  notes_url: null
-- id: GITLEAKS-FIXTURE-MODEL-ROUTING-1A
-  title: 'Narrow gitleaks fixture/allowlist correction for synthetic key in backend/tests/test_assistant_model_routing.py:463
-    on feat/ai-model-routing-slice1a — owned by that branch''s session (blocked Push-And-Verify from other branches 2026-09-02)'
-  projects:
-  - bimpossible
-  status: ready
-  owner_gate: false
-  owner: null
-  unblocks: []
-  blocked_by: []
-  effort: S
-  risk: 1
-  evidence:
-  - kind: log
-    ref: 'Push-And-Verify on feat/cka-documents-placement-ui: gitleaks FAIL rule=generic-api-key, value sk-firm-INJECTED-9f8e7d
-      (synthetic); overridden with -Force'
-  verification:
-    level: verified
-    by: Observed 2026-09-02; file absent from main and other branches.
-    at: '2026-09-02'
-  live_check:
-  - 'git -C F:/BIMpossible grep -n "sk-firm-INJECTED" feat/ai-model-routing-slice1a -- backend/tests/test_assistant_model_routing.py'
-  source: 2026-09-02 owner instruction (follow-up candidate list); see ASSISTANT-MODEL-ROUTING-1A.
   notes_url: null
