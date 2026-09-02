@@ -1003,11 +1003,11 @@ items:
       after PR #414 merge + in-container delegation probe + pure suites 52/52 and 28/28 in the deployed image + DB-aware assemble
       suite 12/12 on an isolated throwaway DB (2026-09-02). Request path ungated (router.py:740). Deployed and correct; not
       yet observed serving real /elements traffic (0 requests in the current log window).'
-    at: '2026-09-02'
+    at: 2026-09-02
   live_check:
-  - "MSYS_NO_PATHCONV=1 docker exec docker-backend-1 cat //app/aec/spatial_relationships.py | tr -d '\r' > $TMP/c.txt; git\
-    \ -C F:/BIMpossible show origin/main:backend/aec/spatial_relationships.py | tr -d '\r' > $TMP/m.txt; diff $TMP/c.txt $TMP/m.txt\
-    \  # expect no output (repeat for aec/cross_model_join.py)"
+  - "TMP=$(mktemp -d); MSYS_NO_PATHCONV=1 docker exec docker-backend-1 cat //app/aec/spatial_relationships.py | tr -d '\r\
+    ' > \"$TMP/c.txt\"; git -C F:/BIMpossible show origin/main:backend/aec/spatial_relationships.py | tr -d '\r' > \"$TMP/m.txt\"\
+    ; diff \"$TMP/c.txt\" \"$TMP/m.txt\"; rm -rf \"$TMP\"  # expect no output (repeat for aec/cross_model_join.py)"
   - 'docker inspect -f ''{{.State.StartedAt}}'' docker-backend-1  # must be later than 2026-08-18T03:27:59Z (PR #414 merge)'
   - 'MSYS_NO_PATHCONV=1 docker run --rm -v F:/BIMpossible/backend:/app:ro -w /app --entrypoint sh docker-backend:latest -c
     ''python -m pytest tests/test_spatial_relationships.py tests/test_cross_model_join.py -q''  # expect 52 passed; test_cross_model_join_assemble.py
