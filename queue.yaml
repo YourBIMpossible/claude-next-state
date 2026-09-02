@@ -2,8 +2,8 @@ schema_version: 1
 reconciled:
   bimpossible:
     at: '2026-09-02'
-    commit: 8cad22b5
-    pr: 548
+    commit: 129a345b
+    pr: 555
   addins:
     at: '2026-08-31'
     commit: d09204e
@@ -4299,15 +4299,16 @@ items:
   - kind: pr
     ref: 'PR #548 MERGED (squash) 2026-09-02T15:54:08Z -> 8cad22b5 on main. Deployed same day 16:08Z: docker compose run --rm backend-migrate applied 3aa734cda334 (new usage_events columns + model_denial_events table), docker compose restart backend healthy; schema verified directly via psql, backend logs clean. Worktree .claude/worktrees/ai-model-routing-1b and local branch feat/ai-model-routing-1b removed post-merge (headRefOid matched merged tip, safe delete). 1C, slice 2, nl_filter still unbuilt.'
     url: https://github.com/YourBIMpossible/BIMpossible/pull/548
-  - kind: commit
-    ref: '1C BUILT 2026-09-02 on feat/ai-model-routing-1c (worktree .claude/worktrees/ai-model-routing-1c-0c7ded): claude-opus-5 registered BYOK-only/chat-only (platform 403 model_not_allowed, never downgraded), refusal category surfaced as final.refusal {category,message} (ledger+user, never logs), one stateless fallback hop (title/slack_reply/teams_reply; Sonnet 5 -> Haiku 4.5) on refusal or HTTP 404/529 disclosed via fallback_from_model_id/fallback_reason on the 1B row; no migration, no .env change. Local CI + backend-endpoint-reviewer PASS; draft PR awaiting owner approval. Slice 2 / slice 3 / nl_filter still unbuilt.'
+  - kind: pr
+    ref: '1C MERGED 2026-09-02T18:29Z: PR #550 squash -> e3ce9120 on main (feat(assistant): model routing slice 1C — Opus 5, refusal category, stateless fallback). claude-opus-5 BYOK-only chat + chat_resume (platform 403 model_not_allowed, never downgraded); refusal category on final SSE event, refusal never hops; one stateless hop title/slack_reply/teams_reply Sonnet 5 -> Haiku 4.5 on narrow model-not-found 404 ONLY (529/429/5xx never), same original credential, disclosed on 1B ledger row; ASSISTANT_PLATFORM_TIERS is a spend ceiling. Required checks backend/pytest + security-scan-summary green; local Verify-Local-CI green at f7869954. No migration; backend restarted 18:31Z, healthy, REGISTRY_REVISION 2026-09-02.1 loaded. Workspace PHASE-STATUS 2b9e72f.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/550
   verification:
     level: verified
-    by: 1B usage ledger MERGED and DEPLOYED 2026-09-02 (gh pr view 548 state=MERGED mergeCommit=8cad22b5; migration + backend restart confirmed directly). 1C/slice 2/nl_filter not started -- item stays in_flight for that remaining scope.
+    by: '1B (#548, 8cad22b5) and 1C (#550, e3ce9120) MERGED and DEPLOYED 2026-09-02, backend healthy after restart. Slice 2 (policy tables + picker + GET /assistant/models) and nl_filter not started -- item stays in_flight for those.'
     at: '2026-09-02'
-  next_action: 'Owner: approve push + draft PR for feat/ai-model-routing-1c, then merge + backend restart (no migration). Then start slice 2 (policy tables + picker + GET /assistant/models) in a NEW session from the anchor F:\Claude-Tools\reports\2026-09-01_ai-model-routing-plan.md section Closeout 1C.'
+  next_action: 'Start slice 2 (firm model-policy tables + picker + GET /assistant/models) in a NEW session from the anchor F:\Claude-Tools\reports\2026-09-01_ai-model-routing-plan.md section Closeout 1C (deferred list) + handoff F:\BIMpossible-Workspace\00_Strategy\design-docs\ai-model-routing-slice2_handoff_2026-09-02.md (Workspace 816faf9). No owner gate.'
   live_check:
-  - 'gh pr list -R YourBIMpossible/BIMpossible --state all --search "model routing" --json number,title,state  # 1C/slice 2/nl_filter: expect no PR yet'
+  - 'gh pr list -R YourBIMpossible/BIMpossible --state all --search "model routing" --json number,title,state  # slice 2/nl_filter: expect no PR yet; 1C = #550 MERGED'
   - 'docker compose exec backend python -c "from db.session import SessionLocal; ..."  # spot-check usage_events has the 1B columns populated on next assistant turn'
   source: F:\Claude-Tools\reports\2026-09-01_ai-model-routing-plan.md; ASSISTANT-MODEL-ROUTING-1A closeout 2026-09-02. Phase 4 assistant work.
   notes_url: null
@@ -4416,38 +4417,11 @@ items:
   - 'python F:/BIMpossible/scripts/ci/xdist_shadow_report.py --since 2026-09-02  # samples gate >=20 runs AND >=14 days'
   source: Delta scan 2026-09-02; memory phase4-xdist-promotion-gate; docs/CI-GATES.md.
   notes_url: null
-- id: CI-XDIST-EVIDENCE-PR543
-  title: 'BIMpossible#543 MERGED: xdist shadow observation evidence hardened (15 review findings on #541)'
+- id: OPS-PAV-GITLEAKS-PS51-EXIT
+  title: Push-And-Verify.ps1 gitleaks "failed to run" sentinel was unreachable on a launch failure (FIXED #553)
   projects:
   - bimpossible
   status: live
-  owner_gate: false
-  owner: null
-  unblocks:
-  - CI-RUNTIME-P4P5-XDIST-SHADOW
-  blocked_by: []
-  effort: S
-  risk: 1
-  evidence:
-  - kind: pr
-    ref: BIMpossible#543 OPEN, ready, branch claude/ci-runtime-review-fixes. Reporting-integrity only; required serial gate byte-identical.
-    url: https://github.com/YourBIMpossible/BIMpossible/pull/543
-  - kind: pr
-    ref: 'BIMpossible#543 MERGED 2026-09-02 (squash c015e6cc). Evidence window for xdist promotion starts here: >=20 runs AND >=14 days.'
-    url: https://github.com/YourBIMpossible/BIMpossible/pull/543
-  verification:
-    level: verified
-    by: 'git log main: c015e6cc on main; gh pr list open = 0.'
-    at: '2026-09-02'
-  live_check:
-  - gh pr view 543 -R YourBIMpossible/BIMpossible --json state,mergedAt
-  source: Delta scan 2026-09-02.
-  notes_url: null
-- id: OPS-PAV-GITLEAKS-PS51-EXIT
-  title: Root-cause Push-And-Verify.ps1 gitleaks "failed to run" sentinel artifact under Windows PowerShell 5.1
-  projects:
-  - bimpossible
-  status: ready
   owner_gate: false
   owner: null
   unblocks: []
@@ -4456,17 +4430,20 @@ items:
   risk: 1
   evidence:
   - kind: doc
-    ref: 'memory gitleaks-gate-ps51-exit-bug: reproduced 2026-09-01 on #524 and #526 (empty [] report, non-zero read) after the #525 sentinel. #547 (2026-09-02) stopped swallowing gitleaks stderr, so the next repro will show the real text. Workaround stays: direct gitleaks origin/main..HEAD scan clean -> plain git push. Wander from the #547 closeout, not fixed.'
+    ref: 'Root cause: the gitleaks call sat in a try/finally with NO catch. Under the script outer $ErrorActionPreference=Stop a native launch failure (missing/blocked/corrupt exe, or a PS5.1 native-stderr NativeCommandError) is a TERMINATING error a local Continue does not tame, so it escaped and crashed the script with a raw .NET trace BEFORE the $LASTEXITCODE -eq 99 sentinel branch -- the "gitleaks failed to run" path was unreachable for the exact failure it handles. Proven under PS5.1 (5.1.26100.9168) and PS7.x, 2026-09-02.'
+  - kind: pr
+    ref: 'BIMpossible#553 MERGED 2026-09-02 (squash d02d8088): add a catch that captures the launch error, keeps LASTEXITCODE at the untouched sentinel 99, prints it, and falls through to the sentinel branch (reports a broken scanner, not a false positive; does not force 99, so a real gitleaks code before a late throw is still honored). Push-And-Verify.Tests.ps1 +4 reachability tests; 17/17 on PS5.1 and PS7.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/553
   verification:
-    level: claimed
-    by: 'Not re-probed 2026-09-02; #547 default-scope run under pwsh 7 was clean, PS5.1 path untested.'
+    level: verified
+    by: 'Repro under PS5.1 + PS7 (no-catch crashes before the branch, with-catch reaches it); Pester 17/17 on both hosts; GitHub CI green on #553; merged d02d8088.'
     at: '2026-09-02'
   live_check:
-  - powershell -NoProfile -Command "& F:\BIMpossible\Push-And-Verify.ps1 -SkipVerify" on a pushed-level branch; expect "gitleaks clean"
-  source: 'Session 2026-09-02 xdist/gitleaks closeout (PR #547); memory gitleaks-gate-ps51-exit-bug.'
+  - 'pwsh -NoProfile -Command "Invoke-Pester -Path F:\BIMpossible\Push-And-Verify.Tests.ps1 -PassThru -Quiet"  # expect 17/17'
+  source: 'Session 2026-09-02 xdist/gitleaks closeout (PR #547 -> #553); memory gitleaks-gate-ps51-exit-bug.'
   notes_url: null
 - id: OPS-AIMR1B-GITLEAKS-FIXTURE
-  title: Rename or .gitleaksignore the token-shaped fixture on feat/ai-model-routing-1b before that PR goes non-draft
+  title: 'Token-shaped model-routing fixtures cleaned up: 1b-branch fixture de-flagged (#548), #537 fixture renamed + dead fingerprint dropped (#553)'
   projects:
   - bimpossible
   status: live
@@ -4484,13 +4461,43 @@ items:
   - kind: pr
     ref: BIMpossible#548
     url: https://github.com/YourBIMpossible/BIMpossible/pull/548
+  - kind: pr
+    ref: 'BIMpossible#553 MERGED 2026-09-02 (d02d8088): the sibling #537 routing fixture (test_assistant_model_routing.py) renamed to a visibly synthetic non-token string and the now-dead e48de362 .gitleaksignore fingerprint dropped (commit unreachable; strict all-refs scan of main clean, 1098 commits). Last token-shaped-fixture residue from the model-routing slices is gone; the two test_auth_issuer.py entries (a distinct vetted FP) are kept.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/553
   verification:
     level: verified
-    by: 'Direct gitleaks scan of the pushed branch clean + PR-lane gitleaks job green on #548 (2026-09-02).'
+    by: 'Direct gitleaks scan of the pushed branch clean + PR-lane gitleaks job green on #548; #537 fixture residue cleaned + dead fingerprint dropped in #553 (2026-09-02).'
     at: '2026-09-02'
   live_check:
   - gitleaks detect --source F:\BIMpossible --no-banner --exit-code 1 --log-opts="origin/main..feat/ai-model-routing-1b"
   source: 'Session 2026-09-02 xdist/gitleaks closeout (PR #547 AllRefs validation).'
+  notes_url: null
+- id: TEST-FLAKY-TEAMS-BIND-999
+  title: 'Flaky test de-flaked: test_bind_to_another_firms_project_is_refused no longer collides "999" with the echoed project id (FIXED #554)'
+  projects:
+  - bimpossible
+  status: live
+  owner_gate: false
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: run
+    ref: 'Verify-Local-CI backend DB lane 2026-09-02: FAILED tests/test_teams_router.py::test_bind_to_another_firms_project_is_refused -- assert "999" not in posted, where posted = "otherfirm-79993397 isn''t a project I can access." The refusal itself is CORRECT (log: refused project ... hub not in firm_allowed_hubs; no OTHERFIRM-CONFIDENTIAL model name or element_count leaked). The bug is in the test: the project id is f"otherfirm-{uuid.uuid4().hex[:8]}" and the reply echoes it, so when the random hex contains the substring "999" it collides with the hardcoded element_count=999 the assertion guards against. ~0.15%/run.'
+  - kind: pr
+    ref: BIMpossible#554
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/554
+  - kind: run
+    ref: 'FIXED in #554 (squash-merged 2026-09-02T22:15:45Z, merge 8d24af9a): strip the user-typed, echoed project id from the posted reply before asserting no confidential model data (model name / element_count) escaped -- echoing the id the user typed is not a leak. Deterministic proof on the exact colliding id otherfirm-79993397: old assertion flakes, new passes, real-leak detection intact. Verify-Local-CI green at HEAD (lane 1 full DB suite 5927 passed); GitHub CI backend/pytest + all required checks green.'
+  verification:
+    level: verified
+    by: 'Deterministic collision-case proof + Verify-Local-CI green + GitHub CI green on #554 (merged 8d24af9a, 2026-09-02).'
+    at: '2026-09-02'
+  live_check:
+  - 'docker exec docker-backend-1 sh -lc "cd /app && python -m pytest tests/test_teams_router.py::test_bind_to_another_firms_project_is_refused -q"  # now deterministic'
+  source: 'Session 2026-09-02 PR #553 local CI (wander) -> fixed in #554.'
   notes_url: null
 - id: OPS-AIDEV-ORPHAN-TRANSCRIPTS
   title: Delete orphan CLI transcripts under ~/.claude/projects/F--AI-Dev-BIMpossible-Workspace once the frozen-clone burn-in ends

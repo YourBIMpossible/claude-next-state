@@ -7,7 +7,7 @@ This is a repo-local read model, not a definition of /next behavior. -->
 
 Generated 2026-09-02 (synced). Anchor-first, leverage-ranked (per item-model.md). The single #1 move is chosen live by the skill from the anchor (stated focus, else roadmap order) and finalization leverage — not from dependency cone. This board is a status-grouped snapshot; within each section it orders by owner-gated+S, then effort, risk, id, with `cone` leading only on a deep graph (this store is flat today). Full algorithm: `~/.claude/skills/next/reference/item-model.md`.
 
-Scope: `all`. Watermarks: `bimpossible` = 2026-09-02 @ `8cad22b5` PR#548 · `addins` = 2026-08-31 @ `d09204e` PR#115 · `workspace` = 2026-09-01 @ `9a8afb8` PR#112 · `evidence-compiler` = 2026-08-24 @ `0ef747e7533c7cf714888076f3df6f06dd028b84` PR#5 · `dashboard` = 2026-08-31 @ `387eefb` PR#10.
+Scope: `all`. Watermarks: `bimpossible` = 2026-09-02 @ `129a345b` PR#555 · `addins` = 2026-08-31 @ `d09204e` PR#115 · `workspace` = 2026-09-01 @ `9a8afb8` PR#112 · `evidence-compiler` = 2026-08-24 @ `0ef747e7533c7cf714888076f3df6f06dd028b84` PR#5 · `dashboard` = 2026-08-31 @ `387eefb` PR#10.
 (pc-monitor: no items yet — run `init` to derive.)
 
 > **Dormant project(s):** `families` — reassessment-bound. Items scoped to them are parked; their probes are suspended (non-executable metadata) and render **SUSPENDED**, never verified. `/next` will not run or propose a command against a dormant repo.
@@ -253,9 +253,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-02 @ `8cad22b5` PR#548 · `add
 [EC-HYGIENE-1] Pull main checkout master to 345e1c7; delete merged lane branches (#1, #2 heads)
        unblocks 0 · S · evidence-compiler · VERIFIED 2026-08-24 · Live probe 2026-08-24: local master at 8bc555b, origin/master at 345…
 
-[OPS-PAV-GITLEAKS-PS51-EXIT] Root-cause Push-And-Verify.ps1 gitleaks "failed to run" sentinel artifact under Windows PowerShell 5.1
-       unblocks 0 · S · bimpossible · CLAIMED 2026-09-02 · memory gitleaks-gate-ps51-exit-bug: reproduced 2026-09-01 on #524 an…
-
 [OPS-ROLLBACK-RETENTION-20260817] Intentional retention: rollback-20260817 image tags until deploy soak completes 2026-08-18 evening
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-30 · deploy closed live at alembic c4e7a2b91d38, 2026-08-17 ~22:00 PDT
 
@@ -446,7 +443,7 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-02 @ `8cad22b5` PR#548 · `add
 [OPS-ADMIN-HOST-SPLIT] Option C admin-hostname split live: founder surface on admin.yourbimpossible.com only
        unblocks 1 · S · bimpossible · VERIFIED 2026-08-16 · BIMpossible #367 MERGED (736b2d6, 2026-08-16) -- Option C middleware…
 
-[OPS-AIMR1B-GITLEAKS-FIXTURE] Rename or .gitleaksignore the token-shaped fixture on feat/ai-model-routing-1b before that PR goes non-draft
+[OPS-AIMR1B-GITLEAKS-FIXTURE] Token-shaped model-routing fixtures cleaned up: 1b-branch fixture de-flagged (#548), #537 fixture renamed + dead fingerprint dropped (#553)
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · Push-And-Verify.ps1 -GitleaksScope AllRefs 2026-09-02: POSSIBLE LEAK…
 
 [OPS-DEPLOY-STACK-REFRESH-20260817] Deploy tonight's merged main to the local stack -- images/DB stale vs main 130ba49
@@ -530,9 +527,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-02 @ `8cad22b5` PR#548 · `add
 [CI-DRAFT-GATING] CI cost/draft-gating live: drafts skip expensive CI, superseded runs cancel, auto-draft-on-red reverted
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-13 · BIMpossible #342 (4956b45) -- expensive CI + security scans skip on …
 
-[CI-XDIST-EVIDENCE-PR543] BIMpossible#543 MERGED: xdist shadow observation evidence hardened (15 review findings on #541)
-       unblocks 1 · S · bimpossible · VERIFIED 2026-09-02 · BIMpossible#543 OPEN, ready, branch claude/ci-runtime-review-fixes. …
-
 [CKA-DOCS-DEFAULT-SCOPE-DECISION] Default document scope on upload DECIDED: nothing preselected, Firm Library never a default (merged in #540)
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · #540 UploadForm default scope firm_library
 
@@ -572,6 +566,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-02 @ `8cad22b5` PR#548 · `add
 [OPS-P7-CLOSEOUT-DOCS-PR529] Merge BIMpossible#529: land the 3 P7 relay closeout docs missing from main
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-01 · BIMpossible#529 OPEN, READY (not draft), head 21766e6a, opened 2026-…
 
+[OPS-PAV-GITLEAKS-PS51-EXIT] Push-And-Verify.ps1 gitleaks "failed to run" sentinel was unreachable on a launch failure (FIXED
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · Root cause: the gitleaks call sat in a try/finally with NO catch. Un…
+
 [OPS-SLOPAUDIT-UNPUSHED] 8 slop-audit remediation commits are local-only across 5 repos - push or discard
        unblocks 0 · S · workspace+dashboard+families · PARTIAL 2026-08-31 · F:/AI-Dev/slop-audit-remediation_2026-08-31.md section 5 (full commi…
        ⏸ dormant leg (families) suspended — workspace+dashboard leg tracked live; dormant leg unverifiable until whole-repo reassessment, so the item is not fully verified
@@ -599,6 +596,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-02 @ `8cad22b5` PR#548 · `add
 
 [SEC-GROUPS-VIEWS-404-EXISTENCE-ORACLE] PATCH/DELETE groups+views: nonexistent id returns 404 but cross-firm id returns 403 -- status-code existence oracle
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · Surfaced by the backend-endpoint-reviewer gate during SEC-GROUPS-403…
+
+[TEST-FLAKY-TEAMS-BIND-999] Flaky test de-flaked: test_bind_to_another_firms_project_is_refused no longer collides "999" with the echoed project id (FIXED #554)
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · Verify-Local-CI backend DB lane 2026-09-02: FAILED tests/test_teams_…
 
 [TEST-OPS-HYGIENE] Test/ops hygiene: app-boot tripwire, post-deploy identity smoke script, flaky prefs test fixed
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · BIMpossible #339 (e516a0d) -- app-boot smoke tripwire that fails CI …
