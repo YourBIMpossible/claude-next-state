@@ -20,9 +20,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `ea42f37f` PR#530 · `add
 [OPS-CLIENTDATA-REMEDIATION] Client-data remediation: quarantine delete, PDF triage, de-ID pass, DB audit
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-31 · decision-log/2026-08-05__client-data-remediation.md -- Open Items ch…
 
-[SEC-20260831-TEMP-CLONE-TOKEN-EXPOSURE] OWNER ATTENTION: live GitHub temp_clone_token committed to Workspace evidence JSON, redacted-in-tree only -- rotation/history-scrub decision needed
-       unblocks 0 · S · workspace · VERIFIED 2026-09-01 · Workspace commit ecd6072 (2026-08-31, "security: redact live temp_cl…
-
 [AUTHZ-ENFORCE-KEYSTONE-PR530] Merge BIMpossible#530: AUTH-INH ENFORCE keystone + Phase 15c T5 end-to-end test (CKA Phase 18 step 1)
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-01 · BIMpossible#530 OPEN, READY, head 6d64390f, opened 2026-09-02T00:40Z…
 
@@ -431,6 +428,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `ea42f37f` PR#530 · `add
 
 [RE-WIZ-POLL-2] Fix wizard provisioning poll: retry transient HTTP errors like its sibling loop does
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-04 · BIMpossible PR#239 (68bb596, merged 2026-08-04) -- _await_project_ac…
+
+[SEC-20260831-TEMP-CLONE-TOKEN-EXPOSURE] OWNER ATTENTION: live GitHub temp_clone_token committed to Workspace evidence JSON, redacted-in-tree only -- rotation/history-scrub decision needed
+       unblocks 0 · S · workspace · VERIFIED 2026-09-01 · Workspace commit ecd6072 (2026-08-31, "security: redact live temp_cl…
 
 [SEC-ASSIST-FIRMVIEW] Merge #278 -- scope the assistant briefing's firm-view count to the caller's firm
        unblocks 2 · S · bimpossible · VERIFIED 2026-08-17 · BIMpossible #278 MERGED 2026-08-07T04:44:03Z, squash commit 5190a4a4…

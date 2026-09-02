@@ -5422,8 +5422,8 @@ items:
     decision needed'
   projects:
   - workspace
-  status: blocked_owner
-  owner_gate: true
+  status: live
+  owner_gate: false
   owner: null
   unblocks: []
   blocked_by: []
@@ -5443,15 +5443,26 @@ items:
       row -- states the two things left for the owner: (1) confirm whether the GitHub temp_clone_token (short-lived, fork/clone-authorization
       use) is still live and rotate/invalidate if so; (2) decide whether this private repo''s history needs a git filter-repo/BFG
       scrub.'
+  - kind: doc
+    ref: 'Owner decision 2026-09-01 (option 1): accept and close, no history scrub. temp_clone_token is a ~1h-TTL read-only
+      clone credential for one repo; long expired; YourBIMpossible/BIMpossible_Workspace is private (gh repo view isPrivate=true
+      2026-09-01). Raw value intentionally left at Workspace 1259bff (redacted 3 min later at ecd6072).'
+  - kind: commit
+    ref: 'Script fix already shipped, not queued: BIMpossible d27d9ef5 (PR#522, 2026-09-01) collect_github_posture.ps1:264
+      regex-redacts temp_clone_token before evidence write (on origin/main, verified 2026-09-01); backstop gate Workspace
+      658018d scripts/check-evidence-secrets.mjs (+ .test.mjs) wired at .github/workflows/docs-hygiene.yml:133 (on origin/main,
+      verified 2026-09-01).'
   verification:
     level: verified
-    by: Commit ecd6072 and its Verification_Checklist row both confirm the exposure, the in-tree redaction, and the two explicit
-      owner-only decisions still pending -- this is a claimed-open owner item by the session that found it, not yet independently
-      confirmed by the owner as rotated/scrubbed or accepted-as-is.
+    by: Owner ruled option 1 (accept+close) 2026-09-01; collector strip + evidence-secrets CI gate verified on both origin/main
+      branches 2026-09-01.
     at: '2026-09-01'
   live_check:
-  - 'cd F:\BIMpossible-Workspace; git show 1259bff:"02_Reference/Audit and Scan Info/_evidence/breach-chains_2026-08-31/github-posture.json"
-    | grep temp_clone_token  # historical value still in history until/unless an owner-authorized scrub happens'
+  - 'gh repo view YourBIMpossible/BIMpossible_Workspace --json isPrivate --jq .isPrivate  # expect true'
+  - 'cd F:/BIMpossible && git show origin/main:.claude/skills/bimpossible-breach-chain/scripts/collect_github_posture.ps1
+    | grep -c temp_clone_token  # expect >=1 (redaction regex present)'
+  - 'cd F:/BIMpossible-Workspace && git show origin/main:.github/workflows/docs-hygiene.yml | grep -c check-evidence-secrets  #
+    expect 1'
   source: Workspace commit ecd6072; BIMpossible_Verification_Checklist.md "post-push secret finding" row
   notes_url: null
 - id: HYG-20260831-WORKSPACE-DOCS
