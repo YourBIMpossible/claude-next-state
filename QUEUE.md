@@ -149,9 +149,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 [ARCH-BIMP-R1-ISSUE-JOIN-PROBE] R1 issue-join probe (read-only, flag-gated) + model_urn tenancy fix
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-23 · BIMpossible#360 MERGED 2026-08-23 -> b8142fca -- adds a read-only, f…
 
-[AUTHZ-AUDIT-FIRMID-EMPTY-ROOTCAUSE] Root-cause the original producer of firm_id='' in authz audit batches (the poison quarantined by #440) and fix it at the source
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-22 · BIMpossible#440 (02bd9b6) quarantines poisoned rows (AUTHZ-AUDIT-POI…
-
 [AUTHZ-RECON-0814-P4P5-CLOSEOUT] 2026-08-14 reconciliation audit P4/P5 remediation PRs closed out (bundle)
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-23 · BIMpossible#354 MERGED 2026-08-23 -> 83170620 -- 2026-08-14 reconcil…
 
@@ -539,6 +536,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 
 [AUDIT-20260901-SH-CRLF-CI-FIX] CRLF-vulnerable .sh files from PR
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-01 · BIMpossible PR #524 (squash 8aee44da, MERGED) -- "fix(firm-docs): en…
+
+[AUTHZ-AUDIT-FIRMID-EMPTY-ROOTCAUSE] Root-cause the original producer of firm_id='' in authz audit batches (the poison quarantined by #440) and fix it at the source
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · BIMpossible#440 (02bd9b6) quarantines poisoned rows (AUTHZ-AUDIT-POI…
 
 [BIMP-CLAUDEMD-POLICY-CI-20260831] CLAUDE.md policy-docs extraction + gate-sync CI selection + PR-time docs-hygiene ceilings
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-31 · bimpossible #511 (4da2c142, MERGED 2026-08-31T20:13Z) -- extracts po…

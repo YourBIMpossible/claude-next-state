@@ -4593,7 +4593,7 @@ items:
     it at the source'
   projects:
   - bimpossible
-  status: landed
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -4609,15 +4609,29 @@ items:
       a valid UUID, so the flush layer could only quarantine-and-drop. Now str(firm_id) if firm_id else None (same guard as
       guard.py:112). artifacts_router fires once per artifact in the served-list loop = the batch-flood shape. 6-test pin
       in test_authz_audit_firmid_normalization.py.'
+  - kind: pr
+    ref: 'BIMpossible #452 MERGED 2026-08-22T10:49:20Z (3bf4b6f7) -- confirmed via gh 2026-09-02.'
+  - kind: run
+    ref: '2026-09-02 deployment identity (read-only): docker-backend-1 (image sha256:db00aeef, StartedAt 2026-09-01T22:57:14Z)
+      runs code byte-identical (CRLF-normalized) to origin/main 5248ff86 for every .py under aec/, revit_link/, db/ plus aps/router.py,
+      search/router.py, main.py (214 files). aec/authz/artifacts_router.py and aec/authz/track2_content_router.py (the two
+      producers fixed in #452) are among the identical files. git grep ''firm_id=str('' across backend/aec audit producers:
+      no hits -- no caller can emit '''' or ''None'' as a firm id. 2026-09-02 isolated throwaway-DB lane (per-run postgres:16-alpine
+      bimpossible_test + redis, backend mounted :ro, db_safety.py not overridden; never docker-db-1): 11 pinned suites for
+      the landed batch -> 104 passed, 29 skipped (all 29 = tests/test_model_resolve.py pure-lane stubs), 0 failed. test_authz_audit_firmid_normalization.py
+      included.'
   verification:
     level: verified
-    by: 'Root-caused via Explore; fix + regression test shipped in #452 (auto-merge armed, local Verify-Local-CI green across
-      all 3 lanes).'
-    at: 2026-08-22
+    by: 'Promoted landed -> live 2026-09-02 overnight pass: both stored live conditions met -- #452 MERGED (3bf4b6f7) and
+      no remaining producer passes a bare str(firm_id) into the authz audit writer; fixed code is what the prod container
+      runs; 6-test pin green on an isolated throwaway DB. Companion symptom item AUTHZ-AUDIT-POISON-BATCH-FLOOD shows 0 InvalidTextRepresentation
+      on the running build.'
+    at: '2026-09-02'
   live_check:
-  - gh pr view 452 --json state -> MERGED confirms the source fix landed.
-  - Search backend/aec for call sites passing a possibly-empty firm string into the authz audit writer; confirm none can yield
-    ''.
+  - 'gh pr view 452 -R YourBIMpossible/BIMpossible --json state,mergedAt  # expect MERGED'
+  - 'git -C F:/BIMpossible grep -n ''firm_id=str('' origin/main -- backend/aec  # expect no hits'
+  - 'MSYS_NO_PATHCONV=1 diff --strip-trailing-cr <(docker exec docker-backend-1 cat //app/aec/authz/artifacts_router.py) <(git
+    -C F:/BIMpossible show origin/main:backend/aec/authz/artifacts_router.py)  # expect no output'
   source: P7 close-out 2026-08-21
   notes_url: null
 - id: ADDINS-JTI-REPLAY-CROSS-PROCESS
