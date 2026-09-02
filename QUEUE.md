@@ -73,9 +73,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 [REVITLINK-OPAQUE-500-MAPPING] revit_link error mapping collapses distinct add-in refusals (NOT_SUPPORTED, DOC_NOT_FOUND, AMBIGUOUS_DOCUMENT, SYNC_FAILED) into one opaque INTERNAL_ERROR 500 with no detail
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-19 · backend/revit_link/native_adapter.py _COMMAND_ERROR_MAP (unknown cod…
 
-[BIMP-RELAY-ERROR-MAP-GAP] Backend _RELAY_ERROR_MAP lacks relay codes TIMEOUT / PIPE_BUSY / METHOD_NOT_ALLOWED -- they collapse to opaque 500s instead of typed 4xx/503 responses
-       unblocks 0 · S · bimpossible · VERIFIED 2026-09-01 · Observed 2026-08-25 during P7-RELAY-SESSION-LIFECYCLE discovery: bac…
-
 [SEC-ASSIST-TOOLS-PERSONAL-VIEWS] FIXED+MERGED: assistant _visible_saved_view_clause personal branch now pins firm_id (PR #416)
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · backend/aec/assistant_tools.py:295-309 _visible_saved_view_clause: f…
 
@@ -383,6 +380,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 
 [P3-DUCTS-PIPES-DECISION] Decide ducts/pipes parameter-write scope for Phase 3 write-back
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-20 · BIMpossible_PHASE-STATUS.md, Phase 3.10b sub-note -- DECIDED 2026-08…
+
+[BIMP-RELAY-ERROR-MAP-GAP] Backend _RELAY_ERROR_MAP lacks relay codes TIMEOUT / PIPE_BUSY / METHOD_NOT_ALLOWED -- they collapse to opaque 500s instead of typed 4xx/503 responses
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-01 · Observed 2026-08-25 during P7-RELAY-SESSION-LIFECYCLE discovery: bac…
 
 [NL-FILTER-EVAL-QUALITY] NL-filter intent-fidelity eval harness built and RUNNING WEEKLY IN CI with a live key
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-27 · BIMpossible #375 MERGED (989a2fb, 23:25Z) -- implements the BUILD NO…

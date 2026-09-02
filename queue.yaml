@@ -586,7 +586,7 @@ items:
     instead of typed 4xx/503 responses
   projects:
   - bimpossible
-  status: landed
+  status: live
   owner_gate: true
   unblocks: []
   blocked_by: []
@@ -606,15 +606,27 @@ items:
     ref: 'BIMpossible#487 MERGED 2026-08-26T00:27Z -> 2c6b32d5 on main. 2026-09-01 probe: backend/revit_link/native_adapter.py
       _RELAY_ERROR_MAP on origin/main carries TIMEOUT / PIPE_BUSY / METHOD_NOT_ALLOWED. Backend container restart after merge
       not evidenced -- stays landed until a runtime probe shows a typed 503/504 for a relay TIMEOUT/PIPE_BUSY.'
+  - kind: run
+    ref: '2026-09-01 promotion probe: docker-backend-1 /app/revit_link/native_adapter.py and /app/revit_link/errors.py byte-identical
+      (diff --strip-trailing-cr) to origin/main backend/revit_link/{native_adapter.py,errors.py}, both containing the TIMEOUT/PIPE_BUSY/METHOD_NOT_ALLOWED
+      mapping from PR#487 (2c6b32d5, merged 2026-08-25T18:26:59-06:00). Container docker-backend-1 StartedAt=2026-09-01T22:57:14Z,
+      after the merge -- fix is running code, not just merged history. Pinned regression suite backend/tests/revit_link/test_relay_error_map.py:
+      11 passed locally (2 benign warnings). Could not re-run the suite inside the container itself -- db_safety.py refuses
+      DB-bound pytest against the prod DB (same guard as ADMIN-DOMAIN-AUDIT-INACTIVE-FIRM-GUARD); not overridden. docker logs
+      docker-backend-1 --since 2026-08-25 grepped for TIMEOUT/PIPE_BUSY/METHOD_NOT_ALLOWED/RevitLinkError: no hits -- no real
+      relay TIMEOUT/PIPE_BUSY/METHOD_NOT_ALLOWED event has actually occurred in prod since the fix landed. Code confirmed
+      deployed and correct; the real-world failure path itself has not yet fired.'
   verification:
     level: verified
+    by: Code-identity diff (live container vs origin/main) + container-restart-after-merge timing + local pinned-suite pass
+      (2026-09-01). Deployed-and-correct confirmed; not yet prod-exercised (no matching log lines since merge).
     at: '2026-09-01'
-    by: PR#487 MERGED 2c6b32d5 (gh, 2026-09-01); mapping present on main (grep). Runtime (post-restart) behaviour unverified.
   live_check:
-  - 'gh pr view 487 -R YourBIMpossible/BIMpossible --json state,mergedAt  # expect MERGED 2026-08-26'
-  - 'grep -c -E ''TIMEOUT|PIPE_BUSY|METHOD_NOT_ALLOWED'' F:/BIMpossible/backend/revit_link/native_adapter.py  # expect >=3'
-  - 'docker inspect -f {{.State.StartedAt}} bimpossible-backend-1  # must be later than 2026-08-26T00:27Z for the merge to
-    be live'
+  - 'docker exec docker-backend-1 diff --strip-trailing-cr <(docker exec docker-backend-1 cat /app/revit_link/native_adapter.py)
+    <(git -C F:/BIMpossible show origin/main:backend/revit_link/native_adapter.py)  # expect no output'
+  - 'docker inspect -f ''{{.State.StartedAt}}'' docker-backend-1  # must be later than 2026-08-25T18:26:59-06:00 (PR#487 merge)'
+  - 'cd F:/BIMpossible && python -m pytest backend/tests/revit_link/test_relay_error_map.py -q  # expect all passed (local
+    only -- db_safety.py refuses this against the container''s prod DB)'
   source: Side-finding, P7-RELAY-SESSION-LIFECYCLE session 2026-08-25.
   notes_url: null
 - id: ADDINS-SYNC-TOKEN-HANDSHAKE
