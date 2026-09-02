@@ -1561,30 +1561,40 @@ items:
       -- that last one fails on the previous keying). Isolated throwaway Postgres run (per-run postgres:16-alpine bimpossible_test,
       backend :ro, db_safety.py not overridden): type_target + test_change_set_router.py + test_change_set_service.py -> 102
       passed. Needs a PR before it counts as merged.'
+  - kind: pr
+    ref: 'BIMpossible #544 MERGED 2026-09-02 (squash ce831f42, head 36fd3cb4 then 0647ef98 after update-branch): per-type
+      Apply outcome attribution fix (_outcome_key = element_unique_id, family_type_id, parameter_name) + tests/test_change_set_router_type_target.py.
+      Local gate Verify-Local-CI at 36fd3cb4 GREEN (DB 5469 passed/189 skipped, pure 3621/400, assistant contract 26); remote
+      required checks backend/pytest + security-scan-summary pass, frontend lane skipped (no frontend paths). No live APS
+      write performed; /apply is the promotion record only. Inc2-router-tests worktree + branch removed after merge.'
+  - kind: doc
+    ref: 'BIMpossible-Workspace 00_Strategy/BIMpossible_PHASE-STATUS.md row 13 re-scored 2026-09-02 (1575d23 built+deployed
+      wording, 9651e14 #544 merged wording), pushed to origin/main. Still landed, not live: Task 8 live smoke (one family-type
+      String write on a sample model through the pane, expected distinct per-type outcomes in change-set detail + edit_log/revit_link_request_log
+      rows) remains owner-gated.'
   verification:
     level: verified
-    by: '2026-09-02 overnight pass: both halves confirmed DEPLOYED, not just merged -- backend code identical to origin/main
-      in the running container, Increment 2 schema + CHECK constraints + partial unique indexes present in the prod DB (read-only
-      probes), AddIns #54 an ancestor of the installed pane DLL. Router-level regression suite added and green on an isolated
-      throwaway DB (102 passed incl. existing change-set suites); one real defect found and fixed in the process (per-type
-      outcome attribution, commit 36fd3cb4, unpushed). Stays landed: promotion to live requires the owner-gated Task 8 live
-      smoke -- a real family-type String parameter write through the pane/API on a sample model with a recorded edit_log batch
-      -- which is an external mutation this pass was not licensed to perform. Prior 2026-08-23 finding retained: PR #273 MERGED
-      2026-08-18T03:25:16Z (06f04da2), AddIns #54 MERGED 2026-08-18T03:00:25Z (1a61342c); owner decisions #1 (unit veto guard)
-      and #3 (BuildSummary exhaustiveness) NON-BLOCKING, #3 since done; Increment 4 (ElementId) owner-ruled unimplemented.
-      Ops preconditions unchanged: build 0-behind main in BOTH repos before deploy; full ship set scoped -Year when shared
-      Core changed; delete alembic/versions/__pycache__ after editing a down_revision.'
+    by: '2026-09-02: both halves DEPLOYED (backend identical to origin/main in the running container, Increment 2 schema/constraints/partial
+      indexes present in the prod DB via read-only probes, AddIns #54 an ancestor of the installed pane DLL 9f6f3c4b). Per-type
+      outcome attribution defect found, fixed and MERGED as BIMpossible #544 (ce831f42) with the router-level type-target
+      regression suite; local + remote CI green. Stays landed: promotion to live requires the owner-gated Task 8 live smoke
+      (a real family-type String write with a recorded edit_log batch), which no pass has been licensed to perform. Prior
+      findings retained: PR #273 MERGED 2026-08-18 (06f04da2), AddIns #54 MERGED 2026-08-18 (1a61342c); owner decisions #1
+      and #3 NON-BLOCKING, #3 done; Increment 4 (ElementId) owner-ruled unimplemented. Ops preconditions unchanged: build
+      0-behind main in BOTH repos before deploy; full ship set scoped -Year when shared Core changed; delete alembic/versions/__pycache__
+      after editing a down_revision.'
     at: '2026-09-02'
   live_check:
   - gh pr view 273 --repo YourBIMpossible/BIMpossible --json state,mergedAt,isDraft
   - gh pr view 54 --repo YourBIMpossible/BIMpossible-AddIns --json state,mergedAt,isDraft
+  - 'gh pr view 544 --repo YourBIMpossible/BIMpossible --json state,mergedAt,mergeCommit  # expect MERGED, ce831f42'
   - 'MSYS_NO_PATHCONV=1 docker exec docker-db-1 psql -U bimpossible -d bimpossible -tAc "select conname from pg_constraint
     where conname in (''ck_staged_change_one_target'',''ck_staged_change_type_is_string_only'',''ck_edit_log_one_target'')"  #
     expect all three (read-only)'
   - 'MSYS_NO_PATHCONV=1 diff --strip-trailing-cr <(docker exec docker-backend-1 cat //app/aec/change_set_router.py) <(git
-    -C F:/BIMpossible show origin/main:backend/aec/change_set_router.py)  # expect no output'
-  - 'git -C F:/BIMpossible branch --contains 36fd3cb4 -r  # empty until the outcome-attribution fix + type-target router suite
-    is PRed and merged'
+    -C F:/BIMpossible show origin/main:backend/aec/change_set_router.py)  # expect no output once the backend container is
+    rebuilt past ce831f42; a diff before that means the #544 fix is merged but not yet deployed'
+  - 'git -C F:/BIMpossible branch -r --contains ce831f42  # expect origin/main'
   - 'isolated throwaway-DB lane (per-run postgres:16-alpine bimpossible_test, backend mounted :ro): python -m pytest tests/test_change_set_router_type_target.py
     tests/test_change_set_router.py -q  # expect all passed; never run against docker-db-1'
   source: 00_Strategy/design-docs/2026-08-06__write-engine-increment2_build-plan.md; BIMpossible PR#273 (e018294); BIMpossible-AddIns
