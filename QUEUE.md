@@ -179,9 +179,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 [P11-QA-HISTORY-RECONCILE-PURGE] Integrate qa_analysis_runs orphan purge into cache_reconcile (models deleted from APS keep history rows until retention)
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-24 · PR #476 non-goals: retention prunes per-model depth only; nothing re…
 
-[P13-T6-REASON-TAG] Add reason/criteria tag to approval flow (T6)
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-21 · BIMpossible_PHASE-STATUS.md, Phase 13 -- reason/criteria tag T6 RATI…
-
 [P8-HUB-ACTIVATION-RUNBOOK] Write Phase 8 hub-activation runbook per OpenQuestions #5
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-18 · WRITTEN 2026-08-18: BIMpossible_Workspace/00_Strategy/2026-08-18__Ph…
 
@@ -582,6 +579,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 [OPS-SLOPAUDIT-UNPUSHED] 8 slop-audit remediation commits are local-only across 5 repos - push or discard
        unblocks 0 · S · workspace+dashboard+families · PARTIAL 2026-08-31 · F:/AI-Dev/slop-audit-remediation_2026-08-31.md section 5 (full commi…
        ⏸ dormant leg (families) suspended — workspace+dashboard leg tracked live; dormant leg unverifiable until whole-repo reassessment, so the item is not fully verified
+
+[P13-T6-REASON-TAG] Add reason/criteria tag to approval flow (T6)
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · BIMpossible_PHASE-STATUS.md, Phase 13 -- reason/criteria tag T6 RATI…
 
 [P15-15C-A-CONTEXT-INJECTION] Safe Revit-context injection (15c-A), PR
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-01 · BIMpossible PR #517 (MERGED 2026-09-01 as squash b27b25e0; was branc…

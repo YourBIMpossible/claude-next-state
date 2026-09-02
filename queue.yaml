@@ -3968,7 +3968,7 @@ items:
   title: Add reason/criteria tag to approval flow (T6)
   projects:
   - bimpossible
-  status: landed
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -3992,15 +3992,29 @@ items:
       ran d5f8b3c41e27 -> d5f8b3c62e49; `alembic current`/`alembic heads` in docker-backend-1 both report d5f8b3c62e49 (head),
       single head confirmed. information_schema: change_set.approval_reason is text, is_nullable=YES. backend/frontend healthy
       (/health 200, :3000 200).'
+  - kind: db
+    ref: '2026-09-02 read-only prod probe: information_schema reports change_set.approval_reason is_nullable=YES; migration
+      d5f8b3c62e49 is in the applied chain (prod alembic head a5b6c7d8e9f0 descends from it). 0 of 9 change_set rows carry
+      a non-null approval_reason -- the field is enabled and reachable, not yet used by a person.'
+  - kind: run
+    ref: '2026-09-02 deployment identity (read-only): docker-backend-1 (image sha256:db00aeef, StartedAt 2026-09-01T22:57:14Z)
+      runs code byte-identical (CRLF-normalized) to origin/main 5248ff86 for every .py under aec/, revit_link/, db/ plus aps/router.py,
+      search/router.py, main.py (214 files). 2026-09-02 isolated throwaway-DB lane (per-run postgres:16-alpine bimpossible_test
+      + redis, backend mounted :ro, db_safety.py not overridden; never docker-db-1): 11 pinned suites for the landed batch
+      -> 104 passed, 29 skipped (all 29 = tests/test_model_resolve.py pure-lane stubs), 0 failed. test_change_set_router.py
+      included (approve/save reason paths).'
   verification:
     level: verified
-    by: 'Merged f0796ef, migrated, deployed, live-verified 2026-08-21: single Alembic head, approval_reason column present+nullable
-      in the running DB, backend+frontend healthy post-deploy.'
-    at: '2026-08-21'
+    by: 'Promoted landed -> live 2026-09-02 overnight pass: column live in the prod DB, /approve + /save reason threading
+      deployed (container code identical to origin/main), router tests green on an isolated throwaway DB. Nobody has entered
+      a reason yet (0/9 change sets) -- enabled, not exercised. Prior 2026-08-21 verification retained: #429 merged f0796ef,
+      deployed with single Alembic head d5f8b3c62e49 at the time.'
+    at: '2026-09-02'
   live_check:
-  - docker exec docker-backend-1 python -m alembic heads -> d5f8b3c62e49 (head), exactly one line.
-  - select is_nullable from information_schema.columns where table_name='change_set' and column_name='approval_reason' ->
-    YES.
+  - 'MSYS_NO_PATHCONV=1 docker exec docker-db-1 psql -U bimpossible -d bimpossible -tAc "select is_nullable from information_schema.columns
+    where table_name=''change_set'' and column_name=''approval_reason''"  # read-only  # expect YES'
+  - 'MSYS_NO_PATHCONV=1 diff --strip-trailing-cr <(docker exec docker-backend-1 cat //app/aec/change_set_router.py) <(git
+    -C F:/BIMpossible show origin/main:backend/aec/change_set_router.py)  # expect no output'
   source: BIMpossible_PHASE-STATUS.md, Phase 13 (T6) -- surfaced by /next BIMpossible roadmap 2026-08-18, UNTRACKED; landed+verified
     2026-08-21 via BIMpossible#429
   notes_url: null
