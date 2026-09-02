@@ -3783,7 +3783,7 @@ items:
   title: Snapshot QA history from digest/assistant/coordination-report paths (today only warm model-health serves capture)
   projects:
   - bimpossible
-  status: landed
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -3798,13 +3798,30 @@ items:
       + resolved versionNumber only (preparing/cold/cached/error never mint); fail-open; all paths capture at SNAPSHOT_FINDINGS_CAP
       then re-truncate responses. backend-endpoint-reviewer + typescript-api-reviewer PASS; local CI green; deployed 2026-08-24,
       prod smoke: panel serve minted 1 baseline, re-serve reused (row count stayed 1).'
+  - kind: run
+    ref: '2026-09-02 deployment identity (read-only): docker-backend-1 (image sha256:db00aeef, StartedAt 2026-09-01T22:57:14Z)
+      runs code byte-identical (CRLF-normalized) to origin/main 5248ff86 for every .py under aec/, revit_link/, db/ plus aps/router.py,
+      search/router.py, main.py (214 files). maybe_record_snapshot has 6 call sites on origin/main (aec/assistant_tools.py,
+      aec/digest.py, aec/qa/router.py x3 plus the boundary itself). 2026-09-02 isolated throwaway-DB lane (per-run postgres:16-alpine
+      bimpossible_test + redis, backend mounted :ro, db_safety.py not overridden; never docker-db-1): 11 pinned suites for
+      the landed batch -> 104 passed, 29 skipped (all 29 = tests/test_model_resolve.py pure-lane stubs), 0 failed. test_qa_history_capture_purge.py
+      included.'
+  - kind: db
+    ref: '2026-09-02 read-only prod probe: qa_analysis_runs holds 2 rows -- the capture boundary has minted snapshots in production
+      (the 2026-08-24 smoke row plus one later run).'
   verification:
     level: verified
-    by: 'P11 QA-history completion wave 2026-08-24: PR #478 merged+deployed, backend/tests/test_qa_history_capture_purge.py
-      pins all six paths'' capture + no-capture cases.'
-    at: '2026-08-24'
+    by: 'Promoted landed -> live 2026-09-02 overnight pass: capture boundary deployed (container identical to origin/main),
+      all six paths wired (>1 caller, the stored live condition), production table carries real snapshot rows, pinned suite
+      green on an isolated throwaway DB. Prior 2026-08-24 verification retained: #478 merged dec69859, prod smoke minted 1
+      baseline and re-serve reused it.'
+    at: '2026-09-02'
   live_check:
-  - Grep backend for record_analysis_snapshot call sites; >1 caller means this landed.
+  - 'git -C F:/BIMpossible grep -c ''maybe_record_snapshot'' origin/main -- backend/aec  # expect >= 4 files'
+  - 'MSYS_NO_PATHCONV=1 docker exec docker-db-1 psql -U bimpossible -d bimpossible -tAc "select count(*) from qa_analysis_runs"  #
+    read-only  # expect >= 1'
+  - 'MSYS_NO_PATHCONV=1 diff --strip-trailing-cr <(docker exec docker-backend-1 cat //app/aec/qa/history.py) <(git -C F:/BIMpossible
+    show origin/main:backend/aec/qa/history.py)  # expect no output'
   source: 'P11 AC7 delivery pass 2026-08-24 (PR #476)'
   notes_url: null
 - id: P11-QA-HISTORY-RECONCILE-PURGE
