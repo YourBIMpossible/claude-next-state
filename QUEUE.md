@@ -109,9 +109,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 [DASH-DRIFT-GATE-UNTRACKED] Harden step-0b drift gate against untracked shadowing files (review finding #6)
        unblocks 0 · S · dashboard · VERIFIED 2026-08-31 · Code review 2026-08-31 finding #6 (PLAUSIBLE): Refresh-Dashboard.ps1…
 
-[DATA-EMPTY-PERSIST-GUARD] Never persist empty categories/property/spec data version-immutably
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-16 · BIMpossible #362 MERGED (0b314d8, 2026-08-16) -- never persist an em…
-
 [FEAT-REVIT-PAIRING-COPY] Revit pairing SHIPPED as Copy/paste-only -- protocol-launch button removed after reliability rework
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · BIMpossible #391 (Send-to-Revit protocol handoff + ?pair=revit deep …
 
@@ -473,6 +470,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-01 @ `b7158ed8` PR#532 · `add
 
 [AUTHZ-AUDIT-POISON-BATCH-FLOOD] authz shadow-audit poison row (firm_id='', principal 'service', reason 'wizard.account_read') fails UUID cast and re-queues the whole ~500-row batch every ~2s, flooding backend logs
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · aec/authz/audit.py flush_pending -- batch insert fails with psycopg2…
+
+[DATA-EMPTY-PERSIST-GUARD] Never persist empty categories/property/spec data version-immutably
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · BIMpossible #362 MERGED (0b314d8, 2026-08-16) -- never persist an em…
 
 [DEP-TRIAGE-2026-08] Dependabot triage: CLOSED BY OWNER RULING 2026-08-21 -- all 6 held PRs closed under the dependency-update policy
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-18 · STILL OPEN as of 2026-08-17 (gh pr view, live): github-actions -- #3…

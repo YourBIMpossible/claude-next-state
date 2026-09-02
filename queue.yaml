@@ -2920,7 +2920,7 @@ items:
   title: Never persist empty categories/property/spec data version-immutably
   projects:
   - bimpossible
-  status: landed
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -2932,14 +2932,24 @@ items:
       capture would otherwise freeze as the immutable record for that version).'
   - kind: pr
     ref: 'BIMpossible #365 MERGED (8aa95a5, 2026-08-16) -- same guard extended to empty property/spec maps.'
+  - kind: run
+    ref: '2026-09-02 deployment identity (read-only): docker-backend-1 (image sha256:db00aeef, StartedAt 2026-09-01T22:57:14Z)
+      runs code byte-identical (CRLF-normalized) to origin/main 5248ff86 for every .py under aec/, revit_link/, db/ plus aps/router.py,
+      search/router.py, main.py (214 files). aec/cache.py and aec/schema.py (the two guard sites from #362/#365) are among
+      the identical files. 2026-09-02 isolated throwaway-DB lane (per-run postgres:16-alpine bimpossible_test + redis, backend
+      mounted :ro, db_safety.py not overridden; never docker-db-1): 11 pinned suites for the landed batch -> 104 passed, 29
+      skipped (all 29 = tests/test_model_resolve.py pure-lane stubs), 0 failed. test_categories_cache.py + test_property_map_cache.py
+      included.'
   verification:
     level: verified
-    by: 'Both squash SHAs confirmed in git log b5c6e64..833964d. Guard code is on the normal capture path with no flag, so
-      it is active on next deploy; ''landed'' because no post-merge deploy/capture has been observed exercising it. unblocks:
-      [] -- defensive data-integrity fix, nothing downstream gates on it.'
-    at: '2026-08-16'
+    by: 'Promoted landed -> live 2026-09-02 overnight pass: the stored live condition (a post-merge deploy running the guard
+      on the capture path) is met -- the 2026-09-01 backend deploy runs code identical to origin/main, the guard has no flag,
+      and its pins are green on an isolated throwaway DB. #362 MERGED 0b314d81 and #365 MERGED 8aa95a55 re-confirmed via gh.'
+    at: '2026-09-02'
   live_check:
   - 'gh pr view 362 -R YourBIMpossible/BIMpossible --json state,mergedAt  # expect MERGED'
+  - 'MSYS_NO_PATHCONV=1 diff --strip-trailing-cr <(docker exec docker-backend-1 cat //app/aec/cache.py) <(git -C F:/BIMpossible
+    show origin/main:backend/aec/cache.py)  # expect no output'
   source: merge-wave delta b5c6e64..833964d, ninth pass 2026-08-16
   notes_url: null
 - id: OPS-CACHE-RECONCILE-V1
