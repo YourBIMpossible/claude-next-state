@@ -267,7 +267,7 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-02 @ `129a345b` PR#555 · `add
 
 ## In flight
 
-[ASSISTANT-MODEL-ROUTING-1B-2] AI model routing remaining lane: 1B usage ledger, 1C premium/Opus, slice 2 policy tables + picker, nl_filter onto resolver route
+[ASSISTANT-MODEL-ROUTING-1B-2] AI model routing remaining lane: slice 3 budgets over estimated_cost_usd, nl_filter onto resolver route (1B/1C/slice 2 all shipped)
        unblocks 0 · L · bimpossible · VERIFIED 2026-09-02 · Anchor F:\Claude-Tools\reports\2026-09-01_ai-model-routing-plan.md (…
 
 ## Blocked elsewhere

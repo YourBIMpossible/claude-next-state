@@ -4276,7 +4276,7 @@ items:
   source: 2026-09-01 owner request (assistant model hardcoded at backend/aec/assistant.py:101); Phase 4 assistant work. PHASE-STATUS Phase 4 row re-scored 2026-09-02 (bf6f7ab).
   notes_url: null
 - id: ASSISTANT-MODEL-ROUTING-1B-2
-  title: 'AI model routing remaining lane: 1B usage ledger, 1C premium/Opus, slice 2 policy tables + picker, nl_filter onto resolver route'
+  title: 'AI model routing remaining lane: slice 3 budgets over estimated_cost_usd, nl_filter onto resolver route (1B/1C/slice 2 all shipped)'
   projects:
   - bimpossible
   status: in_flight
@@ -4302,13 +4302,20 @@ items:
   - kind: pr
     ref: '1C MERGED 2026-09-02T18:29Z: PR #550 squash -> e3ce9120 on main (feat(assistant): model routing slice 1C — Opus 5, refusal category, stateless fallback). claude-opus-5 BYOK-only chat + chat_resume (platform 403 model_not_allowed, never downgraded); refusal category on final SSE event, refusal never hops; one stateless hop title/slack_reply/teams_reply Sonnet 5 -> Haiku 4.5 on narrow model-not-found 404 ONLY (529/429/5xx never), same original credential, disclosed on 1B ledger row; ASSISTANT_PLATFORM_TIERS is a spend ceiling. Required checks backend/pytest + security-scan-summary green; local Verify-Local-CI green at f7869954. No migration; backend restarted 18:31Z, healthy, REGISTRY_REVISION 2026-09-02.1 loaded. Workspace PHASE-STATUS 2b9e72f.'
     url: https://github.com/YourBIMpossible/BIMpossible/pull/550
+  - kind: pr
+    ref: 'Slice 2 (Phases 1-5, firm_model_policy table + ModelPolicyCard admin UI + composer model selector + GET /assistant/models + PUT /account/model-policy) MERGED 2026-09-02: PR #556 squash -> 9605199d on main, branch feat/ai-model-routing-2. Pinned fixes in-review: migration-reviewer FK-name advisory (fk_firm_model_policy_firm), backend-endpoint-reviewer Medium (PUT ceiling check now enforced on platform route only, two new pinning tests), test_assistant_resume.py _stub_auth() missing _firm_model_policy stub. Verify-Local-CI green (backend DB 5969 passed/7 skipped, pure 3951 passed/332 skipped, contract 27 passed, frontend vitest 2085/235 files, migration replay clean). Draft->ready hit the known stale-SKIPPED-run gotcha (DELIVERY.md), fixed via gh pr ready --undo then --ready to force a fresh run on final head.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/556
+  - kind: run
+    ref: 'Slice 2 deployed 2026-09-02: main fast-forwarded 8d24af9a->9605199d; docker compose run --rm backend-migrate applied a4c123b1612d cleanly. First deploy pass was backend-only (--force-recreate --no-deps backend) and missed that this PR also touched frontend/ (ModelPolicyCard.tsx, account/page.tsx, AssistantPanel.tsx, useAssistantChat.ts, sseParse.ts, modelPolicy.ts, models.ts) -- caught via self-review against docs/engineering/deployments.md "both frontend and backend touched" section (frontend bundle is baked into the image, not bind-mounted). Corrected same session: docker compose up -d --build from docker/ rebuilt frontend+backend+backend-migrate images, all containers healthy. Verified live (not just restarted) via docker compose exec frontend grep on built .next/static chunks -- assistant/models and model-policy strings present in the /account page chunk with a fresh BUILD_ID. Worktree ai-model-routing-2 and local branch feat/ai-model-routing-2 removed post-merge.'
+  - kind: doc
+    ref: 'O-4 ratified 2026-09-02 by owner (verbatim in anchor section O-4): calendar-month budgets in firm TZ; 80% soft warning; Starter fast $25/$5, Professional fast+balanced $150/$25, Business fast+balanced $500/$60, Advanced BYOK-only, Fable unregistered; exhaustion of either firm or user budget -> announced downgrade of platform-funded requests only; never pause; ledger-derived counters first, reservation only on proven overshoot.'
   verification:
     level: verified
-    by: '1B (#548, 8cad22b5) and 1C (#550, e3ce9120) MERGED and DEPLOYED 2026-09-02, backend healthy after restart. Slice 2 (policy tables + picker + GET /assistant/models) and nl_filter not started -- item stays in_flight for those.'
+    by: '1B (#548, 8cad22b5), 1C (#550, e3ce9120), and slice 2 (#556, 9605199d) all MERGED and DEPLOYED 2026-09-02, backend+frontend both rebuilt and healthy, new frontend bundle confirmed live via chunk grep. Only nl_filter and slice 3 (budgets) remain unbuilt -- item stays in_flight for those.'
     at: '2026-09-02'
-  next_action: 'Start slice 2 (firm model-policy tables + picker + GET /assistant/models) in a NEW session from the anchor F:\Claude-Tools\reports\2026-09-01_ai-model-routing-plan.md section Closeout 1C (deferred list) + handoff F:\BIMpossible-Workspace\00_Strategy\design-docs\ai-model-routing-slice2_handoff_2026-09-02.md (Workspace 816faf9). No owner gate.'
+  next_action: 'O-4 RATIFIED 2026-09-02 (plan tiers + firm/user monthly USD budgets + 80% soft warning + announced downgrade, BYOK exempt). Start slice 3 in a NEW session from the anchor section "New-session start - slice 3" and section O-4 (behavior contract incl. selection_code/fallback_reason budget_exhausted). nl_filter onto resolver route is a separate small item. Slice 4 stays gated on D-7 re-ratification.'
   live_check:
-  - 'gh pr list -R YourBIMpossible/BIMpossible --state all --search "model routing" --json number,title,state  # slice 2/nl_filter: expect no PR yet; 1C = #550 MERGED'
+  - 'gh pr list -R YourBIMpossible/BIMpossible --state all --search "model routing" --json number,title,state  # slice 3/nl_filter: expect no PR yet; 1C = #550 MERGED, slice 2 = #556 MERGED'
   - 'docker compose exec backend python -c "from db.session import SessionLocal; ..."  # spot-check usage_events has the 1B columns populated on next assistant turn'
   source: F:\Claude-Tools\reports\2026-09-01_ai-model-routing-plan.md; ASSISTANT-MODEL-ROUTING-1A closeout 2026-09-02. Phase 4 assistant work.
   notes_url: null
