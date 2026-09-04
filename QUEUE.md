@@ -7,7 +7,7 @@ This is a repo-local read model, not a definition of /next behavior. -->
 
 Generated 2026-09-04 (synced). Anchor-first, leverage-ranked (per item-model.md). The single #1 move is chosen live by the skill from the anchor (stated focus, else roadmap order) and finalization leverage — not from dependency cone. This board is a status-grouped snapshot; within each section it orders by owner-gated+S, then effort, risk, id, with `cone` leading only on a deep graph (this store is flat today). Full algorithm: `~/.claude/skills/next/reference/item-model.md`.
 
-Scope: `all`. Watermarks: `bimpossible` = 2026-09-04 @ `0ba9db35` PR#558 · `addins` = 2026-08-31 @ `d09204e` PR#115 · `workspace` = 2026-09-01 @ `9a8afb8` PR#112 · `evidence-compiler` = 2026-08-24 @ `0ef747e7533c7cf714888076f3df6f06dd028b84` PR#5 · `dashboard` = 2026-08-31 @ `387eefb` PR#10.
+Scope: `all`. Watermarks: `bimpossible` = 2026-09-04 @ `c0257d65` PR#561 · `addins` = 2026-08-31 @ `d09204e` PR#115 · `workspace` = 2026-09-01 @ `9a8afb8` PR#112 · `evidence-compiler` = 2026-08-24 @ `0ef747e7533c7cf714888076f3df6f06dd028b84` PR#5 · `dashboard` = 2026-08-31 @ `387eefb` PR#10.
 (pc-monitor: no items yet — run `init` to derive.)
 
 > **Dormant project(s):** `families` — reassessment-bound. Items scoped to them are parked; their probes are suspended (non-executable metadata) and render **SUSPENDED**, never verified. `/next` will not run or propose a command against a dormant repo.
@@ -95,7 +95,7 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-04 @ `0ba9db35` PR#558 · `add
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-08 · BIMpossible #321 (66d09f2, merged 2026-08-08) -- adds frontend/app/s…
 
 [OPS-SYNTH-AUDIT-HARDEN] Harden synthetic-concurrency-audit tooling: env-guard seeding, loopback-check host, fix schedule
-       unblocks 0 · S · bimpossible · CONTRADICTED 2026-09-01 · weekly-full-audit_2026-08-04.md SEC-SCRIPTS-PERF-1, CQ-SYNTH-HOST-EN…
+       unblocks 0 · S · bimpossible · CONTRADICTED 2026-09-04 · weekly-full-audit_2026-08-04.md SEC-SCRIPTS-PERF-1, CQ-SYNTH-HOST-EN…
        ⚠ both readings unresolved — STORE: guard wiring exercised on the next Monday run, exitCode 0/1 never 2. LIVE 2026-09-01: 2026-08-31 run exited 2 (wrapper container-recreate error…
 
 [PHASE9-REOPENED-SCOPE] Phase 9 link-target RULED: cutsheets anchor to individual element (by family type)

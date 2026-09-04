@@ -2,8 +2,8 @@ schema_version: 1
 reconciled:
   bimpossible:
     at: '2026-09-04'
-    commit: 0ba9db35
-    pr: 558
+    commit: c0257d65
+    pr: 561
   addins:
     at: '2026-08-31'
     commit: d09204e
@@ -654,10 +654,13 @@ items:
     ref: 'FOLLOW-ON, and it is a correctness fix rather than more hardening: BIMpossible #294 (ec9eec9, merged 2026-08-07) ''fix guard-check breach misclassification''. The guard check had been treating ANY non-401/403 response as an isolation breach, so a 300-VU spike dry run reported 28 ''breaches'' that were entirely connection drops, timeouts and 500s with no evidence any cross-tenant data was ever returned. Replaced with a four-way classifier (new guard_classification.py, unit-tested, no Locust/DB dependency): PASS (401/403 or an identity echo matching the caller''s own tenant) / AVAILABILITY_FAILURE (status 0 or 5xx -- a load signal, never a security finding) / CONFIRMED_BREACH (response proves protected cross-tenant data came back) / GUARD_POLICY_ANOMALY (non-denial that does not itself prove disclosure). locustfile.py routes non-pass responses into three non-overlapping report lists so nothing double-counts, all still register as Locust failures so load visibility is preserved, diff_baseline.py reports the categories distinctly with only confirmed breaches CRITICAL, and the nonzero-on-any-finding exit contract is unchanged. Commit message read directly; the classifier module itself was not reviewed.'
   - kind: run
     ref: '2026-08-31T11:00Z scheduled run: results/scheduled-run-status.json exitCode 2 ("Run failed to complete -- environment problem"); scheduled-run.log: WRAPPER ERROR: Container bimpossible-perf-audit-backend-migrate-1 Recreate. Not the guard path -- an environment failure, but the stored pass condition (exit 0/1, never 2) is unmet.'
+  - kind: pr
+    ref: 'BIMpossible#560 MERGED 2026-09-04T18:10:45Z (squash 5daaea65, branch claude/synthetic-audit-native-stderr): repairs the synthetic-concurrency audit producer + relay -- Invoke-SyntheticConcurrencyAudit.ps1 / Invoke-ScheduledConcurrencyAuditRelay.ps1 (+139 each), Run-ScheduledConcurrencyAudit.ps1, Register-/Test- task scripts, locustfile.py, docker-compose.yml, plus a new 875-line SyntheticConcurrencyAudit.Tests.ps1 Pester suite. Addresses the wrapper/producer path the 2026-08-31 exit-2 (container-recreate) failure surfaced. Code landed; a fresh green scheduled run is not yet observed, so the contradiction stands until the next run clears the live_check.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/560
   verification:
     level: contradicted
-    at: '2026-09-01'
-    by: 'STORE: guard wiring exercised on the next Monday run, exitCode 0/1 never 2. LIVE 2026-09-01: 2026-08-31 run exited 2 (wrapper container-recreate error). Both readings kept; owner to decide whether the env failure is a separate defect or this item reopens.'
+    at: '2026-09-04'
+    by: 'STORE: guard wiring exercised on the next Monday run, exitCode 0/1 never 2. LIVE 2026-09-01: 2026-08-31 run exited 2 (wrapper container-recreate error). REPAIR 2026-09-04: #560 (5daaea65) repaired the producer/relay wrapper path that failed; code landed but no fresh green scheduled run observed yet, so this stays contradicted until a run exits 0/1 (live_check) -- not flipped to verified on a merge alone. Both readings kept; owner to decide whether the env failure is a separate defect or this item reopens.'
   live_check:
   - 'After the next Monday scheduled run: check .claude/skills/synthetic-concurrency-audit/results/scheduled-run-status.json (or the Cowork run log) for exitCode 0/1, not 2.'
   source: 02_Reference/Audit and Scan Info/weekly-full-audit_2026-08-04.md §1-§2; PR#239; PR#241
@@ -4317,9 +4320,17 @@ items:
     url: https://github.com/YourBIMpossible/BIMpossible/pull/558
   - kind: run
     ref: 'Slice 3 DEPLOYED + LIVE 2026-09-04: docker-backend-1 image created 01:14:42Z (after #557), restarted 17:16:49Z (after #558 at 17:15:48Z); alembic current = b5d234c2723e (head); aec/model_budget.py + aec/model_plans.py + assistant.py + model_policy.py byte-identical (CRLF-normalized) to origin/main; frontend budget UI baked into the running image (built .next chunks carry budget_exhausted / estimated_cost_usd / model-policy). Local main == origin/main == 0ba9db35.'
+  - kind: pr
+    ref: 'BIMpossible#559 MERGED 2026-09-04T18:07:31Z (squash 24e95cae, branch fix/assistant-budget-notice-selected-model): budget notice now reflects the SELECTED model, not a fixed one -- assistant.py + frontend budget UI (AssistantPanel, useAssistantChat, budget.ts, models.ts). Backend assistant.py byte-identical (CRLF-normalized) to origin/main in the running docker-backend-1; frontend rebuilt.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/559
+  - kind: pr
+    ref: 'BIMpossible#561 MERGED 2026-09-04T19:01:33Z (squash c0257d65, branch fix/assistant-catalog-null-entry): frontend models.ts robustness -- listAssistantModels drops a null/non-object catalog entry (flatMap) instead of rejecting the whole catalog; +test. Frontend-only.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/561
+  - kind: run
+    ref: 'Slice 3 correctives #559/#561 LIVE 2026-09-04: origin/main == local main == c0257d65 (#561 tip); running docker-backend-1 aec/assistant.py byte-identical (CRLF-normalized, sha 5784056360a2b34e) to origin/main -- #559 backend change live. docker-frontend-1 image built 19:02:39Z, 66s after #561 merged 19:01:33Z, so #559 frontend budget UI + #561 models.ts catalog fix are baked into the running frontend (budget_exhausted / estimated_cost_usd chunks present). alembic head b5d234c2723e unchanged (no new migration).'
   verification:
     level: verified
-    by: 'Slice 3 (#557 9ed31ef3) + corrective (#558 0ba9db35) MERGED and DEPLOYED LIVE 2026-09-04: container restarted 17:16:49Z after #558, migration b5d234c2723e applied, backend model_budget/model_plans/assistant/model_policy identical to origin/main, frontend budget bundle live via chunk grep. Remaining lane work: nl_filter onto the resolver route (aec/nl_filter.py exists but is NOT wired through the model resolver route -- git grep for resolver wiring in the nl_filter path is empty) and slice 4 (gated on D-7 re-ratification). Item is ready (small tail), not in_flight.'
+    by: 'Slice 3 (#557 9ed31ef3) + corrective (#558 0ba9db35) MERGED and DEPLOYED LIVE 2026-09-04: container restarted 17:16:49Z after #558, migration b5d234c2723e applied, backend model_budget/model_plans/assistant/model_policy identical to origin/main, frontend budget bundle live via chunk grep. Remaining lane work: nl_filter onto the resolver route (aec/nl_filter.py exists but is NOT wired through the model resolver route -- git grep for resolver wiring in the nl_filter path is empty) and slice 4 (gated on D-7 re-ratification). Item is ready (small tail), not in_flight. Correctives #559 (budget notice reflects selected model) + #561 (catalog null-entry robustness) folded 2026-09-04, both live on c0257d65.'
     at: '2026-09-04'
   next_action: 'Slice 3 budgets SHIPPED LIVE 2026-09-04 (#557 + corrective #558): budgets over estimated_cost_usd, announced downgrade of platform-funded requests, BYOK exempt, migration b5d234c2723e. Remaining: (1) wire nl_filter onto the model resolver route -- small, aec/nl_filter.py not yet through the resolver; (2) slice 4 stays gated on D-7 re-ratification (owner). No other routing work open.'
   live_check:
