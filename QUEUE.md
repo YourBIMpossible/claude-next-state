@@ -265,7 +265,7 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-04 @ `0ba9db35` PR#558 · `add
 [EC-DOGFOOD-2] Continue Evidence Compiler dogfooding toward the next North Star review window
        unblocks 1 · M · evidence-compiler · VERIFIED 2026-08-24 · F:/Evidence Compiler/DOGFOOD_LOG.md
 
-[ASSISTANT-MODEL-ROUTING-1B-2] AI model routing tail: nl_filter onto resolver route unbuilt; slice 4 D-7-gated (slice 3 budgets #557/#558 LIVE; 1A/1B/1C/slice 2 shipped)
+[ASSISTANT-MODEL-ROUTING-1B-2] AI model routing tail: nl_filter onto resolver route unbuilt; slice 4 personal BYOK design complete + D-7 RE-RATIFIED 2026-09-04 (personal-only workspace, firm data denied, no fallback) — implementation unblocked, awaiting build order (packet 2026-09-04); slice 3.2 #559 LIVE 24e95cae; #557/#558 LIVE
        unblocks 0 · L · bimpossible · VERIFIED 2026-09-04 · Anchor F:\Claude-Tools\reports\2026-09-01_ai-model-routing-plan.md (…
 
 ## Blocked elsewhere

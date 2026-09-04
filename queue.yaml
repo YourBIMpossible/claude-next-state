@@ -4276,7 +4276,7 @@ items:
   source: 2026-09-01 owner request (assistant model hardcoded at backend/aec/assistant.py:101); Phase 4 assistant work. PHASE-STATUS Phase 4 row re-scored 2026-09-02 (bf6f7ab).
   notes_url: null
 - id: ASSISTANT-MODEL-ROUTING-1B-2
-  title: 'AI model routing tail: nl_filter onto resolver route unbuilt; slice 4 D-7-gated (slice 3 budgets #557/#558 LIVE; 1A/1B/1C/slice 2 shipped)'
+  title: 'AI model routing tail: nl_filter onto resolver route unbuilt; slice 4 personal BYOK design complete + D-7 RE-RATIFIED 2026-09-04 (personal-only workspace, firm data denied, no fallback) — implementation unblocked, awaiting build order (packet 2026-09-04); slice 3.2 #559 LIVE 24e95cae; #557/#558 LIVE'
   projects:
   - bimpossible
   status: ready
