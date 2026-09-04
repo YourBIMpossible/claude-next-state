@@ -5,9 +5,9 @@ This is a repo-local read model, not a definition of /next behavior. -->
 
 # /next — work-item queue
 
-Generated 2026-09-03 (synced). Anchor-first, leverage-ranked (per item-model.md). The single #1 move is chosen live by the skill from the anchor (stated focus, else roadmap order) and finalization leverage — not from dependency cone. This board is a status-grouped snapshot; within each section it orders by owner-gated+S, then effort, risk, id, with `cone` leading only on a deep graph (this store is flat today). Full algorithm: `~/.claude/skills/next/reference/item-model.md`.
+Generated 2026-09-04 (synced). Anchor-first, leverage-ranked (per item-model.md). The single #1 move is chosen live by the skill from the anchor (stated focus, else roadmap order) and finalization leverage — not from dependency cone. This board is a status-grouped snapshot; within each section it orders by owner-gated+S, then effort, risk, id, with `cone` leading only on a deep graph (this store is flat today). Full algorithm: `~/.claude/skills/next/reference/item-model.md`.
 
-Scope: `all`. Watermarks: `bimpossible` = 2026-09-03 @ `9605199d` PR#556 · `addins` = 2026-08-31 @ `d09204e` PR#115 · `workspace` = 2026-09-01 @ `9a8afb8` PR#112 · `evidence-compiler` = 2026-08-24 @ `0ef747e7533c7cf714888076f3df6f06dd028b84` PR#5 · `dashboard` = 2026-08-31 @ `387eefb` PR#10.
+Scope: `all`. Watermarks: `bimpossible` = 2026-09-04 @ `0ba9db35` PR#558 · `addins` = 2026-08-31 @ `d09204e` PR#115 · `workspace` = 2026-09-01 @ `9a8afb8` PR#112 · `evidence-compiler` = 2026-08-24 @ `0ef747e7533c7cf714888076f3df6f06dd028b84` PR#5 · `dashboard` = 2026-08-31 @ `387eefb` PR#10.
 (pc-monitor: no items yet — run `init` to derive.)
 
 > **Dormant project(s):** `families` — reassessment-bound. Items scoped to them are parked; their probes are suspended (non-executable metadata) and render **SUSPENDED**, never verified. `/next` will not run or propose a command against a dormant repo.
@@ -265,10 +265,8 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-03 @ `9605199d` PR#556 · `add
 [EC-DOGFOOD-2] Continue Evidence Compiler dogfooding toward the next North Star review window
        unblocks 1 · M · evidence-compiler · VERIFIED 2026-08-24 · F:/Evidence Compiler/DOGFOOD_LOG.md
 
-## In flight
-
-[ASSISTANT-MODEL-ROUTING-1B-2] AI model routing remaining lane: slice 3 budgets over estimated_cost_usd, nl_filter onto resolver route (1B/1C/slice 2 all shipped)
-       unblocks 0 · L · bimpossible · VERIFIED 2026-09-02 · Anchor F:\Claude-Tools\reports\2026-09-01_ai-model-routing-plan.md (…
+[ASSISTANT-MODEL-ROUTING-1B-2] AI model routing tail: nl_filter onto resolver route unbuilt; slice 4 D-7-gated (slice 3 budgets #557/#558 LIVE; 1A/1B/1C/slice 2 shipped)
+       unblocks 0 · L · bimpossible · VERIFIED 2026-09-04 · Anchor F:\Claude-Tools\reports\2026-09-01_ai-model-routing-plan.md (…
 
 ## Blocked elsewhere
 
@@ -368,17 +366,11 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-03 @ `9605199d` PR#556 · `add
 [OD-DECISIONS] Decide OD3 (fire-alarm schedule owner) and OD4 (OSS reuse triage)
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-18 · 02_Reference/Audit and Scan Info/BIMpossible_Verification_Checklist.…
 
-[OPS-RESIDENCY-DOC] Data residency/retention policy PUBLISHED -- /data-policy page live, bs-5 closed
-       unblocks 1 · S · bimpossible · VERIFIED 2026-08-04 · BIMpossible_ProgramPlan_2026-05-25.md, Commercial Launch Prerequisit…
-
 [OPS-TENANCY-DOC] Write the multi-tenant data-isolation strategy doc (audit's required TEST already shipped in PR#243)
        unblocks 1 · S · bimpossible · VERIFIED 2026-08-17 · BIMpossible_ProgramPlan_2026-05-25.md, Commercial Launch Prerequisit…
 
 [P7-SYNC-COMMENT-CRYPTO-BINDING] Sync comment crypto-binding: CLOSED BY OWNER RULING -- comment is non-authoritative collaboration metadata, no special binding required
        unblocks 0 · S · bimpossible+addins · VERIFIED 2026-08-27 · Today the token binds firm/user/document_title only (backend/revit_l…
-
-[WRITE-ENGINE-SHIPVEHICLE] Write Engine ship vehicle DECIDED: Phase 13 sub-increment (platform track reserved for later)
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-04 · BIMpossible_PHASE-STATUS.md row 13.1 (placed 2026-08-04 AM): 'ships …
 
 [P7-SYNC-GOLIVE] Supervised owner flag-flip: go-live Revit Link sync re-enable (Phase 7 step 2)
        unblocks 1 · S · bimpossible+addins · VERIFIED 2026-08-23 · CUTOVER PASS 2026-08-25 -- LIVE and verified, stays on (unlike pilot…
@@ -401,9 +393,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-03 @ `9605199d` PR#556 · `add
 [HYG-20260831-WORKSPACE-DOCS] Workspace docs-hygiene fixes (HYG-1/2/3) sit on an unpushed local branch with no PR
        unblocks 0 · S · workspace · VERIFIED 2026-08-31 · 3de8211 'fix(ci): gate docs-hygiene at PR time, not a week downstrea…
 
-[RE-WIZ-POLL-2] Fix wizard provisioning poll: retry transient HTTP errors like its sibling loop does
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-04 · BIMpossible PR#239 (68bb596, merged 2026-08-04) -- _await_project_ac…
-
 [SEC-20260831-TEMP-CLONE-TOKEN-EXPOSURE] OWNER ATTENTION: live GitHub temp_clone_token committed to Workspace evidence JSON, redacted-in-tree only -- rotation/history-scrub decision needed
        unblocks 0 · S · workspace · VERIFIED 2026-09-01 · Workspace commit ecd6072 (2026-08-31, "security: redact live temp_cl…
 
@@ -412,9 +401,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-03 @ `9605199d` PR#556 · `add
 
 [SEC-ASSIST-PERSONAL-VIEWCOUNT] Assistant briefing's personal_views count is the unfixed half of the SEC-ASSIST-FIRMVIEW function
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · backend/aec/assistant_context.py:172-178 (_assemble_project_context)…
-
-[SEC-BRACE-2] Bump brace-expansion override to 5.0.9 -- new HIGH GHSA-rgw5-rvv9-x895
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-04 · gh api dependabot/alerts 2026-08-04: alert #3 OPEN HIGH, brace-expan…
 
 [WSR-SECSCAN-LAUNCHGUARD] Run-Security-Scan.ps1 reports a stale report as a fresh one when a scanner fails to launch
        unblocks 0 · S · workspace · VERIFIED 2026-08-31 · F:/BIMpossible-Workspace/system/Run-Security-Scan.ps1 - four sequent…
@@ -449,9 +435,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-03 @ `9605199d` PR#556 · `add
 [OPS-DEPLOY-STACK-REFRESH-20260817] Deploy tonight's merged main to the local stack -- images/DB stale vs main 130ba49
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-17 · BIMpossible#415 #416 #417 #418 #419 (+#273 #275) all MERGED; main ti…
 
-[P13-T4-REFUSAL] Live-test Apply-Changes refusal paths -- non-cloud file, expired pane pairing
-       unblocks 2 · S · bimpossible+addins · VERIFIED 2026-08-04 · addins main cfb4cc1 (T4 apply core); BIMpossible PR#229 b19674c + Ad…
-
 [P3-8-SLICE23] Phase 3.8 slice 3 (ACC role sync) LIVE dark (deployed, flag OFF by design); slice-2 ruling resolved
        unblocks 1 · S · bimpossible · VERIFIED 2026-08-31 · BIMpossible #275 MERGED 2026-08-17 (owner ruling: merge tonight, dar…
 
@@ -466,9 +449,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-03 @ `9605199d` PR#556 · `add
 
 [SEC-DEP-EXEC] Dependabot PR triage EXECUTED: closed 201+235, parked 200, merged 179/180/237 (redis smoked); 139 auto-merging
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · 00_Strategy/2026-08-04__ProductionQueue_Session_Findings.md §2 -- pe…
-
-[SEC-DEPENDABOT-CI] Decide the CI Actions merge policy (unreviewed third-party Action can merge to main)
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-04 · BIMpossible PR#242 MERGED f8b022f 2026-08-04 -- github_actions ecosy…
 
 [SEC-GROUPS-PERSONAL-INDEX-FIRMID] uix_named_deliverables_personal_name_group unique index omits firm_id -- confirmed write-path only, not data corruption
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · Source: named-deliverable-personal-scope-firm-gaps.md finding #4, pr…
@@ -668,9 +648,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-03 @ `9605199d` PR#556 · `add
 
 [SEC-APSISO-TESTS-ENROLLMENT-EXPLICIT] Make /aps + /data hub-isolation test suites enrollment-explicit (no flag-lane dependence)
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-17 · BIMpossible #390 (e9a424e, merged 2026-08-17) -- enrollment-explicit…
-
-[WRITE-ENGINE-INC1] Write Engine Increment-1 -- SHIPPED: Task 8 smoke passed, #232 + AddIns #49 merged lockstep
-       unblocks 1 · L · bimpossible+addins · VERIFIED 2026-08-04 · 00_Strategy/design-docs/2026-07-26__write-engine-increment1_typed-va…
 
 [ENROLL-TENANCY-LAYER] Client/project enrollment tenancy layer (E1-E5) — enforcement LIVE (flag ON)
        unblocks 1 · L · bimpossible · VERIFIED 2026-08-17 · BIMpossible #333 MERGED (squash 593a4fb) 2026-08-14T23:33:38Z -- cli…

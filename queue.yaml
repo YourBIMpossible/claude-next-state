@@ -1,9 +1,9 @@
 schema_version: 1
 reconciled:
   bimpossible:
-    at: '2026-09-03'
-    commit: 9605199d
-    pr: 556
+    at: '2026-09-04'
+    commit: 0ba9db35
+    pr: 558
   addins:
     at: '2026-08-31'
     commit: d09204e
@@ -4276,10 +4276,10 @@ items:
   source: 2026-09-01 owner request (assistant model hardcoded at backend/aec/assistant.py:101); Phase 4 assistant work. PHASE-STATUS Phase 4 row re-scored 2026-09-02 (bf6f7ab).
   notes_url: null
 - id: ASSISTANT-MODEL-ROUTING-1B-2
-  title: 'AI model routing remaining lane: slice 3 budgets over estimated_cost_usd, nl_filter onto resolver route (1B/1C/slice 2 all shipped)'
+  title: 'AI model routing tail: nl_filter onto resolver route unbuilt; slice 4 D-7-gated (slice 3 budgets #557/#558 LIVE; 1A/1B/1C/slice 2 shipped)'
   projects:
   - bimpossible
-  status: in_flight
+  status: ready
   owner_gate: false
   owner: null
   unblocks: []
@@ -4309,13 +4309,21 @@ items:
     ref: 'Slice 2 deployed 2026-09-02: main fast-forwarded 8d24af9a->9605199d; docker compose run --rm backend-migrate applied a4c123b1612d cleanly. First deploy pass was backend-only (--force-recreate --no-deps backend) and missed that this PR also touched frontend/ (ModelPolicyCard.tsx, account/page.tsx, AssistantPanel.tsx, useAssistantChat.ts, sseParse.ts, modelPolicy.ts, models.ts) -- caught via self-review against docs/engineering/deployments.md "both frontend and backend touched" section (frontend bundle is baked into the image, not bind-mounted). Corrected same session: docker compose up -d --build from docker/ rebuilt frontend+backend+backend-migrate images, all containers healthy. Verified live (not just restarted) via docker compose exec frontend grep on built .next/static chunks -- assistant/models and model-policy strings present in the /account page chunk with a fresh BUILD_ID. Worktree ai-model-routing-2 and local branch feat/ai-model-routing-2 removed post-merge.'
   - kind: doc
     ref: 'O-4 ratified 2026-09-02 by owner (verbatim in anchor section O-4): calendar-month budgets in firm TZ; 80% soft warning; Starter fast $25/$5, Professional fast+balanced $150/$25, Business fast+balanced $500/$60, Advanced BYOK-only, Fable unregistered; exhaustion of either firm or user budget -> announced downgrade of platform-funded requests only; never pause; ledger-derived counters first, reservation only on proven overshoot.'
+  - kind: pr
+    ref: 'BIMpossible#557 MERGED 2026-09-04T01:11:05Z (squash 9ed31ef3, branch feat/ai-model-routing-slice3): slice 3 platform cost controls -- new aec/model_budget.py + aec/model_plans.py, budget enforcement over estimated_cost_usd in model_policy.py/assistant.py, migration b5d234c2723e (firm billing timezone), slack/teams routers, frontend budget UI (budget.ts, AssistantPanel, sseParse, useAssistantChat). Announced downgrade of platform-funded requests on budget exhaustion per O-4; BYOK exempt.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/557
+  - kind: pr
+    ref: 'BIMpossible#558 MERGED 2026-09-04T17:15:48Z (squash 0ba9db35, branch fix/slice3-budget-routing-corrective): corrective for slice 3 budget routing disclosures/resolution in assistant.py + model_policy.py; decision-log 2026-09-04__slice3-budget-routing-corrective.md. Backend + docs only (no frontend).'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/558
+  - kind: run
+    ref: 'Slice 3 DEPLOYED + LIVE 2026-09-04: docker-backend-1 image created 01:14:42Z (after #557), restarted 17:16:49Z (after #558 at 17:15:48Z); alembic current = b5d234c2723e (head); aec/model_budget.py + aec/model_plans.py + assistant.py + model_policy.py byte-identical (CRLF-normalized) to origin/main; frontend budget UI baked into the running image (built .next chunks carry budget_exhausted / estimated_cost_usd / model-policy). Local main == origin/main == 0ba9db35.'
   verification:
     level: verified
-    by: '1B (#548, 8cad22b5), 1C (#550, e3ce9120), and slice 2 (#556, 9605199d) all MERGED and DEPLOYED 2026-09-02, backend+frontend both rebuilt and healthy, new frontend bundle confirmed live via chunk grep. Only nl_filter and slice 3 (budgets) remain unbuilt -- item stays in_flight for those.'
-    at: '2026-09-02'
-  next_action: 'O-4 RATIFIED 2026-09-02 (plan tiers + firm/user monthly USD budgets + 80% soft warning + announced downgrade, BYOK exempt). Start slice 3 in a NEW session from the anchor section "New-session start - slice 3" and section O-4 (behavior contract incl. selection_code/fallback_reason budget_exhausted). nl_filter onto resolver route is a separate small item. Slice 4 stays gated on D-7 re-ratification.'
+    by: 'Slice 3 (#557 9ed31ef3) + corrective (#558 0ba9db35) MERGED and DEPLOYED LIVE 2026-09-04: container restarted 17:16:49Z after #558, migration b5d234c2723e applied, backend model_budget/model_plans/assistant/model_policy identical to origin/main, frontend budget bundle live via chunk grep. Remaining lane work: nl_filter onto the resolver route (aec/nl_filter.py exists but is NOT wired through the model resolver route -- git grep for resolver wiring in the nl_filter path is empty) and slice 4 (gated on D-7 re-ratification). Item is ready (small tail), not in_flight.'
+    at: '2026-09-04'
+  next_action: 'Slice 3 budgets SHIPPED LIVE 2026-09-04 (#557 + corrective #558): budgets over estimated_cost_usd, announced downgrade of platform-funded requests, BYOK exempt, migration b5d234c2723e. Remaining: (1) wire nl_filter onto the model resolver route -- small, aec/nl_filter.py not yet through the resolver; (2) slice 4 stays gated on D-7 re-ratification (owner). No other routing work open.'
   live_check:
-  - 'gh pr list -R YourBIMpossible/BIMpossible --state all --search "model routing" --json number,title,state  # slice 3/nl_filter: expect no PR yet; 1C = #550 MERGED, slice 2 = #556 MERGED'
+  - 'gh pr list -R YourBIMpossible/BIMpossible --state all --search "model routing" --json number,title,state  # slice 3 = #557 MERGED + #558 corrective; nl_filter: expect no PR yet'
   - 'docker compose exec backend python -c "from db.session import SessionLocal; ..."  # spot-check usage_events has the 1B columns populated on next assistant turn'
   source: F:\Claude-Tools\reports\2026-09-01_ai-model-routing-plan.md; ASSISTANT-MODEL-ROUTING-1A closeout 2026-09-02. Phase 4 assistant work.
   notes_url: null
