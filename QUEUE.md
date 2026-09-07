@@ -20,12 +20,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `add
 [OPS-CLIENTDATA-REMEDIATION] Client-data remediation: quarantine delete, PDF triage, de-ID pass, DB audit
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-31 · decision-log/2026-08-05__client-data-remediation.md -- Open Items ch…
 
-[R18-SHARE-READ-VS-BYTES] Owner call: does a read share include byte download, or fail closed?
-       unblocks 0 · S · bimpossible · CLAIMED 2026-09-07 · F:/BIMpossible-Workspace/00_Strategy/2026-09-04__Phase3-Phase4-Needs…
-
-[R20-P310A-DISPLAY-FLAG] Owner call: was the 2026-08-15 go meant to activate the 3.10a display flag?
-       unblocks 0 · S · bimpossible · CLAIMED 2026-09-07 · F:/BIMpossible-Workspace/00_Strategy/2026-09-04__Phase3-Phase4-Needs…
-
 [CHAT-GATEWAY-291-OWNER-DECISIONS] Issue #291 owner decisions: binding lifecycle after denial, persisted identity bridge, cross-firm alerting threshold (decision package prepared, awaiting three sign-offs)
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-06 · BIMpossible #582 docs(#291) -- squash 5f275baa, docs-only. Adds the …
 
@@ -40,9 +34,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `add
 
 [PROD-DERIV-3] Discharge the DERIV-3 prod verification -- needs a mid-translation model and an APS upload
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-28 · 01_BuildLog/2026-08-05__hub-tenancy-migration-BLOCKED_HANDOFF.md -- …
-
-[R19-INHERITANCE-PLAN-LANE] Confirm the superseded 2026-08-08 Authorization-Inheritance plan lane is dead
-       unblocks 0 · S · workspace+bimpossible · CLAIMED 2026-09-07 · F:/BIMpossible-Workspace/00_Strategy/2026-09-04__Phase3-Phase4-Needs…
 
 [AUTHZ-SHADOW-WINDOW-VALIDITY] DEFERRED to pre-pilot re-entry (runbook Sec 6): shadow-window validity work only when a real pilot is prepared
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-16 · 2026-08-16 prod probe with SHADOW live: authz_decision_log holds onl…
@@ -264,9 +255,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `add
 [OPS-AUDIT-UNATTENDED-ACCESS] Pre-grant Workspace + Add-Ins folder access to the scheduled weekly-audit session
        unblocks 0 · S · workspace · VERIFIED 2026-08-31 · 01_BuildLog/2026-08-31__weekly-full-audit-run.md step 1 + the report…
 
-[TEST-PYTEST-COLLECTS-NOTHING] pytest collects ZERO tests in Claude-Profile/hooks/tests and Claude-Tools/ctxcheck - green means nothing ran
-       unblocks 0 · S · workspace · VERIFIED 2026-09-07 · `python -m pytest` in F:/Claude-Tools/ctxcheck reports `no tests ran…
-
 [ADDINS-SLOT-LEDGER] Runtime-slot handoff ledger is stale: deploys are landing without a ledger entry
        unblocks 0 · S · addins · VERIFIED 2026-08-23 · Add-Ins decision-log/2026-07-25__runtime-slot-handoff.md -- last mod…
 
@@ -284,6 +272,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `add
 
 [OPS-ROLLBACK-RETENTION-20260817] Intentional retention: rollback-20260817 image tags until deploy soak completes 2026-08-18 evening
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-30 · deploy closed live at alembic c4e7a2b91d38, 2026-08-17 ~22:00 PDT
+
+[R18-SHARE-READ-VS-BYTES] Build the explicit per-share download scope: read share is view-only, download opt-in (owner ruling 2026-09-07)
+       unblocks 0 · M · bimpossible · CLAIMED 2026-09-07 · F:/BIMpossible-Workspace/00_Strategy/2026-09-04__Phase3-Phase4-Needs…
 
 [ADDINS-HYGIENE] Add-Ins hygiene: finish Glass rollout (conformance-PR dedup DONE 2026-08-04)
        unblocks 0 · M · addins · VERIFIED 2026-08-23 · Add-Ins #10 MERGED 2026-08-04 (squash, main 94b21ab -- Plans 1+2 con…
@@ -425,6 +416,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `add
 [HYG-20260831-WORKSPACE-DOCS] Workspace docs-hygiene fixes (HYG-1/2/3) sit on an unpushed local branch with no PR
        unblocks 0 · S · workspace · VERIFIED 2026-08-31 · 3de8211 'fix(ci): gate docs-hygiene at PR time, not a week downstrea…
 
+[R20-P310A-DISPLAY-FLAG] Owner call: was the 2026-08-15 go meant to activate the 3.10a display flag?
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-07 · F:/BIMpossible-Workspace/00_Strategy/2026-09-04__Phase3-Phase4-Needs…
+
 [SEC-20260831-TEMP-CLONE-TOKEN-EXPOSURE] OWNER ATTENTION: live GitHub temp_clone_token committed to Workspace evidence JSON, redacted-in-tree only -- rotation/history-scrub decision needed
        unblocks 0 · S · workspace · VERIFIED 2026-09-01 · Workspace commit ecd6072 (2026-08-31, "security: redact live temp_cl…
 
@@ -433,6 +427,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `add
 
 [SEC-ASSIST-PERSONAL-VIEWCOUNT] Assistant briefing's personal_views count is the unfixed half of the SEC-ASSIST-FIRMVIEW function
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · backend/aec/assistant_context.py:172-178 (_assemble_project_context)…
+
+[TEST-PYTEST-COLLECTS-NOTHING] pytest collects ZERO tests in Claude-Profile/hooks/tests and Claude-Tools/ctxcheck - green means nothing ran
+       unblocks 0 · S · workspace · VERIFIED 2026-09-07 · `python -m pytest` in F:/Claude-Tools/ctxcheck reports `no tests ran…
 
 [WSR-SECSCAN-LAUNCHGUARD] Run-Security-Scan.ps1 reports a stale report as a fresh one when a scanner fails to launch
        unblocks 0 · S · workspace · VERIFIED 2026-08-31 · F:/BIMpossible-Workspace/system/Run-Security-Scan.ps1 - four sequent…
@@ -602,6 +599,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `add
 
 [POST-268-FOLLOWUPS] Merge the three post-#268 follow-up PRs -- reviewed, three-lane green, awaiting checks
        unblocks 2 · S · bimpossible · VERIFIED 2026-08-18 · BIMpossible #269 (1887583), #270 (f6f0044), #271 (428889c) -- all ME…
+
+[R19-INHERITANCE-PLAN-LANE] Confirm the superseded 2026-08-08 Authorization-Inheritance plan lane is dead
+       unblocks 0 · S · workspace+bimpossible · VERIFIED 2026-09-07 · F:/BIMpossible-Workspace/00_Strategy/2026-09-04__Phase3-Phase4-Needs…
 
 [ROUTER-SUPPORT-INDEX-KEY-MISMATCH] RESOLVED by PR #485: support fast-path now keys ModelIndex on the file_urn COLUMN (not item_id); regression tests pin item_id != file_urn
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-31 · Found by Explore agent during P11 QA-history follow-ups session 2026…

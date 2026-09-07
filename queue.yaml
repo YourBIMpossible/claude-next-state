@@ -3798,7 +3798,7 @@ items:
   title: pytest collects ZERO tests in Claude-Profile/hooks/tests and Claude-Tools/ctxcheck - green means nothing ran
   projects:
   - workspace
-  status: ready
+  status: live
   owner_gate: false
   owner: null
   unblocks: []
@@ -3812,10 +3812,11 @@ items:
     ref: Risk is any CI job or human habit that runs plain pytest there and reads green as coverage. Remedy is either a conftest/collector shim or a documented runner - NOT rewriting the suites. Not fixed in the 2026-08-31 slop-audit pass because that audit records 0 findings for these repos and the brief forbade modifying them to manufacture work.
   verification:
     level: verified
-    by: 'Re-probed 2026-09-07: python -m pytest in F:/Claude-Tools/ctxcheck still prints ''collected 0 items / no tests ran in 0.04s''. Green-on-nothing unchanged.'
+    by: 'FIXED 2026-09-07: ctxcheck ac832bf (test_ctxcheck.py exposes test_ctxcheck_suite; pytest -q = 1 passed, script = 48 passed) and Claude-Profile c13aee0 (hooks/tests four files wrapped in run_checks() + def test_*; pytest hooks/tests -q = 4 passed). Both on master. Live check now asserts the exit code instead of piping to tail.'
     at: '2026-09-07'
   live_check:
-  - cd F:/Claude-Tools/ctxcheck && python -m pytest 2>&1 | tail -3
+  - cd F:/Claude-Tools/ctxcheck && python -m pytest -q; echo exit=$?  # expect '1 passed' and exit=0 (exit 5 = collected nothing)
+  - cd F:/Claude-Profile && python -m pytest hooks/tests -q; echo exit=$?  # expect '4 passed' and exit=0
   source: F:/AI-Dev/slop-audit-remediation_2026-08-31.md sections 2 and 4
   notes_url: F:/AI-Dev/slop-audit-remediation_2026-08-31.md
 - id: FAM-PREEXISTING-RED
@@ -4839,13 +4840,13 @@ items:
   source: 'BIMpossible_Workspace PR #128 (receipt-gated push) + code-repo PR #610; docs/engineering/DELIVERY.md'
   notes_url: null
 - id: R18-SHARE-READ-VS-BYTES
-  title: 'Owner call: does a read share include byte download, or fail closed?'
+  title: 'Build the explicit per-share download scope: read share is view-only, download opt-in (owner ruling 2026-09-07)'
   projects:
   - bimpossible
-  status: blocked_owner
-  owner_gate: true
+  status: ready
+  owner_gate: false
   unblocks: []
-  effort: S
+  effort: M
   risk: 3
   evidence:
   - kind: doc
@@ -4853,11 +4854,17 @@ items:
   - kind: pr
     ref: BIMpossible_Workspace#126
     url: https://github.com/YourBIMpossible/BIMpossible_Workspace/pull/126
+  - kind: doc
+    ref: F:/BIMpossible-Workspace/00_Strategy/2026-09-07__R18_ShareDownloadScope_DesignDoc.md
+  - kind: pr
+    ref: BIMpossible_Workspace#138
+    url: https://github.com/YourBIMpossible/BIMpossible_Workspace/pull/138
   verification:
     level: claimed
-    by: 'Filed 2026-09-06 by Workspace PR #126 when R12''s parked follow-ups were split out. Backlog row: P2, Deferred (product decision), no environment needed; owner chooses option A (fail-closed) or B (bytes included, stated as policy). Both options costed in the backlog; current behaviour documented and unchanged. Ledger claim only - no machine probe settles a product decision.'
+    by: 'Filed 2026-09-06 by Workspace PR #126 when R12''s parked follow-ups were split out. Backlog row: P2, Deferred (product decision), no environment needed; owner chooses option A (fail-closed) or B (bytes included, stated as policy). Both options costed in the backlog; current behaviour documented and unchanged. Ledger claim only - no machine probe settles a product decision. DECIDED 2026-09-07 (owner, chat): Option A extended - a `read` share is view-only; byte download is a second explicit per-share scope `download`, off by default. Design doc signed via Workspace PR #138. Engineering scope: migration widening ck_psg_scope, `_shared_read_allowed(download=)` rail at assert_project_access step 5 placed before every cache read, byte routes required=VIEW_DOWNLOAD, POST/PATCH share scope API, share-dialog checkbox, 403 reason share_view_only, test matrix + R12 harness download leg, new Wave row.'
     at: '2026-09-07'
   live_check:
+  - 'grep -n "download" F:/BIMpossible/backend/aec/cross_firm_sharing.py  # expect SCOPES to include download once built'
   - 'grep -n "R18" "F:/BIMpossible-Workspace/00_Strategy/2026-09-04__Phase3-Phase4-NeedsAttention-Backlog.md"  # expect the row to leave Deferred once decided'
   source: '2026-09-04__Phase3-Phase4-NeedsAttention-Backlog.md row R18 (filed by Workspace PR #126)'
   notes_url: null
@@ -4866,8 +4873,8 @@ items:
   projects:
   - workspace
   - bimpossible
-  status: blocked_owner
-  owner_gate: true
+  status: live
+  owner_gate: false
   unblocks: []
   effort: S
   risk: 1
@@ -4877,9 +4884,12 @@ items:
   - kind: pr
     ref: BIMpossible_Workspace#126
     url: https://github.com/YourBIMpossible/BIMpossible_Workspace/pull/126
+  - kind: pr
+    ref: BIMpossible_Workspace#138
+    url: https://github.com/YourBIMpossible/BIMpossible_Workspace/pull/138
   verification:
-    level: claimed
-    by: 'Filed 2026-09-06 by Workspace PR #126. Backlog row: P3, Blocked - needs the owning lane to release an uncommitted plan file; resolution is lane coordination, not code. Ledger claim only.'
+    level: verified
+    by: 'Owner ruled 2026-09-07 (chat): lane dead. The plan file''s uncommitted lines were committed by Workspace PR #132 (fbf6926); branch/worktree gone. SUPERSEDED pointer added to the plan and backlog row set Resolved by Workspace PR #138 (159fc60).'
     at: '2026-09-07'
   live_check:
   - 'grep -n "R19" "F:/BIMpossible-Workspace/00_Strategy/2026-09-04__Phase3-Phase4-NeedsAttention-Backlog.md"  # expect the row to leave Blocked once the lane is confirmed dead'
@@ -4889,8 +4899,8 @@ items:
   title: 'Owner call: was the 2026-08-15 go meant to activate the 3.10a display flag?'
   projects:
   - bimpossible
-  status: blocked_owner
-  owner_gate: true
+  status: live
+  owner_gate: false
   unblocks: []
   effort: S
   risk: 3
@@ -4900,9 +4910,12 @@ items:
   - kind: pr
     ref: BIMpossible_Workspace#126
     url: https://github.com/YourBIMpossible/BIMpossible_Workspace/pull/126
+  - kind: pr
+    ref: BIMpossible#618
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/618
   verification:
-    level: claimed
-    by: 'Filed 2026-09-06 by Workspace PR #126. Backlog row: P2, Blocked - a docs-vs-compose contradiction over NEXT_PUBLIC_BIMPOSSIBLE_PHASE3_10_ENABLED''s tracked value; only the owner can say whether the 2026-08-15 ''owner go'' was meant to activate it. Ledger claim only.'
+    level: verified
+    by: 'Filed 2026-09-06 by Workspace PR #126. Backlog row: P2, Blocked - a docs-vs-compose contradiction over NEXT_PUBLIC_BIMPOSSIBLE_PHASE3_10_ENABLED''s tracked value; only the owner can say whether the 2026-08-15 ''owner go'' was meant to activate it. Ledger claim only. RESOLVED 2026-09-07: owner ruled the flag is ON (dev stage, no real users; already "1" in both compose files). Five stale OFF/BLOCK docs truthed up by BIMpossible PR #618 (ac23866b); the 3.10a live test plan remains its own open item, no longer a gate on the flag.'
     at: '2026-09-07'
   live_check:
   - 'grep -n "R20" "F:/BIMpossible-Workspace/00_Strategy/2026-09-04__Phase3-Phase4-NeedsAttention-Backlog.md"  # expect the row to leave Blocked once the owner answers'
