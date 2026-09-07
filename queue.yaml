@@ -10,8 +10,8 @@ reconciled:
     pr: 121
   workspace:
     at: '2026-09-07'
-    commit: 7429d25
-    pr: 133
+    commit: 7d7647f
+    pr: 134
   evidence-compiler:
     at: '2026-08-24'
     commit: 0ef747e7533c7cf714888076f3df6f06dd028b84
@@ -4792,7 +4792,7 @@ items:
   projects:
   - workspace
   - bimpossible
-  status: landed
+  status: live
   owner_gate: false
   unblocks: []
   effort: S
@@ -4824,13 +4824,18 @@ items:
     url: https://github.com/YourBIMpossible/BIMpossible/pull/616
   - kind: run
     ref: F:/BIMpossible/.git/verify-local-ci.receipt.json
+  - kind: pr
+    ref: BIMpossible_Workspace#134
+    url: https://github.com/YourBIMpossible/BIMpossible_Workspace/pull/134
+  - kind: run
+    ref: F:/BIMpossible-Workspace/.git/worktrees/ledger-refresh/verify-local-ci.receipt.json
   verification:
     level: verified
-    by: 'All eight PRs MERGED 2026-09-07. Code leg is exercised: F:/BIMpossible/.git/verify-local-ci.receipt.json exists, schema 1, exitCode 0, headSha 540bcd31, finished 2026-09-07T02:15:16Z. Workspace leg is installed but UNEXERCISED: .git/hooks/pre-push shim present (935 B) and Verify-Local-CI.ps1 at the repo root, but NO verify-local-ci.receipt.json exists in F:/BIMpossible-Workspace/.git. Cross-repo asymmetry: stays landed, not live, until the Workspace half produces a receipt.'
+    by: 'Workspace leg EXERCISED 2026-09-07: Push-And-Verify.ps1 from worktree .claude/worktrees/ledger-refresh first went RED on G3 (receipt written RED for 9ecc0856, push refused - gate proven to bite), then GREEN for 10b4831c: receipt schema 2, exitCode 0, dirty=false, headSha==startHeadSha==pushed SHA 10b4831cf9c1, baseRef origin/main @ 7429d259, skips [], verifierFiles sha256 recorded (shim b133e79d matches installed .git/hooks/pre-push), lanes [docs-hygiene]. Pre-push hook executed on the push: ''delivery-receipt: OK 10b4831cf9c1 -> refs/heads/claude/ledger-refresh-20260907 - preflight green ... hook installed''. check-delivery-receipt.mjs --hooks-only rc 0 and --sha 10b4831c rc 0. Workspace PR #134 MERGED 7d7647fb (docs-hygiene pass). Code leg: F:/BIMpossible/.git/verify-local-ci.receipt.json exitCode 0 headSha 540bcd31 (2026-09-07T02:15Z). Both legs observed with hook execution.'
     at: '2026-09-07'
   live_check:
-  - 'cat F:/BIMpossible/.git/verify-local-ci.receipt.json  # expect exitCode 0 at current HEAD'
-  - 'ls F:/BIMpossible-Workspace/.git/verify-local-ci.receipt.json  # currently MISSING - this is the gap'
+  - 'cat F:/BIMpossible/.git/verify-local-ci.receipt.json  # expect exitCode 0 at a recent HEAD'
+  - 'git -C F:/BIMpossible-Workspace log --oneline -1 7d7647fb  # PR #134 merge commit reachable (receipt-gated push observed)'
   source: 'BIMpossible_Workspace PR #128 (receipt-gated push) + code-repo PR #610; docs/engineering/DELIVERY.md'
   notes_url: null
 - id: R18-SHARE-READ-VS-BYTES

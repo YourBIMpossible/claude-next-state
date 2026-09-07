@@ -7,7 +7,7 @@ This is a repo-local read model, not a definition of /next behavior. -->
 
 Generated 2026-09-07 (synced). Anchor-first, leverage-ranked (per item-model.md). The single #1 move is chosen live by the skill from the anchor (stated focus, else roadmap order) and finalization leverage — not from dependency cone. This board is a status-grouped snapshot; within each section it orders by owner-gated+S, then effort, risk, id, with `cone` leading only on a deep graph (this store is flat today). Full algorithm: `~/.claude/skills/next/reference/item-model.md`.
 
-Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `addins` = 2026-09-07 @ `111e241f` PR#121 · `workspace` = 2026-09-07 @ `7429d25` PR#133 · `evidence-compiler` = 2026-08-24 @ `0ef747e7533c7cf714888076f3df6f06dd028b84` PR#5 · `dashboard` = 2026-09-06 @ `efdcba1` PR#22.
+Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `addins` = 2026-09-07 @ `111e241f` PR#121 · `workspace` = 2026-09-07 @ `7d7647f` PR#134 · `evidence-compiler` = 2026-08-24 @ `0ef747e7533c7cf714888076f3df6f06dd028b84` PR#5 · `dashboard` = 2026-09-06 @ `efdcba1` PR#22.
 (pc-monitor: no items yet — run `init` to derive.)
 
 > **Dormant project(s):** `families` — reassessment-bound. Items scoped to them are parked; their probes are suspended (non-executable metadata) and render **SUSPENDED**, never verified. `/next` will not run or propose a command against a dormant repo.
@@ -93,9 +93,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `add
 
 [CKA-DOC-MODEL-PR534] CKA project/private/multi-project/firm-library document model on AUTH-INH MERGED (#534); migration b7c8d9e0f1a2 applied locally; project scopes dark while gate is not ENFORCE
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · BIMpossible#534 MERGED 2026-09-02T02:58Z (squash 1f59bcf8): aec/firm…
-
-[DELIV-RECEIPT-GATE] Verify the Workspace leg of the exact-HEAD delivery receipt gate actually runs
-       unblocks 0 · S · workspace+bimpossible · VERIFIED 2026-09-07 · BIMpossible_Workspace#128
 
 [SEC-FIRMVIEW-TENANCY-280] PR#280 CLOSED as superseded by main's #276/#291 fix -- owner-directed, coverage check done
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · BIMpossible #280 OPEN, 2 commits, 'feat(slack): tenancy enforcement …
@@ -421,6 +418,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `add
 
 [BUG-GITLEAKS-HITS-COLLAPSE] Invoke-GitleaksScan collapses the whole findings array into one hit under PowerShell 5.1 - every multi-finding scan prints one System.Object[] line and HITS: 1
        unblocks 0 · S · workspace · VERIFIED 2026-08-31 · Observed 2026-08-31 while running the helper by hand before the main…
+
+[DELIV-RECEIPT-GATE] Verify the Workspace leg of the exact-HEAD delivery receipt gate actually runs
+       unblocks 0 · S · workspace+bimpossible · VERIFIED 2026-09-07 · BIMpossible_Workspace#128
 
 [HYG-20260831-WORKSPACE-DOCS] Workspace docs-hygiene fixes (HYG-1/2/3) sit on an unpushed local branch with no PR
        unblocks 0 · S · workspace · VERIFIED 2026-08-31 · 3de8211 'fix(ci): gate docs-hygiene at PR time, not a week downstrea…
