@@ -90,7 +90,7 @@ projects:
   - key: ai-server
     name: AI-Server (local LLM inference platform)
     aliases: [server, ollama, inference]
-    path: F:\AI-Dev\AI-Server
+    path: F:\AI-Server
     origin: https://github.com/YourBIMpossible/AI-Server.git
     active: true
     companions: []
