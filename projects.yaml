@@ -128,13 +128,17 @@ projects:
 
   - key: laundry
     name: Laundry Gig
-    path: F:\AI-Dev\Laundry Gig
+    # location-pending: formerly F:\AI-Dev\Laundry Gig (retired rollback/archive root); no canonical relocation assigned. Path neutralized so nothing resolves into AI-Dev. GitHub remote below is authoritative.
+    path: null
+    location: location-pending
     origin: https://github.com/YourBIMpossible/lazy-laundry-app.git
     active: false
 
   - key: revit-ocr
     name: Revit-OCR
-    path: F:\AI-Dev\Revit-OCR
+    # location-pending: formerly F:\AI-Dev\Revit-OCR (retired rollback/archive root); no canonical relocation assigned. Path neutralized so nothing resolves into AI-Dev.
+    path: null
+    location: location-pending
     origin: null
     active: false
     notes: Not a repo. Evaluated as a selective tool, not a pipeline.
