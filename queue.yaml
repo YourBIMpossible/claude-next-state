@@ -1,25 +1,25 @@
 schema_version: 1
 reconciled:
   bimpossible:
-    at: '2026-09-04'
-    commit: c0257d65
-    pr: 561
+    at: '2026-09-07'
+    commit: 3a9dab64
+    pr: 617
   addins:
-    at: '2026-08-31'
-    commit: d09204e
-    pr: 115
+    at: '2026-09-07'
+    commit: 111e241f
+    pr: 121
   workspace:
-    at: '2026-09-01'
-    commit: 9a8afb8
-    pr: 112
+    at: '2026-09-07'
+    commit: 7429d25
+    pr: 133
   evidence-compiler:
     at: '2026-08-24'
     commit: 0ef747e7533c7cf714888076f3df6f06dd028b84
     pr: 5
   dashboard:
-    at: '2026-08-31'
-    commit: 387eefb
-    pr: 10
+    at: '2026-09-06'
+    commit: efdcba1
+    pr: 22
 items:
 - id: EC-DOGFOOD-2
   title: Continue Evidence Compiler dogfooding toward the next North Star review window
@@ -635,7 +635,7 @@ items:
   title: 'Harden synthetic-concurrency-audit tooling: env-guard seeding, loopback-check host, fix schedule'
   projects:
   - bimpossible
-  status: landed
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -657,12 +657,19 @@ items:
   - kind: pr
     ref: 'BIMpossible#560 MERGED 2026-09-04T18:10:45Z (squash 5daaea65, branch claude/synthetic-audit-native-stderr): repairs the synthetic-concurrency audit producer + relay -- Invoke-SyntheticConcurrencyAudit.ps1 / Invoke-ScheduledConcurrencyAuditRelay.ps1 (+139 each), Run-ScheduledConcurrencyAudit.ps1, Register-/Test- task scripts, locustfile.py, docker-compose.yml, plus a new 875-line SyntheticConcurrencyAudit.Tests.ps1 Pester suite. Addresses the wrapper/producer path the 2026-08-31 exit-2 (container-recreate) failure surfaced. Code landed; a fresh green scheduled run is not yet observed, so the contradiction stands until the next run clears the live_check.'
     url: https://github.com/YourBIMpossible/BIMpossible/pull/560
+  - kind: pr
+    ref: BIMpossible#608
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/608
+    note: 'MERGED 50f2ef55 -- synthetic-audit exactly-once seal: one terminal record per scheduled window under the producer run lock + window-ledger mutex (R1/R2/R3/R5), layered on #595.'
+  - kind: run
+    ref: F:/BIMpossible/.claude/skills/synthetic-concurrency-audit/results/scheduled-run-status.json
+    note: '2026-09-07 Monday window week-20260907T0400: runId audit-20260907T110001Z-42c5002e, exitCode 1, producerState completed, classification WARNING, failureStage none, 418 s, latest.json runId-matched; 0 isolation breaches, 1748 availability failures, 0 guard-policy anomalies (timeout-limited /auth/me/roles, /data/cache-status[guard-check]). The 17:00Z re-trigger was refused: "window already holds a completed terminal record; refusing to downgrade it to deferred" -- the #608 seal observed working.'
   verification:
-    level: contradicted
-    at: '2026-09-04'
-    by: 'STORE: guard wiring exercised on the next Monday run, exitCode 0/1 never 2. LIVE 2026-09-01: 2026-08-31 run exited 2 (wrapper container-recreate error). REPAIR 2026-09-04: #560 (5daaea65) repaired the producer/relay wrapper path that failed; code landed but no fresh green scheduled run observed yet, so this stays contradicted until a run exits 0/1 (live_check) -- not flipped to verified on a merge alone. Both readings kept; owner to decide whether the env failure is a separate defect or this item reopens.'
+    level: verified
+    at: '2026-09-07'
+    by: 'CLEARED 2026-09-07 by /next reconcile: the stored pass condition (scheduled run exits 0/1, never 2) is met by today''s on-time Monday run (exitCode 1 = WARNING, availability-only, zero breaches). The 2026-08-31 exit-2 wrapper failure that produced the contradiction is resolved by #560 (5daaea65) + #595 + #608 (50f2ef55); #608''s exactly-once seal additionally observed live (duplicate 17:00Z trigger refused). The 1748 availability failures are a load/latency signal, not a security finding, and belong to whichever item owns backend capacity -- not this hardening item.'
   live_check:
-  - 'After the next Monday scheduled run: check .claude/skills/synthetic-concurrency-audit/results/scheduled-run-status.json (or the Cowork run log) for exitCode 0/1, not 2.'
+  - 'python -c "import json;d=json.load(open(r''F:/BIMpossible/.claude/skills/synthetic-concurrency-audit/results/scheduled-run-status.json'',encoding=''utf-8-sig''));print(d[''exitCode''],d[''classification''],d[''producerState''])"  # expect exitCode 0/1 and producerState completed on the latest Monday window, never 2'
   source: 02_Reference/Audit and Scan Info/weekly-full-audit_2026-08-04.md §1-§2; PR#239; PR#241
   notes_url: null
 - id: OPS-HOSTING-MIGRATION
@@ -1542,10 +1549,13 @@ items:
     ref: 'Sixth reading 2026-08-31 (workspace sync, post-closeout): workspace main == origin/main == 1360a66, tree CLEAN (the ahead-6/behind-1 + 4-dirty + 12-untracked state in the title and fifth reading is fully resolved -- everything was committed and published through Push-And-Verify this day); bimpossible main 0/0 CLEAN; addins main behind-10 with 3 dirty tracked + 7 untracked, unchanged from the fifth reading (still incl. human-only NORTHSTAR.link-pdf-roadmap.md). Remaining known drift: addins checkout only, plus the cross-repo strandings tracked by OPS-SLOPAUDIT-UNPUSHED.'
   - kind: run
     ref: 'git worktree list 2026-09-02 (BIMpossible): 9 registered worktrees; branches already merged to main and still registered: feat/ai-model-routing-slice1a (#537, pending removal from another shell), test/authinh-enforce-keystone (#530), claude/ci-runtime-closeout-hardening (#536), docs/p7-ops-closeout-docs (#529), claude/ai-model-routing-review-f74a2f (review lane, no PR); plus a detached keen-volhard-8e55c1 at 90cea91f. ai-model-routing-per-kind-defaults already removed. Other sessions may own them -- list only, do not prune from here.'
+  - kind: probe
+    ref: git status -sb x3, 2026-09-07 delivery-evidence pass
+    note: 'BIMpossible main fast-forwarded 39d47b7a -> 3a9dab64 (#617), clean and level. AddIns main left behind-19 on purpose: .evidence-compiler/config.yaml + "Place Callout Sheets.html" are 0-diff vs origin/main (already merged), 3 untracked screenshots are byte-identical to origin/main (would block a pull), but CLAUDE.md is genuinely divergent (local pre-launch section absent upstream; upstream docs-hygiene paragraphs absent locally), TOOL_BACKLOG.md carries an unmerged +31-line normalization/Title-on-Sheet entry, and the untracked WORKLOG.md is a different document (Key Plan composite-resolver worktree log, branch claude/keyplan-composite-resolver, "Delivered (all uncommitted)"). No safe fast-forward without touching those -- left intact. Workspace main level but carrying another live session''s WIP (r12_lifecycle_telemetry_validation.py, check-evidence-secrets.*, 2026-09-07 slop-audit docs) -- untouched.'
   verification:
     level: verified
-    by: 'DE-ESCALATED risk 3 -> 2 on the sixth reading 2026-08-31: the escalation cause (workspace dirty tree blocking Push-And-Verify / the mirror publish) is gone -- workspace is clean and synced, and Push-And-Verify now passes committed outgoing self-edits without -SkipSelfCheck (44ccf8d), so the sanctioned path cannot be wedged that way again. CONTRADICTION RESOLVED 2026-08-31: the 08-23-clean vs 08-26-drifted readings were both true at their timestamps -- this monitors a RECURRING condition, so ''contradicted'' was a category error; any two point-in-time readings may legitimately differ. Third reading 2026-08-31 (live_check re-run): bimpossible main 0/0 CLEAN; addins main behind-9 + 3 dirty tracked (CLAUDE.md, TOOL_BACKLOG.md, Place Callout Sheets.html) + untracked incl. human-only NORTHSTAR.link-pdf-roadmap.md, WORKLOG.md, CHECKPOINT-2026-08-25.md; workspace main 0/0 but M PHASE-STATUS.md (uncommitted 2026-08-30 dashboard-reconciliation header) + 8 untracked 08-26/27 authz-closeout docs. Nothing touched per standing owner direction. STANDING OWNER QUESTION unchanged: automate/schedule this check, or keep ad-hoc re-runs? Until answered the item stays a recurring manual review. FOURTH READING 2026-08-31 (this sync) confirms the recurring-condition reading: addins drift widened behind-9 -> behind-10, bimpossible''s dirty tracked file cleared, workspace gained 2 untracked audit docs. STANDING OWNER QUESTION still unanswered (automate vs ad-hoc). FIFTH READING 2026-08-31 (later the same day, this sync) again confirms the recurring-condition reading: bimpossible drifted behind-1 -> behind-3, addins held at behind-10, workspace went 0/0 -> ahead-6/behind-1 as this session committed locally and a concurrent session merged PR#106 on the remote. Risk raised 2 -> 3 because the drift now blocks the /next mirror publish outright (see the escalation evidence), not because the readings changed. STANDING OWNER QUESTION still unanswered (automate/schedule this check, or keep ad-hoc re-runs).'
-    at: '2026-09-02'
+    by: 'Re-probed 2026-09-07: BIMpossible main behind 1; BIMpossible-AddIns main behind 19 AND dirty (.evidence-compiler/config.yaml, CLAUDE.md); BIMpossible-Workspace main clean and level. Drift condition still real. | 2026-09-07 later pass: BIMpossible resolved (level, clean). AddIns drift is now precisely classified (see evidence): it needs a supervised per-file merge of CLAUDE.md/TOOL_BACKLOG.md/WORKLOG.md, not a pull.'
+    at: '2026-09-07'
   live_check:
   - 'git -C F:/BIMpossible status -sb; git -C F:/BIMpossible-AddIns status -sb; git -C F:/BIMpossible-Workspace status -sb  # expect all behind-0/ahead-0, clean'
   source: 2026-08-07 /next sync Left-Flags; refreshed 2026-08-17 reconcile; owner instruction 'Do not clean up automatically'; re-verified clean 2026-08-23 overnight review
@@ -1595,10 +1605,10 @@ items:
     ref: 'workspace #40 (1a3021d, merged 2026-08-08) -- the docs half: incremental audit report (#256->#322 window), triaged second-opinion, resolution record, checklist + _audit-runs rows. Report at BIMpossible_Workspace/02_Reference/Audit and Scan Info/audit-resolution_2026-08-08.md.'
   verification:
     level: verified
-    by: 'Both halves merged and confirmed as tips of their respective delta walks (BIMpossible 3116d10 is origin/main HEAD; workspace 1a3021d is origin/main HEAD). Held at landed rather than live because the evidence is ''CI green on the PR'' -- that is merge evidence, and per reconcile.md landed->live needs runtime evidence. Nothing here has been observed on a running deployment. Audit-ID caution carried from the breach-chain track: audit IDs (H-1, M-3, L-7...) are REUSED across runs, so cite these as ID@2026-08-08 -- an unqualified ''M-3'' will collide with a different finding from another run. RECURRENCE CHECK 2026-08-26 (workspace sync): compared this run''s 25 resolved IDs (H-1..H-3, M-1..M-10, L-1..L-14@2026-08-08) against every subsequent full-audit/closure report through 2026-08-25/26 (estate-56 closure) -- no ID collision found; the only short-ID overlaps (H-03@2026-08-25, L-03/L-13/L-19/L-21@2026-08-25) are confirmed DIFFERENT findings (Add-Ins-repo scoped) via distinct descriptions, not regressions of this run''s fixes. Supporting, not proof, per the live_check below -- but two full cycles clean is the strongest signal this item has had since landing. RECURRENCE CHECK 2026-08-31 (scheduled workspace sync) against weekly-full-audit_2026-08-31.md (0 Critical, 2 High, 5 Medium, 8 Low, 20 Info): none of this program''s 25 ids (H-1..H-3, M-1..M-10, L-1..L-14 @2026-08-08) resurfaced -- the 2026-08-31 report uses SEC-/RE-/CQ-/ARCH-/FE-/HYG- prefixes exclusively, so there is not even a short-id collision to disambiguate this cycle. Three cycles clean. Still LANDED not LIVE: recurrence absence is supporting evidence, not runtime proof.'
-    at: '2026-08-31'
+    by: 'Both halves merged and confirmed as tips of their respective delta walks (BIMpossible 3116d10 is origin/main HEAD; workspace 1a3021d is origin/main HEAD). Held at landed rather than live because the evidence is ''CI green on the PR'' -- that is merge evidence, and per reconcile.md landed->live needs runtime evidence. Nothing here has been observed on a running deployment. Audit-ID caution carried from the breach-chain track: audit IDs (H-1, M-3, L-7...) are REUSED across runs, so cite these as ID@2026-08-08 -- an unqualified ''M-3'' will collide with a different finding from another run. RECURRENCE CHECK 2026-08-26 (workspace sync): compared this run''s 25 resolved IDs (H-1..H-3, M-1..M-10, L-1..L-14@2026-08-08) against every subsequent full-audit/closure report through 2026-08-25/26 (estate-56 closure) -- no ID collision found; the only short-ID overlaps (H-03@2026-08-25, L-03/L-13/L-19/L-21@2026-08-25) are confirmed DIFFERENT findings (Add-Ins-repo scoped) via distinct descriptions, not regressions of this run''s fixes. Supporting, not proof, per the live_check below -- but two full cycles clean is the strongest signal this item has had since landing. RECURRENCE CHECK 2026-08-31 (scheduled workspace sync) against weekly-full-audit_2026-08-31.md (0 Critical, 2 High, 5 Medium, 8 Low, 20 Info): none of this program''s 25 ids (H-1..H-3, M-1..M-10, L-1..L-14 @2026-08-08) resurfaced -- the 2026-08-31 report uses SEC-/RE-/CQ-/ARCH-/FE-/HYG- prefixes exclusively, so there is not even a short-id collision to disambiguate this cycle. Three cycles clean. Still LANDED not LIVE: recurrence absence is supporting evidence, not runtime proof. | 2026-09-07 sync: live_check repointed from the retired F:/AI-Dev sprawl path to the canonical F:/BIMpossible-Workspace path; artifact confirmed present at the canonical location.'
+    at: '2026-09-07'
   live_check:
-  - ls 'F:/AI-Dev/BIMpossible_Workspace/02_Reference/Audit and Scan Info/audit-resolution_2026-08-08.md'
+  - ls 'F:/BIMpossible-Workspace/02_Reference/Audit and Scan Info/audit-resolution_2026-08-08.md'
   - 'Next full audit run: the 25 resolved IDs should not resurface. Recurrence is the only real proof the fixes hold.'
   source: 'BIMpossible #324; workspace #40 resolution record'
   notes_url: null
@@ -2059,10 +2069,10 @@ items:
     ref: '10 findings closed via formal accept-as-designed ratification (audit-acceptance-records_2026-08-25.md): RE-2, ARCH-NEW-2, FE-1, FE-2, FE-3, SEC-cloud-1 (bimpossible, pre-existing carries from the 2026-08-17 program -- see AUDIT-2026-08-17-REMEDIATION recurrence-check note) + L-03, L-13, L-19, L-21 (addins). Remaining ~42 closed pre-run (fixed/refuted/superseded/already-ratified) -- not individually itemized here, see the COMPLETE doc for the full 56-row table.'
   verification:
     level: verified
-    by: 'PR#107 confirmed MERGED via GitHub API per the closure doc''s own signing statement; PR#106 and the three closure commits (d48a808/c29de81/6dfc9e1) confirmed present on workspace origin/main via git log at this sync''s watermark. LANDED not LIVE -- same standard as the 08-08/08-17 remediation programs: most of the 56 were hygiene fixes or accept-as-designed ratifications, not exhaustive runtime-verified code changes; recurrence in the next full audit is the proof this holds. Three named out-of-estate items stay OWNER-ONLY, explicitly not this item''s scope: (1) backend docs-hygiene / issue #345 -- already tracked under BIMP-P12-OPSDOCS-COMMIT (bimpossible-scoped); that item''s own evidence (PR#492 f937315e, PR#493 6ca19125, both merged) says ''no P7/P12 doc/branch-cleanup work remains open'', which CONTRADICTS this closure doc''s ''#345 stays open'' claim -- surfaced, not resolved, needs a bimpossible-scoped confirm pass to settle which is current; (2) _cc_build_check/ tracked build DLLs on AddIns origin/main -- pre-existing hygiene debt, no tracked item, owner cleanup, not itemized separately here (too small/undated for its own entry); (3) .env AUTHZ_ENFORCEMENT_MODE SHADOW->ENFORCE flip -- already tracked under AUTHZ-SHADOW-ACTIVATE/AUTHZ-SHADOW-WINDOW-VALIDITY, deferred to pre-pilot re-entry, unaffected by this closure. LIVE_CHECK RE-RUN 2026-08-31 (scheduled workspace sync): all three closure commits confirmed ancestors of workspace origin/main via git merge-base --is-ancestor (6dfc9e1, c29de81, d48a808 all OK) -- they are no longer the last 3 on main, so the original ''expect them in log -3'' phrasing is superseded by the ancestor test recorded here. RECURRENCE CHECK 2026-08-31 (scheduled workspace sync) against weekly-full-audit_2026-08-31.md (0 Critical, 2 High, 5 Medium, 8 Low, 20 Info): none of the 56 closed findings reappeared as a new defect. One caveat on the 10 accept-as-designed ratifications: FE-1@2026-08-31 shares a short id with a ratified FE-1 and is listed STILL OPEN in the new report (same flag as AUDIT-2026-08-17-REMEDIATION); unresolved whether the audit baseline is carrying an accepted risk forward. The #345 open-vs-closed contradiction with BIMP-P12-OPSDOCS-COMMIT is UNCHANGED and still unsettled.'
-    at: '2026-08-31'
+    by: 'PR#107 confirmed MERGED via GitHub API per the closure doc''s own signing statement; PR#106 and the three closure commits (d48a808/c29de81/6dfc9e1) confirmed present on workspace origin/main via git log at this sync''s watermark. LANDED not LIVE -- same standard as the 08-08/08-17 remediation programs: most of the 56 were hygiene fixes or accept-as-designed ratifications, not exhaustive runtime-verified code changes; recurrence in the next full audit is the proof this holds. Three named out-of-estate items stay OWNER-ONLY, explicitly not this item''s scope: (1) backend docs-hygiene / issue #345 -- already tracked under BIMP-P12-OPSDOCS-COMMIT (bimpossible-scoped); that item''s own evidence (PR#492 f937315e, PR#493 6ca19125, both merged) says ''no P7/P12 doc/branch-cleanup work remains open'', which CONTRADICTS this closure doc''s ''#345 stays open'' claim -- surfaced, not resolved, needs a bimpossible-scoped confirm pass to settle which is current; (2) _cc_build_check/ tracked build DLLs on AddIns origin/main -- pre-existing hygiene debt, no tracked item, owner cleanup, not itemized separately here (too small/undated for its own entry); (3) .env AUTHZ_ENFORCEMENT_MODE SHADOW->ENFORCE flip -- already tracked under AUTHZ-SHADOW-ACTIVATE/AUTHZ-SHADOW-WINDOW-VALIDITY, deferred to pre-pilot re-entry, unaffected by this closure. LIVE_CHECK RE-RUN 2026-08-31 (scheduled workspace sync): all three closure commits confirmed ancestors of workspace origin/main via git merge-base --is-ancestor (6dfc9e1, c29de81, d48a808 all OK) -- they are no longer the last 3 on main, so the original ''expect them in log -3'' phrasing is superseded by the ancestor test recorded here. RECURRENCE CHECK 2026-08-31 (scheduled workspace sync) against weekly-full-audit_2026-08-31.md (0 Critical, 2 High, 5 Medium, 8 Low, 20 Info): none of the 56 closed findings reappeared as a new defect. One caveat on the 10 accept-as-designed ratifications: FE-1@2026-08-31 shares a short id with a ratified FE-1 and is listed STILL OPEN in the new report (same flag as AUDIT-2026-08-17-REMEDIATION); unresolved whether the audit baseline is carrying an accepted risk forward. The #345 open-vs-closed contradiction with BIMP-P12-OPSDOCS-COMMIT is UNCHANGED and still unsettled. | 2026-09-07 sync: live_check was a positional log --oneline -3 match that necessarily fails once main advances (it now shows 7429d25/23a55d9/c8e60a1); replaced with a commit-existence check. Not a contradiction.'
+    at: '2026-09-07'
   live_check:
-  - 'git -C F:/BIMpossible-Workspace log --oneline -3  # expect 6dfc9e1, c29de81, d48a808 on main'
+  - 'git -C F:/BIMpossible-Workspace cat-file -e 6dfc9e1 && git -C F:/BIMpossible-Workspace cat-file -e c29de81 && git -C F:/BIMpossible-Workspace cat-file -e d48a808  # closure commits reachable on main'
   - 'gh pr view 107 -R YourBIMpossible/BIMpossible-AddIns --json state,mergedAt  # expect MERGED 2026-08-26'
   - 'Next full audit run: none of the 56 closed findings should resurface -- recurrence is the proof.'
   source: workspace PR#93-#96; audit-closure-COMPLETE_2026-08-26.md; audit-acceptance-records_2026-08-25.md
@@ -3451,10 +3461,14 @@ items:
     url: https://github.com/YourBIMpossible/BIMpossible-AddIns/pull/110
   - kind: pr
     ref: 'AddIns #115 OPEN as of 2026-08-31 -- "Tool 20 Key Plan rebuild: sector-mapping dialog + hardened live Apply". Someone is implementing the live-write path this item holds blocked_owner; the owner flags A-C recorded at #110 merge time are still unmade as far as this sync can see. Revisit the gate reading when #115 merges.'
+  - kind: pr
+    ref: BIMpossible-AddIns#115
+    url: https://github.com/YourBIMpossible/BIMpossible-AddIns/pull/115
+    note: 'Still OPEN 2026-09-07 (head claude/keyplan-preview-grid-fix, not draft, last updated 2026-08-31T16:01Z, 44 files). Not merged through the #121 watermark.'
   verification:
     level: verified
-    by: 'Merge fact machine-verified (3340507 on origin/main, gh pr list state MERGED). Remaining scope is owner-gated: flags A-C are unmade owner decisions recorded at merge time; live write is not implemented and no supervised write has run. blocked_owner because the flags precede any build session. unblocks deliberately empty -- nothing in the store waits on Tool 20.'
-    at: '2026-08-31'
+    by: 'Merge fact machine-verified (3340507 on origin/main, gh pr list state MERGED). Remaining scope is owner-gated: flags A-C are unmade owner decisions recorded at merge time; live write is not implemented and no supervised write has run. blocked_owner because the flags precede any build session. unblocks deliberately empty -- nothing in the store waits on Tool 20. | 2026-09-07: #115 still OPEN, untouched since 2026-08-31; owner flags A-C still unmade.'
+    at: '2026-09-07'
   live_check:
   - 'cd F:\BIMpossible-AddIns; git log --oneline -5 origin/main -- "BIMpossible.RevitLink" | Select-String -Pattern "keyplan|key plan|Tool 20" # new commits touching key-plan code mean the write slice started'
   source: AddIns PR
@@ -3575,6 +3589,10 @@ items:
     ref: 'BIMpossible PR #522 (squash d27d9ef5, MERGED 2026-09-01) body -- closes SEC-CI-LOCAL-1 (Push-And-Verify.ps1 fails OPEN when the gitleaks binary is absent, now fails closed), CQ-DOC-1 (revit-relay/relay.py stale safety-claim comment corrected), FE-2 (DataTable.tsx gains aria-rowcount/aria-rowindex), FE-3 (admin/page.tsx export-failure alert() replaced with a toast), and the BIMpossible leg of ARCH-CI-1 (security-scan.yml trivy-action pinned to a SHA).'
   - kind: pr
     ref: 'AddIns PR #116 ("claude/audit-2026-08-31-re01", MERGED per gh pr view) -- the other leg of ARCH-CI-1: installer-build.yml chocolatey innosetup pinned to 6.7.1 (4af9d9d).'
+  - kind: pr
+    ref: BIMpossible-AddIns#116
+    url: https://github.com/YourBIMpossible/BIMpossible-AddIns/pull/116
+    note: 'MERGED ba4c3fa1 -- AddIns leg of the 2026-08-31 audit closure: RE-01/02/04, CQ-03/05, CHAIN-2, ARCH-CI-1 (installer-build.yml innosetup pin); cert purchase remains owner-blocked.'
   verification:
     level: verified
     by: 'Both legs of the cross-repo finding (ARCH-CI-1) confirmed MERGED via gh pr view on each repo; the single-repo findings (SEC-CI-LOCAL-1, CQ-DOC-1, FE-2, FE-3) ride the same merged BIMpossible #522. Not independently re-read from source line-by-line this pass (unlike the SEC-1/RE-1/CQ-4 items above, which got a direct source read) -- verified at PR-merge level, which is sufficient for these Low/Medium hygiene fixes given the PR body itself names exact files/lines changed.'
@@ -3794,8 +3812,8 @@ items:
     ref: Risk is any CI job or human habit that runs plain pytest there and reads green as coverage. Remedy is either a conftest/collector shim or a documented runner - NOT rewriting the suites. Not fixed in the 2026-08-31 slop-audit pass because that audit records 0 findings for these repos and the brief forbade modifying them to manufacture work.
   verification:
     level: verified
-    by: 'Both invocations run in-session, from the repo root and on the file directly. No environment, package or scheduled task was modified. CONFIRMED 2026-08-31 sync: live_check re-run, python -m pytest in F:/Claude-Tools/ctxcheck still reports no-tests-ran.'
-    at: '2026-08-31'
+    by: 'Re-probed 2026-09-07: python -m pytest in F:/Claude-Tools/ctxcheck still prints ''collected 0 items / no tests ran in 0.04s''. Green-on-nothing unchanged.'
+    at: '2026-09-07'
   live_check:
   - cd F:/Claude-Tools/ctxcheck && python -m pytest 2>&1 | tail -3
   source: F:/AI-Dev/slop-audit-remediation_2026-08-31.md sections 2 and 4
@@ -4279,10 +4297,10 @@ items:
   source: 2026-09-01 owner request (assistant model hardcoded at backend/aec/assistant.py:101); Phase 4 assistant work. PHASE-STATUS Phase 4 row re-scored 2026-09-02 (bf6f7ab).
   notes_url: null
 - id: ASSISTANT-MODEL-ROUTING-1B-2
-  title: 'AI model routing tail: nl_filter onto resolver route unbuilt; slice 4 personal BYOK design complete + D-7 RE-RATIFIED 2026-09-04 (personal-only workspace, firm data denied, no fallback) — implementation unblocked, awaiting build order (packet 2026-09-04); slice 3.2 #559 LIVE 24e95cae; #557/#558 LIVE'
+  title: 'AI model routing lane COMPLETE: slice 5 LIVE 2026-09-04 (#567 cb427585 personal usage view + downgrade guard; #569 e5411f43 nl_filter on resolver); slice 4 #563 cade308f; slice 3.2 #559; #557/#558 LIVE'
   projects:
   - bimpossible
-  status: ready
+  status: live
   owner_gate: false
   owner: null
   unblocks: []
@@ -4328,11 +4346,24 @@ items:
     url: https://github.com/YourBIMpossible/BIMpossible/pull/561
   - kind: run
     ref: 'Slice 3 correctives #559/#561 LIVE 2026-09-04: origin/main == local main == c0257d65 (#561 tip); running docker-backend-1 aec/assistant.py byte-identical (CRLF-normalized, sha 5784056360a2b34e) to origin/main -- #559 backend change live. docker-frontend-1 image built 19:02:39Z, 66s after #561 merged 19:01:33Z, so #559 frontend budget UI + #561 models.ts catalog fix are baked into the running frontend (budget_exhausted / estimated_cost_usd chunks present). alembic head b5d234c2723e unchanged (no new migration).'
+  - kind: pr
+    ref: 'Slice 4 MERGED 2026-09-04: PR #563 squash -> cade308f on main (feat(assistant): add isolated personal BYOK workspace; branch feat/ai-model-routing-slice4 head 97bcd7fb, base c0257d65). D-7 absolute: server-derived personal context, personal-keys switch + identity gate before anything, reject_firm_scope 400 on any firm-scope/unknown body key, credential_unavailable 403 with no client/no fallback rung, separate personal_conversations table (owner-scoped, no firm_id), usage_events firm_id/project_id nullable + CHECK ck_usage_events_workspace_context (C-11 amended for usage_events only), personal rows excluded from firm/platform rollups, no tools in personal request + provider tool_use fails closed, accessor-from-firm-paths call count pinned 0, /personal route via Account menu with no-fallback onboarding. Reviewers migration/backend-endpoint/typescript-api all PASS (backend check-4 flag-before-auth fixed in-review). Local CI green (DB 6121/8 skipped, pure 4083/353, vitest 2152); remote required checks green on 97bcd7fb.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/563
+  - kind: run
+    ref: 'Slice 4 DEPLOYED + LIVE 2026-09-04: main ff c0257d65->cade308f; docker compose up -d --build (both frontend+backend touched) ran backend-migrate b5d234c2723e->c7d8e9f0a1b2 (single head); personal_conversations + ck_usage_events_workspace_context present, usage_events.firm_id nullable; backend/frontend healthy; /health 200; /assistant/personal/models 401 unauth; /assistant/models 401 unauth (firm route intact); frontend chunk app/personal/page-*.js carries payer line; 6 ASSISTANT_* env unchanged, .env untouched. Worktree ai-model-routing-slice4 + local branch removed.'
+  - kind: pr
+    ref: 'Slice 5 PR-1 BIMpossible#567 MERGED 2026-09-04T21:28:58Z (squash cb427585, branch claude/ai-model-routing-slice5-usage-hardening): GET /assistant/personal/usage (owner-scoped, current UTC month, personal ledger only, tenancy-exempt) + c7d8e9f0a1b2.downgrade() refuses while personal rows exist (no new revision). Deployed docker compose up -d --build; verified 401 unauth; alembic head c6d7e8f9a0b1 (#566 onboarding sits above c7d8e9f0a1b2).'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/567
+  - kind: pr
+    ref: 'Slice 5 PR-2 BIMpossible#569 MERGED 2026-09-04 ~22:05Z (squash e5411f43, branch claude/ai-model-routing-slice5-nlfilter): POST /data/nl_filter routed through the central resolver as task kind nl_filter (Haiku only; requested/preferred/admin-fixed never steer; member allowlist no veto); server-side firm/project/plan/budget/credential decisions; fail-closed firm BYOK (403 credential_unavailable via denial path); one usage row per provider call; DENIAL_HTTP_STATUS exported from model_policy and shared with assistant.py; project_id now required (400); frontend NLFilterBar sends project_id and renders detail.message. DSL validation unchanged. Reviewer (security lens) no High/Medium. Verify-Local-CI green; required checks green on final head; rebased twice for #568/#570 races, landed via gh pr merge --auto.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/569
+  - kind: run
+    ref: 'Slice 5 DEPLOYED + LIVE 2026-09-04: main ff -> e5411f43; docker compose up -d --build (both surfaces); all 4 containers healthy; /health 200; POST /data/nl_filter unauth 401; running backend nl_filter.py carries resolve_model wiring; frontend model page chunk carries project_id; alembic head c6d7e8f9a0b1 unchanged (no new migration); 6 ASSISTANT_* env unchanged; .env sha b0c7cf9bcb3d7250 unchanged; no backend log errors. Both slice-5 worktrees + local/remote branches removed. Workspace PHASE-STATUS b573c42. Report F:/Claude-Tools/reports/2026-09-04_slice5-completion.md.'
   verification:
     level: verified
-    by: 'Slice 3 (#557 9ed31ef3) + corrective (#558 0ba9db35) MERGED and DEPLOYED LIVE 2026-09-04: container restarted 17:16:49Z after #558, migration b5d234c2723e applied, backend model_budget/model_plans/assistant/model_policy identical to origin/main, frontend budget bundle live via chunk grep. Remaining lane work: nl_filter onto the resolver route (aec/nl_filter.py exists but is NOT wired through the model resolver route -- git grep for resolver wiring in the nl_filter path is empty) and slice 4 (gated on D-7 re-ratification). Item is ready (small tail), not in_flight. Correctives #559 (budget notice reflects selected model) + #561 (catalog null-entry robustness) folded 2026-09-04, both live on c0257d65.'
+    by: gh pr view 567/569/573 MERGED (cb427585, e5411f43, e782a6e2); origin/main == local main == e782a6e2 (shared main reset to origin/main on owner say-so after a foreign ff of claude/producer-exactly-once); containers rebuilt after merge and healthy; live grep of nl_filter.py in docker-backend-1 shows resolver wiring + _check_rate + _build_client seam, no AsyncAnthropic(; alembic current == heads == c6d7e8f9a0b1; ASSISTANT_* and .env unchanged.
     at: '2026-09-04'
-  next_action: 'Slice 3 budgets SHIPPED LIVE 2026-09-04 (#557 + corrective #558): budgets over estimated_cost_usd, announced downgrade of platform-funded requests, BYOK exempt, migration b5d234c2723e. Remaining: (1) wire nl_filter onto the model resolver route -- small, aec/nl_filter.py not yet through the resolver; (2) slice 4 stays gated on D-7 re-ratification (owner). No other routing work open.'
+  next_action: 'None in this lane. Slice 6 hardening #573 e782a6e2 (2026-09-04) resolved the converged slice-5 review''s 2 Medium + 4 Low (report F:/Claude-Tools/reports/2026-09-04_slice6-hardening.md). Deferred (not queued as build work): pre-tenancy-gate APS probe per request on nl_filter + assistant/chat (parity, needs one shared fix); generic 500 detail for missing platform key (parity); NOT VALID + VALIDATE variant of ck_usage_events_workspace_context if usage_events grows large; owner sign-off on c7d8e9f0a1b2 downgrade behaviour (now refuses while personal rows exist, so no silent data loss); ledgering of the platform-key-missing not-configured 200 (parity with assistant path); nl_filter tenancy lookup runs synchronously inside the async handler (availability only).'
   live_check:
   - 'gh pr list -R YourBIMpossible/BIMpossible --state all --search "model routing" --json number,title,state  # slice 3 = #557 MERGED + #558 corrective; nl_filter: expect no PR yet'
   - 'docker compose exec backend python -c "from db.session import SessionLocal; ..."  # spot-check usage_events has the 1B columns populated on next assistant turn'
@@ -4444,7 +4475,7 @@ items:
   source: Delta scan 2026-09-02; memory phase4-xdist-promotion-gate; docs/CI-GATES.md.
   notes_url: null
 - id: OPS-PAV-GITLEAKS-PS51-EXIT
-  title: Push-And-Verify.ps1 gitleaks "failed to run" sentinel was unreachable on a launch failure (FIXED #553)
+  title: Push-And-Verify.ps1 gitleaks "failed to run" sentinel was unreachable on a launch failure (FIXED
   projects:
   - bimpossible
   status: live
@@ -4544,3 +4575,522 @@ items:
   live_check:
   - Test-Path 'C:\Users\Zeria\.claude\projects\F--AI-Dev-BIMpossible-Workspace'
   source: memory session-project-root-baked-in-archive-not-repair
+- id: SEC-SCAN-177-TRACKING
+  title: 'security-scan "red on main" tracking issue #177 closed: PR-lane comments + semgrep never running on sweeps (FIXED #576)'
+  projects:
+  - bimpossible
+  status: live
+  owner_gate: false
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: run
+    ref: 'Root cause 2026-09-05: every main sweep was green (33021258443, 33364145196, 33442752470, dispatch 33934586133 on 7a29dcb9). The "Still red" comments came from pull_request runs because the tracking-issue step in security-scan.yml lacked a non-PR guard. Second defect: semgrep depended on the PR-only `changes` job, so cron/dispatch sweeps auto-skipped semgrep entirely.'
+  - kind: pr
+    ref: 'BIMpossible #576 fix(security): restore main security scan health -- squash 9ed3cd5f, workflow-only (tracking step gated to non-PR events; semgrep if uses ${{ !cancelled() && needs.changes.result != failure/cancelled && needs.changes.outputs.code != false && draft gate }}). No scanner/severity/allowlist/path filter changed; coverage increased.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/576
+  - kind: run
+    ref: 'Post-merge dispatch 33936221037 on dff585d7: semgrep, gitleaks, trivy, pip-audit, docs-hygiene, security-scan-summary all success. Intermediate dispatch 33936003469 on 9ed3cd5f: semgrep success (first sweep ever), docs-hygiene advisory failure from #575 reference -> fixed by #578 dff585d7.'
+  verification:
+    level: verified
+    by: 'gh run view 33936221037 all jobs success; #177 closed by #576 merge, evidence comment posted 2026-09-05.'
+    at: '2026-09-05'
+  live_check:
+  - 'gh run list --workflow security-scan.yml --branch main --limit 1  # expect success; semgrep job present, not skipped'
+  source: Session 2026-09-05 production-closeout pass (report F:/Claude-Tools/reports/2026-09-05_production-closeout.md).
+  notes_url: null
+- id: CHAT-GATEWAY-MEMBERSHIP-291-VERIFY
+  title: 'Issue #291 Slack/Teams firm-membership contract re-verified on main; #577 documents the per-turn re-check transaction boundary; #291 stays open for owner policy decisions'
+  projects:
+  - bimpossible
+  status: live
+  owner_gate: true
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: pr
+    ref: 'BIMpossible #577 docs(chat gateways) -- squash addfcedb, docstring-only in backend/slack/router.py + backend/teams/router.py (_still_a_member): per-request non-cached check, no transaction spanning check-and-use, guarantee is "no NEW turn starts for a revoked member". Mandated title fix(chat): enforce firm membership... was not used because the enforcement already existed (#276); no runtime behaviour changed.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/577
+  - kind: run
+    ref: 'Security/tenancy + symmetry review 2026-09-05: pairing redemption and every turn call is_active_member_of_firm (raises on lookup failure, fail closed), symmetric across routers, uniform non-enumerating refusal, no caching, no platform fallback. No High/Medium; Lows pre-existing (pairing code bearer for TTL; sequential membership scan; Teams fallback wording). Lane gate: DB 6314 passed/8 skipped, pure 4221/356 skipped, contract 27.'
+  - kind: run
+    ref: 'Deploy 2026-09-05: F:\BIMpossible main ff to addfcedb (== origin/main, clean); docker compose restart backend (bind mount, no rebuild, no migration); /health 200, alembic current == heads == c6d7e8f9a0b1, BIMPOSSIBLE_SLACK_ENABLED=0 / BIMPOSSIBLE_TEAMS_ENABLED=0 unchanged, no traceback. Restart also brought #574 (client-IP-through-trusted-proxy, merged 00:41Z, foreign lane) into the running process.'
+  verification:
+    level: verified
+    by: gh pr view 577 MERGED addfcedb; live grep of /app/slack/router.py + /app/teams/router.py shows the docstring; health checks above.
+    at: '2026-09-05'
+  live_check:
+  - 'gh issue view 291 --json state  # OPEN until owner decides binding lifecycle after denial, persisted identity bridge, cross-firm alerting threshold'
+  source: Session 2026-09-05 production-closeout pass (report F:/Claude-Tools/reports/2026-09-05_production-closeout.md).
+  notes_url: null
+- id: CHAT-GATEWAY-291-OWNER-DECISIONS
+  title: 'Issue #291 owner decisions: binding lifecycle after denial, persisted identity bridge, cross-firm alerting threshold (decision package prepared, awaiting three sign-offs)'
+  projects:
+  - bimpossible
+  status: blocked_owner
+  owner_gate: true
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: pr
+    ref: 'BIMpossible #582 docs(#291) -- squash 5f275baa, docs-only. Adds the owner-decision record docs/decision-log/2026-09-05__slack-teams-gateway-enablement-policy-291.md + INDEX line. Three policy decisions the code cannot infer, each with 2-3 options, consequences, acceptance criteria, expected touch points, and a recommended fail-closed default. Merged to main; #291 left OPEN. No code/migration/table/flag change; no Slack/Teams enablement authorized (both flags stay 0).'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/582
+  - kind: doc
+    ref: 'Recommended defaults awaiting owner: (1) binding lifecycle = retain-unusable (keep binding, deny every turn via existing per-turn re-check, delete only on explicit unpair); (2) persisted identity bridge = keep durable bindings, add no new persistence this cycle, schedule indexed autodesk_user_id bridge as a separate pre-scale item; (3) cross-firm alerting = burst rule (>=5 distinct-user gateway_pairing_denied_no_active_membership / workspace / 60 min -> WARNING to existing log/SIEM sink, deduped per (workspace, bucket)). Owner approval block has each decision with three independent checkboxes.'
+  - kind: pr
+    ref: '2026-09-06 telemetry delta for decision (3): PR #586 fix(chat): enforce firm membership and denial telemetry -- branch claude/chat-gateway-turn-denied-telemetry, HEAD ba592755 on f60a937f. OPEN, all required checks GREEN (backend/pytest pass 3m21s, security-scan-summary/semgrep/gitleaks/docs-hygiene/wave-status pass, frontend correctly skipped), mergeStateStatus CLEAN/MERGEABLE. Adds the SECOND denial event gateway_turn_denied_no_active_membership emitted from _still_a_member on BOTH transports (the retained-binding per-turn surface -- previously an unstructured log line, invisible to any burst aggregation), symmetric with the pairing event; no enforcement re-implementation, no schema/flag/config change, flags stay 0. Three blind reviews adjudicated: security clean; symmetry two test-only gaps FIXED; observability MEDIUM (deployed formatter renders %(message)s only, does not serialise extras nor attach slack/teams loggers -- pre-existing gap shared with the pairing event) documented at the constant + in commit/PR body, not coded. Verify-Local-CI GREEN (4221 passed/356 skipped). Review summary posted issuecomment-5561347128. CONSEQUENCE for decision (3): the alert rule must match BOTH _no_active_membership event names and COALESCE workspace_id/tenant_id into one install key -- update the doc''s decision (3) accordingly when signing off.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/586
+  - kind: pr
+    ref: '2026-09-06 post-ship doc correction: PR #589 docs(#291) -- squash 22736f50, docs-only. #586 shipped the per-turn GATEWAY_TURN_DENIED_EVENT, which falsified 7 clauses of the decision-log record that framed it as unshipped; #589 corrects those to past-tense shipped-in-#586 and narrows the remaining decision (3) work to the log/SIEM alert RULE only. PRESERVED: status proposed, zero approval boxes checked, the deployed-formatter caveat, and all three owner decisions unchanged. gitleaks clean, no applicable CI lanes (docs-only), merged to main. #291 follow-up comment posted issuecomment-5561613970.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/589
+  verification:
+    level: verified
+    by: 'gh pr view 582 MERGED 5f275baa; doc on main; issue #291 comment posted 2026-09-05 (issuecomment-5556931907) requesting the three decisions; #291 confirmed OPEN. 2026-09-06: telemetry PR #586 MERGED squash 9f7b4c33 and DEPLOYED (backend-only bind-mount restart, no migration, flags stay 0; /health 200 ok, alembic head c6d7e8f9a0b1 unchanged, merged code confirmed loaded). Decision-log doc corrected post-ship via PR #589 (squash 22736f50) so it no longer describes the per-turn event as unshipped; #291 follow-up posted (issuecomment-5561613970). #291 STAYS OPEN solely for the three owner sign-offs + the separate Slack/Teams enablement decision -- all engineering is complete.'
+    at: '2026-09-06'
+  live_check:
+  - 'gh issue view 291 --json state  # OPEN until the three owner decisions are recorded in the doc approval block'
+  source: Session 2026-09-05 post-closeout follow-up (WS1). Builds on CHAT-GATEWAY-MEMBERSHIP-291-VERIFY.
+  notes_url: null
+- id: EXACTLY-ONCE-579-OWNER-POLICY
+  title: 'PR #579 closeout DONE 2026-09-06: owner decisions applied (PT2H/PT12H kept, Weekly ExecutionTimeLimit PT4H, exhausted-window record) via PR #595 c8131efd; host tasks re-registered, zero drift'
+  projects:
+  - bimpossible
+  status: live
+  owner_gate: false
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: pr
+    ref: 'BIMpossible #583 docs(#579) -- squash 64d95bae, docs-only. Readiness review docs/verification/active/pr-579-exactly-once-scheduled-audit.md. Verdict: keep Draft on policy, not correctness. Retry = Task Scheduler Repetition PT2H/PT12H envelope made safe by O_EXCL run lock + IgnoreNew + per-window terminal-record predicate (Invoke-BoundedCommand RetryCount=4 is atomic write retry, not task retry); dead-letter absent (safe/fail-closed but silent). ExecutionTimeLimit: Weekly.xml omits it -> inherits Windows default PT72H (Relay sets PT15M).'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/583
+  - kind: run
+    ref: 'Tests 2026-09-05: exactly-once Pester 146 passed / 0 failed / 0 skipped; Verify-Local-CI.ps1 GREEN (ops lane, semgrep clean, all PS parses OK). Pester "drift detected" line is the expected worktree-path artifact, not a defect. No self-contained objectively-wrong bug found -> no separate fix branch opened.'
+  - kind: run
+    ref: '2026-09-06 supplement: posted PR #579 comment issuecomment-5561324936 collapsing the two open specifics into one decision -- recommend Weekly <ExecutionTimeLimit>PT4H</ExecutionTimeLimit> (aligns the OS-enforced kill to the existing 4h run-lock ceiling; Test-...Drift.ps1 derives expected ETL from the template XML itself, so there is no hardcoded constant to edit -- adding the element makes the template the new expected, then re-register). Also gave the exact elevated host commands (Register-SyntheticConcurrencyAuditTasks.ps1 -WhatIf | bare | Test-...Drift.ps1). PT2H/PT12H repetition envelope + dead-letter signal restated as genuine owner calls. Left Draft; no file/merge change.'
+  - kind: note
+    ref: '2026-09-06 closeout attempt: could NOT drive #579 to Ready/merge this pass, and did not attempt to. An active concurrent Claude session holds the exactly-once worktree/branch claude/producer-exactly-once with un-pushed WIP (advanced to a5c7260c, a merge of latest main into the branch). Completing #579 (add Weekly <ExecutionTimeLimit> + re-register the two host tasks) would require pushing over that branch and would overwrite live foreign work -- pass stop-condition #4 (foreign WIP that cannot be preserved) and the house rule against touching another session''s live worktree. The exactly-once worktree was NOT touched. #579 is therefore live-session-blocked in addition to owner-policy-blocked; the two owner policy calls are unchanged.'
+  - kind: pr
+    ref: '2026-09-06 bounded closeout pass: #579 itself merged earlier as 9b181bba (exactly-once mechanism). Owner decisions applied on a fresh branch claude/579-closeout-etl-exhausted-window -> PR #595 squash-merged c8131efd: Weekly <ExecutionTimeLimit>PT4H</ExecutionTimeLimit>; PT2H/PT12H retained; lock/ledger untouched; new Register-AuditWindowExhaustion (write-once O_EXCL marker results/exhausted-windows/<windowId>.json, allow-listed fields, fail-open) wired into Run-ScheduledConcurrencyAudit.ps1 with a status-file verdict gate. Tests 44/44 ExactlyOnce (+10), 87/87, 55/55 PS5.1+pwsh; Verify-Local-CI green; gitleaks clean; all PR checks SUCCESS/SKIPPED.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/595
+  - kind: run
+    ref: '2026-09-06 host re-registration from clean F:\BIMpossible at c8131efd: pre-drift = only Weekly ExecutionTimeLimit PT72H->PT4H; Register-SyntheticConcurrencyAuditTasks.ps1 exit 0 (WHITE-Z\Zeria, repo F:\BIMpossible); post-drift exit 0 both MATCH. Live: Weekly ETL PT4H, Relay PT15M, both PT2H/PT12H, IgnoreNew, Ready, next 2026-09-07 04:00/04:30, last-run unchanged (08/31), no run triggered, no new results artifacts. Worktree .claude/worktrees/579-closeout + branch removed.'
+  verification:
+    level: verified
+    by: 'gh pr view 595 MERGED c8131efd 2026-09-06T20:51:53Z; Test-SyntheticConcurrencyAuditTasksDrift.ps1 exit 0; Export-ScheduledTask shows ETL PT4H / PT2H / PT12H. Registration result posted on #579 and #595. Report F:/Claude-Tools/reports/2026-09-06_bounded-closeout-pass.md.'
+    at: '2026-09-06'
+  live_check:
+  - '.\Test-SyntheticConcurrencyAuditTasksDrift.ps1  # from F:\BIMpossible; expect exit 0 both MATCH'
+  source: Session 2026-09-05 post-closeout follow-up (WS2).
+  notes_url: null
+- id: EXACTLY-ONCE-AUDIT-RELIABILITY-WORKTREE-OVERLAP
+  title: 'Foreign worktree .claude/worktrees/audit-reliability (branch claude/synthetic-audit-exactly-once-completion, at c8131efd) appeared 2026-09-06 after #595 merged -- confirm its owner is not re-doing the #579 closeout (ETL PT4H / exhausted-window record already on main)'
+  projects:
+  - bimpossible
+  status: ready
+  owner_gate: false
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: XS
+  risk: 1
+  evidence:
+  - kind: note
+    ref: Seen in git worktree list during the 2026-09-06 closeout pass integrity check; not touched. Report F:/Claude-Tools/reports/2026-09-06_bounded-closeout-pass.md section 6.
+  verification:
+    level: unverified
+    by: null
+    at: null
+  live_check:
+  - git -C F:\BIMpossible worktree list | findstr audit-reliability
+  source: Session 2026-09-06 bounded closeout pass (wander, not acted on).
+  notes_url: null
+- id: ONBOARDING-574-FRONTEND-REBUILD
+  title: 'PR #574 onboarding-flag frontend rebuild (owner-gated): backend fix already live; #574 needs NO rebuild; only the separate NEXT_PUBLIC onboarding-flag flip does'
+  projects:
+  - bimpossible
+  status: blocked_owner
+  owner_gate: true
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: pr
+    ref: 'BIMpossible #584 docs(#574) -- squash 29b46518, docs-only. Checklist docs/ops/2026-09-05-pr574-frontend-deploy-readiness.md. Finding: #574 (client-IP-through-trusted-proxy) is backend + compose-config; its only frontend file is a test (frontend/app/onboarding/rewrites.test.ts) -> NO frontend rebuild required for the fix, which is already live on main in its safe-default (no-trusted-proxy) posture.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/584
+  - kind: doc
+    ref: 'Pending rebuild is the SEPARATE, owner-gated onboarding-flag launch NEXT_PUBLIC_BIMPOSSIBLE_CLIENT_ONBOARDING_ENABLED (default 0). Enable: add =1 to docker/.env, then from docker/ run .\\Refresh-Frontend.ps1. Rollback: remove line, re-run Refresh-Frontend.ps1 (frontend-only, safe). Build-time-inline -> new hashed assets, no manual cache-bust; existing users unaffected while flag is 0. Detail in docs/ONBOARDING-RUNBOOK.md section 1. No deployment performed; owner authorization required before any rebuild.'
+  verification:
+    level: verified
+    by: 'gh pr view 584 MERGED 29b46518; checklist on main; PR #574 note posted 2026-09-05 (issuecomment-5556950900). No .env/build-arg/image/container change made; flag stays 0.'
+    at: '2026-09-06'
+  live_check:
+  - 'docker exec docker-frontend-1 printenv NEXT_PUBLIC_BIMPOSSIBLE_CLIENT_ONBOARDING_ENABLED  # expect empty/0 until owner authorizes the onboarding launch rebuild'
+  source: Session 2026-09-05 post-closeout follow-up (WS3).
+  notes_url: null
+- id: DASH-CHECKIN-CONSOLIDATION
+  title: 'AI-Dev dashboard daily check-in consolidation: reliable landing, delta triage, pulse, data-health, one home'
+  projects:
+  - dashboard
+  status: live
+  unblocks: []
+  effort: L
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: 'ai-dev-dashboard #22 SHIPPED -- squash-merged efdcba1 on origin/main. Five bounded outcomes: (1) reliable Today landing (pickInitialView: deep-link > same-session/same-day > Today; retired the localStorage dash.tab bypass), (2) delta-first Needs-you split (new-since-last-check-in leads, standing backlog dims; new+backlog===ripe), (3) Portfolio pulse summary + per-project action-need counts (92%/63% headline untouched), (4) one Today-level data-health line over 6 real source timestamps (honest stale/unknown, no synthetic live), (5) Overview relabelled Portfolio (secondary reference, no duplicate desk). Tests: new test_checkin_consolidation.js (13) + renderer/disclosure/phase_metrics/validate all green.'
+    url: https://github.com/YourBIMpossible/ai-dev-dashboard/pull/22
+  - kind: doc
+    ref: 'docs/CHECKIN-CONSOLIDATION_2026-09-06.md (acceptance note: before/after, count-reconciliation rule, landing rule, non-goals). Canonical Dashboard-auto checkout fast-forwarded to efdcba1; lane worktree/branch (local+remote) pruned; dashboard-auto-checkin launch.json entry removed.'
+  verification:
+    level: verified
+    by: 'gh pr view 22 MERGED 2026-09-07T03:08:55Z (efdcba1). Cloudflare production https://ai-dev-dashboard.pages.dev/ verified live: lands on Today, 6 data-health chips, Portfolio nav, pickInitialView+deskBaseline present as live functions. Code-review (low) pass: no findings.'
+    at: '2026-09-06'
+  live_check:
+  - 'gh pr view 22 --repo YourBIMpossible/ai-dev-dashboard --json state,mergedAt  # expect MERGED'
+  source: Session 2026-09-06 -- /csuite AI-Dashboard consolidation release, worked end-to-end.
+  notes_url: https://github.com/YourBIMpossible/ai-dev-dashboard/pull/22
+- id: DASH-USAGE-AGENTS-REFRESH-REPAIR
+  title: 'Usage/Agents dashboard sources stale ~47d: scheduled refresh never invokes usage_sync.mjs / agents_sync.mjs'
+  projects:
+  - dashboard
+  status: ready
+  unblocks: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: doc
+    ref: 'ROOT CAUSE (2026-09-06): usage.js/agents.js carry generated=2026-07-22; every other source (Facts, GitHub, BIM Watch, Graphify) is current. Refresh-Dashboard.ps1 (the scheduled refresh) invokes sync_ledgers.py, sync_activity.py, codebase_sync.mjs -- but NOT usage_sync.mjs / agents_sync.mjs. The 2026-07-04 monitor plan (docs/superpowers/plans/2026-07-04-local-dashboard-monitor.md) specified both as lenient per-cycle steps; the live script never wired them in. So collection does not run -> the dashboard data-health line correctly shows them stale (fail-safe working as designed).'
+  - kind: doc
+    ref: 'CONTRACT for the repair (do NOT change the UI to suppress the flag, do NOT build a new data platform): the two producers exist and run standalone (node usage_sync.mjs --no-push / node agents_sync.mjs --no-push regenerate usage.js/agents.js). Wire them into Refresh-Dashboard.ps1 as lenient WARN-on-failure steps (matching the plan) so a successful cycle advances their generated timestamp; a failed/absent run leaves them visibly stale/unknown. Refresh-Dashboard.ps1 is the guarded scheduled-refresh file -- owner-authorized edit only; not touched this session.'
+  - kind: doc
+    ref: 'OPPORTUNISTIC FOLD-IN (from /review-all on PR #22, 2026-09-06 -- low sev, not its own task): in index.html todayView baseline block (~line 4166), the dash.deskBaseline read does JSON.parse(raw) and the localStorage.setItem(bl.store) BOTH inside one try{}catch(e){}. If a corrupted/invalid-JSON dash.deskBaseline value is ever stored, JSON.parse throws, the empty catch swallows it, and the setItem is skipped -- so the bad value never self-heals and "new" delta markers silently stop appearing for that browser permanently. One-line fix when index.html is next edited: move the setItem out of the parse try (or removeItem in the catch) so a parse error resets the baseline instead of sticking. Purely local single-browser degradation; no data loss, queue still shows every item. Security lens on the same diff: clean (all new interpolations escaped/numeric/literal).'
+  verification:
+    level: verified
+    by: 'grep across *.ps1/*.py/*.mjs: usage_sync/agents_sync referenced only in their own defs + the 2026-07-04 plan/spec docs, never in Refresh-Dashboard.ps1 or any live caller. usage.js/agents.js generated timestamps read 2026-07-22.'
+    at: '2026-09-06'
+  live_check:
+  - 'grep -c "usage_sync\|agents_sync" Refresh-Dashboard.ps1  # expect 0 until wired'
+  - 'node usage_sync.mjs --no-push && head usage.js  # generated should advance to today'
+  source: 'Session 2026-09-06 closeout -- surfaced as the one functional follow-up to the consolidation; diagnosed to root cause, queued (not fixed: guarded scheduled-refresh file).'
+  notes_url: null
+- id: DELIV-RECEIPT-GATE
+  title: Verify the Workspace leg of the exact-HEAD delivery receipt gate actually runs
+  projects:
+  - workspace
+  - bimpossible
+  status: landed
+  owner_gate: false
+  unblocks: []
+  effort: S
+  risk: 3
+  evidence:
+  - kind: pr
+    ref: BIMpossible_Workspace#128
+    url: https://github.com/YourBIMpossible/BIMpossible_Workspace/pull/128
+  - kind: pr
+    ref: BIMpossible_Workspace#129
+    url: https://github.com/YourBIMpossible/BIMpossible_Workspace/pull/129
+  - kind: pr
+    ref: BIMpossible_Workspace#130
+    url: https://github.com/YourBIMpossible/BIMpossible_Workspace/pull/130
+  - kind: pr
+    ref: BIMpossible_Workspace#131
+    url: https://github.com/YourBIMpossible/BIMpossible_Workspace/pull/131
+  - kind: pr
+    ref: BIMpossible#610
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/610
+  - kind: pr
+    ref: BIMpossible#613
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/613
+  - kind: pr
+    ref: BIMpossible#614
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/614
+  - kind: pr
+    ref: BIMpossible#616
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/616
+  - kind: run
+    ref: F:/BIMpossible/.git/verify-local-ci.receipt.json
+  verification:
+    level: verified
+    by: 'All eight PRs MERGED 2026-09-07. Code leg is exercised: F:/BIMpossible/.git/verify-local-ci.receipt.json exists, schema 1, exitCode 0, headSha 540bcd31, finished 2026-09-07T02:15:16Z. Workspace leg is installed but UNEXERCISED: .git/hooks/pre-push shim present (935 B) and Verify-Local-CI.ps1 at the repo root, but NO verify-local-ci.receipt.json exists in F:/BIMpossible-Workspace/.git. Cross-repo asymmetry: stays landed, not live, until the Workspace half produces a receipt.'
+    at: '2026-09-07'
+  live_check:
+  - 'cat F:/BIMpossible/.git/verify-local-ci.receipt.json  # expect exitCode 0 at current HEAD'
+  - 'ls F:/BIMpossible-Workspace/.git/verify-local-ci.receipt.json  # currently MISSING - this is the gap'
+  source: 'BIMpossible_Workspace PR #128 (receipt-gated push) + code-repo PR #610; docs/engineering/DELIVERY.md'
+  notes_url: null
+- id: R18-SHARE-READ-VS-BYTES
+  title: 'Owner call: does a read share include byte download, or fail closed?'
+  projects:
+  - bimpossible
+  status: blocked_owner
+  owner_gate: true
+  unblocks: []
+  effort: S
+  risk: 3
+  evidence:
+  - kind: doc
+    ref: F:/BIMpossible-Workspace/00_Strategy/2026-09-04__Phase3-Phase4-NeedsAttention-Backlog.md#r18
+  - kind: pr
+    ref: BIMpossible_Workspace#126
+    url: https://github.com/YourBIMpossible/BIMpossible_Workspace/pull/126
+  verification:
+    level: claimed
+    by: 'Filed 2026-09-06 by Workspace PR #126 when R12''s parked follow-ups were split out. Backlog row: P2, Deferred (product decision), no environment needed; owner chooses option A (fail-closed) or B (bytes included, stated as policy). Both options costed in the backlog; current behaviour documented and unchanged. Ledger claim only - no machine probe settles a product decision.'
+    at: '2026-09-07'
+  live_check:
+  - 'grep -n "R18" "F:/BIMpossible-Workspace/00_Strategy/2026-09-04__Phase3-Phase4-NeedsAttention-Backlog.md"  # expect the row to leave Deferred once decided'
+  source: '2026-09-04__Phase3-Phase4-NeedsAttention-Backlog.md row R18 (filed by Workspace PR #126)'
+  notes_url: null
+- id: R19-INHERITANCE-PLAN-LANE
+  title: Confirm the superseded 2026-08-08 Authorization-Inheritance plan lane is dead
+  projects:
+  - workspace
+  - bimpossible
+  status: blocked_owner
+  owner_gate: true
+  unblocks: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: doc
+    ref: F:/BIMpossible-Workspace/00_Strategy/2026-09-04__Phase3-Phase4-NeedsAttention-Backlog.md#r19
+  - kind: pr
+    ref: BIMpossible_Workspace#126
+    url: https://github.com/YourBIMpossible/BIMpossible_Workspace/pull/126
+  verification:
+    level: claimed
+    by: 'Filed 2026-09-06 by Workspace PR #126. Backlog row: P3, Blocked - needs the owning lane to release an uncommitted plan file; resolution is lane coordination, not code. Ledger claim only.'
+    at: '2026-09-07'
+  live_check:
+  - 'grep -n "R19" "F:/BIMpossible-Workspace/00_Strategy/2026-09-04__Phase3-Phase4-NeedsAttention-Backlog.md"  # expect the row to leave Blocked once the lane is confirmed dead'
+  source: '2026-09-04__Phase3-Phase4-NeedsAttention-Backlog.md row R19 (filed by Workspace PR #126)'
+  notes_url: null
+- id: R20-P310A-DISPLAY-FLAG
+  title: 'Owner call: was the 2026-08-15 go meant to activate the 3.10a display flag?'
+  projects:
+  - bimpossible
+  status: blocked_owner
+  owner_gate: true
+  unblocks: []
+  effort: S
+  risk: 3
+  evidence:
+  - kind: doc
+    ref: F:/BIMpossible-Workspace/00_Strategy/2026-09-04__Phase3-Phase4-NeedsAttention-Backlog.md#r20
+  - kind: pr
+    ref: BIMpossible_Workspace#126
+    url: https://github.com/YourBIMpossible/BIMpossible_Workspace/pull/126
+  verification:
+    level: claimed
+    by: 'Filed 2026-09-06 by Workspace PR #126. Backlog row: P2, Blocked - a docs-vs-compose contradiction over NEXT_PUBLIC_BIMPOSSIBLE_PHASE3_10_ENABLED''s tracked value; only the owner can say whether the 2026-08-15 ''owner go'' was meant to activate it. Ledger claim only.'
+    at: '2026-09-07'
+  live_check:
+  - 'grep -n "R20" "F:/BIMpossible-Workspace/00_Strategy/2026-09-04__Phase3-Phase4-NeedsAttention-Backlog.md"  # expect the row to leave Blocked once the owner answers'
+  source: '2026-09-04__Phase3-Phase4-NeedsAttention-Backlog.md row R20 (filed by Workspace PR #126)'
+  notes_url: null
+- id: R12-SHARE-AUTHORITY-CLOSURE
+  title: 'R12 cross-firm share authority: telemetry, lifecycle holes H1-H3, share-aware projection read gate'
+  projects:
+  - bimpossible
+  - workspace
+  status: landed
+  owner_gate: false
+  unblocks: []
+  effort: L
+  risk: 3
+  evidence:
+  - kind: pr
+    ref: BIMpossible#605
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/605
+    note: 'MERGED 91991b9b -- closes R12 operationally: share telemetry authority_source=bimpossible_cross_firm_share, lifecycle holes H1-H3 closed, discovery seam (24 files).'
+  - kind: pr
+    ref: BIMpossible#606
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/606
+    note: 'MERGED 55ff6dc1 -- CP3 closeout docs; tracker R12 -> Verified 2026-09-07; runtime evidence recorded in Workspace #127; third follow-up split out as R18.'
+  - kind: pr
+    ref: BIMpossible#609
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/609
+    note: MERGED 5a6e74d7 -- CP4 frontend deploy record via Refresh-Frontend.ps1.
+  - kind: pr
+    ref: BIMpossible#615
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/615
+    note: MERGED 85e8208b -- share-aware projection READ gate (46 files) -- closes the list-but-not-open gap; decision log docs/decision-log/2026-09-06__share-authority.md.
+  - kind: pr
+    ref: BIMpossible#617
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/617
+    note: MERGED 3a9dab64 -- share-authority pass 8 + review-all pass 9 findings F1-F13 (18 files); verifier 4431 passed / 415 skipped.
+  - kind: pr
+    ref: BIMpossible_Workspace#127
+    url: https://github.com/YourBIMpossible/BIMpossible_Workspace/pull/127
+    note: 'runtime evidence packet referenced by #606.'
+  verification:
+    level: verified
+    at: '2026-09-07'
+    by: 'Merge facts machine-verified 2026-09-07 (gh pr view, squash SHAs on origin/main; local main fast-forwarded to 3a9dab64). landed, not live: #609 is a frontend deploy record only; no backend redeploy record for #605/#615/#617 was found in this pass and the R12 telemetry probe script (ops/foundation-validation/r12_lifecycle_telemetry_validation.py) is mid-edit in another live session. Promote to live only on a backend deploy record + a telemetry row with authority_source=bimpossible_cross_firm_share.'
+  live_check:
+  - 'git -C F:/BIMpossible log --oneline origin/main -3 -- docs/ops/  # look for a backend deploy record after 3a9dab64 before promoting'
+  - 'python F:/BIMpossible-Workspace/ops/foundation-validation/r12_lifecycle_telemetry_validation.py  # expect authority_source=bimpossible_cross_firm_share rows once live'
+  source: 'BIMpossible PRs #605/#606/#615/#617; 2026-09-04__Phase3-Phase4-NeedsAttention-Backlog.md row R12 (Verified 2026-09-07); follow-ups R18/R19/R20 tracked separately'
+  notes_url: https://github.com/YourBIMpossible/BIMpossible/blob/main/docs/decision-log/2026-09-06__share-authority.md
+- id: DOORS-SINGLE-ROOM-BLANK-REASON
+  title: 'Phase 3.10b Doors: single-room door gets an explicit "(no second room)" blank reason'
+  projects:
+  - bimpossible
+  status: live
+  owner_gate: false
+  unblocks: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: BIMpossible#611
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/611
+    note: MERGED 408af85b -- LINKED_ROOM_BLANK_REASON gains "single" (frontend/app/lib/aec/element.ts).
+  - kind: pr
+    ref: BIMpossible#612
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/612
+    note: 'MERGED 47297a74 -- CP5 frontend deploy record: container/image hashes recorded; served bundle contains single:"(no second room)".'
+  verification:
+    level: claimed
+    at: '2026-09-07'
+    by: 'live on the strength of the #612 deploy record (container + image hash, bundle grep) -- a repo-recorded runtime fact, not re-probed against the running container in this pass; run the live_check to convert to verified.'
+  live_check:
+  - 'docker exec docker-frontend-1 grep -rl "no second room" /app/.next/static 2>/dev/null | head -1  # expect a chunk hit'
+  source: 'BIMpossible PRs #611/#612 (sibling of WARM-ORIGIN-DOORGAP, which covers the origin-absent case)'
+  notes_url: null
+- id: APS-PHASE12-COMPLETION-VERIFY
+  title: APS Phase 1/2 completion verification doc + 2-legged token test
+  projects:
+  - bimpossible
+  status: landed
+  owner_gate: false
+  unblocks: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: BIMpossible#603
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/603
+    note: MERGED 9100c63d -- docs/audits/2026-09-06__Phase-1-2-Completion-Verification.md + backend test_2legged_token.py.
+  verification:
+    level: verified
+    at: '2026-09-07'
+    by: Merge fact machine-verified 2026-09-07. Audit/test artefact only -- Phase 0-2 was already CLOSED on the ledger; no ledger change implied.
+  live_check:
+  - git -C F:/BIMpossible ls-tree --name-only origin/main docs/audits/ | grep Phase-1-2-Completion
+  source: 'BIMpossible PR #603'
+  notes_url: null
+- id: HYGIENE-UNTRACKED-DOC-CONTRACT
+  title: 'docs-hygiene contract: untracked new docs no longer produce a false pass'
+  projects:
+  - bimpossible
+  status: landed
+  owner_gate: false
+  unblocks: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: BIMpossible#604
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/604
+    note: MERGED 768cd4ed -- hygiene-contract doc closing the untracked-new-doc false-pass hole.
+  verification:
+    level: verified
+    at: '2026-09-07'
+    by: Merge fact machine-verified 2026-09-07; contract doc read at PR level only.
+  live_check:
+  - git -C F:/BIMpossible show --stat 768cd4ed | head -5
+  source: 'BIMpossible PR #604'
+  notes_url: null
+- id: ADDINS-PIPE-BUSY-BACKOFF
+  title: PipeServer pipe-busy listen backoff
+  projects:
+  - addins
+  status: landed
+  owner_gate: false
+  unblocks: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: pr
+    ref: BIMpossible-AddIns#117
+    url: https://github.com/YourBIMpossible/BIMpossible-AddIns/pull/117
+    note: MERGED 9f6f3c4b -- Shared/PipeListenBackoff.cs; 2053/2053 tests.
+  verification:
+    level: verified
+    at: '2026-09-07'
+    by: 'Merge fact machine-verified 2026-09-07. landed not live: merged is not deployed to the %APPDATA% Revit slots (projects.yaml addins note).'
+  live_check:
+  - git -C F:/BIMpossible-AddIns ls-tree --name-only origin/main Shared/ | grep PipeListenBackoff
+  source: 'AddIns PR #117 (2026-09-02); sibling of P7-RELAY-SESSION-LIFECYCLE'
+  notes_url: null
+- id: ADDINS-HYGIENE-PASS-20260902
+  title: 'AddIns hygiene pass: evidence-compiler timeouts, FamilyFixer canonical root, 4 broken doc refs'
+  projects:
+  - addins
+  status: landed
+  owner_gate: false
+  unblocks: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: BIMpossible-AddIns#118
+    url: https://github.com/YourBIMpossible/BIMpossible-AddIns/pull/118
+    note: MERGED 945c1954 -- evidence-compiler timeouts 600/1500.
+  - kind: pr
+    ref: BIMpossible-AddIns#119
+    url: https://github.com/YourBIMpossible/BIMpossible-AddIns/pull/119
+    note: MERGED a9eea423 -- FamilyFixer canonical root F:\BIMpossible-Families.
+  - kind: pr
+    ref: BIMpossible-AddIns#120
+    url: https://github.com/YourBIMpossible/BIMpossible-AddIns/pull/120
+    note: 'MERGED c91be8ae -- 4 broken doc refs fixed (closes AddIns issue #114).'
+  verification:
+    level: verified
+    at: '2026-09-07'
+    by: Merge facts machine-verified 2026-09-07; PR-level read only.
+  live_check:
+  - gh pr view 120 -R YourBIMpossible/BIMpossible-AddIns --json state,mergeCommit
+  source: 'AddIns PRs #118/#119/#120'
+  notes_url: null
+- id: ADDINS-DOCS-HYGIENE-REQUIRED-CHECK
+  title: AddIns docs-hygiene is a required branch-protection check
+  projects:
+  - addins
+  status: live
+  owner_gate: false
+  unblocks: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: BIMpossible-AddIns#121
+    url: https://github.com/YourBIMpossible/BIMpossible-AddIns/pull/121
+    note: MERGED 111e241f -- docs/CI-GATES.md; branch protection strict + enforce_admins.
+  - kind: probe
+    ref: gh api repos/YourBIMpossible/BIMpossible-AddIns/branches/main/protection
+    note: '2026-09-07: strict=true, enforce_admins=true, contexts=[firm-literals, test, gitleaks, nuget-vulns, docs-hygiene].'
+  verification:
+    level: verified
+    at: '2026-09-07'
+    by: 'Branch-protection state probed live via gh api 2026-09-07: docs-hygiene present in required contexts with strict + enforce_admins.'
+  live_check:
+  - 'gh api repos/YourBIMpossible/BIMpossible-AddIns/branches/main/protection --jq .required_status_checks.contexts  # expect docs-hygiene'
+  source: 'AddIns PR #121'
+  notes_url: null

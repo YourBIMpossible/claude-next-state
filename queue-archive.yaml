@@ -2284,3 +2284,42 @@ items:
   archived_reason: 'status dropped -- owner ruling 2026-09-02: investigation-only mandate fully discharged; anomaly
     inherent upstream; retained for anti-rediscovery history'
   source_queue_version: 1
+- id: DOCS-HYGIENE-ENFORCED
+  title: docs-hygiene enforced as a required check on main in both repos; the recurring Monday sweep failure is closed
+  projects:
+  - bimpossible
+  - workspace
+  status: live
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: 'BIMpossible #600 MERGED -> 0c6e2f02. docs-hygiene added to required contexts (now backend / pytest, frontend / vitest + tsc, security-scan-summary, docs-hygiene; strict=true) -- additive, nothing removed, and deliberately NOT folded into security-scan-summary''s needs. Ships the contract doc (docs/engineering/docs-hygiene.md), the CLAUDE.md routing trigger, scripts/check-doc-references.test.mjs (11 hermetic cases over throwaway git repos), scripts/check-docs-hygiene-wiring.test.mjs (8 cases, mutation-verified), and a Verify-Local-CI.ps1 docs-hygiene section -- G3/G4 previously had NO local coverage at all.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/600
+  - kind: pr
+    ref: 'Workspace #122 MERGED -> 237364b. First required status check this repo has ever had (main was completely unprotected; strict=false, enforce_admins=false). Adds the mirrored check-doc-references.test.mjs, a 7-case wiring test, and a self-test step that finally runs check-evidence-secrets.test.mjs -- a credential scanner''s own test that no workflow executed. Fixes the shared-root miss that reddened main on 2026-09-06: docs/audits/ is thisRepoRoots here and externalRoots in the code repo, so a bare docs/audits/... citation resolved as local and read as broken; the two live citations in 00_Strategy/BIMpossible_PHASE-STATUS.md are qualified, not baselined.'
+    url: https://github.com/YourBIMpossible/BIMpossible_Workspace/pull/122
+  - kind: note
+    ref: 'ROOT CAUSE was the wiring, not the registers. docs-hygiene reported but sat outside the required-check set, so it could go red indefinitely and block nothing: code repo sweep failed 2026-08-10/08-17/08-24, Workspace failed all four August Mondays, every one drift that had ALREADY MERGED and each week an unrelated set of refs. Nothing flaky. Superseded PRs #594 and #120 closed, their commits cherry-picked into the merged lanes. Both mains verified clean against every register post-merge; check-doc-references.mjs and .test.mjs confirmed byte-identical across repos by blob hash (1e29588f / 2017e553). GOTCHA found in flight: a PR with merge conflicts produces NO run at all -- GitHub cannot build the merge ref -- and gh pr checks then reports ''no checks reported on the branch'', which reads exactly like a broken trigger; check gh pr view <n> --json mergeable first. Documented in docs/engineering/docs-hygiene.md.'
+    url: null
+  - kind: pr
+    ref: 'BIMpossible #602 MERGED -> 39d47b7a. Closeout pass. Found and fixed one real defect: the Verify-Local-CI.ps1 docs-hygiene section sat BELOW the path-aware lane selector, so a docs-only diff -- the shape most likely to break G3 -- hit the NO APPLICABLE LANES early exit and reported green having run neither register. Section moved above lane selection (the local mirror of the CI job carrying no paths: filter); the early exit now reports the docs result instead of exit 0; check-docs-hygiene-wiring.test.mjs gains a 9th case pinning the ordering (mutation-verified: 8/9 when inverted). Contract doc gains the live-protection read-back procedure, the local ordering rule, the Workspace largestDocWords headroom note, and the verification record.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/602
+  - kind: note
+    ref: 'CLOSEOUT VERIFIED 2026-09-06. Final defaults: BIMpossible main 39d47b7a, BIMpossible_Workspace main dd7da5bb -- both clean and aligned with origin, both green against every register locally. Protection is CLASSIC branch protection in both repos and NEITHER has any ruleset (rulesets: 0), so the API path is the identifier: repos/YourBIMpossible/BIMpossible/branches/main/protection (contexts backend / pytest, frontend / vitest + tsc, security-scan-summary, docs-hygiene; strict=true, enforce_admins=true) and repos/YourBIMpossible/BIMpossible_Workspace/branches/main/protection (contexts docs-hygiene; strict=false, enforce_admins=false). An API update REPLACES the object -- always re-send the full context list and read back. Enforcement proven against real merges rather than configuration: docs-irrelevant PRs (#601, Workspace #123) and a docs-relevant one (Workspace #124) each produced a completed docs-hygiene result rather than hanging pending, and a workflow_dispatch run of the scheduled path in both repos (runs 34068490831 / 34068492029) published the per-register G3/G4 table to the job summary with the fail and tracking-issue steps correctly skipped. Mirrored pair byte-identical on both mains: check-doc-references.mjs 1e29588f, check-doc-references.test.mjs 2017e553. Worktrees closed: docs-refs-harden plus branch claude/docs-refs-gitignore-aware (local and remote), and both temporary closeout lanes. BOUNDED RESIDUAL: Workspace largestDocWords is 27,606 of 28,000 on 02_Reference/Audit and Scan Info/BIMpossible_Verification_Checklist.md -- a ceiling never raised since it was written; the documented response is to SPLIT that file, never to raise the ceiling, and it now fails at PR time attributable to the author rather than as an unowned Monday email.'
+    url: null
+  verification:
+    level: verified
+    by: 'Both PRs merged and both mains re-run locally against every register at the merged tips (code 0c6e2f02: G3 8/baseline 8, G4 all four metrics OK, 11/11 + 8/8 self-tests; workspace 237364b: G3 150/baseline 150, G4 live OK, G4 records OK, report header OK, evidence secrets OK, 11/11 + 7/7 + evidence-secrets self-tests). Required-check config read back from the GitHub API on both repos. docs-hygiene reported PASS as a real check on both PRs before merge -- the live proof it neither hangs nor is bypassed. Next Monday sweep (2026-09-07 06:00 UTC) is the first run under enforcement; a red one is now exceptional and worth opening.'
+    at: '2026-09-06'
+  live_check:
+  - 'gh api repos/YourBIMpossible/BIMpossible/branches/main/protection --jq ''.required_status_checks.contexts'' # expect docs-hygiene present'
+  - 'gh api repos/YourBIMpossible/BIMpossible_Workspace/branches/main/protection --jq ''.required_status_checks.contexts'' # expect ["docs-hygiene"]'
+  source: 'Owner mandate 2026-09-06: permanent remediation of recurring docs-hygiene scheduled failures, after the advisory-only wiring was mis-diagnosed several times as a content problem.'
+  notes_url: null
+  archived_at: '2026-09-06'
+  archived_reason: 'status live -- docs-hygiene enforcement complete and archived 2026-09-06: both defaults green and aligned, docs-hygiene a direct required check in both repos, PR-facing and scheduled paths each verified against real runs, and the one closeout defect fixed in #602.'
+  source_queue_version: 1
