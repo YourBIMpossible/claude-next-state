@@ -5,9 +5,9 @@ reconciled:
     commit: 3a9dab64
     pr: 617
   addins:
-    at: '2026-09-07'
-    commit: 111e241f
-    pr: 121
+    at: '2026-09-10'
+    commit: 64a8a6b
+    pr: 127
   workspace:
     at: '2026-09-07'
     commit: 7d7647f
@@ -2097,8 +2097,8 @@ items:
     ref: 'TRIGGER PARTIALLY FIRED 2026-08-31: weekly-full-audit_2026-08-31.md DID audit BIMpossible-AddIns for the first time WITH a severity/id scheme (0 Critical, 0 High; RE-3 and ARCH-1 Low; SEC-10..SEC-13 Informational), so a properly scored Add-Ins assessment now exists. BUT it is a combined tri-repo report living in the Workspace repo, not an Add-Ins-scoped report in F:/BIMpossible-AddIns/audits/, whose newest file is still 2026-08-22__link-pdf-to-sheets-phase0-audit.md (the unscored one that caused this item). The dashboard card''s per-repo ingestion path therefore still has nothing to read. The owner call is now sharper, not closed: teach the card to read the AddIns slice of the weekly tri-repo report, or require a separately-filed scored Add-Ins report, or fold 08-22 in narratively.'
   verification:
     level: claimed
-    by: 'Ledger row is a judgment source (reconcile.md priority 3), not machine-verified here -- not independently re-run this sync (out of scope: dashboard freshness script, not a repo/PR fact). Two explicit revisit triggers per the ledger row: either a properly severity-scored Add-Ins audit report lands, or the owner decides to fold the 08-22 findings in narratively (history-only, no counts/open[] claim) -- not yet decided which. RE-CHECKED 2026-08-31 (scheduled workspace sync): still blocked_owner, but the blocking condition changed shape -- a scored Add-Ins assessment now exists, in the wrong place and shape for the card (see the new evidence row). Level stays CLAIMED: the dashboard freshness script was not re-run this sync (out of scope -- not a repo/PR fact).'
-    at: '2026-08-31'
+    by: 'Ledger row is a judgment source (reconcile.md priority 3), not machine-verified here -- not independently re-run this sync (out of scope: dashboard freshness script, not a repo/PR fact). Two explicit revisit triggers per the ledger row: either a properly severity-scored Add-Ins audit report lands, or the owner decides to fold the 08-22 findings in narratively (history-only, no counts/open[] claim) -- not yet decided which. RE-CHECKED 2026-08-31 (scheduled workspace sync): still blocked_owner, but the blocking condition changed shape -- a scored Add-Ins assessment now exists, in the wrong place and shape for the card (see the new evidence row). Level stays CLAIMED: the dashboard freshness script was not re-run this sync (out of scope -- not a repo/PR fact). RE-CHECKED 2026-09-10 (addins closeout): unchanged -- the scored assessment still lives only in the tri-repo workspace file (02_Reference/Audit and Scan Info/weekly-full-audit_2026-08-31.md), and the newest F:/BIMpossible-AddIns/audits file is still the unscored 2026-08-22 phase-0 audit, so the card still has nothing per-repo to ingest. Finite owner decision (not active work): pick exactly one of A) teach the card to read the Add-Ins slice of the tri-repo weekly audit; B) require a separately-filed scored Add-Ins report; C) fold the 2026-08-22 findings in narratively (history-only, no counts).'
+    at: '2026-09-10'
   live_check:
   - 'python check_audit_freshness.py  # (or equivalent) -- expect addins.stale: true until ops-1 is resolved one way or the other'
   source: 00_Strategy/Dashboard/strategy_decisions_ledger.md row ops-1 (commit c75eaf7)
@@ -3031,19 +3031,19 @@ items:
   title: First-use DPAPI pre-warm in the add-in verifier to remove the cold-start latency on the first attestation after Revit launch
   projects:
   - addins
-  status: blocked_owner
-  owner_gate: true
+  status: parked
+  owner_gate: false
   unblocks: []
   blocked_by: []
   effort: S
   risk: 1
   evidence:
   - kind: doc
-    ref: Observed during the 2026-08-19/21 pilots as a one-time delay; not a correctness issue. Owner call whether the latency is worth the code.
+    ref: Observed during the 2026-08-19/21 pilots as a one-time delay; not a correctness issue. Optional P7 close-out improvement -- no active work and no demonstrated current performance/reliability need.
   verification:
     level: claimed
-    by: Queued at P7 close-out 2026-08-21 as an optional improvement.
-    at: '2026-08-23'
+    by: 'Parked 2026-09-10 as an intentional deferral (was blocked_owner/claimed -- stale: it was never an active owner decision, only an optional idea). Revive trigger: a user-visible first-attestation latency after Revit launch. Owner keeps the revive call; no churn until the trigger fires.'
+    at: '2026-09-10'
   live_check:
   - Time the first vs second attestation after a Revit launch with the add-in log; if the delta is not user-visible, retire.
   source: P7 close-out 2026-08-21
@@ -3464,11 +3464,11 @@ items:
   - kind: pr
     ref: BIMpossible-AddIns#115
     url: https://github.com/YourBIMpossible/BIMpossible-AddIns/pull/115
-    note: 'Still OPEN 2026-09-07 (head claude/keyplan-preview-grid-fix, not draft, last updated 2026-08-31T16:01Z, 44 files). Not merged through the #121 watermark.'
+    note: 'Still OPEN 2026-09-10 (head claude/keyplan-preview-grid-fix, not draft, mergeable=UNKNOWN, last updated 2026-08-31T16:01Z). Carries P3 sector-mapping dialog + P4 live Apply (KeyPlanApplyPlanner, 25-sheet transaction waves, post-commit read-back); its own body: "live ACCC Apply is a separate owner-run step." Not merged; untouched since 2026-08-31.'
   verification:
     level: verified
-    by: 'Merge fact machine-verified (3340507 on origin/main, gh pr list state MERGED). Remaining scope is owner-gated: flags A-C are unmade owner decisions recorded at merge time; live write is not implemented and no supervised write has run. blocked_owner because the flags precede any build session. unblocks deliberately empty -- nothing in the store waits on Tool 20. | 2026-09-07: #115 still OPEN, untouched since 2026-08-31; owner flags A-C still unmade.'
-    at: '2026-09-07'
+    by: 'Merge fact machine-verified (#110 = 3340507 on origin/main; dry-run + resolver only). The remaining live-write scope is owner-gated. The "flags A-C" shorthand grounds to the concrete unmade owner decisions: (A) whether to MERGE PR #115 (the P4 live-Apply implementation; OPEN, mergeable=UNKNOWN as of 2026-09-10); (B) the owner-run live-ribbon DRY-RUN gate against the ACCC test model (bounded preview, row outcomes, no-mutation before/after) -- PR #110 checklist item 1; (C) the single-sheet LIVE-WRITE authorization, a separate explicit gate that only opens once (B) passes -- PR #110 checklist item 2. Concrete next state: owner rules on (A); if merged, run (B); if (B) passes, grant (C) and perform the first supervised single-sheet write, then promote. No supervised write has run. Not stale, not ready -- awaiting owner. unblocks empty: nothing in the store waits on Tool 20.'
+    at: '2026-09-10'
   live_check:
   - 'cd F:\BIMpossible-AddIns; git log --oneline -5 origin/main -- "BIMpossible.RevitLink" | Select-String -Pattern "keyplan|key plan|Tool 20" # new commits touching key-plan code mean the write slice started'
   source: AddIns PR
@@ -5073,15 +5073,44 @@ items:
   - kind: pr
     ref: BIMpossible-AddIns#117
     url: https://github.com/YourBIMpossible/BIMpossible-AddIns/pull/117
-    note: MERGED 9f6f3c4b -- Shared/PipeListenBackoff.cs; 2053/2053 tests.
+    note: MERGED 9f6f3c4b -- BIMpossible.RevitLink/Shared/PipeListenBackoff.cs; 2053/2053 tests.
+  - kind: doc
+    ref: 'Stored probe path corrected 2026-09-10: the live_check targeted Shared/PipeListenBackoff.cs (repo root) but the file has always lived at BIMpossible.RevitLink/Shared/PipeListenBackoff.cs on origin/main (confirmed present 2026-09-10; the old path returns empty). Stale probe metadata, not a code contradiction -- merged code unchanged.'
   verification:
     level: verified
-    at: '2026-09-07'
-    by: 'Merge fact machine-verified 2026-09-07. landed not live: merged is not deployed to the %APPDATA% Revit slots (projects.yaml addins note).'
+    at: '2026-09-10'
+    by: 'Merge fact machine-verified; probe path corrected 2026-09-10 to BIMpossible.RevitLink/Shared/PipeListenBackoff.cs (confirmed present on origin/main). landed not live: merged is not deployed to the %APPDATA% Revit slots (projects.yaml addins note).'
   live_check:
-  - git -C F:/BIMpossible-AddIns ls-tree --name-only origin/main Shared/ | grep PipeListenBackoff
+  - git -C F:/BIMpossible-AddIns ls-tree --name-only origin/main BIMpossible.RevitLink/Shared/ | grep PipeListenBackoff
   source: 'AddIns PR #117 (2026-09-02); sibling of P7-RELAY-SESSION-LIFECYCLE'
   notes_url: null
+- id: LINKPDF-ROADMAP-A-D
+  title: 'NORTHSTAR "Link PDF to Sheets" post-merge roadmap (Features A/B1/C1/D): per-feature review + live smoke, not yet accepted'
+  projects:
+  - addins
+  status: in_flight
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: L
+  risk: 2
+  evidence:
+  - kind: pr
+    ref: 'BIMpossible-AddIns #127 MERGED 2026-09-11 (merge commit 64a8a6b) under the title "Scope Revit Claude skills to BIMpossible-AddIns" -- but its own body states it "also carries the existing Link PDF to Sheets roadmap work (Features A/B1/C1/D, 10 commits)". The roadmap feature code landed on origin/main bundled under a skills-relocation title, NOT via one-PR-per-feature review or the roadmap-required live smoke.'
+    url: https://github.com/YourBIMpossible/BIMpossible-AddIns/pull/127
+  - kind: doc
+    ref: 'Roadmap spec: Tool-Specs/16_SHEET_PRODUCTION_LinkPdfToSheets_PostMergeRoadmap.md (on origin/main), governed by the active NORTHSTAR.link-pdf-roadmap.md mission (delivery order A -> C1 -> B1 -> D; optional stretch C2/B2). Per-feature Definition of Done: deterministic, previewable where it touches existing content, tool-owned artifacts only, automated tests, live-validated in Revit -- one PR per feature/stage, each live-smoked before merge.'
+  - kind: doc
+    ref: 'Created 2026-09-10 as the single canonical queue tracker for the active NORTHSTAR work (none existed before -- only incidental mentions in other items). REMAINING: per-feature review against each Acceptance Tests section + the roadmap-required in-Revit live smoke for A, B1, C1, D. Code merge != feature acceptance -- #127 landing the code satisfies no feature Acceptance Tests or the DoD; do not mark any feature accepted on merge evidence alone.'
+  verification:
+    level: claimed
+    by: 'Only the code-merge fact is machine-verified (A/B1/C1/D present on origin/main via #127, merge 64a8a6b). Feature ACCEPTANCE is NOT verified: no per-feature review against Acceptance Tests and no roadmap-required in-Revit live smoke has run. Level is claimed (not verified) precisely because code-landed != feature-accepted; stays in_flight until each feature is reviewed and live-smoked.'
+    at: '2026-09-10'
+  live_check:
+  - 'gh pr view 127 --repo YourBIMpossible/BIMpossible-AddIns --json state,mergeCommit  # expect MERGED, 64a8a6b'
+  - git -C F:/BIMpossible-AddIns ls-tree --name-only origin/main Tool-Specs/ | grep LinkPdfToSheets_PostMergeRoadmap
+  source: 'NORTHSTAR.link-pdf-roadmap.md; Tool-Specs/16_SHEET_PRODUCTION_LinkPdfToSheets_PostMergeRoadmap.md; PR #127 phase-0 reconciliation 2026-09-10'
+  notes_url: https://github.com/YourBIMpossible/BIMpossible-AddIns/pull/127
 - id: ADDINS-HYGIENE-PASS-20260902
   title: 'AddIns hygiene pass: evidence-compiler timeouts, FamilyFixer canonical root, 4 broken doc refs'
   projects:

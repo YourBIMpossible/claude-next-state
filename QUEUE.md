@@ -7,7 +7,7 @@ This is a repo-local read model, not a definition of /next behavior. -->
 
 Generated 2026-09-10 (synced). Anchor-first, leverage-ranked (per item-model.md). The single #1 move is chosen live by the skill from the anchor (stated focus, else roadmap order) and finalization leverage — not from dependency cone. This board is a status-grouped snapshot; within each section it orders by owner-gated+S, then effort, risk, id, with `cone` leading only on a deep graph (this store is flat today). Full algorithm: `~/.claude/skills/next/reference/item-model.md`.
 
-Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `addins` = 2026-09-07 @ `111e241f` PR#121 · `workspace` = 2026-09-07 @ `7d7647f` PR#134 · `evidence-compiler` = 2026-08-24 @ `0ef747e7533c7cf714888076f3df6f06dd028b84` PR#5 · `dashboard` = 2026-09-06 @ `efdcba1` PR#22.
+Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `addins` = 2026-09-10 @ `64a8a6b` PR#127 · `workspace` = 2026-09-07 @ `7d7647f` PR#134 · `evidence-compiler` = 2026-08-24 @ `0ef747e7533c7cf714888076f3df6f06dd028b84` PR#5 · `dashboard` = 2026-09-06 @ `efdcba1` PR#22.
 (pc-monitor: no items yet — run `init` to derive.)
 
 > **Dormant project(s):** `families` — reassessment-bound. Items scoped to them are parked; their probes are suspended (non-executable metadata) and render **SUSPENDED**, never verified. `/next` will not run or propose a command against a dormant repo.
@@ -26,11 +26,8 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `add
 [ONBOARDING-574-FRONTEND-REBUILD] PR #574 onboarding-flag frontend rebuild (owner-gated): backend fix already live; #574 needs NO rebuild; only the separate NEXT_PUBLIC onboarding-flag flip does
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-06 · BIMpossible #584 docs(#574) -- squash 29b46518, docs-only. Checklist…
 
-[ADDINS-DPAPI-PREWARM] First-use DPAPI pre-warm in the add-in verifier to remove the cold-start latency on the first attestation after Revit launch
-       unblocks 0 · S · addins · CLAIMED 2026-08-23 · Observed during the 2026-08-19/21 pilots as a one-time delay; not a …
-
 [OPS-1-ADDINS-AUDIT-GAP] Add-Ins/RevitLink audit dashboard card stuck stale: newer report has no severity/ID scheme to ingest
-       unblocks 0 · S · workspace+addins · CLAIMED 2026-08-31 · workspace 00_Strategy/Dashboard/strategy_decisions_ledger.md row ops…
+       unblocks 0 · S · workspace+addins · CLAIMED 2026-09-10 · workspace 00_Strategy/Dashboard/strategy_decisions_ledger.md row ops…
 
 [PROD-DERIV-3] Discharge the DERIV-3 prod verification -- needs a mid-translation model and an APS upload
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-28 · 01_BuildLog/2026-08-05__hub-tenancy-migration-BLOCKED_HANDOFF.md -- …
@@ -42,7 +39,7 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `add
        unblocks 0 · M · addins · CLAIMED 2026-08-23 · Distinct from ADDINS-JTI-REPLAY-PERSIST (single-process restart insi…
 
 [ADDINS-KEYPLAN-LIVE-WRITE] Key Plan (Tool 20) live write -- owner flags A-C then first supervised write
-       unblocks 0 · M · addins · VERIFIED 2026-09-07 · AddIns #110 'Key Plan (Tool 20): composite resolver, dry-run preview…
+       unblocks 0 · M · addins · VERIFIED 2026-09-10 · AddIns #110 'Key Plan (Tool 20): composite resolver, dry-run preview…
 
 [ARCH-FIRM-ALIAS-DYNAMIC-SELECTION] Request-scoped tenant-safe alias-profile selection -- if multi-firm alias profiles are in scope
        unblocks 0 · M · bimpossible · CLAIMED 2026-08-30 · 2026-08-30 ARCH-FIRM-ALIAS-BACKEND runtime verification scope note: …
@@ -92,7 +89,7 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `add
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · BIMpossible #262 MERGED 2026-08-07T04:20:29Z, squash commit dd898899…
 
 [ADDINS-PIPE-BUSY-BACKOFF] PipeServer pipe-busy listen backoff
-       unblocks 0 · S · addins · VERIFIED 2026-09-07 · BIMpossible-AddIns#117
+       unblocks 0 · S · addins · VERIFIED 2026-09-10 · BIMpossible-AddIns#117
 
 [AUTHZ-ENFORCE-KEYSTONE-PR530] Merge BIMpossible#530: AUTH-INH ENFORCE keystone + Phase 15c T5 end-to-end test (CKA Phase 18 step 1)
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · BIMpossible#530 OPEN, READY, head 6d64390f, opened 2026-09-02T00:40Z…
@@ -288,6 +285,11 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `add
 [EXACTLY-ONCE-AUDIT-RELIABILITY-WORKTREE-OVERLAP] Foreign worktree .claude/worktrees/audit-reliability (branch claude/synthetic-audit-exactly-once-completion, at c8131efd) appeared 2026-09-06 after #595 merged -- confirm its owner is not re-doing the #579 closeout (ETL PT4H / exhausted-window record already on main)
        unblocks 0 · XS · bimpossible · UNVERIFIED date-unknown · Seen in git worktree list during the 2026-09-06 closeout pass integr…
 
+## In flight
+
+[LINKPDF-ROADMAP-A-D] NORTHSTAR "Link PDF to Sheets" post-merge roadmap (Features A/B1/C1/D): per-feature review + live smoke, not yet accepted
+       unblocks 0 · L · addins · CLAIMED 2026-09-10 · BIMpossible-AddIns #127 MERGED 2026-09-11 (merge commit 64a8a6b) und…
+
 ## Blocked elsewhere
 
 [SHARED-PARAM-REGISTRY] Canonical shared-parameter registry landed (PR#174+hardening) -- generator only, nothing imports it yet
@@ -310,6 +312,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `add
 
 [OPS-REDIS-P5] Flip WEB_CONCURRENCY>1 with redis leader-lock (Wave C-1 Phase 5)
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-04 · docker/REDIS-CUTOVER.md §Next -- confirmed exists on origin/main 202…
+
+[ADDINS-DPAPI-PREWARM] First-use DPAPI pre-warm in the add-in verifier to remove the cold-start latency on the first attestation after Revit launch
+       unblocks 0 · S · addins · CLAIMED 2026-09-10 · Observed during the 2026-08-19/21 pilots as a one-time delay; not a …
 
 [APS-BACKGROUND-VERIFICATION-PHASE-A] APS service-context feasibility spike (docs-and-repo-only) -- deferred behind blocked-job metric trigger
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-31 · Durable plan MERGED 2026-08-31 (PR#509): docs/plans/active/aps-backg…
