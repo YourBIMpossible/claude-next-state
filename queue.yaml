@@ -4768,7 +4768,7 @@ items:
   title: 'Usage/Agents dashboard sources stale ~47d: scheduled refresh never invokes usage_sync.mjs / agents_sync.mjs'
   projects:
   - dashboard
-  status: ready
+  status: live
   unblocks: []
   effort: S
   risk: 2
@@ -4776,17 +4776,42 @@ items:
   - kind: doc
     ref: 'ROOT CAUSE (2026-09-06): usage.js/agents.js carry generated=2026-07-22; every other source (Facts, GitHub, BIM Watch, Graphify) is current. Refresh-Dashboard.ps1 (the scheduled refresh) invokes sync_ledgers.py, sync_activity.py, codebase_sync.mjs -- but NOT usage_sync.mjs / agents_sync.mjs. The 2026-07-04 monitor plan (docs/superpowers/plans/2026-07-04-local-dashboard-monitor.md) specified both as lenient per-cycle steps; the live script never wired them in. So collection does not run -> the dashboard data-health line correctly shows them stale (fail-safe working as designed).'
   - kind: doc
-    ref: 'CONTRACT for the repair (do NOT change the UI to suppress the flag, do NOT build a new data platform): the two producers exist and run standalone (node usage_sync.mjs --no-push / node agents_sync.mjs --no-push regenerate usage.js/agents.js). Wire them into Refresh-Dashboard.ps1 as lenient WARN-on-failure steps (matching the plan) so a successful cycle advances their generated timestamp; a failed/absent run leaves them visibly stale/unknown. Refresh-Dashboard.ps1 is the guarded scheduled-refresh file -- owner-authorized edit only; not touched this session.'
+    ref: 'CONTRACT for the repair (do NOT change the UI to suppress the flag, do NOT build a new data platform): the two producers exist and run standalone (node usage_sync.mjs --no-push / node agents_sync.mjs --no-push regenerate usage.js/agents.js). Wire them into Refresh-Dashboard.ps1 as lenient WARN-on-failure steps (matching the plan) so a successful cycle advances their generated timestamp; a failed/absent run leaves them visibly stale/unknown. Refresh-Dashboard.ps1 is the guarded scheduled-refresh file -- owner-authorized edit only.'
   - kind: doc
-    ref: 'OPPORTUNISTIC FOLD-IN (from /review-all on PR #22, 2026-09-06 -- low sev, not its own task): in index.html todayView baseline block (~line 4166), the dash.deskBaseline read does JSON.parse(raw) and the localStorage.setItem(bl.store) BOTH inside one try{}catch(e){}. If a corrupted/invalid-JSON dash.deskBaseline value is ever stored, JSON.parse throws, the empty catch swallows it, and the setItem is skipped -- so the bad value never self-heals and "new" delta markers silently stop appearing for that browser permanently. One-line fix when index.html is next edited: move the setItem out of the parse try (or removeItem in the catch) so a parse error resets the baseline instead of sticking. Purely local single-browser degradation; no data loss, queue still shows every item. Security lens on the same diff: clean (all new interpolations escaped/numeric/literal).'
+    ref: 'OPPORTUNISTIC FOLD-IN (from /review-all on PR #22, 2026-09-06 -- low sev, not its own task): in index.html todayView baseline block (~line 4166), the dash.deskBaseline read does JSON.parse(raw) and the localStorage.setItem(bl.store) BOTH inside one try{}catch(e){}. If a corrupted/invalid-JSON dash.deskBaseline value is ever stored, JSON.parse throws, the empty catch swallows it, and the setItem is skipped -- so the bad value never self-heals and "new" delta markers silently stop appearing for that browser permanently. One-line fix when index.html is next edited: move the setItem out of the parse try (or removeItem in the catch) so a parse error resets the baseline instead of sticking. Purely local single-browser degradation; no data loss, queue still shows every item. Security lens on the same diff: clean (all new interpolations escaped/numeric/literal). Still open -- not folded in as of 2026-09-07.'
+  - kind: commit
+    ref: 'fbced14 (2026-09-06/07 prior session): usage_sync.mjs/agents_sync.mjs wired into Refresh-Dashboard.ps1 as lenient steps 1e/1g. 43d8937 (2026-09-07, this session): extended the same pattern to github_actions_sync.mjs (step 1h) + github_actions.js added to the step-4 stage list; ccusage pinned 20.0.20 in both sync scripts (was @latest); REFRESH-SPEC rule 11 (>7d graph-metrics staleness reminder) automated as step 1f2 (Sync-GraphStalenessReminder). /review-all (standard: code-review + security-diff) on 43d8937: 0 BLOCKER, 2 FOLLOW-UP (see DASH-STALENESS-BACKSLASH-ESCAPE; the other -- reminder array always rewritten single-line -- dropped as noise, bimpossible''s block is already single-line). Pushed to origin/main.'
+    url: https://github.com/YourBIMpossible/ai-dev-dashboard/commit/43d8937
   verification:
     level: verified
-    by: 'grep across *.ps1/*.py/*.mjs: usage_sync/agents_sync referenced only in their own defs + the 2026-07-04 plan/spec docs, never in Refresh-Dashboard.ps1 or any live caller. usage.js/agents.js generated timestamps read 2026-07-22.'
-    at: '2026-09-06'
+    by: 'grep -c "usage_sync\|agents_sync" Refresh-Dashboard.ps1 = 4 (was 0). node usage_sync.mjs --no-push run live 2026-09-07: usage.js generated advanced, $16626.35 all-time. test_refresh_git_staging.ps1 full suite green after the 43d8937 additions. github_actions_sync.mjs/agents_sync.mjs/usage_sync.mjs each --no-push verified standalone before commit.'
+    at: '2026-09-07'
   live_check:
-  - 'grep -c "usage_sync\|agents_sync" Refresh-Dashboard.ps1  # expect 0 until wired'
+  - 'grep -c "usage_sync\|agents_sync\|github_actions_sync" Refresh-Dashboard.ps1  # expect 6+'
   - 'node usage_sync.mjs --no-push && head usage.js  # generated should advance to today'
-  source: 'Session 2026-09-06 closeout -- surfaced as the one functional follow-up to the consolidation; diagnosed to root cause, queued (not fixed: guarded scheduled-refresh file).'
+  - 'Get-Content Dashboard-auto\_backups\refresh-log.txt -Tail 40  # next scheduled run: confirm 1f2/1g/1h all report ok, degraded=0'
+  source: 'Session 2026-09-06 closeout -- surfaced as the one functional follow-up to the consolidation; diagnosed to root cause, queued. Session 2026-09-07 -- wiring completed, extended to the two remaining Step-5 items (github_actions_sync, ccusage pin, graph-staleness reminder), committed 43d8937, pushed on explicit "push". Awaiting tomorrow''s scheduled Dashboard-auto run as live confirmation before fully closing this item; reopen if that run degrades.'
+  notes_url: https://github.com/YourBIMpossible/ai-dev-dashboard/commit/43d8937
+- id: DASH-STALENESS-BACKSLASH-ESCAPE
+  title: 'Sync-GraphStalenessReminder backslash-escape quadruples instead of doubles (latent, not live)'
+  projects:
+  - dashboard
+  status: ready
+  unblocks: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: doc
+    ref: "Refresh-Dashboard.ps1 line 316, the backslash-escape replace inside Sync-GraphStalenessReminder. Both sides of a PowerShell -replace on a single-quoted string are literal (no backslash meta-meaning), so one literal backslash in dollar-reminderText is replaced with four backslash characters, not the two needed for a valid JS string escape. Confirmed by reading the line directly (review-all, 2026-09-07). Not reachable today: both current reminderText templates (snapshot-age wording, missing-file wording) contain no backslash."
+  - kind: doc
+    ref: "Owner call (2026-09-07): real but not live, not worth a solo commit/push. Fix inline the next time this function is touched for another reason: the replacement pattern needs to double a backslash, not quadruple it, in the emitted JS string. Do not open a dedicated commit for this alone."
+  verification:
+    level: unverified
+    by: 'Static read only -- no reminder text has ever contained a backslash in production data.js, so the bug has not fired.'
+    at: '2026-09-07'
+  live_check:
+  - 'grep -n "replace .\\\\\\\\." Refresh-Dashboard.ps1  # still quadrupling -> still open'
+  source: 'Session 2026-09-07 -- /review-all on commit 43d8937 (code-review lens); owner triaged same session: fix-on-next-touch, no solo push.'
   notes_url: null
 - id: DELIV-RECEIPT-GATE
   title: Verify the Workspace leg of the exact-HEAD delivery receipt gate actually runs

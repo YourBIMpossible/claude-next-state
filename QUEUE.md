@@ -5,7 +5,7 @@ This is a repo-local read model, not a definition of /next behavior. -->
 
 # /next — work-item queue
 
-Generated 2026-09-07 (synced). Anchor-first, leverage-ranked (per item-model.md). The single #1 move is chosen live by the skill from the anchor (stated focus, else roadmap order) and finalization leverage — not from dependency cone. This board is a status-grouped snapshot; within each section it orders by owner-gated+S, then effort, risk, id, with `cone` leading only on a deep graph (this store is flat today). Full algorithm: `~/.claude/skills/next/reference/item-model.md`.
+Generated 2026-09-10 (synced). Anchor-first, leverage-ranked (per item-model.md). The single #1 move is chosen live by the skill from the anchor (stated focus, else roadmap order) and finalization leverage — not from dependency cone. This board is a status-grouped snapshot; within each section it orders by owner-gated+S, then effort, risk, id, with `cone` leading only on a deep graph (this store is flat today). Full algorithm: `~/.claude/skills/next/reference/item-model.md`.
 
 Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `addins` = 2026-09-07 @ `111e241f` PR#121 · `workspace` = 2026-09-07 @ `7d7647f` PR#134 · `evidence-compiler` = 2026-08-24 @ `0ef747e7533c7cf714888076f3df6f06dd028b84` PR#5 · `dashboard` = 2026-09-06 @ `efdcba1` PR#22.
 (pc-monitor: no items yet — run `init` to derive.)
@@ -258,14 +258,14 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `add
 [ADDINS-SLOT-LEDGER] Runtime-slot handoff ledger is stale: deploys are landing without a ledger entry
        unblocks 0 · S · addins · VERIFIED 2026-08-23 · Add-Ins decision-log/2026-07-25__runtime-slot-handoff.md -- last mod…
 
-[DASH-USAGE-AGENTS-REFRESH-REPAIR] Usage/Agents dashboard sources stale ~47d: scheduled refresh never invokes usage_sync.mjs / agents_sync.mjs
-       unblocks 0 · S · dashboard · VERIFIED 2026-09-06 · ROOT CAUSE (2026-09-06): usage.js/agents.js carry generated=2026-07-…
-
 [OPS-WORKTREE-DRIFT-REVIEW] Recurring per-repo drift review: workspace local behind-6/ahead-1 with dirty ledgers + untracked audit docs
        unblocks 0 · S · workspace+bimpossible · VERIFIED 2026-09-07 · 2026-08-07 (original): workspace carried 2 untracked docs (revitlink…
 
 [ADMIN-DOMAIN-UNKNOWN-FIRM-404] Admin domain registration: return typed 404 for unknown firm instead of 409
        unblocks 0 · S · bimpossible · CLAIMED 2026-09-01 · Observed during BIMpossible#449 review: POST /admin/domains/{firm_id…
+
+[DASH-STALENESS-BACKSLASH-ESCAPE] Sync-GraphStalenessReminder backslash-escape quadruples instead of doubles (latent, not live)
+       unblocks 0 · S · dashboard · UNVERIFIED 2026-09-07 · Refresh-Dashboard.ps1 line 316, the backslash-escape replace inside …
 
 [EC-HYGIENE-1] Pull main checkout master to 345e1c7; delete merged lane branches (#1, #2 heads)
        unblocks 0 · S · evidence-compiler · VERIFIED 2026-08-24 · Live probe 2026-08-24: local master at 8bc555b, origin/master at 345…
@@ -449,6 +449,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `add
 [DASH-DRIFT-GATE-UNTRACKED] Harden step-0b drift gate against untracked shadowing files (review finding #6)
        unblocks 0 · S · dashboard · VERIFIED 2026-09-02 · Code review 2026-08-31 finding #6 (PLAUSIBLE): Refresh-Dashboard.ps1…
 
+[DASH-USAGE-AGENTS-REFRESH-REPAIR] Usage/Agents dashboard sources stale ~47d: scheduled refresh never invokes usage_sync.mjs / agents_sync.mjs
+       unblocks 0 · S · dashboard · VERIFIED 2026-09-07 · ROOT CAUSE (2026-09-06): usage.js/agents.js carry generated=2026-07-…
+
 [DATA-EMPTY-PERSIST-GUARD] Never persist empty categories/property/spec data version-immutably
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · BIMpossible #362 MERGED (0b314d8, 2026-08-16) -- never persist an em…
 
@@ -499,12 +502,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `add
 
 [TENANCY-RAIL-SEARCH-RESOLVE] /search/models + /aps/model/resolve migrated off the ALLOWED_PROJECT_IDS rail
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · BIMpossible #366 MERGED (e585862, 2026-08-16) -- migrates /search/mo…
-
-[ADDINS-BRANCH-PROTECT] Protect Add-Ins main: require PRs + firm-literals/test/gitleaks checks, strict up-to-date
-       unblocks 0 · S · addins · VERIFIED 2026-08-08 · Applied 2026-08-08 via gh api PUT repos/YourBIMpossible/BIMpossible-…
-
-[ADDINS-DEP-SCAN] Add deterministic NuGet dependency-vulnerability check to Add-Ins CI, gate it, add its check name to branch protection
-       unblocks 0 · S · addins · VERIFIED 2026-08-08 · Verified 2026-08-08: Add-Ins security-scan.yml is a single gitleaks …
 
 [ADDINS-DOCS-HYGIENE-REQUIRED-CHECK] AddIns docs-hygiene is a required branch-protection check
        unblocks 0 · S · addins · VERIFIED 2026-09-07 · BIMpossible-AddIns#121
@@ -660,9 +657,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `add
 [WIZARD-NEWPROJECT-SETUP] New-Project-Setup wizard hardened -- keep-alive-safe provision (#387) + approved fixes wave (#388: combobox, address/client, dup-number advisory, schedule/value/timezone, Option A session-cached consent)
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-17 · BIMpossible #387 (squash b12ef36, merged 2026-08-17) -- fix(wizard):…
 
-[ADDINS-TDD-CENSUS] Measure Add-Ins logic in the /tdd-excluded Revit-API-bound glue zone vs extracted tested cores
-       unblocks 0 · M · addins · VERIFIED 2026-08-08 · Anti-slop coverage plan sec.3: /tdd explicitly excludes Revit-API-bo…
-
 [DOCS-HYGIENE-ENFORCED] docs-hygiene enforced as a required check on main in both repos; the recurring Monday sweep failure is closed
        unblocks 0 · M · bimpossible+workspace · VERIFIED 2026-09-06 · BIMpossible #600 MERGED -> 0c6e2f02. docs-hygiene added to required …
 
@@ -671,9 +665,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `add
 
 [P3-6-SPATIAL] Build Phase 3.6 Spatial Relationship Engine v1 (architecturally unblocked)
        unblocks 0 · M · bimpossible · VERIFIED 2026-09-02 · BIMpossible_PHASE-STATUS.md Phase 3 sub-phase notes, Phase 3.6 row
-
-[SLOP-AUDIT-SKILL] Repo-agnostic on-demand slop-audit skill: silent-catch census, counter-integrity, tested-but-dead
-       unblocks 0 · M · claude-profile+workspace · VERIFIED 2026-08-08 · Anti-slop coverage plan sec.2: PC-Monitor, Finance-Dashboard, Presea…
 
 [WSCLOSEOUT-20260831-RECORDS] 2026-08-31 workspace closeout: review, authz, weekly-audit, PHASE-STATUS and slop-audit records published
        unblocks 0 · M · workspace · VERIFIED 2026-08-31 · One coherent publication wave, all ancestors of origin/main 1360a66:…
