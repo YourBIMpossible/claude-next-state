@@ -7,7 +7,7 @@ This is a repo-local read model, not a definition of /next behavior. -->
 
 Generated 2026-09-12 (synced). Anchor-first, leverage-ranked (per item-model.md). The single #1 move is chosen live by the skill from the anchor (stated focus, else roadmap order) and finalization leverage — not from dependency cone. This board is a status-grouped snapshot; within each section it orders by owner-gated+S, then effort, risk, id, with `cone` leading only on a deep graph (this store is flat today). Full algorithm: `~/.claude/skills/next/reference/item-model.md`.
 
-Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `addins` = 2026-09-10 @ `320e63a` PR#124 · `workspace` = 2026-09-07 @ `7d7647f` PR#134 · `evidence-compiler` = 2026-08-24 @ `0ef747e7533c7cf714888076f3df6f06dd028b84` PR#5 · `dashboard` = 2026-09-06 @ `efdcba1` PR#22.
+Scope: `all`. Watermarks: `bimpossible` = 2026-09-12 @ `95ce4556` PR#653 · `addins` = 2026-09-10 @ `320e63a` PR#124 · `workspace` = 2026-09-07 @ `7d7647f` PR#134 · `evidence-compiler` = 2026-08-24 @ `0ef747e7533c7cf714888076f3df6f06dd028b84` PR#5 · `dashboard` = 2026-09-06 @ `efdcba1` PR#22.
 (pc-monitor: no items yet — run `init` to derive.)
 
 > **Dormant project(s):** `families` — reassessment-bound. Items scoped to them are parked; their probes are suspended (non-executable metadata) and render **SUSPENDED**, never verified. `/next` will not run or propose a command against a dormant repo.
@@ -172,7 +172,7 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `add
 [WINCHESTER-STALE-LINEAGE-LINK] Winchester - TEST project file list still links one TEST_Winchester_ELEC_R25.rvt entry to a dead item lineage (urn n53a4yy6RJu5fBMjDppI8A) -- Autodesk 'couldn't find this item', bounces to Autodesk sign-in
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-22 · Two links with an identical file_name in the project's file list res…
 
-[DEP-JSYAML-282] Dependabot js-yaml 4.3.0 -> 4.3.1 merged (GHSA-5p4m-2wfm-xmqj, dev-only transitive)
+[DEP-JSYAML-282] Dependabot js-yaml bumped to 4.3.2 (4.3.0->4.3.1
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · BIMpossible #282 MERGED 2026-08-07T02:30:12Z, squash commit 5d0379d3…
 
 [P7-RELAY-SESSION-LIFECYCLE] Customer-session relay lifecycle: the Revit add-in owns/activates the localhost relay in the signed-in session -- available when Revit starts, gone cleanly when Revit closes; no Windows service, Scheduled Task, NSSM, machine-wide secret store, or developer-only deploy path
@@ -662,6 +662,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `add
 [ASSISTANT-MODEL-ROUTING-1A] AI model routing slice 1A + per-kind defaults SHIPPED and running on the local stack (#537, #542)
        unblocks 1 · M · bimpossible · VERIFIED 2026-09-02 · Anchor F:\Claude-Tools\reports\2026-09-01_ai-model-routing-plan.md (…
 
+[CI-POSTURE-LEAN-2026-09-11] CI cost-reduction posture (2026-09-11): heavy GitHub Actions removed; secret-scan once/PR, clean-room-ci deleted, wiring retired; enforcement moved to Verify-Local-CI.ps1
+       unblocks 0 · M · bimpossible · VERIFIED 2026-09-12 · BIMpossible #637 (secret-scan once/PR, retire wiring), #652 (delete …
+
 [CKA-PILLAR1-HELP-CORPUS] Client Knowledge Assistant Pillar 1: BM25 help ranker + how-to corpus, waves 1-4 shipped
        unblocks 0 · M · bimpossible+workspace · VERIFIED 2026-08-17 · BIMpossible #320 (f8791ec) -- ports the docindex BM25 ranker into ba…
 
@@ -680,6 +683,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `add
 [P3-6-SPATIAL] Build Phase 3.6 Spatial Relationship Engine v1 (architecturally unblocked)
        unblocks 0 · M · bimpossible · VERIFIED 2026-09-02 · BIMpossible_PHASE-STATUS.md Phase 3 sub-phase notes, Phase 3.6 row
 
+[SYNC-2026-09-12-MISC-HARDENING] Standalone hardening merged before 2026-09-12 sync: assistant optimistic-rollback, relay-boundary CI allowlist, /audit skill relocate, Wave-9E dep bump (next 15.5.25 + sharp) + FE-CORRECT residuals, ctxcheck repoint off AI-Dev copy, NL-filter two-half drift monitor (ARCH-3C)
+       unblocks 0 · M · bimpossible · VERIFIED 2026-09-12 · BIMpossible #626 (assistant optimistic rollback), #627 (relay bounda…
+
 [WSCLOSEOUT-20260831-RECORDS] 2026-08-31 workspace closeout: review, authz, weekly-audit, PHASE-STATUS and slop-audit records published
        unblocks 0 · M · workspace · VERIFIED 2026-08-31 · One coherent publication wave, all ancestors of origin/main 1360a66:…
 
@@ -694,6 +700,12 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `add
 
 [P6-CLIENTMGMT-F] Build cross-firm project sharing (Client-Mgmt F), gated on 3.12
        unblocks 1 · L · bimpossible · VERIFIED 2026-08-30 · BIMpossible_PHASE-STATUS.md, Phase 6 row Client-Mgmt F -- PLACED not…
+
+[WFA-2026-09-07-CODE-REMEDIATION] WFA 2026-09-07 code-repo remediation lane: firm-neutrality/raw-SQL/admin-fail-closed/hub-isolation/atomic-budget/APS-write-boundary/read-path-tenant-scope + relay CI lane
+       unblocks 0 · L · bimpossible · VERIFIED 2026-09-12 · BIMpossible #619 (HYG-3/CQ-6 firm-neutrality gate), #620 (HYG-4 raw-…
+
+[WFA-2026-09-11-CODE-REMEDIATION] WFA 2026-09-11 remediation wave (62 findings) code-repo lane: truth/logging/docs + frontend + ops/scripts + backend lanes + sessions-volume :ro migrate + SEC-1A hub fail-closed + consent multi-worker guard -- CLOSED per owner
+       unblocks 0 · L · bimpossible · VERIFIED 2026-09-12 · BIMpossible #644 (audit-2026-09-11 truth/logging/docs), #645 (fronte…
 
 [DASH-CHECKIN-CONSOLIDATION] AI-Dev dashboard daily check-in consolidation: reliable landing, delta triage, pulse, data-health, one home
        unblocks 0 · L · dashboard · VERIFIED 2026-09-06 · ai-dev-dashboard #22 SHIPPED -- squash-merged efdcba1 on origin/main…

@@ -2323,3 +2323,127 @@ items:
   archived_at: '2026-09-06'
   archived_reason: 'status live -- docs-hygiene enforcement complete and archived 2026-09-06: both defaults green and aligned, docs-hygiene a direct required check in both repos, PR-facing and scheduled paths each verified against real runs, and the one closeout defect fixed in #602.'
   source_queue_version: 1
+- id: WFA-2026-09-07-CODE-REMEDIATION
+  title: 'WFA 2026-09-07 code-repo remediation lane: firm-neutrality/raw-SQL/admin-fail-closed/hub-isolation/atomic-budget/APS-write-boundary/read-path-tenant-scope + relay CI lane'
+  projects:
+  - bimpossible
+  status: live
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: L
+  risk: 2
+  evidence:
+  - kind: pr
+    ref: 'BIMpossible #619 (HYG-3/CQ-6 firm-neutrality gate), #620 (HYG-4 raw-SQL sink gate), #622 (HYG-5 admin fail-closed boot invariant), #624 (M-1 atomic client-budget upsert), #625 (CQ-ROUTER-FIRM-1 alias key), #628 (Track-A hub-isolation in wizard/change_set, 2 MEDIUM tenancy fixes), #636 (HYG-2 APS write-approval at boundary), #639 (RA-1 read-path tenant scope), #641 (F4/B1 Windows relay validation lane -> cb109d1b), #642 (M-1(b)/B2 durable per-firm output-token reservations -> 984f0fc7). All MERGED to origin/main by 2026-09-12.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/642
+  - kind: note
+    ref: 'DEDUP TOKENS: BIMpossible#619 BIMpossible#620 BIMpossible#622 BIMpossible#624 BIMpossible#625 BIMpossible#628 BIMpossible#636 BIMpossible#639 BIMpossible#641 BIMpossible#642'
+    url: null
+  - kind: note
+    ref: 'Weekly Full Audit 2026-09-07 code-repo lane. Fully resolved 2026-09-12 (see memory wfa-2026-09-07-fully-resolved). Provenance record added by /next sync 2026-09-12 because the code lane was tracked only in MEMORY.md, never in the two-tier store -- every PR here read as unknown to --known-pr until now.'
+    url: null
+  verification:
+    level: verified
+    by: 'All listed PRs merged to origin/main; #642 (984f0fc7) confirmed in worktree git log. Ledger cross-scoring is owner-maintained (PHASE/WAVE-STATUS) and out of /next write-scope.'
+    at: '2026-09-12'
+  live_check:
+  - 'git -C F:/BIMpossible log --oneline origin/main | grep -E "#(619|620|622|624|625|628|636|639|641|642)" | head'
+  source: '/next BIMpossible sync 2026-09-12: 09-07 code-remediation wave was MEMORY-only, no dedup record existed.'
+  notes_url: null
+  archived_at: '2026-09-12'
+  archived_reason: 'status live -- 09-07 code remediation wave closed and merged; archived as dedup provenance so its PRs stop resurfacing as new each sync.'
+  source_queue_version: 1
+- id: WFA-2026-09-11-CODE-REMEDIATION
+  title: 'WFA 2026-09-11 remediation wave (62 findings) code-repo lane: truth/logging/docs + frontend + ops/scripts + backend lanes + sessions-volume :ro migrate + SEC-1A hub fail-closed + consent multi-worker guard -- CLOSED per owner'
+  projects:
+  - bimpossible
+  status: live
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: L
+  risk: 2
+  evidence:
+  - kind: pr
+    ref: 'BIMpossible #644 (audit-2026-09-11 truth/logging/docs), #645 (frontend lane), #646 (ops/scripts lane), #647 (backend lane), #648 (sessions volume :ro on migrate), #649 (hub fail-closed; was mislabeled SEC-1A), #650 (SEC-1A consent WEB_CONCURRENCY multi-worker guard). All MERGED to origin/main by 2026-09-13 per owner.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/647
+  - kind: note
+    ref: 'DEDUP TOKENS: BIMpossible#644 BIMpossible#645 BIMpossible#646 BIMpossible#647 BIMpossible#648 BIMpossible#649 BIMpossible#650'
+    url: null
+  - kind: note
+    ref: 'See memory wfa-2026-09-11-remediation-wave (62 fixed incl. AddIns #139/#140 and Workspace #149/#150). SEC-1A label correction: #649 = hub fail-closed; real SEC-1A = consent WEB_CONCURRENCY guard (#650). Provenance-only record; wave itself owner-closed.'
+    url: null
+  verification:
+    level: verified
+    by: 'PRs #644-#650 merged to origin/main; wave closure recorded by owner/prior session (memory wfa-2026-09-11-remediation-wave). /next did not re-audit; anchors PR numbers for dedup only.'
+    at: '2026-09-12'
+  live_check:
+  - 'git -C F:/BIMpossible log --oneline origin/main | grep -E "#(644|645|646|647|648|649|650)" | head'
+  source: '/next BIMpossible sync 2026-09-12: 09-11 remediation wave was MEMORY-only, no dedup record existed.'
+  notes_url: null
+  archived_at: '2026-09-12'
+  archived_reason: 'status live -- 09-11 remediation wave owner-closed and merged; archived as dedup provenance.'
+  source_queue_version: 1
+- id: CI-POSTURE-LEAN-2026-09-11
+  title: 'CI cost-reduction posture (2026-09-11): heavy GitHub Actions removed; secret-scan once/PR, clean-room-ci deleted, wiring retired; enforcement moved to Verify-Local-CI.ps1'
+  projects:
+  - bimpossible
+  status: live
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 2
+  evidence:
+  - kind: pr
+    ref: 'BIMpossible #637 (secret-scan once/PR, retire wiring), #652 (delete .github/workflows/clean-room-ci.yml), #623 (HYG-10 nl-filter red-monitor issue, folded here as CI-posture-adjacent). MERGED to origin/main by 2026-09-12.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/652
+  - kind: note
+    ref: 'DEDUP TOKENS: BIMpossible#637 BIMpossible#652 BIMpossible#623'
+    url: null
+  - kind: note
+    ref: 'See memory ci-posture-lean-2026-09-11: only gitleaks (all 3 repos) + clean-room-ci (code repo, PR-open+manual) survived remotely -- then clean-room-ci itself deleted in #652. Supersedes the docs-hygiene required-gate memories. NL-filter monitor (#623) also tracked live in NL-FILTER-EVAL-QUALITY / NL-FILTER-EVAL-CRON-CONFIRM.'
+    url: null
+  verification:
+    level: verified
+    by: 'PRs merged to origin/main; posture recorded in CLAUDE.md enforcement-point note and memory ci-posture-lean-2026-09-11.'
+    at: '2026-09-12'
+  live_check:
+  - 'git -C F:/BIMpossible log --oneline origin/main | grep -E "#(637|652|623)" | head'
+  source: '/next BIMpossible sync 2026-09-12: CI-posture-lean was MEMORY-only, no dedup record existed.'
+  notes_url: null
+  archived_at: '2026-09-12'
+  archived_reason: 'status live -- CI posture reduction merged; archived as dedup provenance.'
+  source_queue_version: 1
+- id: SYNC-2026-09-12-MISC-HARDENING
+  title: 'Standalone hardening merged before 2026-09-12 sync: assistant optimistic-rollback, relay-boundary CI allowlist, /audit skill relocate, Wave-9E dep bump (next 15.5.25 + sharp) + FE-CORRECT residuals, ctxcheck repoint off AI-Dev copy, NL-filter two-half drift monitor (ARCH-3C)'
+  projects:
+  - bimpossible
+  status: live
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: 'BIMpossible #626 (assistant optimistic rollback), #627 (relay boundary CI allowlist), #640 (relocate /audit skill -> 6d808cc1), #633 (next 15.5.25 + sharp, audit-ci unblock), #634 (FE-CORRECT-2..5 residuals stacked on #633), #651 (repoint ctxcheck off AI-Dev copy -> 9e0710d5), #653 (two-half NL-filter drift monitor replaces retired nightly, ARCH-3C -> 95ce4556). All MERGED to origin/main by 2026-09-12.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/653
+  - kind: note
+    ref: 'DEDUP TOKENS: BIMpossible#626 BIMpossible#627 BIMpossible#640 BIMpossible#633 BIMpossible#634 BIMpossible#651 BIMpossible#653'
+    url: null
+  - kind: note
+    ref: 'Wave-9E dep bump (#633/#634) tracked in memory wave9e-fe-correct-and-audit-ci-unblock-2026-09-10. #651 ctxcheck repoint noted in memory (ENV-CTXCFG token) but had no store item -> anchored here. #653 (95ce4556) is the current origin/main tip and the newest commit in this sync delta; NL-filter monitor also tracked live in NL-FILTER-EVAL-QUALITY / NL-FILTER-EVAL-CRON-CONFIRM.'
+    url: null
+  verification:
+    level: verified
+    by: 'All listed PRs merged to origin/main; #640 (6d808cc1), #651 (9e0710d5), #653 (95ce4556) tips confirmed. Anchors PR numbers + commits for dedup.'
+    at: '2026-09-12'
+  live_check:
+  - 'git -C F:/BIMpossible log --oneline origin/main | grep -E "#(626|627|640|633|634|651|653)" | head'
+  source: '/next BIMpossible sync 2026-09-12: standalone hardening merges had no dedup record; #651/#653 were untracked.'
+  notes_url: null
+  archived_at: '2026-09-12'
+  archived_reason: 'status live -- standalone hardening + #653 tip merged; archived as dedup provenance.'
+  source_queue_version: 1

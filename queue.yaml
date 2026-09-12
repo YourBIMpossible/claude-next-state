@@ -1,9 +1,9 @@
 schema_version: 1
 reconciled:
   bimpossible:
-    at: '2026-09-07'
-    commit: 3a9dab64
-    pr: 617
+    at: '2026-09-12'
+    commit: 95ce4556
+    pr: 653
   addins:
     at: '2026-09-10'
     commit: 320e63a
@@ -2386,7 +2386,7 @@ items:
   source: gh pr view 280/276/281; git log -S on router.py; owner ruling + close directive 2026-08-07
   notes_url: null
 - id: DEP-JSYAML-282
-  title: Dependabot js-yaml 4.3.0 -> 4.3.1 merged (GHSA-5p4m-2wfm-xmqj, dev-only transitive)
+  title: Dependabot js-yaml bumped to 4.3.2 (4.3.0->4.3.1 #282, ->4.3.2 #638; GHSA-5p4m-2wfm-xmqj, dev-only transitive)
   projects:
   - bimpossible
   status: landed
@@ -2398,6 +2398,9 @@ items:
   evidence:
   - kind: pr
     ref: 'BIMpossible #282 MERGED 2026-08-07T02:30:12Z, squash commit 5d0379d32bd9b7edbe8bc9c1f7b0c053c5a7574a'
+  - kind: pr
+    ref: 'BIMpossible #638 MERGED (js-yaml 4.3.1 -> 4.3.2) -- superseding dev-only transitive bump, same
+      GHSA-5p4m-2wfm-xmqj family, folded here by /next sync 2026-09-12 rather than opening a new item.'
   - kind: doc
     ref: 'PR body: transitive via eslint -> @eslint/eslintrc, dev-only, not reachable by any served request;
       4.3.1 already satisfies eslint 8.57.1''s declared range (^4.1.0) so no override or eslint bump needed.
@@ -2411,7 +2414,7 @@ items:
       for this specific change to take effect since nothing in the served bundle depends on it.
     at: '2026-08-07'
   live_check:
-  - 'npm ls js-yaml --prefix frontend  # expect 4.3.1 deduped'
+  - 'npm ls js-yaml --prefix frontend  # expect 4.3.2 deduped'
   source: gh pr list --search updated:>=2026-08-06, sync pass 2026-08-07
   notes_url: null
 - id: TAILWIND-V4-VERIFY
