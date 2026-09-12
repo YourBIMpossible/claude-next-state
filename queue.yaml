@@ -8753,3 +8753,26 @@ items:
     (6) hosted app.yourbimpossible.com returns 422 for the 849597 payload after deploy, no Revit write
     performed. Close only after code+validation+delivery+hosted verification.'
   notes_url: null
+- id: GATEA-APPROVAL
+  title: Gate A — approved, not started
+  projects:
+  - bimpossible
+  status: parked
+  owner_gate: true
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 1
+  evidence:
+  - kind: doc
+    ref: 00_Strategy/2026-09-12__GateA_ApprovalMemo_and_BindingAddendum_TargetReidentified.md
+    url: https://github.com/YourBIMpossible/BIMpossible_Workspace/blob/main/00_Strategy/2026-09-12__GateA_ApprovalMemo_and_BindingAddendum_TargetReidentified.md
+  verification:
+    level: verified
+    by: 'Gate A owner approval recorded in memo section 11 (Status: Approved — Not Started), Workspace main commit d6ec753'
+    at: '2026-09-12'
+  live_check:
+  - git -C F:\BIMpossible-Workspace show origin/main:00_Strategy/2026-09-12__GateA_ApprovalMemo_and_BindingAddendum_TargetReidentified.md | Select-String -SimpleMatch 'GATE A OWNER APPROVAL'
+  source: 'Canonical Gate A memo 00_Strategy/2026-09-12__GateA_ApprovalMemo_and_BindingAddendum_TargetReidentified.md (owner approval section 11, Workspace commit d6ec753). Begins only on explicit owner "Start Gate A". Output: one Pilot Slice Decision Pack. Gate B and Gate C are NOT approved. DA4R is not a dependency or blocker. Creates no implementation or engineering work item.'
+  notes_url: https://github.com/YourBIMpossible/BIMpossible_Workspace/blob/main/00_Strategy/2026-09-12__GateA_ApprovalMemo_and_BindingAddendum_TargetReidentified.md

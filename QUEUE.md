@@ -335,6 +335,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `add
 [SEC-AUDIT-HASHCHAIN] Tamper-evident hash-chain for audit tables -- deferred, gated on trigger
        unblocks 0 · M · bimpossible · CLAIMED 2026-08-06 · 00_Strategy/2026-08-06__Multi-Tenant_Data-Isolation_Strategy_DRAFT.m…
 
+[GATEA-APPROVAL] Gate A — approved, not started
+       unblocks 0 · M · bimpossible · VERIFIED 2026-09-12 · 00_Strategy/2026-09-12__GateA_ApprovalMemo_and_BindingAddendum_Targe…
+
 [P5-6-VISUAL-MODEL-GRAPH] Build Visual Model Graph frontend view (5.6, design doc ready)
        unblocks 0 · M · bimpossible · CLAIMED 2026-08-18 · BIMpossible_PHASE-STATUS.md, Phase 5 row 5.6 -- ledger's own wording…
 
