@@ -81,6 +81,27 @@ python render_queue.py --state-dir . --generated-on <YYYY-MM-DD> --check
 
 Reports `CHECK OK` when `QUEUE.md` reproduces byte-for-byte from `queue.yaml`.
 
+## Mirror commit conventions (adopted 2026-09-11)
+
+A mirror publish is a **snapshot**: its commit carries every queue change since the previous
+publish, not only the event that triggered it. The subject must say so. Use exactly one of:
+
+- `state: <specific scope>` — the publish contains only that change (e.g. `state: verify P7 sync live`).
+- `state: mirror canonical queue catch-up through YYYY-MM-DD` — a pure catch-up with no headline event.
+- `state: mirror <event> plus canonical catch-up through YYYY-MM-DD` — a headline event **and** other
+  accumulated changes. This is the common case after a gap between publishes.
+
+Before choosing the first form, diff the mirror's `queue.yaml` against the canonical store; if the
+diff touches items beyond the triggering event, use the third form.
+
+### Provenance notes for published snapshots
+
+- **`195d5f4` (`state: verify write engine increment 2 live smoke`)** is a validated canonical
+  state-mirror catch-up covering queue changes from 2026-09-07 through 2026-09-10, including the
+  WRITE-ENGINE-INC2 Task 8 promotion. Its subject reflects the triggering event, not the complete
+  snapshot scope. The commit is correct data and is preserved as pushed; the convention above
+  exists so later subjects describe the full scope.
+
 ## What this is not
 
 Not an audit. It reports status and ranks work; it does not hunt defects, fix code, commit, or push.

@@ -5,9 +5,9 @@ This is a repo-local read model, not a definition of /next behavior. -->
 
 # /next — work-item queue
 
-Generated 2026-09-10 (synced). Anchor-first, leverage-ranked (per item-model.md). The single #1 move is chosen live by the skill from the anchor (stated focus, else roadmap order) and finalization leverage — not from dependency cone. This board is a status-grouped snapshot; within each section it orders by owner-gated+S, then effort, risk, id, with `cone` leading only on a deep graph (this store is flat today). Full algorithm: `~/.claude/skills/next/reference/item-model.md`.
+Generated 2026-09-12 (synced). Anchor-first, leverage-ranked (per item-model.md). The single #1 move is chosen live by the skill from the anchor (stated focus, else roadmap order) and finalization leverage — not from dependency cone. This board is a status-grouped snapshot; within each section it orders by owner-gated+S, then effort, risk, id, with `cone` leading only on a deep graph (this store is flat today). Full algorithm: `~/.claude/skills/next/reference/item-model.md`.
 
-Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `addins` = 2026-09-10 @ `64a8a6b` PR#127 · `workspace` = 2026-09-07 @ `7d7647f` PR#134 · `evidence-compiler` = 2026-08-24 @ `0ef747e7533c7cf714888076f3df6f06dd028b84` PR#5 · `dashboard` = 2026-09-06 @ `efdcba1` PR#22.
+Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `addins` = 2026-09-10 @ `320e63a` PR#124 · `workspace` = 2026-09-07 @ `7d7647f` PR#134 · `evidence-compiler` = 2026-08-24 @ `0ef747e7533c7cf714888076f3df6f06dd028b84` PR#5 · `dashboard` = 2026-09-06 @ `efdcba1` PR#22.
 (pc-monitor: no items yet — run `init` to derive.)
 
 > **Dormant project(s):** `families` — reassessment-bound. Items scoped to them are parked; their probes are suspended (non-executable metadata) and render **SUSPENDED**, never verified. `/next` will not run or propose a command against a dormant repo.
@@ -73,9 +73,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `add
 [REVITLINK-OPAQUE-500-MAPPING] revit_link error mapping collapses distinct add-in refusals (NOT_SUPPORTED, DOC_NOT_FOUND, AMBIGUOUS_DOCUMENT, SYNC_FAILED) into one opaque INTERNAL_ERROR 500 with no detail
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-19 · backend/revit_link/native_adapter.py _COMMAND_ERROR_MAP (unknown cod…
 
-[WRITE-ENGINE-INC2] Write Engine Increment 2 (family-type String targeting) merged + deployed incl. #544 per-type outcome fix; owner-gated Task 8 live smoke needed to go live
-       unblocks 0 · S · bimpossible+addins · VERIFIED 2026-09-02 · BIMpossible #273 MERGED 2026-08-18T03:25Z (owner ruling 2026-08-17: …
-
 [AEC-PREWARM-TIP-PROBE-EMPTY-VERSION] E25_Nudge live tip-probe failure leaves receptacle_schedule perpetually preparing
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-31 · 2026-08-30 backend log, repeated on every poll for E25_Nudge-1800_Ow…
 
@@ -87,6 +84,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `add
 
 [SLACK-GATEWAY-W1] Read-only Slack assistant gateway merged, flag-off; migration 9329a1e7be85 now on main
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · BIMpossible #262 MERGED 2026-08-07T04:20:29Z, squash commit dd898899…
+
+[WRITE-ENGINE-INC2-UID] Enforce ElementType UniqueId contract for family-type staged writes
+       unblocks 0 · S · bimpossible+addins · VERIFIED 2026-09-12 · Root cause + failed value: hosted change set 9c46b1f0-81a7-4d68-98d2…
 
 [ADDINS-PIPE-BUSY-BACKOFF] PipeServer pipe-busy listen backoff
        unblocks 0 · S · addins · VERIFIED 2026-09-10 · BIMpossible-AddIns#117
@@ -286,6 +286,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `add
        unblocks 0 · XS · bimpossible · UNVERIFIED date-unknown · Seen in git worktree list during the 2026-09-06 closeout pass integr…
 
 ## In flight
+
+[AUDIT-2026-09-07-REMEDIATION] 2026-09-07 weekly audit remediation wave: Revit write-integrity + fail-open QA reads + pipe-kill-switch CI guard -- 3 merged, 2 open drafts
+       unblocks 0 · L · addins · CLAIMED 2026-09-10 · Program root: Weekly Full Audit 2026-09-07. Ledger BIMpossible-Works…
 
 [LINKPDF-ROADMAP-A-D] NORTHSTAR "Link PDF to Sheets" post-merge roadmap (Features A/B1/C1/D): per-feature review + live smoke, not yet accepted
        unblocks 0 · L · addins · CLAIMED 2026-09-10 · BIMpossible-AddIns #127 MERGED 2026-09-11 (merge commit 64a8a6b) und…
@@ -507,6 +510,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-07 @ `3a9dab64` PR#617 · `add
 
 [TENANCY-RAIL-SEARCH-RESOLVE] /search/models + /aps/model/resolve migrated off the ALLOWED_PROJECT_IDS rail
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · BIMpossible #366 MERGED (e585862, 2026-08-16) -- migrates /search/mo…
+
+[WRITE-ENGINE-INC2] LIVE: Write Engine Increment 2 (family-type String targeting) -- Task 8 live smoke PASSED 2026-09-11 on hosted app + Revit 2026 pane (incl. #544 per-type outcome fix)
+       unblocks 0 · S · bimpossible+addins · VERIFIED 2026-09-02 · BIMpossible #273 MERGED 2026-08-18T03:25Z (owner ruling 2026-08-17: …
 
 [ADDINS-DOCS-HYGIENE-REQUIRED-CHECK] AddIns docs-hygiene is a required branch-protection check
        unblocks 0 · S · addins · VERIFIED 2026-09-07 · BIMpossible-AddIns#121
