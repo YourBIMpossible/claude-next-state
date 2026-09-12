@@ -8707,14 +8707,33 @@ items:
       1 after the merge). Read-only hosted posture: GET / -> 200, GET /data/change-sets -> 401 (auth enforced);
       the running backend still predates 6bd75cbc. Add-in deploy also deferred (Revit running; Deploy-Local
       requires Revit closed). Acceptance (6) hosted 422 remains open.'
+  - kind: run
+    ref: '2026-09-12 07:40Z hosted deploy DONE (supersedes the previous entry): F:/BIMpossible main reconciled
+      (deployed paths equal origin/main 6bd75cbc); docker compose up -d --build from docker/; backend-migrate ran
+      d8e9f0a1b2c3 -> b2c3d4e5f6a7, alembic current = b2c3d4e5f6a7 (head); docker-backend-1 StartedAt
+      2026-09-12T07:40:37Z image sha256:ae44e558..., docker-frontend-1 StartedAt 07:40:43Z image sha256:94e3ab8a...;
+      Refresh-Frontend -Check "Apply to family type" PRESENT (3 files, exit 0); GET https://app.yourbimpossible.com/
+      -> 200.'
+  - kind: run
+    ref: '2026-09-12 ACCEPTANCE (6) PASS on https://app.yourbimpossible.com (authenticated browser session,
+      in-page fetch, CSRF echoed from the app cookie, no token displayed): POST /data/change-sets/save for project
+      b.65496296-644b-4845-b11a-cf3e08970c77 / model urn:adsk.wipprod:dm.lineage:CjCxUSkWT8-JARCnJ270wg with
+      family_type_id="849597" -> 422, type name "Duplex Receptacle" -> 422, bare GUID -> 422, each with detail
+      "family_type_id must be the Revit ElementType UniqueId (format 8-4-4-4-12-8 hex ...)". GET /data/change-sets
+      before and after: 2 change sets (4aa54689-..., 9c46b1f0-...), unchanged -> nothing persisted. No Revit write,
+      no positive save.'
+  - kind: run
+    ref: '2026-09-12 add-in deploy NOT performed: graceful close of Revit 2026 raised "Changes Not Saved" and
+      "Changes Not Synchronized with Central" for TEST_ACCC_D_EL_SL.rvt (foreign WIP); both prompts cancelled,
+      Revit left open, nothing discarded. Deploy-Local.ps1 -Year 2026 (main a952c7a) still required once the
+      owner closes Revit; the running add-in predates f0a41c2.'
   verification:
     level: verified
-    by: 'Code MERGED in both repos with local + remote CI evidence (see pr entries). Landed, not live: hosted
-      deploy (docker compose up -d --build + backend-migrate for b2c3d4e5f6a7, then Refresh-Frontend -Check)
-      and Deploy-Local.ps1 with Revit closed are still required, then acceptance (6): POST /data/change-sets/save
-      on app.yourbimpossible.com with family_type_id=849597 -> 422 and no change set created. Caveat: element_cache
-      rows warmed before the migration carry type_unique_id NULL until the next category warm (type edits 422
-      "Refresh the model data" until then).'
+    by: 'Backend/frontend half LIVE on app.yourbimpossible.com (deploy + migration + 422 acceptance evidence above).
+      Add-in half MERGED but NOT deployed (Revit open with unsaved changes) -- item stays landed per the cross-repo
+      rule: both halves verified before live. Remaining: close Revit (owner), Deploy-Local.ps1 -Year 2026, verify
+      the deployed RevitLink DLL hash, then promote. Caveat: element_cache rows warmed before the migration carry
+      type_unique_id NULL until the next category warm (type edits 422 "Refresh the model data" until then).'
     at: '2026-09-12'
   live_check:
   - gh pr list --repo YourBIMpossible/BIMpossible --head fix/family-type-uniqueid-contract --state all
