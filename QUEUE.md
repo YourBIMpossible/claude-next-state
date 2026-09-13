@@ -53,6 +53,12 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-12 @ `95ce4556` PR#653 · `add
 [P14-14G-RESIDENCY-REDACTION] Wire residency + redaction into 14g, update proposal doc §6
        unblocks 0 · M · bimpossible · CLAIMED 2026-08-18 · BIMpossible_PHASE-STATUS.md, Phase 14 row 14g -- PLACED not ratified…
 
+[DECIDE-DA4R-EMPTY-WORKTREE] Decide: BIMpossible worktree da4r-status-roadmap-30ceaa is an empty lane (0 ahead of main, clean, its PR #154 merged) owned by pinned session "DA4R Status Roadmap Orientation" -- retire or keep
+       unblocks 0 · XS · bimpossible · VERIFIED 2026-09-12 · Drift review 2026-09-12: worktree at c654783b, 0 commits ahead of ma…
+
+[DECIDE-WS-REVIEW-ARTIFACT-GATEA] Decide: Workspace worktree review-artifact-gatea holds 1 unpushed commit 5312cfd (review report for merged WS #154) -- push + PR, or drop the lane
+       unblocks 0 · XS · workspace · VERIFIED 2026-09-12 · Drift review 2026-09-12: F:/BIMpossible-Workspace/.claude/worktrees/…
+
 [EC-RELEASE-1] First release PR — versioning, changelog, build verification, PyPI publish
        unblocks 0 · M · evidence-compiler · VERIFIED 2026-08-24 · Maintainer deferred first release until after real dogfooding (WORKL…
 
@@ -117,6 +123,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-12 @ `95ce4556` PR#653 · `add
 
 [ADDINS-HYGIENE-PASS-20260902] AddIns hygiene pass: evidence-compiler timeouts, FamilyFixer canonical root, 4 broken doc refs
        unblocks 0 · S · addins · VERIFIED 2026-09-07 · BIMpossible-AddIns#118
+
+[ADMIN-DOMAIN-UNKNOWN-FIRM-404] Admin domain registration: return typed 404 for unknown firm instead of 409
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-12 · BIMpossible main e408e16f (2026-09-12, direct-to-main per solo-owner…
 
 [AISERVER-OPENCODE-DOCS] Commit AI-Server's uncommitted opencode/local-coding-agent doc updates (PROGRAM_PLAN.md, README.md)
        unblocks 0 · S · ai-server · VERIFIED 2026-08-08 · AI-Server main 2172820 -- 'docs: document opencode local coding-agen…
@@ -220,6 +229,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-12 @ `95ce4556` PR#653 · `add
 [WARM-ORIGIN-DOORGAP] Curtain-panel/unhosted doors have no origin: label them 'no location (curtain panel)' instead of deriving one
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-24 · 01_BuildLog/2026-08-04__doors-join-increment1_RESULTS.md, 'Follow-up…
 
+[EXACTLY-ONCE-AUDIT-RELIABILITY-WORKTREE-OVERLAP] Foreign worktree .claude/worktrees/audit-reliability (branch claude/synthetic-audit-exactly-once-completion, at c8131efd) appeared 2026-09-06 after #595 merged -- confirm its owner is not re-doing the #579 closeout (ETL PT4H / exhausted-window record already on main)
+       unblocks 0 · XS · bimpossible · VERIFIED 2026-09-12 · Seen in git worktree list during the 2026-09-06 closeout pass integr…
+
 [R5-AECDM-PUSHDOWN] R5 AECDM query-pushdown lane MERGED -- flag-gated, read-only (PR #363)
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-17 · BIMpossible #363 MERGED (d56bd14, 2026-08-16T19:47:59Z, branch feat/…
 
@@ -258,9 +270,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-12 @ `95ce4556` PR#653 · `add
 [OPS-WORKTREE-DRIFT-REVIEW] Recurring per-repo drift review: workspace local behind-6/ahead-1 with dirty ledgers + untracked audit docs
        unblocks 0 · S · workspace+bimpossible · VERIFIED 2026-09-07 · 2026-08-07 (original): workspace carried 2 untracked docs (revitlink…
 
-[ADMIN-DOMAIN-UNKNOWN-FIRM-404] Admin domain registration: return typed 404 for unknown firm instead of 409
-       unblocks 0 · S · bimpossible · CLAIMED 2026-09-01 · Observed during BIMpossible#449 review: POST /admin/domains/{firm_id…
-
 [DASH-STALENESS-BACKSLASH-ESCAPE] Sync-GraphStalenessReminder backslash-escape quadruples instead of doubles (latent, not live)
        unblocks 0 · S · dashboard · UNVERIFIED 2026-09-07 · Refresh-Dashboard.ps1 line 316, the backslash-escape replace inside …
 
@@ -269,9 +278,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-12 @ `95ce4556` PR#653 · `add
 
 [OPS-ROLLBACK-RETENTION-20260817] Intentional retention: rollback-20260817 image tags until deploy soak completes 2026-08-18 evening
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-30 · deploy closed live at alembic c4e7a2b91d38, 2026-08-17 ~22:00 PDT
-
-[R18-SHARE-READ-VS-BYTES] Build the explicit per-share download scope: read share is view-only, download opt-in (owner ruling 2026-09-07)
-       unblocks 0 · M · bimpossible · CLAIMED 2026-09-07 · F:/BIMpossible-Workspace/00_Strategy/2026-09-04__Phase3-Phase4-Needs…
 
 [ADDINS-HYGIENE] Add-Ins hygiene: finish Glass rollout (conformance-PR dedup DONE 2026-08-04)
        unblocks 0 · M · addins · VERIFIED 2026-08-23 · Add-Ins #10 MERGED 2026-08-04 (squash, main 94b21ab -- Plans 1+2 con…
@@ -282,16 +288,13 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-12 @ `95ce4556` PR#653 · `add
 [EC-DOGFOOD-2] Continue Evidence Compiler dogfooding toward the next North Star review window
        unblocks 1 · M · evidence-compiler · VERIFIED 2026-08-24 · F:/Evidence Compiler/DOGFOOD_LOG.md
 
-[EXACTLY-ONCE-AUDIT-RELIABILITY-WORKTREE-OVERLAP] Foreign worktree .claude/worktrees/audit-reliability (branch claude/synthetic-audit-exactly-once-completion, at c8131efd) appeared 2026-09-06 after #595 merged -- confirm its owner is not re-doing the #579 closeout (ETL PT4H / exhausted-window record already on main)
-       unblocks 0 · XS · bimpossible · UNVERIFIED date-unknown · Seen in git worktree list during the 2026-09-06 closeout pass integr…
-
 ## In flight
 
 [AUDIT-2026-09-07-REMEDIATION] 2026-09-07 weekly audit remediation wave: Revit write-integrity + fail-open QA reads + pipe-kill-switch CI guard -- 3 merged, 2 open drafts
        unblocks 0 · L · addins · CLAIMED 2026-09-10 · Program root: Weekly Full Audit 2026-09-07. Ledger BIMpossible-Works…
 
 [LINKPDF-ROADMAP-A-D] NORTHSTAR "Link PDF to Sheets" post-merge roadmap (Features A/B1/C1/D): per-feature review + live smoke, not yet accepted
-       unblocks 0 · L · addins · CLAIMED 2026-09-10 · BIMpossible-AddIns #127 MERGED 2026-09-11 (merge commit 64a8a6b) und…
+       unblocks 0 · L · addins · CLAIMED 2026-09-12 · BIMpossible-AddIns #127 MERGED 2026-09-11 (merge commit 64a8a6b) und…
 
 ## Blocked elsewhere
 
@@ -426,6 +429,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-12 @ `95ce4556` PR#653 · `add
 
 [HYG-20260831-WORKSPACE-DOCS] Workspace docs-hygiene fixes (HYG-1/2/3) sit on an unpushed local branch with no PR
        unblocks 0 · S · workspace · VERIFIED 2026-08-31 · 3de8211 'fix(ci): gate docs-hygiene at PR time, not a week downstrea…
+
+[R18-PROXY-MODE-FAIL-CLOSED] Harden R18: if cross-firm sharing is ON while derivative proxy mode is OFF, the byte scope is unenforced (Viewer runs on the app-level viewables:read token Autodesk serves directly). Make the unsafe combination fail closed -- boot invariant is the lowest-complexity option.
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-13 · ACTIVATION RECEIPT (owner-restarted 2026-09-13): merged SHA 9c50c190…
 
 [R20-P310A-DISPLAY-FLAG] Owner call: was the 2026-08-15 go meant to activate the 3.10a display flag?
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-07 · F:/BIMpossible-Workspace/00_Strategy/2026-09-04__Phase3-Phase4-Needs…
@@ -611,6 +617,12 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-12 @ `95ce4556` PR#653 · `add
 [POST-268-FOLLOWUPS] Merge the three post-#268 follow-up PRs -- reviewed, three-lane green, awaiting checks
        unblocks 2 · S · bimpossible · VERIFIED 2026-08-18 · BIMpossible #269 (1887583), #270 (f6f0044), #271 (428889c) -- all ME…
 
+[R18-UI-GATE-DOWNLOAD-ON-CANDOWNLOAD] Build (R18 UI b): gate the Download PDF / export / thumbnail controls on useSharedProject().canDownload, with explanatory text for view-only shares. Clarity/workflow only -- backend 404 share_view_only remains the security boundary.
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-13 · BIMpossible@f50ccb6e: useSharedProject exposes canDownload (false on…
+
+[R18-UI-OWNER-SHARE-SCOPE-SELECT] Build (R18 UI a): owner share dialog gains a share-scope selection -- read (default) vs download (explicit opt-in) -- posting scope to the share-create/PATCH endpoints. Backend stays authoritative.
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-13 · PROMOTED blocked_owner -> in-flight 2026-09-13 under explicit owner …
+
 [R19-INHERITANCE-PLAN-LANE] Confirm the superseded 2026-08-08 Authorization-Inheritance plan lane is dead
        unblocks 0 · S · workspace+bimpossible · VERIFIED 2026-09-07 · F:/BIMpossible-Workspace/00_Strategy/2026-09-04__Phase3-Phase4-Needs…
 
@@ -652,6 +664,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-12 @ `95ce4556` PR#653 · `add
 
 [AUDIT-2026-08-31-REMEDIATION] 2026-08-31 weekly audit: unguarded Alembic migrations (High) + 2 code Mediums -- FIXED, merged, live
        unblocks 0 · M · bimpossible+workspace · VERIFIED 2026-09-01 · 02_Reference/Audit and Scan Info/weekly-full-audit_2026-08-31.md (re…
+
+[R18-SHARE-READ-VS-BYTES] Build the explicit per-share download scope: read share is view-only, download opt-in (owner ruling 2026-09-07)
+       unblocks 0 · M · bimpossible · CLAIMED 2026-09-12 · BIMpossible#654 (MERGED squash f50ccb6e 2026-09-12)
 
 [SEC-GROUPS-VIEWS-HUB-ISOLATION] groups.py + views.py routes check only the global project allowlist, never per-firm hub isolation
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-17 · Source: parallel session's memory record named-deliverable-personal-…

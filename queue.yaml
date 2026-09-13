@@ -2820,6 +2820,13 @@ items:
       without touching those -- left intact. Workspace main level but carrying another live session''s
       WIP (r12_lifecycle_telemetry_validation.py, check-evidence-secrets.*, 2026-09-07 slop-audit docs)
       -- untouched.'
+  - kind: run
+    ref: 'Drift review 2026-09-12 (owner-directed hygiene pass): BIMpossible main = origin = e408e16f, clean,
+      0 open PRs; Workspace main = origin = f4f9fb2, clean; ledgers PHASE-STATUS/WAVE-STATUS committed.
+      MECHANICAL, resolved: Workspace worktree .claude/worktrees/gatea-canonical (branch docs/gatea-canonical-filing,
+      merged via WS #154) removed + local branch deleted (remote branch left; owner-gated delete). JUDGMENT,
+      one decision item each: DECIDE-WS-REVIEW-ARTIFACT-GATEA (unpushed 5312cfd), DECIDE-DA4R-EMPTY-WORKTREE
+      (empty lane owned by another session). AddIns not in this review''s scope.'
   verification:
     level: verified
     by: 'Re-probed 2026-09-07: BIMpossible main behind 1; BIMpossible-AddIns main behind 19 AND dirty
@@ -5380,7 +5387,7 @@ items:
   title: 'Admin domain registration: return typed 404 for unknown firm instead of 409'
   projects:
   - bimpossible
-  status: ready
+  status: landed
   owner_gate: false
   unblocks: []
   blocked_by:
@@ -5388,22 +5395,24 @@ items:
   effort: S
   risk: 1
   evidence:
+  - kind: commit
+    ref: 'BIMpossible main e408e16f (2026-09-12, direct-to-main per solo-owner delivery rule): add_domain
+      resolves the Firm before insert and raises HTTPException(404, "Firm not found."); new test
+      test_add_domain_unknown_firm_returns_404 also asserts no FirmDomain row and no AccountAuditLog row for
+      the missing firm. Focused run in a throwaway backend container against bimpossible_test: 65 passed
+      (test_admin_firms + test_admin_router + test_admin_auth).'
+    url: https://github.com/YourBIMpossible/BIMpossible/commit/e408e16f
   - kind: pr
-    ref: 'Observed during BIMpossible#449 review: POST /admin/domains/{firm_id} relies on a foreign-key
-      insert failure, and the broad except-handler maps an unknown firm_id to 409 alongside genuine domain-uniqueness
-      conflicts. #449 intentionally left this unchanged to keep the audit/inactive-firm hardening scoped.'
+    ref: 'Origin: observed during BIMpossible#449 review -- POST /admin/domains/{firm_id} relied on a foreign-key
+      insert failure and the broad except-handler mapped an unknown firm_id to 409.'
     url: https://github.com/YourBIMpossible/BIMpossible/pull/449
   verification:
-    level: claimed
-    by: 'Not started. Acceptance criteria: (1) unknown firm_id returns a typed 404 without attempting
-      the FirmDomain insert; (2) active firm + new normalized domain returns 201 with audit event firm_domain.added;
-      (3) duplicate domain returns 409 with audit event firm_domain.add_denied; (4) inactive/churned/suspended/prospect
-      target firm returns the established denial status with audit evidence; (5) non-platform-admin request
-      remains denied; (6) no token, authorization header, or credential-shaped value in audit detail or
-      response; (7) targeted tests plus canonical CI pass. Scope guards: do NOT broaden into domain lifecycle
-      redesign; preserve existing exact-match and DB uniqueness semantics. Correctness/error-shape improvement,
-      not a P6 smoke blocker.'
-    at: '2026-09-01'
+    level: verified
+    by: 'main e408e16f + focused suite 65 passed (2026-09-12). Not yet live: the dev backend container has
+      not been restarted since the merge (bind-mounted source, gunicorn loads at start). Note: add_domain
+      itself carries no inactive/churned-firm status check (the inactive-firm guard lives in login autolink,
+      test_login_firm_autolink.py); left as-is per the scope guard, flagged for the owner.'
+    at: '2026-09-12'
   live_check:
   - Resolve the target firm explicitly before insert; confirm an unknown firm_id yields 404 and a duplicate
     domain still yields 409.
@@ -7953,7 +7962,7 @@ items:
     (ETL PT4H / exhausted-window record already on main)'
   projects:
   - bimpossible
-  status: ready
+  status: landed
   owner_gate: false
   owner: null
   unblocks: []
@@ -7964,10 +7973,14 @@ items:
   - kind: note
     ref: Seen in git worktree list during the 2026-09-06 closeout pass integrity check; not touched. Report
       F:/Claude-Tools/reports/2026-09-06_bounded-closeout-pass.md section 6.
+  - kind: run
+    ref: 'CLOSED 2026-09-12, no action; duplicate completion. git worktree list (F:/BIMpossible) shows no
+      audit-reliability worktree; no local or remote branch matches *exactly-once*. The #579 closeout is
+      on main via #595 c8131efd. Worktree and branch were already retired by their owner.'
   verification:
-    level: unverified
-    by: null
-    at: null
+    level: verified
+    by: 'git -C F:/BIMpossible worktree list; git branch -a --list *exactly-once* -> empty (2026-09-12)'
+    at: '2026-09-12'
   live_check:
   - git -C F:\BIMpossible worktree list | findstr audit-reliability
   source: Session 2026-09-06 bounded closeout pass (wander, not acted on).
@@ -8194,17 +8207,200 @@ items:
     push observed)'
   source: 'BIMpossible_Workspace PR #128 (receipt-gated push) + code-repo PR #610; docs/engineering/DELIVERY.md'
   notes_url: null
+- id: DECIDE-WS-REVIEW-ARTIFACT-GATEA
+  title: 'Decide: Workspace worktree review-artifact-gatea holds 1 unpushed commit 5312cfd (review report
+    for merged WS #154) -- push + PR, or drop the lane'
+  projects:
+  - workspace
+  status: blocked_owner
+  owner_gate: true
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: XS
+  risk: 1
+  evidence:
+  - kind: run
+    ref: 'Drift review 2026-09-12: F:/BIMpossible-Workspace/.claude/worktrees/review-artifact-gatea on branch
+      docs/review-all-gatea-canonical-filing at 5312cfd, clean, no upstream, no PR. The commit is a review
+      report of #154, which is already merged, so it is durable-artifact-or-noise: a judgment call, not
+      mechanical drift.'
+  verification:
+    level: verified
+    by: git -C F:/BIMpossible-Workspace worktree list; git log origin/main..docs/review-all-gatea-canonical-filing
+    at: '2026-09-12'
+  live_check:
+  - git -C F:/BIMpossible-Workspace log --oneline origin/main..docs/review-all-gatea-canonical-filing
+  source: 2026-09-12 workspace drift review (owner-directed)
+  notes_url: null
+- id: R18-PROXY-MODE-FAIL-CLOSED
+  title: 'Harden R18: if cross-firm sharing is ON while derivative proxy mode is OFF, the byte scope is
+    unenforced (Viewer runs on the app-level viewables:read token Autodesk serves directly). Make the
+    unsafe combination fail closed -- boot invariant is the lowest-complexity option.'
+  projects:
+  - bimpossible
+  status: live
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 3
+  evidence:
+  - kind: run
+    ref: 'ACTIVATION RECEIPT (owner-restarted 2026-09-13): merged SHA 9c50c190 (squash of #655) on main.
+      Backend docker-backend-1 restarted, container StartedAt 2026-09-13T03:25:05Z, health=healthy, serving
+      (gunicorn "Application startup complete", Listening 0.0.0.0:8000). Effective flags: PROXY_MODE=true,
+      CROSS_FIRM_SHARING_ENABLED=1 (safe pairing -> guard is a boot no-op). Startup logs: NO cross-firm/proxy
+      guard RuntimeError, no traceback, no refusal. Live /app/main.py contains _check_cross_firm_sharing_proxy_safety
+      (def+call) and /app/aps/derivative_proxy.py carries the .strip() parity fix. R18-PROXY-MODE-FAIL-CLOSED
+      verified LIVE.'
+  - kind: commit
+    ref: 'BIMpossible@9c50c190 (squash merge of #655) on main: _check_cross_firm_sharing_proxy_safety() +
+      proxy_mode() .strip() parity fix. LANDED 2026-09-13T02:44Z, ACTIVATED via backend restart 03:25:05Z.'
+  - kind: commit
+    ref: 'BIMpossible@f50ccb6e backend/aec/cross_firm_sharing.py (~L49-55): the R18 contract states the byte
+      scope is fully enforced only under BIMPOSSIBLE_DERIVATIVE_PROXY_MODE. Live dev backend observed
+      2026-09-12 in exactly the unsafe pairing: PROXY_MODE empty (OFF), CROSS_FIRM_SHARING_ENABLED=1 (ON).'
+  - kind: pr
+    ref: 'BIMpossible#655 feat/r18-proxy-mode-fail-closed: main.py lifespan gains
+      _check_cross_firm_sharing_proxy_safety() -- raises RuntimeError at boot when sharing ON + proxy OFF,
+      unconditionally (all postures, matching _check_assistant_model_config / AdminBootstrapInvariantError).
+      Focused tests test_boot_sharing_proxy_guard.py (enabled+off dev/prod, enabled+on, sharing-disabled);
+      startup-guard + R18 share regression lane 66 passed against throwaway bimpossible_test DB 2026-09-12.'
+  - kind: note
+    ref: 'backend-endpoint-reviewer flagged the proxy-off bypass as its one FAIL on PR #654; documented in
+      code + PR body as a known boundary. This item closes it. Chose the boot-invariant (refuse to start)
+      option -- lowest complexity, matches AdminBootstrapInvariantError precedent.'
+  verification:
+    level: verified
+    by: 'Live on docker-backend-1 (restart 2026-09-13T03:25:05Z, health=healthy, no guard RuntimeError); live
+      /app/main.py has the guard; merged 9c50c190. Focused + startup/config regression lane 66 passed.'
+    at: '2026-09-13'
+  live_check:
+  - 'docker exec docker-backend-1 grep -c "_check_cross_firm_sharing_proxy_safety" /app/main.py  # expect 2 (def+call)'
+  source: 2026-09-12 R18 deploy (owner-directed hardening)
+  notes_url: null
+- id: R18-UI-OWNER-SHARE-SCOPE-SELECT
+  title: 'Build (R18 UI a): owner share dialog gains a share-scope selection -- read (default) vs download
+    (explicit opt-in) -- posting scope to the share-create/PATCH endpoints. Backend stays authoritative.'
+  projects:
+  - bimpossible
+  status: live
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: note
+    ref: 'PROMOTED blocked_owner -> in-flight 2026-09-13 under explicit owner Phase-B authorization ("Build
+      end-to-end now ... prior blocked_owner / parked /ui-ux-pro-max notes are superseded ... do not require
+      another design-first gate"). Built the full greenfield owner cross-firm share-management surface
+      (grantee discovery + create/list/PATCH-scope/revoke), not a 1-control add.'
+  - kind: pr
+    ref: 'BIMpossible#660 (squash f1414a47, MERGED 2026-09-13T06:17Z): backend GET /account/share-recipients
+      (owner-admin, flag-dark, active-only, own-firm-excluded, id+name only) via aec/cross_firm_sharing.py::eligible_recipient_firms
+      + account_router.py; FE frontend/app/lib/account/projectShares.ts, hooks/useAccountRole.ts,
+      components/CrossFirmSharingDialog.tsx, entry point in project/[id]/page.tsx (role===admin && !sharedReadOnly).
+      Backend authoritative; UI hint separate from authz. Tests: backend test_cross_firm_share_api.py +8;
+      FE +38 (projectShares 17 / dialog 17 / page.sharing 4), full FE suite 2277 pass, tsc/lint/Next-build clean.
+      backend-endpoint-reviewer PASS; typescript-api-reviewer PASS.'
+  - kind: run
+    ref: 'DEPLOYED + SMOKED 2026-09-13: backend container restarted (share-recipients + project-shares routes
+      in openapi, flag=1, unauth->401 not 404), Refresh-Frontend.ps1 (health=healthy, :3000=200). Live owner-admin
+      smoke (signed-in Chrome, app.yourbimpossible.com, project b.65496296-...): entry-point gating, list
+      empty->populated, create read-default to "Silverman & Light" (own firm BIMpossible excluded from
+      recipients), scope edit read<->download both directions, destructive revoke w/ named-firm confirm ->
+      empty; test grant revoked, no residue.'
+  verification:
+    level: verified
+    by: 'backend-endpoint-reviewer PASS; typescript-api-reviewer PASS; #660 merged f1414a47; deployed + live owner-admin smoke PASS 2026-09-13'
+    at: '2026-09-13'
+  live_check:
+  - 'grep -rn "CrossFirmSharingDialog" F:/BIMpossible/frontend/app --include=*.tsx  # entry point + dialog present'
+  source: 2026-09-12 R18 build (owner-directed; split from DECIDE-R18-FRONTEND-AFFORDANCES)
+  notes_url: null
+- id: R18-UI-GATE-DOWNLOAD-ON-CANDOWNLOAD
+  title: 'Build (R18 UI b): gate the Download PDF / export / thumbnail controls on useSharedProject().canDownload,
+    with explanatory text for view-only shares. Clarity/workflow only -- backend 404 share_view_only remains
+    the security boundary.'
+  projects:
+  - bimpossible
+  status: live
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: commit
+    ref: 'BIMpossible@f50ccb6e: useSharedProject exposes canDownload (false on a read share); no production
+      .tsx consumes it yet (model/page.tsx, project/[id]/page.tsx read only readOnly/sharedBy).'
+  - kind: pr
+    ref: 'BIMpossible#656 (squash 547f3d11, MERGED 2026-09-13): SheetsGrid/SheetPdfModal/SheetCard gain
+      canDownload (default true); on a view-only share thumbnail fetch suppressed, card click routes to
+      property browser instead of byte-gated preview, Export-set + PDF new-tab/download anchors hidden
+      (replaced by a "View-only -- download disabled" indicator), top-of-grid notice shown. model/page.tsx
+      wires canDownload={sharedProject.canDownload}. 12/12 vitest pass, tsc clean, eslint clean.'
+  - kind: run
+    ref: 'DEPLOYED 2026-09-13: Refresh-Frontend.ps1 rebuilt docker-frontend image (built 2026-09-13T05:29:56Z),
+      recreated docker-frontend-1 -> health=healthy, GET http://localhost:3000/ = 200. typescript-api-reviewer
+      PASS 8/8 (contract fidelity, error handling, tenancy, neutrality, bundle discipline, affordance coverage,
+      test hygiene, deploy reality). Backend 404 share_view_only remains the security boundary; UI is
+      clarity/workflow only.'
+  verification:
+    level: verified
+    by: typescript-api-reviewer 2026-09-13 (PASS 8/8); vitest 12/12; deployed + health-verified 2026-09-13
+    at: '2026-09-13'
+  live_check:
+  - 'grep -rn "canDownload" F:/BIMpossible/frontend/app --include=*.tsx  # SheetsGrid + model/page.tsx consume it'
+  source: 2026-09-12 R18 build (owner-directed; split from DECIDE-R18-FRONTEND-AFFORDANCES)
+  notes_url: null
+- id: DECIDE-DA4R-EMPTY-WORKTREE
+  title: 'Decide: BIMpossible worktree da4r-status-roadmap-30ceaa is an empty lane (0 ahead of main, clean,
+    its PR #154 merged) owned by pinned session "DA4R Status Roadmap Orientation" -- retire or keep'
+  projects:
+  - bimpossible
+  status: blocked_owner
+  owner_gate: true
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: XS
+  risk: 1
+  evidence:
+  - kind: run
+    ref: 'Drift review 2026-09-12: worktree at c654783b, 0 commits ahead of main, clean, no upstream. Session
+      local_6cc8724f is not running but is pinned in the sidebar; another session''s worktree is never
+      removed from here (house rule), so this stays a named decision.'
+  verification:
+    level: verified
+    by: git -C F:/BIMpossible worktree list; git log main..c654783b -> empty
+    at: '2026-09-12'
+  live_check:
+  - git -C F:/BIMpossible worktree list | findstr da4r
+  source: 2026-09-12 workspace drift review (owner-directed)
+  notes_url: null
 - id: R18-SHARE-READ-VS-BYTES
   title: 'Build the explicit per-share download scope: read share is view-only, download opt-in (owner
     ruling 2026-09-07)'
   projects:
   - bimpossible
-  status: ready
+  status: live
   owner_gate: false
   unblocks: []
   effort: M
   risk: 3
   evidence:
+  - kind: pr
+    ref: BIMpossible#654 (MERGED squash f50ccb6e 2026-09-12)
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/654
+  - kind: commit
+    ref: 'BIMpossible@f50ccb6e on main (merge of feat/r18-share-download-scope@c8d7e5a8); Verify-Local-CI green receipt on c8d7e5a8'
+  - kind: run
+    ref: 'LIVE 2026-09-13: backend-migrate applied b2c3d4e5f6a7 -> c3d4e5f6a7b8 (alembic head); ck_psg_scope accepts read|download. Backend force-recreated 2026-09-13T02:19:48Z with DERIVATIVE_PROXY_MODE=true + CROSS_FIRM_SHARING_ENABLED=1. Live smoke 8/8 against recreated container + live DB: read share view allowed, read share bytes 403 share_view_only, download share bytes allowed, downgrade revokes bytes immediately (verdict reads share row before any cache), grantee cannot widen own share (404), audit events distinguish shared_read/shared_download/shared_download.denied/scope_changed. Byte routes 401 auth-gated on running gunicorn. Frontend refreshed (image 2026-09-13T02:31:34Z, healthy); TS canDownload contract deployed but inert. Receipt: PR #654 comment 5650259375.'
+  - kind: note
+    ref: 'Residual hardening: unsafe pairing (sharing ON + proxy OFF) not yet fail-closed -> R18-PROXY-MODE-FAIL-CLOSED (next). Inert UI contract -> R18-UI-OWNER-SHARE-SCOPE-SELECT, R18-UI-GATE-DOWNLOAD-ON-CANDOWNLOAD.'
   - kind: doc
     ref: F:/BIMpossible-Workspace/00_Strategy/2026-09-04__Phase3-Phase4-NeedsAttention-Backlog.md#r18
   - kind: pr
@@ -8226,8 +8422,14 @@ items:
       scope: migration widening ck_psg_scope, `_shared_read_allowed(download=)` rail at assert_project_access
       step 5 placed before every cache read, byte routes required=VIEW_DOWNLOAD, POST/PATCH share scope
       API, share-dialog checkbox, 403 reason share_view_only, test matrix + R12 harness download leg,
-      new Wave row.'
-    at: '2026-09-07'
+      new Wave row. BUILT 2026-09-12 (commit 72c94fe0, lane branch): migration c3d4e5f6a7b8, SCOPES
+      read|download, assert_project_access(download=) before every cache read, bytes routes 404
+      share_view_only on a read share, PATCH scope (account owner-admin + admin on-behalf), audit split
+      view vs download, share_authority caps read at VIEW; 364 backend tests + vitest green;
+      migration-reviewer / backend-endpoint-reviewer / typescript-api-reviewer PASS. Frontend affordance
+      gating on canDownload + owner share-dialog scope control parked as DECIDE-R18-FRONTEND-AFFORDANCES.
+      Lands when the PR merges + backend-migrate rerun.'
+    at: '2026-09-12'
   live_check:
   - 'grep -n "download" F:/BIMpossible/backend/aec/cross_firm_sharing.py  # expect SCOPES to include download
     once built'
@@ -8586,16 +8788,29 @@ items:
       decisive commit .Persisted. Feature-D code maturing after the #127 landing, still pre-live-smoke;
       also tracked as a leg of AUDIT-2026-09-07-REMEDIATION. Does not change this item status.'
     url: https://github.com/YourBIMpossible/BIMpossible-AddIns/pull/131
+  - kind: doc
+    ref: 'Per-feature ACCEPTANCE REVIEW completed 2026-09-12 (branch docs/linkpdf-acceptance-review,
+      off origin/main 7516d36): docs/link-pdf-roadmap-acceptance-review.md. Traced all four features
+      A/C1/B1/D pure planners into their command paths (LinkPdfToSheetsCommand.cs, ReconcilePdfJobCommand.cs)
+      with correct preview/confirm/transaction-integrity behavior. Every roadmap acceptance criterion
+      marked REVIEW PASS (deterministic core, code + unit tests) or LIVE-REQUIRES-REVIT (image reload,
+      atomic Ctrl+Z rollback, identity/slot retention, real geometry tamper detection) -- NO REVIEW FAIL.
+      Live receipt: dotnet test LinkPdf logic = 197/197 pass, 0 fail, 0 skip at 7516d36. One documented
+      non-blocking limitation: Feature D geometry tamper-check is signature-gated (skips on title-block
+      move / MULTI: mixed jobs; deletion always detected; area-change handled by D.6 confirmation checkbox).
+      Owner live-smoke runbook authored: docs/link-pdf-roadmap-owner-smoke-runbook.md. Decision: ready
+      for live smoke. Stays in_flight until all in-Revit smoke steps pass.'
   verification:
     level: claimed
-    by: 'Only the code-merge fact is machine-verified (A/B1/C1/D present on origin/main via #127, merge
-      64a8a6b). Feature ACCEPTANCE is NOT verified: no per-feature review against Acceptance Tests and
-      no roadmap-required in-Revit live smoke has run. Level is claimed (not verified) precisely because
-      code-landed != feature-accepted; stays in_flight until each feature is reviewed and live-smoked.
-      RECONFIRMED 2026-09-10 sync (delta 64a8a6b -> 320e63a): #130 (docs) records A/C1/B1/D code-complete
-      + live-gate-not-run, and #131 gives Feature D a post-merge write-integrity fix -- both consistent
-      with in_flight/claimed. No live smoke ran; not promoted.'
-    at: '2026-09-10'
+    by: 'Code-merge fact machine-verified (A/B1/C1/D present on origin/main via #127, merge 64a8a6b).
+      REVIEW COMPLETE 2026-09-12: per-feature acceptance review found NO REVIEW FAIL -- criteria are
+      REVIEW PASS (proved by code + 197/197 passing LinkPdf unit tests at 7516d36) or LIVE-REQUIRES-REVIT
+      (only observable in a running Revit session; not upgraded to pass by inspection). Feature ACCEPTANCE
+      still NOT verified: the roadmap-required in-Revit live smoke has NOT run. Level stays claimed (not
+      verified) precisely because code-reviewed + tests-green != feature-accepted without live smoke;
+      stays in_flight until each feature is live-smoked per the owner runbook. Decision recorded: ready
+      for live smoke (no review-blocking failure).'
+    at: '2026-09-12'
   live_check:
   - 'gh pr view 127 --repo YourBIMpossible/BIMpossible-AddIns --json state,mergeCommit  # expect MERGED,
     64a8a6b'
