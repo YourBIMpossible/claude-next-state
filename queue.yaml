@@ -1,17 +1,17 @@
 schema_version: 1
 reconciled:
   bimpossible:
-    at: '2026-09-12'
-    commit: 95ce4556
-    pr: 653
+    at: '2026-09-16'
+    commit: f14dbf4c
+    pr: 668
   addins:
     at: '2026-09-10'
     commit: 320e63a
     pr: 124
   workspace:
-    at: '2026-09-07'
-    commit: 7d7647f
-    pr: 134
+    at: '2026-09-14'
+    commit: 735c779
+    pr: 154
   evidence-compiler:
     at: '2026-08-24'
     commit: 0ef747e7533c7cf714888076f3df6f06dd028b84
@@ -2540,8 +2540,12 @@ items:
       sibling files are now inconsistent with each other on a pattern the team has already named, reasoned
       about, and fixed once.'
   verification:
-    level: claimed
-    by: 'NEEDS REPRODUCTION (no live/test request has confirmed the actual 403 body an attacker receives),
+    level: verified
+    by: 'VERIFIED 2026-09-13 sync by both live_check probes: 4448fcf4 present in git log origin/main
+      (PR #314 squash); backend/aec/groups.py lines 486 and 578 read `if group.firm_id != firm_id:` and
+      precede assert_project_allowed in update_group/delete_group -- F-5 ordering in place. Reproduction
+      was done at landing time by test_groups_403_ordering.py (RED on unmodified code, see claim). ||
+      Prior reading 2026-08-07: NEEDS REPRODUCTION (no live/test request has confirmed the actual 403 body an attacker receives),
       but the F-5 discovery above substantially raises confidence this is real and not merely theoretical
       -- the same engineering group already treated this exact ordering as worth a dedicated fix in the
       sibling file. Exploitability is narrow, same precondition the source note gave: the attacker needs
@@ -2551,7 +2555,7 @@ items:
       the firm check, which returns a generic ''Group not found'' -- no leak in that path). Fix shape:
       mirror F-5 exactly -- swap the two blocks so `if group.firm_id != firm_id` runs first in both update_group
       and delete_group.'
-    at: '2026-08-07'
+    at: '2026-09-13'
   live_check:
   - 'git log origin/main --oneline | grep 4448fcf  # squash SHA of PR #314'
   - 'grep -n ''assert_project_allowed\|firm_id != firm_id'' backend/aec/groups.py  # firm check now precedes
@@ -2827,14 +2831,21 @@ items:
       merged via WS #154) removed + local branch deleted (remote branch left; owner-gated delete). JUDGMENT,
       one decision item each: DECIDE-WS-REVIEW-ARTIFACT-GATEA (unpushed 5312cfd), DECIDE-DA4R-EMPTY-WORKTREE
       (empty lane owned by another session). AddIns not in this review''s scope.'
+  - kind: probe
+    ref: 'Seventh reading 2026-09-14 (scheduled workspace sync): all three main checkouts behind-0/ahead-0,
+      clean of tracked drift. BIMpossible: 0 untracked. AddIns: 2 untracked (deploy-evidence/, reviews/2026-09-13__panel-schedules-sheet-index-architecture.md
+      -- foreign in-progress review work, left untouched). Workspace: 1 untracked (audits/2026-09-13__slop-audit.md
+      -- deliberately left uncommitted by the 2026-09-14 weekly-full-audit run per its own log). Best
+      reading on record: no dirty tracked files anywhere, all three repos level with origin.'
   verification:
     level: verified
     by: 'Re-probed 2026-09-07: BIMpossible main behind 1; BIMpossible-AddIns main behind 19 AND dirty
       (.evidence-compiler/config.yaml, CLAUDE.md); BIMpossible-Workspace main clean and level. Drift condition
       still real. | 2026-09-07 later pass: BIMpossible resolved (level, clean). AddIns drift is now precisely
       classified (see evidence): it needs a supervised per-file merge of CLAUDE.md/TOOL_BACKLOG.md/WORKLOG.md,
-      not a pull.'
-    at: '2026-09-07'
+      not a pull. | 2026-09-14: git status -sb x3, all level/clean; only untracked (non-tracked-drift) foreign
+      docs remain, named above.'
+    at: '2026-09-14'
   live_check:
   - 'git -C F:/BIMpossible status -sb; git -C F:/BIMpossible-AddIns status -sb; git -C F:/BIMpossible-Workspace
     status -sb  # expect all behind-0/ahead-0, clean'
@@ -3103,6 +3114,10 @@ items:
   effort: S
   risk: 3
   evidence:
+  - kind: run
+    ref: '2026-09-13 owner-run probe: `docker exec docker-backend-1 printenv BIMPOSSIBLE_AUTHZ_ENFORCEMENT_MODE`
+      -> OFF. The OFF->SHADOW flip observed 2026-08-16 has been undone (2026-09-11 vanishing-projects
+      outage fix set the mode back to off). Shadow window abandoned, not passed.'
   - kind: doc
     ref: 'NORTHSTAR guardrail #1 (owner ''go'' AND ratified revocation window, proposal 15 min) + #9 (provenance
       gate ships in shadow mode first, ~7 days log-only, zero false denials proven, before it hard-denies).
@@ -3117,7 +3132,11 @@ items:
       authz_decision_log = 3 rows, ALL would_deny=true reason no-projection-record'
   verification:
     level: verified
-    by: 'PROMOTED live 2026-08-16: the flip this item tracked has happened -- SHADOW observed live in
+    by: 'DEMOTED 2026-09-13: live probe (owner-run, OFF) resolves the contradiction -- the flip is undone
+      and the foundation is merged but inert at OFF. Item stays landed with owner_gate; re-flipping to
+      SHADOW is a human .env action tied to pre-pilot re-entry (runbook Sec 6, AUTHZ-SHADOW-WINDOW-VALIDITY).
+      The 2026-08-16 shadow window is void: abandoned by the 2026-09-11 outage fix, never proved zero
+      false denials. || Prior reading 2026-08-16: PROMOTED live 2026-08-16: the flip this item tracked has happened -- SHADOW observed live in
       prod (env-var probe), decision log receiving rows. CAVEAT, tracked as its own item AUTHZ-SHADOW-WINDOW-VALIDITY:
       the 3 rows are all would_deny=true / no-projection-record, and an unfixed audit finding says shadow
       telemetry likely UNDERCOUNTS because read paths never commit the decision-log insert -- so the >=7-day
@@ -3129,10 +3148,10 @@ items:
       health, (6) flip OFF->SHADOW. Packets: BIMpossible docs/2026-08-14__Owner-Action-Packets.md. unblocks:
       [] deliberately -- downstream arc (ENFORCE, Track-2, write-back) itemized only after shadow proves
       out.'
-    at: '2026-08-16'
+    at: '2026-09-13'
   live_check:
-  - 'docker exec <backend> printenv BIMPOSSIBLE_AUTHZ_ENFORCEMENT_MODE  # expect SHADOW for the log-only
-    window (never flip it yourself)'
+  - 'docker exec docker-backend-1 printenv BIMPOSSIBLE_AUTHZ_ENFORCEMENT_MODE  # OFF since 2026-09-11; SHADOW
+    only after the owner re-flips for pre-pilot (never flip it yourself)'
   - 'SELECT count(*), count(*) FILTER (WHERE would_deny) FROM authz_decision_log  # expect growth over
     the window; all-would-deny/no-projection-record means the seed gap or telemetry gap is still open'
   source: 'NORTHSTAR guardrails #1/#9; plan v3 Sec 7b.3; authz-phase3-serving-frontier + authorization-inheritance-plan-v3
@@ -3761,8 +3780,10 @@ items:
       is still the unscored 2026-08-22 phase-0 audit, so the card still has nothing per-repo to ingest.
       Finite owner decision (not active work): pick exactly one of A) teach the card to read the Add-Ins
       slice of the tri-repo weekly audit; B) require a separately-filed scored Add-Ins report; C) fold
-      the 2026-08-22 findings in narratively (history-only, no counts).'
-    at: '2026-09-10'
+      the 2026-08-22 findings in narratively (history-only, no counts). RE-CHECKED 2026-09-14 (workspace
+      sync): unchanged -- no new F:/BIMpossible-AddIns/audits file since, still nothing owner-decided
+      among A/B/C.'
+    at: '2026-09-14'
   live_check:
   - 'python check_audit_freshness.py  # (or equivalent) -- expect addins.stale: true until ops-1 is resolved
     one way or the other'
@@ -3848,7 +3869,7 @@ items:
   title: 'Intentional retention: rollback-20260817 image tags until deploy soak completes 2026-08-18 evening'
   projects:
   - bimpossible
-  status: ready
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -3857,16 +3878,20 @@ items:
   evidence:
   - kind: commit
     ref: deploy closed live at alembic c4e7a2b91d38, 2026-08-17 ~22:00 PDT
+  - kind: run
+    ref: 'CLOSED 2026-09-13 (owner-approved in-session): docker image rm removed all three tags
+      (f40bd411 migrate, e69a74e3 backend, ff8eb39a frontend); docker image ls | rollback -> empty.'
   verification:
-    level: claimed
-    by: 'Deliberate operational retention, not a leftover: docker-backend:rollback-20260817, docker-frontend:rollback-20260817,
+    level: verified
+    by: 'Done 2026-09-13: three rollback-20260817 tags deleted, none remain in docker image ls; stack
+      healthy at deletion time. || Prior: Deliberate operational retention, not a leftover: docker-backend:rollback-20260817, docker-frontend:rollback-20260817,
       docker-backend-migrate:rollback-20260817 preserve the pre-deploy images. Soak boundary: stack healthy
       for 24h after the 2026-08-17 ~22:00 PDT deploy with no deploy-related backend errors. After 2026-08-18
       evening, if healthy: docker image rm the three tags and close this item. If a rollback was needed
       instead: retag to :latest + docker compose up -d. | Probe 2026-08-30: all three rollback-20260817
       tags still present in docker image ls, 12 days past the 2026-08-18 soak boundary with the stack
       healthy — the prescribed ''docker image rm'' close-out has not been run.'
-    at: '2026-08-30'
+    at: '2026-09-13'
   live_check:
   - 'After 2026-08-18 22:00 PDT with healthy services: the three rollback-20260817 tags are removed and
     absent from docker image ls.'
@@ -3986,13 +4011,23 @@ items:
   - kind: doc
     ref: BIMpossible_PHASE-STATUS.md, Phase 6 row Client-Mgmt E -- absorbs prior FG-G4 scope; PLACED not
       ratified
+  - kind: pr
+    ref: 'BUILT + MERGED: BIMpossible#566, #570, #574 (squash 7a29dcb9, MERGED 2026-09-05T00:41:14Z) +
+      Workspace #115/#118 (65a570d6). Smoke-tested non-prod, drill torn down. Closeout: F:\Claude-Tools\reports\2026-09-04-p6-clientmgmt-e-final-closeout.md
+      (section 7 = owner launch steps).'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/574
   verification:
-    level: claimed
-    by: Ledger marks this PLACED not ratified in the 2026-07-27 client-mgmt batch. No design doc cited;
-      scope named but not built.
-    at: '2026-08-18'
+    level: verified
+    by: 'CORRECTED 2026-09-13 sync: the feature IS built and merged (PR #574 state MERGED, squash 7a29dcb9
+      on origin/main; closeout report present on disk). NOT live: gated on the owner launch flag
+      NEXT_PUBLIC_BIMPOSSIBLE_CLIENT_ONBOARDING_ENABLED plus the frontend rebuild -- the same gate tracked
+      by ONBOARDING-574-FRONTEND-REBUILD. Stays blocked_owner for the launch decision only; the two ids
+      are left separate (distinct literal scope) -- merging them is an owner call. || Prior reading
+      2026-08-18: ledger PLACED not ratified, scope named but not built -- stale.'
+    at: '2026-09-13'
   live_check:
-  - Re-read BIMpossible_PHASE-STATUS.md Phase 6 row Client-Mgmt E for a ratification.
+  - gh pr view 574 -R YourBIMpossible/BIMpossible --json state,mergeCommit
+  - Re-read BIMpossible_PHASE-STATUS.md Phase 6 row Client-Mgmt E for the ratification/score.
   source: BIMpossible_PHASE-STATUS.md, Phase 6 (Client-Mgmt E) -- surfaced by /next BIMpossible roadmap
     2026-08-18, UNTRACKED
   notes_url: null
@@ -4409,10 +4444,12 @@ items:
       increment after Increment 2 (Increment 4/ElementId stays owner-ruled deliberately unimplemented)
   verification:
     level: claimed
-    by: WRITE-ENGINE-INC2's own verification prose states its unblocks stays empty deliberately ("product
-      depth, not a dependency") -- that ruling is honored here and not overridden; this item's blocked_by
-      names the true build-sequencing fact without adding INC3 to INC2's unblocks.
-    at: '2026-08-23'
+    by: 'WRITE-ENGINE-INC2''s own verification prose states its unblocks stays empty deliberately ("product
+      depth, not a dependency") -- that ruling is honored here and not overridden. blocked_by is [] on
+      purpose: INC2 landed 2026-08-21, so there is no open dependency; the sequencing fact lives in the
+      title and live_check, not in the graph. (Sync 2026-09-13 corrected the earlier wording that claimed
+      blocked_by named it.) Still blocked_owner: Increment 3 has no scope definition.'
+    at: '2026-09-13'
   live_check:
   - '2026-08-21: INC2 dependency cleared (landed). BLOCKED ON OWNER: Increment 3 has no scope definition
     anywhere in queue/ledger -- owner must name the increment''s contents before a build session starts.'
@@ -5387,7 +5424,7 @@ items:
   title: 'Admin domain registration: return typed 404 for unknown firm instead of 409'
   projects:
   - bimpossible
-  status: landed
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by:
@@ -5395,6 +5432,15 @@ items:
   effort: S
   risk: 1
   evidence:
+  - kind: pr
+    ref: 'BIMpossible#657 (squash 3404e85a, MERGED 2026-09-13): add_domain also rejects inactive/churned
+      firms with the same uniform 404 "Firm not found." (backend/admin_router.py:460-461, status != "active"
+      guard) -- closes the residual gap the 2026-09-12 verification flagged for the owner.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/657
+  - kind: run
+    ref: 'LIVE 2026-09-13: docker-backend-1 restarted 2026-09-13T06:19:09Z (after both merges); container
+      /app/admin_router.py byte-identical to origin/main:backend/admin_router.py (docker exec cat | diff
+      git show, no delta), lines 460-461 carry the #657 guard.'
   - kind: commit
     ref: 'BIMpossible main e408e16f (2026-09-12, direct-to-main per solo-owner delivery rule): add_domain
       resolves the Firm before insert and raises HTTPException(404, "Firm not found."); new test
@@ -5408,11 +5454,12 @@ items:
     url: https://github.com/YourBIMpossible/BIMpossible/pull/449
   verification:
     level: verified
-    by: 'main e408e16f + focused suite 65 passed (2026-09-12). Not yet live: the dev backend container has
-      not been restarted since the merge (bind-mounted source, gunicorn loads at start). Note: add_domain
-      itself carries no inactive/churned-firm status check (the inactive-firm guard lives in login autolink,
-      test_login_firm_autolink.py); left as-is per the scope guard, flagged for the owner.'
-    at: '2026-09-12'
+    by: 'PROMOTED live 2026-09-13 sync: backend container restarted after e408e16f + #657 (3404e85a),
+      live source diffed identical to origin/main. Both halves present: unknown firm -> 404 (e408e16f),
+      inactive/churned firm -> 404 (#657). || Prior reading 2026-09-12: main e408e16f + focused suite 65
+      passed; not yet live (container not restarted); inactive-firm gap flagged for the owner -- now closed
+      by #657.'
+    at: '2026-09-13'
   live_check:
   - Resolve the target firm explicitly before insert; confirm an unknown firm_id yields 404 and a duplicate
     domain still yields 409.
@@ -5504,8 +5551,11 @@ items:
       needs the proxy live. Unblock = (1) stack restored healthy, (2) owner product decision to enable.
       Bounded action then: set BIMPOSSIBLE_DERIVATIVE_PROXY_MODE=on in compose env, restart backend; verify
       authorized 200 + unauthorized/cross-tenant 404 + texture path; rollback = unset + restart. Audit
-      record: BIMpossible_Workspace/03_Audits/closeout-evidence-ledger_2026-08-27.md.'
-    at: '2026-08-27'
+      record: BIMpossible_Workspace/03_Audits/closeout-evidence-ledger_2026-08-27.md. || Sync 2026-09-13:
+      the "production stack DOWN" precondition is stale -- stack is up and healthy (docker ps, backend
+      restarted 2026-09-13T06:19Z). Flag probe itself was classifier-blocked this pass (probe failed, not
+      a negative). Unblock (1) is met; only (2) the owner product decision remains.'
+    at: '2026-09-13'
   live_check:
   - 'docker exec <backend> printenv BIMPOSSIBLE_DERIVATIVE_PROXY_MODE  # expect unset/off'
   source: gh pr view 456/459/460/461/462 --repo YourBIMpossible/BIMpossible; docs/plans/active/pdp-g1-sdk-viewer-proxy.md
@@ -6353,7 +6403,7 @@ items:
   title: Pre-grant Workspace + Add-Ins folder access to the scheduled weekly-audit session
   projects:
   - workspace
-  status: ready
+  status: live
   owner_gate: false
   owner: null
   unblocks: []
@@ -6375,15 +6425,25 @@ items:
     ref: 'The run log''s own instruction: fix at the scheduled-task / session-provisioning level, ''not
       another diagnosis''. Fix shape: pre-grant both roots to whatever session executes the weekly-audit
       scheduled task, so an unattended run cannot silently degrade.'
+  - kind: doc
+    ref: 'LIVE_CHECK MET, 1st time: 01_BuildLog/2026-09-07__weekly-full-audit-run.md -- Workspace/AddIns
+      both accessible; that run''s only coverage gap (Track A parent agent never reporting) is unrelated
+      to directory access.'
+  - kind: doc
+    ref: 'LIVE_CHECK MET, 2nd consecutive time: 01_BuildLog/2026-09-14__weekly-full-audit-run.md -- repo
+      tips audited for all three repos (code f14dbf4c, AddIns 482a2be, Workspace 6a8df67), no coverage-gap
+      entry for either directory. Two clean runs back to back (2026-09-07, 2026-09-14) with zero recurrence
+      since the 2026-08-31 fix -- promoting ready -> live.'
   verification:
     level: verified
     by: 'Report and run log independently record the same access failure and the same mid-run human rescue;
       the 2026-08-24 degradation is corroborated inside the 08-31 report''s own change-since-last-run
       table (BIMpossible-AddIns ''inaccessible 2026-08-24, no baseline existed''; Hygiene lens ''not run
-      2026-08-24''). This is a scheduling/provisioning defect, not a code defect -- the next unattended
-      run reproduces it. unblocks: [] on the item graph, but note the real coupling: every future weekly
-      audit''s scope depends on it.'
-    at: '2026-08-31'
+      2026-08-24''). This is a scheduling/provisioning defect, not a code defect. RE-CHECKED 2026-09-14
+      (workspace sync): the live_check bar (no coverage-gap naming either directory) has now been met on
+      two consecutive unattended runs (2026-09-07, 2026-09-14) with no recurrence -- the fix holds under
+      repeat unattended execution, not just the one post-fix run. Promoted to live.'
+    at: '2026-09-14'
   live_check:
   - 'Next unattended weekly-audit run: its Coverage Gap section must NOT name F:/BIMpossible-Workspace
     or F:/BIMpossible-AddIns as inaccessible.'
@@ -8227,11 +8287,47 @@ items:
       mechanical drift.'
   verification:
     level: verified
-    by: git -C F:/BIMpossible-Workspace worktree list; git log origin/main..docs/review-all-gatea-canonical-filing
-    at: '2026-09-12'
+    by: 'git -C F:/BIMpossible-Workspace worktree list; git log origin/main..docs/review-all-gatea-canonical-filing.
+      RE-CHECKED 2026-09-14 (workspace sync): still exactly 1 unpushed commit (5312cfd), no upstream, no
+      PR -- unchanged, still awaiting the owner push-or-drop call.'
+    at: '2026-09-14'
   live_check:
   - git -C F:/BIMpossible-Workspace log --oneline origin/main..docs/review-all-gatea-canonical-filing
   source: 2026-09-12 workspace drift review (owner-directed)
+  notes_url: null
+- id: DECIDE-WS-STALE-MIRROR-PUBLISH-PR146
+  title: 'Decide: draft PR #146 (state: publish /next sync mirror, addins delta 64a8a6b->320e63a) has
+    sat open since 2026-09-11 -- update to the current canonical snapshot and merge, or close as superseded'
+  projects:
+  - workspace
+  status: blocked_owner
+  owner_gate: true
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: XS
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: 'gh pr view 146 --repo YourBIMpossible/BIMpossible_Workspace (checked 2026-09-14): state OPEN,
+      isDraft true, headRefName claude/next-sync-addins-20260910, base main, mergeable UNKNOWN, updatedAt
+      2026-09-11T06:21:27Z (3 days stale at check time). Touches only .tools/state/queue.yaml + QUEUE.md
+      -- a mirror-publish snapshot from a prior addins-scoped sync, not application code. No queue item
+      referenced this PR number (queue_store.py --known-pr returned unknown).'
+    url: https://github.com/YourBIMpossible/BIMpossible_Workspace/pull/146
+  - kind: log
+    ref: 'At least 5 canonical queue.yaml syncs have landed on main since this branch was cut (queue commits
+      6a8df67, 00d92c1, 06f8c86, 24fe85a and this run''s own edits) -- the branch''s mirror snapshot is
+      almost certainly stale against the current canonical store, so mergeable is likely a real conflict,
+      not just an unresolved GitHub check.'
+  verification:
+    level: claimed
+    by: 'PR metadata read live via gh pr view; not merged or closed by this sync (owner_gate: true, /next
+      never pushes/merges/closes PRs).'
+    at: '2026-09-14'
+  live_check:
+  - gh pr view 146 --repo YourBIMpossible/BIMpossible_Workspace --json state,isDraft,mergeable
+  source: 2026-09-14 workspace sync (this run) -- new item, no prior tracking
   notes_url: null
 - id: R18-PROXY-MODE-FAIL-CLOSED
   title: 'Harden R18: if cross-firm sharing is ON while derivative proxy mode is OFF, the byte scope is
@@ -8348,9 +8444,15 @@ items:
       PASS 8/8 (contract fidelity, error handling, tenancy, neutrality, bundle discipline, affordance coverage,
       test hygiene, deploy reality). Backend 404 share_view_only remains the security boundary; UI is
       clarity/workflow only.'
+  - kind: pr
+    ref: 'BIMpossible#659 (squash 9eb834ca, MERGED 2026-09-13, R18 hardening): element-level scope narrowing
+      in frontend/app/lib/sharedProjects.ts + SheetPdfModal self-protection in SheetsGrid.tsx (the modal
+      enforces canDownload itself rather than trusting every caller to gate it).'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/659
   verification:
     level: verified
-    by: typescript-api-reviewer 2026-09-13 (PASS 8/8); vitest 12/12; deployed + health-verified 2026-09-13
+    by: 'typescript-api-reviewer 2026-09-13 (PASS 8/8); vitest 12/12; deployed + health-verified 2026-09-13.
+      Sync 2026-09-13: #659 hardening confirmed merged on origin/main (9eb834ca in git log); status unchanged.'
     at: '2026-09-13'
   live_check:
   - 'grep -rn "canDownload" F:/BIMpossible/frontend/app --include=*.tsx  # SheetsGrid + model/page.tsx consume it'
@@ -8550,8 +8652,11 @@ items:
   live_check:
   - 'git -C F:/BIMpossible log --oneline origin/main -3 -- docs/ops/  # look for a backend deploy record
     after 3a9dab64 before promoting'
-  - 'python F:/BIMpossible-Workspace/ops/foundation-validation/r12_lifecycle_telemetry_validation.py  #
-    expect authority_source=bimpossible_cross_firm_share rows once live'
+  - 'Get-Content F:/BIMpossible-Workspace/ops/foundation-validation/r12_lifecycle_telemetry_validation.py
+    | docker exec -i docker-backend-1 python -  # runs IN the container (needs /app db+aec packages and
+    the container DATABASE_URL; plain host python fails ModuleNotFoundError db). Requires AUTHZ mode ENFORCE
+    + sharing on, else exits 2 Blocked before touching the DB. Writes+tears down prefixed fixtures in the
+    shared dev DB -- owner-run, not a routine probe.'
   source: 'BIMpossible PRs #605/#606/#615/#617; 2026-09-04__Phase3-Phase4-NeedsAttention-Backlog.md row
     R12 (Verified 2026-09-07); follow-ups R18/R19/R20 tracked separately'
   notes_url: https://github.com/YourBIMpossible/BIMpossible/blob/main/docs/decision-log/2026-09-06__share-authority.md
@@ -8800,6 +8905,18 @@ items:
       move / MULTI: mixed jobs; deletion always detected; area-change handled by D.6 confirmation checkbox).
       Owner live-smoke runbook authored: docs/link-pdf-roadmap-owner-smoke-runbook.md. Decision: ready
       for live smoke. Stays in_flight until all in-Revit smoke steps pass.'
+  - kind: pr
+    ref: 'BIMpossible-AddIns #141 (branch docs/linkpdf-acceptance-review) bundled the A/C1/D acceptance
+      evidence above with an off-limits B2 code implementation, a same-day B1 acceptance-criteria
+      redefinition-then-retraction, and an unrelated Feature E north-star proposal -- split 2026-09-13
+      into four narrow PRs to keep this item''s evidence truthful. #141 CLOSED, superseded. Current
+      acceptance-evidence PR (open, unmerged): #145 "docs: LINKPDF A/C1/D acceptance review and owner
+      live-smoke runbook" -- https://github.com/YourBIMpossible/BIMpossible-AddIns/pull/145. Makes no
+      claim beyond A/C1/D; explicitly does not claim B1 acceptance. The B1/B2 policy question, the B2
+      packing-foundation code, and the Feature E proposal are tracked separately (PRs #146/#148/#147)
+      and are NOT part of this item''s A/C1/D scope. This entry updates evidence only -- status stays
+      in_flight, verification level stays claimed; live-Revit smoke is still outstanding.'
+    url: https://github.com/YourBIMpossible/BIMpossible-AddIns/pull/145
   verification:
     level: claimed
     by: 'Code-merge fact machine-verified (A/B1/C1/D present on origin/main via #127, merge 64a8a6b).
@@ -8994,3 +9111,450 @@ items:
   - git -C F:\BIMpossible-Workspace show origin/main:00_Strategy/2026-09-12__GateA_ApprovalMemo_and_BindingAddendum_TargetReidentified.md | Select-String -SimpleMatch 'GATE A OWNER APPROVAL'
   source: 'Canonical Gate A memo 00_Strategy/2026-09-12__GateA_ApprovalMemo_and_BindingAddendum_TargetReidentified.md (owner approval section 11, Workspace commit d6ec753). Begins only on explicit owner "Start Gate A". Output: one Pilot Slice Decision Pack. Gate B and Gate C are NOT approved. DA4R is not a dependency or blocker. Creates no implementation or engineering work item.'
   notes_url: https://github.com/YourBIMpossible/BIMpossible_Workspace/blob/main/00_Strategy/2026-09-12__GateA_ApprovalMemo_and_BindingAddendum_TargetReidentified.md
+- id: ASSISTANT-AI-CONTEXT-POLICY
+  title: 'Assistant fail-closed project AI-context policy: project_configs.ai_context_policy + opaque
+    navigation handles, Slack/Teams coverage (PR #661, MERGED + deployed 2026-09-13)'
+  projects:
+  - bimpossible
+  status: live
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: L
+  risk: 3
+  evidence:
+  - kind: pr
+    ref: 'BIMpossible#661 (branch feat/assistant-ai-context-policy, head 0eb24c4b) squash-MERGED to main
+      as 66d22392 on 2026-09-13 (owner instruction, strict model_data opt-in for existing projects treated
+      as intentional). project_configs.ai_context_policy + migration d4e5f6a7b8c0; HMAC opaque navigation
+      handles; policy-gated Assistant context; Slack + Teams surfaces covered; D5 (nl_filter.py) folded in
+      via the third explicit permission model_data -- see NL-FILTER-AI-CONTEXT-POLICY-WIRING. PR body
+      cites owner decisions D1-D5, two backend-endpoint-reviewer passes, and the default-deny behavior
+      change. Companion review doc reviews/2026-09-13__review-all__assistant-ai-context-policy.md.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/661
+  - kind: deploy
+    ref: 'Deployed 2026-09-13 via docker compose up -d --build from F:/BIMpossible/docker (backend-migrate
+      one-shot ran; alembic current = d4e5f6a7b8c0 (head); pg_constraint ck_project_configs_ai_context_policy
+      admits model_data; all services healthy; /health 200; frontend .next carries the NLFilterBar copy).'
+  verification:
+    level: verified
+    by: 'Merge SHA 66d22392 on origin/main; backend-migrate log + alembic current + pg_constraint probe
+      post-deploy; live denied-without-policy check on app.yourbimpossible.com: POST /data/nl_filter
+      (with CSRF header) for project b.65496296-... with no project_configs row -> 403
+      {code: project_ai_policy_disabled} before any provider spend; same-firm admin opt-in end-to-end PASS
+      (scope grant -> PUT model_data -> audit row -> nl_filter 200 -> reset help_only). Cross-firm share
+      denial NOT live-validated -- see NL-FILTER-AI-CONTEXT-POLICY-WIRING.'
+    at: '2026-09-13'
+  live_check:
+  - gh pr view 661 -R YourBIMpossible/BIMpossible --json state,mergedAt,mergeCommit
+  - 'git -C F:/BIMpossible grep -n "ai_context_policy" origin/main -- backend/aec/nl_filter.py  # non-empty'
+  source: gh pr list --state all (2026-09-13 sync delta); PR #661 merged + deployed same day (owner instruction)
+  notes_url: https://github.com/YourBIMpossible/BIMpossible/pull/661
+- id: DECIDE-NL-FILTER-AI-CONTEXT-CLASSIFICATION
+  title: 'Decide: is backend nl_filter.py a model-data AI surface under ai_context_policy (fail-closed)
+    or an exempt query-parsing surface? (D5 open gap named in PR #661)'
+  projects:
+  - bimpossible
+  status: live
+  owner_gate: true
+  unblocks:
+  - NL-FILTER-AI-CONTEXT-POLICY-WIRING
+  blocked_by: []
+  effort: XS
+  risk: 2
+  evidence:
+  - kind: pr
+    ref: 'PR #661 body, decision D5: "nl_filter.py is a distinct model-data task surface ... must be
+      classified in a later explicit decision." Left deliberately outside #661 scope.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/661
+  - kind: doc
+    ref: 'OWNER RULED 2026-09-13 (in-session, /next follow-up): "nl_filter.py should be under the fail-closed
+      policy." nl_filter.py is a model-data AI surface; no exemption.'
+  verification:
+    level: verified
+    by: 'Decision is the deliverable -- owner ruling recorded 2026-09-13: fail-closed, same as the Assistant
+      surfaces in #661. Implementation tracked separately as NL-FILTER-AI-CONTEXT-POLICY-WIRING.'
+    at: '2026-09-13'
+  live_check: []
+  source: PR #661 body D5 (2026-09-13 sync delta); owner ruling 2026-09-13
+  notes_url: null
+- id: NL-FILTER-AI-CONTEXT-POLICY-WIRING
+  title: 'Build: put backend/aec/nl_filter.py under ai_context_policy fail-closed (owner D5 ruling 2026-09-13)
+    -- deny model-data AI filtering unless the project policy allows it'
+  projects:
+  - bimpossible
+  status: live
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 3
+  evidence:
+  - kind: pr
+    ref: 'Folded into PR #661 (branch feat/assistant-ai-context-policy) at commit 0eb24c4b; PR squash-MERGED
+      as 66d22392 and deployed 2026-09-13 (migration d4e5f6a7b8c0 applied, backend + frontend rebuilt via
+      docker compose up -d --build). New explicit permission model_data (does not widen
+      help_only or project_navigation); get_ai_context_policy() takes firm_id and denies a policy row
+      owned by another firm (closes a backend-endpoint-reviewer MEDIUM re cross-firm share recipients);
+      nl_filter denies before the rate limiter/budget/credential/client/provider call on: no row,
+      help_only, project_navigation, unknown/NULL value, lookup error, or foreign-firm row. Migration
+      d4e5f6a7b8c0 (unapplied to dev) edited in place to add model_data to the CHECK constraint.
+      NLFilterBar.tsx shows a plain "policy disabled" message on that 403. Behavior change: existing
+      projects lose Smart Filter by default until a firm admin sets model_data via the existing PUT
+      /account/projects/{id}/ai-context-policy route -- called out prominently in the PR body.'
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/661
+  - kind: live-smoke
+    ref: 'Live validation 2026-09-13 on app.yourbimpossible.com after deploy (owner set
+      BIMPOSSIBLE_CLIENT_ADMIN_ENABLED=1 in .env + force-recreated backend at ~19:15Z). (1) Denied-without-policy:
+      PASS -- POST /data/nl_filter (X-CSRF-Token) for project b.65496296-644b-4845-b11a-cf3e08970c77 with no
+      project_configs row -> 403 {code: project_ai_policy_disabled}. (2) Same-firm admin opt-in end-to-end:
+      PASS -- firm admin J86MCX345VS26DAB (principal 00296064-...) granted itself a selected_projects
+      PrincipalAdminScope for that one project via POST /account/admin-scopes (audit admin_scope.grant);
+      GET policy -> 200 help_only; PUT model_data -> 200; account_audit_log row ai_context_policy.set
+      {old_policy: help_only, new_policy: model_data, outcome: changed, actor_principal_id: 00296064-...}
+      at 19:21:26Z; POST /data/nl_filter -> 200 filter_tree (one paid call); reset PUT help_only -> 200
+      (audit row 19:21:44Z); nl_filter -> 403 project_ai_policy_disabled again. A non-signed-in principal
+      (c140704d-...) with the same scope was correctly 403 on the policy route; its scope was revoked
+      (admin_scope.revoke). End state: project_configs = help_only for that project; ONE active scope
+      remains (00296064-... selected_projects on b.65496296-...) because the API refuses to revoke the
+      firm''s last active client admin (409) -- owner may revoke via a second admin or leave it.
+      (3) Cross-firm share denial: PASS (2026-09-13 ~20:40Z) -- owner PUT model_data -> 200 and owner
+      nl_filter -> 200; share BIMpossible -> Silverman & Light (1e2b3880-...) created 19:45:52Z (label
+      "model_data denial test", scope read, owner_admin); S&L identity KAKJ5MM3JMXTNCPY (membership 928
+      reassigned BIMpossible -> S&L via PATCH /admin/memberships, firm_domains row 315 silvermanlight.com
+      added via POST /admin/domains) opened the shared model in Incognito and ran Smart filter: UI showed
+      "Smart filter is turned off for this project''s AI policy."; backend log POST /data/nl_filter -> 403
+      while the owner-firm policy was model_data. Cleanup: PUT help_only -> 200, share revoked (DELETE ->
+      200). Two defects found during the run, filed as BUG-SHARED-PROJECT-MODEL-PAGE-NO-HUB-ID and
+      ADMIN-CONSOLE-NO-DOMAIN-OR-MEMBERSHIP-CONTROLS. Unit coverage
+      test_share_recipient_never_inherits_the_owning_firms_model_data +
+      test_firm_scoped_lookup_ignores_a_row_owned_by_another_firm.'
+  - kind: eval
+    ref: 'Live hash monitor 2026-09-13: python tests/eval/nl_filter_monitor.py --mode live --repeats 10
+      in docker-backend-1 -> verdict=PASS, model=claude-haiku-4-5, samples=160, score=1.0 threshold=1.0
+      delta=0.0 flips=0 transport_errors=0, 16/16 scored cases always-pass; drift=nl_filter_source_sha256
+      (expected: prompt-file hash changed with the policy gate). Owner accepted the run 2026-09-13;
+      --write-baseline re-pinned nl_filter_baseline.json to 2026-09-13.1 (pins only, thresholds untouched),
+      live_evidence records the run (commit 66d22392, 160/160, 0 flips); offline monitor drift=none
+      verdict=PASS; tests/eval 59 passed. Committed directly to main as 25c56760 (isolated, one file).'
+  verification:
+    level: verified
+    by: 'Merge 66d22392 + deploy + migration head d4e5f6a7b8c0 confirmed post-deploy; live denied-without-policy
+      403 observed in the browser; same-firm admin opt-in end-to-end PASS with audit rows (19:21Z) and
+      reset; live monitor PASS (160 samples, 0 flips). Pre-merge: 238 focused backend tests in-container,
+      frontend NLFilterBar.test.tsx (12) + tsc + eslint clean, migration-reviewer PASS, typescript-api-reviewer
+      approve, backend-endpoint-reviewer PASS on 0eb24c4b. Cross-firm live check PASS 2026-09-13 (S&L
+      grantee 403 + UI denial while owner policy = model_data). Baseline re-pin accepted and landed
+      (25c56760, 2026-09-13). No owner-gated remainder -- item complete.'
+    at: '2026-09-13'
+  live_check:
+  - 'git -C F:/BIMpossible grep -n "ai_context_policy" origin/main -- backend/aec/nl_filter.py  # non-empty'
+  - gh pr view 661 -R YourBIMpossible/BIMpossible --json state,mergedAt,mergeCommit
+  - 'curl -fsS https://app.yourbimpossible.com/health  # 200'
+  source: 'owner instruction 2026-09-13 "Fold nl_filter into PR #661 ..." then "Merge PR #661 ... apply the
+    migration and deploy ... live validation ... --repeats 10"; merged, deployed, partially live-validated same day'
+  notes_url: https://github.com/YourBIMpossible/BIMpossible/pull/661
+- id: BUG-SHARED-PROJECT-MODEL-PAGE-NO-HUB-ID
+  title: 'Bug: a cross-firm share recipient opening a shared model gets an empty table and an unbounded
+    /data/elements poll loop -- the Shared-with-you link carries no hub_id'
+  projects:
+  - bimpossible
+  status: live
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 3
+  evidence:
+  - kind: live-smoke
+    ref: 'Observed 2026-09-13 ~20:35Z during the cross-firm Smart Filter denial test. SharedProjects.tsx
+      builds /project/{id}?project_name=...&shared=1 with no hub_id (frontend/app/components/SharedProjects.tsx:22,
+      by design: the share record exposes no hub). The model page reads hubId from the query
+      (frontend/app/project/[id]/model/page.tsx:283) and sends hub_id= (empty) on every /data/elements call;
+      backend answered 200 rows=0 for every category, the page rendered "No element categories found" /
+      "No element data available for this model", and useCategoryData + pollUntilWarm kept re-requesting:
+      5,906 /data/elements requests in 6 minutes from one grantee tab (docker logs docker-backend-1). Owner
+      workaround used for the test: append &hub_id=b.c2836070-8c23-421c-b5d4-ceedd626c327 to the model URL
+      -> table filled normally. Fix shape: resolve the hub server-side for shared projects (or include hub_id
+      in the shared-projects payload) AND cap/stop the warm poll when the server returns a terminal empty
+      result; add a regression test for the empty-hub_id request.'
+  - kind: pr
+    ref: 'Fix built 2026-09-13 on lane fix/shared-project-hub-id (worktree .claude/worktrees/shared-hub-id),
+      commit 7a7a72a0, DRAFT PR https://github.com/YourBIMpossible/BIMpossible/pull/663 -- stopped before merge
+      (owner merges). Shape: /account/shared-projects now carries a server-resolved hub_id from ProjectHubCache
+      (written by grant_project_share, so null only for legacy shares); SharedProjects.tsx href appends
+      &hub_id=...; model + project pages fall back to the share probe hub when the URL lacks one;
+      useCategoryOrchestration waits for a hub before its first load; /data/categories + /data/elements
+      reject empty hub_id with 422; pollUntilWarm capped at DEFAULT_MAX_POLLS=240 -> WarmTimeoutError surfaced
+      as the category error; explicit unresolved-hub / probe-failed notices replace the empty table.'
+  - kind: test
+    ref: 'DB lane (throwaway postgres:16-alpine + docker-backend image, worktree mounted): 56 passed across
+      test_cross_firm_share_api.py (new test_shared_projects_carry_server_resolved_hub_id) +
+      test_data_routes_require_hub_id.py (new, 4 tests: empty/missing hub -> 422, resolver never called) +
+      test_elements_timing_log.py. Frontend: vitest 251 files / 2285 passed (SharedProjects, account/api,
+      useSharedProject, useCategoryOrchestration, pollUntilWarm regression cases), tsc clean, eslint clean.
+      Gates: backend-endpoint-reviewer PASS 5/5, typescript-api-reviewer PASS after folding its check-2 finding
+      (probe-failure notice no longer misdirects the grantee to the owner). Verify-Local-CI NOT run
+      (pre-push receipt warning accepted, pre-authorized).'
+  - kind: commit
+    ref: 'MERGED 2026-09-13 21:43Z: PR #663 squash -> main 89d50fca. Deployed from shared checkout F:/BIMpossible
+      (main == origin/main, clean) with docker compose up -d --build from docker/; backend + frontend healthy.
+      Test share: first attempt on SL FS 22 - TEST revoked (0 Revit files); fresh share Stanford ES3 - TEST
+      (b.96397268-b16c-47b9-ac4f-e294a6bfbbba, hub b.c2836070-8c23-421c-b5d4-ceedd626c327) -> Silverman & Light,
+      View only, label "hub_id fix e2e 2026-09-13". Unrelated: /aps/project/.../all-rvts returned one 500
+      (httpx.ConnectError to APS) right after the container restart.'
+  - kind: live-smoke
+    ref: 'LIVE 2026-09-13 ~22:30Z, grantee side (owner signed in Incognito as zeriah@silvermanlight.com, Claude
+      read docker logs docker-backend-1): Shared with you listed the share; model TEST-Stanford_ES3_Lab_S&L_R26
+      opened, categories + Cable Tray Fittings table populated. Log window: 14x GET /account/shared-projects 200;
+      exactly 1x GET /data/categories?hub_id=b.c2836070-...&project_id=b.96397268-...&model_urn=... 200; exactly
+      1x GET /data/elements?hub_id=b.c2836070-...&category=Cable Tray Fittings&non_blocking=1 200; 0 requests
+      with empty hub_id; no /data/elements storm (was 5,906 in 6 min before the fix). Privacy boundary intact:
+      grantee typed "6\" fitting" in Smart Filter -> UI "Smart filter is turned off for this project''s AI policy",
+      log POST /data/nl_filter 403; no PUT /account/projects/.../ai-context-policy in the window (policy never
+      left help_only, nothing to restore). Share revoked afterwards from the owner dialog: DELETE
+      /account/projects/b.96397268-.../shares/1e2b3880-... 200, dialog shows "not shared with any other firm".'
+  verification:
+    level: verified
+    by: 'Cause verified live 2026-09-13 (log counts, workaround URL). Fix verified: DB-lane + vitest + agent
+      gates on the PR, then post-merge grantee-side live smoke on the deployed main (89d50fca) -- see the second
+      live-smoke evidence entry (single hub-qualified categories/elements calls, 0 empty-hub requests, nl_filter
+      403, share revoked).'
+    at: '2026-09-13'
+  live_check:
+  - 'gh pr view 663 -R YourBIMpossible/BIMpossible --json state,isDraft,mergedAt,mergeCommit  # MERGED + mergeCommit = merged; then deploy'
+  - 'git -C F:/BIMpossible grep -n "hub_id" origin/main -- frontend/app/components/SharedProjects.tsx  # empty until #663 merges'
+  owner_steps:
+  - 'ALL DONE 2026-09-13: merge #663, deploy, share Stanford ES3 - TEST -> S&L, grantee live smoke, Smart Filter
+    403 confirmed, share revoked, policy untouched (help_only).'
+  - 'Follow-ups left in the PR: ~46 other hub_id Query(...) sites still accept ""; FederatedViewer /
+    ModelHealthLauncher receive hubId="" while the share probe resolves (pre-existing for shared links).'
+  - 'UX flags seen in the S&L view during the smoke (not fixed): Shared-with-you row shows the share label
+    ("hub_id fix e2e 2026-09-13") instead of the project name; Recently opened shows 12/31/1969 (epoch-zero)
+    dates.'
+  source: cross-firm Smart Filter denial live test 2026-09-13 (owner + Claude, Chrome MCP)
+- id: UX-SHARED-WITH-YOU-TITLE-IS-SHARE-LABEL
+  title: 'UX: Shared-with-you row titled with the owner''s share label instead of the project name --
+    project_name now on the wire, label demoted to secondary metadata'
+  projects:
+  - bimpossible
+  status: landed
+  owner_gate: true
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: live-smoke
+    ref: 'Observed 2026-09-13 ~22:30Z in the S&L grantee view: the row read "hub_id fix e2e 2026-09-13"
+      (the owner''s share label) where "Stanford ES3 - TEST" belonged. Cause: /account/shared-projects
+      carried no project name; SharedProjects.tsx titled the row label ?? project_id and forwarded that as
+      project_name= in the URL, which the project page pins as its header.'
+  - kind: pr
+    ref: 'MERGED 2026-09-13: PR https://github.com/YourBIMpossible/BIMpossible/pull/664 squash -> main ea32beee
+      (branch fix/shared-project-ux-label-dates). Backend: shared_project_names() resolves the title from the
+      owner firm''s non-tombstoned ModelIndex.project_name (newest last_seen); shared_project_out(row,
+      owner_name, *, hub_id, project_name) keyword-only, blank/whitespace label and name -> null. Frontend:
+      title = project_name ?? label ?? project_id, label shown beneath only when it differs from the title,
+      project_name= forwarded in the URL only when it is the real name. /review-all standard on the PR:
+      no BLOCKER; FU1 (label never forwarded as project_name) + FU2 (keyword-only) applied per owner ruling,
+      report reviews/2026-09-13__review-all__shared-project-ux-label-dates.md.'
+  - kind: test
+    ref: 'DB lane 112 passed (test_cross_firm_share_api: carry_project_name_separate_from_label,
+      blank_label_is_null_and_out_is_keyword_only); vitest 2293 passed / 251 files (SharedProjects,
+      account/api narrowing); tsc 0; eslint 0; backend-endpoint-reviewer + typescript-api-reviewer PASS.'
+  - kind: commit
+    ref: 'DEPLOYED 2026-09-14 00:05Z from F:/BIMpossible main == ea32beee: Refresh-Frontend.ps1 (image built
+      00:05:08Z, chunk app/page-89bde03c contains shared-project-label) + docker compose restart backend
+      (container has shared_project_names in /app/account_router.py). Owner-side check: /account/shared-projects
+      returns [] (test share revoked in the hub_id lane); no grantee view possible without the S&L sign-in.'
+  verification:
+    level: verified
+    by: 'PR tests + gates + deploy receipts above. LANDED not LIVE: the grantee-side visual check (real
+      project name as title, label beneath, no blank title) needs the owner to re-share a project to
+      Silverman & Light and sign in as S&L -- Claude never signs in for the owner.'
+    at: '2026-09-14'
+  live_check:
+  - 'gh pr view 664 -R YourBIMpossible/BIMpossible --json state,mergeCommit  # MERGED ea32beee'
+  - 'git -C F:/BIMpossible grep -n "shared_project_names" origin/main -- backend/account_router.py'
+  owner_steps:
+  - 'Share a project to Silverman & Light again, sign in as S&L, open Shared with you: confirm the project
+    name is the title, the label sits beneath it, and no row has a blank title (try an empty label). Then
+    set this item live.'
+  source: S&L grantee live smoke 2026-09-13 (hub_id lane Left-Flag) -> PR #664
+- id: UX-RECENTLY-OPENED-EPOCH-DATE
+  title: 'UX: Recently opened rendered 12/31/1969 for discovery-only models -- backend emits null for the
+    1970 sentinel, timeAgo guards non-positive/invalid timestamps'
+  projects:
+  - bimpossible
+  status: landed
+  owner_gate: true
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: live-smoke
+    ref: 'Observed 2026-09-13 ~22:30Z in the S&L grantee view: Recently opened showed 12/31/1969. Cause:
+      /search/models emitted the DISCOVERY_SENTINEL (1970-01-01 UTC) stub last_seen as lastSeen and
+      RecentModels.timeAgo formatted it with toLocaleDateString.'
+  - kind: pr
+    ref: 'MERGED 2026-09-13: PR https://github.com/YourBIMpossible/BIMpossible/pull/664 squash -> main ea32beee.
+      search/router.py _last_seen_out() returns null for ts <= DISCOVERY_SENTINEL; RecentModels.timeAgo
+      returns "" for missing, null, non-finite, or <= 0 timestamps and formats only a valid positive one.'
+  - kind: test
+    ref: 'test_search_hub_isolation::test_models_never_emit_discovery_sentinel_as_last_seen (stub -> null,
+      real open -> ISO); RecentModels.test.tsx timeAgo guard cases (null/undefined/""/1970/1969/not-a-date/"0"
+      -> "", valid -> relative or real date, never 1969|1970).'
+  - kind: commit
+    ref: 'DEPLOYED 2026-09-14 00:05Z (same Refresh-Frontend + backend restart as the sibling item; container
+      has _last_seen_out in /app/search/router.py). Owner-side check on the deployed main: /search/models?limit=8
+      returns 8 real ISO lastSeen values, Recently opened renders 2h ago / 3h ago / 3w ago / 4w ago -- valid
+      dates intact. The discovery-only case exists only in the S&L grantee view (owner sign-in needed).'
+  verification:
+    level: verified
+    by: 'PR tests + deploy receipt + owner-side valid-date check above. LANDED not LIVE: the never-opened
+      model (no fake 1969 date) is only visible in the S&L grantee view.'
+    at: '2026-09-14'
+  live_check:
+  - 'gh pr view 664 -R YourBIMpossible/BIMpossible --json state,mergeCommit  # MERGED ea32beee'
+  - 'git -C F:/BIMpossible grep -n "_last_seen_out" origin/main -- backend/search/router.py'
+  owner_steps:
+  - 'Signed in as S&L with a share active: Recently opened shows real dates for opened models and NO date
+    (not 12/31/1969) for a discovered-but-never-opened model. Then set this item live.'
+  source: S&L grantee live smoke 2026-09-13 (hub_id lane Left-Flag) -> PR #664
+- id: ADMIN-CONSOLE-NO-DOMAIN-OR-MEMBERSHIP-CONTROLS
+  title: 'Gap: the platform admin console cannot add a firm email domain or activate/reassign a membership --
+    a new client firm''s first login can never link without a raw admin API call'
+  projects:
+  - bimpossible
+  status: ready
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 2
+  evidence:
+  - kind: live-smoke
+    ref: 'Observed 2026-09-13 during the cross-firm test. Silverman & Light existed as a firm (admin console
+      Firms list) but firm_domains was empty, so sign-in as zeriah@silvermanlight.com created no membership
+      (aec/membership.link_user_on_login: no domain match -> None). The console FirmDetailPanel / FirmEditDrawer
+      / OnboardingWizard expose website + hub grants + API key only -- no email-domain add, no membership
+      list, no activate/revoke/reassign (backend has POST /admin/domains/{firm_id}, GET /admin/memberships/{firm_id},
+      PATCH /admin/memberships/{id} actions activate|revoke|reassign|set_role). Second trap hit the same run:
+      the S&L Autodesk identity KAKJ5MM3JMXTNCPY already held a manual_seed BIMpossible membership (id 928,
+      2026-07-25), and link_user_on_login returns an existing membership unchanged, so it could never become
+      an S&L member until reassigned via the API. Both steps had to be done by Claude with the owner''s
+      Google id token from the admin session. Fix shape: Firm detail panel gets an Email domains section
+      (add/primary/verified) and a Memberships section (pending -> activate, reassign firm, set role),
+      wired to the existing admin routes; onboarding wizard asks for the primary email domain.'
+  verification:
+    level: verified
+    by: 'Code read of frontend/app/admin/_components/*.tsx (grep domain -> website only) + live run 2026-09-13.'
+    at: '2026-09-13'
+  live_check:
+  - 'git -C F:/BIMpossible grep -l -i "memberships" origin/main -- frontend/app/admin/  # empty while open'
+  source: cross-firm Smart Filter denial live test 2026-09-13 (owner + Claude, Chrome MCP)
+- id: AUTHZ-OPTION-B-B1-ENTITLEMENT-FOUNDATION
+  title: 'Autodesk-first access (Option B) B1: per-user Autodesk entitlement foundation (aec/entitlement.py
+    EntitlementCache, user/token-scoped, no firm-wide positive cache) -- draft PR #666, NOT merged, NOT live'
+  projects:
+  - bimpossible
+  status: in_flight
+  owner_gate: true
+  unblocks:
+  - AUTHZ-OPTION-B-B2-DISCOVERY
+  blocked_by: []
+  effort: M
+  risk: 3
+  evidence:
+  - kind: pr
+    ref: 'BIMpossible #666 (draft, base main), branch feat/autodesk-entitlement-foundation, commits b9917a2c,
+      a081e5b4, e43f8492. Decision record PR #665 decisions/2026-09-13__autodesk-first-per-user-access-and-firm-capability-enrollment.md.
+      Anchor docs/engineering/autodesk-first-access-rollout.md. No production behaviour change (foundation
+      only, no caller flips).'
+  verification:
+    level: verified
+    by: 'DB lane Verify-Local-CI.ps1 -BaseRef origin/main -SkipFrontend green on the stacked branch at 1b92e51f
+      (2026-09-13); pure lane + semgrep + gitleaks clean.'
+    at: '2026-09-13'
+  live_check:
+  - 'gh pr view 666 --repo YourBIMpossible/BIMpossible --json state,isDraft --jq ".state+\" draft=\"+(.isDraft|tostring)"  # OPEN draft while in_flight'
+  source: owner mandate 2026-09-13 (Autodesk-first access program, Option B); merge order #666 -> #667 -> #668
+- id: AUTHZ-OPTION-B-B2-DISCOVERY
+  title: 'Autodesk-first access (Option B) B2: discovery under BIMPOSSIBLE_AUTODESK_FIRST_ACCESS (default off)
+    uses the signed-in user''s own Autodesk entitlement, per-user APS caches, 401/403 invalidation, no enrollment
+    rows -- draft PR #667 stacked on #666, NOT merged, NOT live, flag NOT set'
+  projects:
+  - bimpossible
+  status: in_flight
+  owner_gate: true
+  unblocks:
+  - AUTHZ-OPTION-B-B3-CAPABILITY-ENROLLMENT
+  blocked_by:
+  - AUTHZ-OPTION-B-B1-ENTITLEMENT-FOUNDATION
+  effort: L
+  risk: 4
+  evidence:
+  - kind: pr
+    ref: 'BIMpossible #667 (draft, base feat/autodesk-entitlement-foundation), branch feat/autodesk-first-discovery,
+      commits 00fc73ca, d64cb26a, a39bbfc2 (test-fake fix). Flag false = today''s behaviour byte-for-byte; rollback
+      = unset + redeploy.'
+  verification:
+    level: verified
+    by: 'DB lane green at stacked 1b92e51f (2026-09-13) incl. tests/test_autodesk_first_routes.py + test_autodesk_first_unit.py;
+      endpoint reviewer + security review, findings remediated.'
+    at: '2026-09-13'
+  live_check:
+  - 'gh pr view 667 --repo YourBIMpossible/BIMpossible --json state,isDraft --jq ".state+\" draft=\"+(.isDraft|tostring)"  # OPEN draft while in_flight'
+  source: owner mandate 2026-09-13 (Autodesk-first access program, Option B)
+- id: AUTHZ-OPTION-B-B3-CAPABILITY-ENROLLMENT
+  title: 'Autodesk-first access (Option B) B3: firm_allowed_* reclassified as firm capability enrollment under the
+    flag (write=True only), enroll needs no hub-grant row, discover/available routes member-readable (own Autodesk
+    resources), Account/Hubs UX capability wording -- draft PR #668 stacked on #667, NOT merged, NOT live; B4+
+    owner-gated and flag must stay off until B4'
+  projects:
+  - bimpossible
+  status: in_flight
+  owner_gate: true
+  unblocks: []
+  blocked_by:
+  - AUTHZ-OPTION-B-B2-DISCOVERY
+  effort: L
+  risk: 4
+  evidence:
+  - kind: pr
+    ref: 'BIMpossible #668 (draft, base feat/autodesk-first-discovery), branch feat/firm-capability-enrollment,
+      commit 1b92e51f. 15 DB-lane tests in tests/test_firm_capability_enrollment.py. Frontend vitest/tsc/lint
+      NOT run (frontend/node_modules absent in the worktree) -- must run on an installed checkout before merge.
+      Known gaps deferred: B4 artifact re-check + surfaces still on allowed_hubs_for; B6 service identity in
+      current_user_scope; B7 cross-worker cache eviction.'
+  verification:
+    level: verified
+    by: 'Verify-Local-CI.ps1 -BaseRef origin/main -SkipFrontend LOCAL CI GREEN at 1b92e51f (7044 passed DB,
+      4702 pure); backend-endpoint-reviewer PASS; adversarial security review F1-F4 remediated.'
+    at: '2026-09-13'
+  live_check:
+  - 'gh pr view 668 --repo YourBIMpossible/BIMpossible --json state,isDraft --jq ".state+\" draft=\"+(.isDraft|tostring)"  # OPEN draft while in_flight'
+  source: owner mandate 2026-09-13 (Autodesk-first access program, Option B)
+- id: FIX-INHERITED-DOCS-REVITLINK-RECEIPT-662
+  title: 'Fix: inherited docs + Revit Link receipt test failures cleared (conftest + decision-log ref) -- #662'
+  projects:
+  - bimpossible
+  status: live
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: 'BIMpossible#662 squash-MERGED 2026-09-13T18:48Z -> main 651b692a (backend/tests/conftest.py +1, docs/decision-log/2026-09-12__model-project-ui-review-direction.md).
+      Test/doc-only change; backend container recreated 2026-09-15T02:03Z from F:/BIMpossible main == f14dbf4c (includes it).'
+  verification:
+    level: verified
+    by: 'sync 2026-09-16: git log origin/main contains 651b692a; docker inspect docker-backend-1 Created 2026-09-15T02:03Z, local main == origin/main == f14dbf4c.'
+    at: '2026-09-16'
+  live_check:
+  - 'git -C F:/BIMpossible log origin/main --oneline -50 | grep 651b692a'
+  source: /next BIMpossible sync 2026-09-16 (merged PR with no matching item in either tier)
