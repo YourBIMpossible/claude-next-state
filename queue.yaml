@@ -793,7 +793,7 @@ items:
     ref: 00_Strategy/2026-08-04__Deploy_and_Rollback_Runbook_DRAFT.md -- draft written by the 2026-08-04
       cloud session, placed on the rig 2026-08-04
   - kind: pr
-    ref: 'BIMpossible_Workspace#104 (e6b0684, MERGED 2026-08-30T23:41:01Z) ''docs(ops): deploy-runbook
+    ref: 'BIMpossible_Workspace#104 (e6b0684 [Workspace filter-repo 2026-09-01: now c3d1aac; equivalent by empty tree diff + patch-id, see BIMpossible docs/ops/2026-09-16-unattended/workspace-history-rewrite-sha-mapping.md], MERGED 2026-08-30T23:41:01Z) ''docs(ops): deploy-runbook
       verification pass + PR #191 ledger correction''. Closed WITH OBSERVED EVIDENCE: backup pipeline
       (3 scheduled tasks LastTaskResult 0, fresh 23.3 MB dumps in _db-backups/), /health 200 with four
       healthy containers, Cloudflared service Running/Automatic, DEPLOY-LOG.md absence re-confirmed. RECLASSIFIED
@@ -806,7 +806,7 @@ items:
   verification:
     level: verified
     by: 'PROMOTED ready -> blocked_owner 2026-08-31 (scheduled workspace sync). PR#104''s merge commit
-      e6b0684 confirmed an ancestor of workspace origin/main HEAD 7d3952a. The remaining scope is no longer
+      e6b0684 confirmed an ancestor of workspace origin/main HEAD 7d3952a [Workspace filter-repo 2026-09-01: now 1998eaa; equivalent by empty tree diff + patch-id, see BIMpossible docs/ops/2026-09-16-unattended/workspace-history-rewrite-sha-mapping.md]. The remaining scope is no longer
       ''walk the runbook and fill the blanks'' -- everything verifiable read-only IS filled; what is left
       is a live production drill on the host that also runs the Phase 13 write-back path, which by the
       runbook''s own new Sec 7 requires an owner-approved drill packet. That is an owner gate, not a build
@@ -2917,7 +2917,7 @@ items:
       verify; L-1,3,4,5,6,8,9,10,12,13,14 hardening. L-7 closed as an OWNER DECISION, not a fix: declared
       alias order is authoritative and firm-first is intentional. L-2 was already fixed on main (b19e377).'
   - kind: pr
-    ref: 'workspace #40 (1a3021d, merged 2026-08-08) -- the docs half: incremental audit report (#256->#322
+    ref: 'workspace #40 (1a3021d [Workspace filter-repo 2026-09-01: now cbb3b6b; equivalent by empty tree diff + patch-id, see BIMpossible docs/ops/2026-09-16-unattended/workspace-history-rewrite-sha-mapping.md], merged 2026-08-08) -- the docs half: incremental audit report (#256->#322
       window), triaged second-opinion, resolution record, checklist + _audit-runs rows. Report at BIMpossible_Workspace/02_Reference/Audit
       and Scan Info/audit-resolution_2026-08-08.md.'
   verification:
