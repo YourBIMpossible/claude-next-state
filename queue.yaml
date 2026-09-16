@@ -1553,10 +1553,10 @@ items:
       reads "Open design question to settle first thing in the reopened phase (flagged, not decided)"
       -- the gap between the chat ruling and the written ledger persists unchanged. RECONFIRMED 2026-08-30:
       ledger row 9 still reads "flagged, not decided" -- chat ruling of 2026-08-17 still not written back
-      by owner close-out.'
-    at: '2026-08-30'
+      by owner close-out. || 2026-09-16 unattended run (docs/ops/2026-09-16-unattended/ on lane claude/unattended-run-20260916): probe re-run with the corrected ledger path (the stored path pointed at the retired F:/AI-Dev root -- probe failed, not a negative). Ledger row 9 unchanged: element/type-scope decision still flagged, not decided. Store reading AGREES -- landed, not live. Verified.'
+    at: '2026-09-16'
   live_check:
-  - 'grep -A6 ''^| 9 '' "F:\AI-Dev\BIMpossible_Workspace\00_Strategy\BIMpossible_PHASE-STATUS.md"  # ledger
+  - 'grep -A6 ''^| 9 '' "F:\BIMpossible-Workspace\00_Strategy\BIMpossible_PHASE-STATUS.md"  # ledger
     row 9 -- check whether the owner has recorded the element/type ruling yet'
   source: Owner ruling in chat 2026-08-17; BIMpossible_PHASE-STATUS.md row 9
   notes_url: null
@@ -2568,7 +2568,7 @@ items:
     id exists -- possibly by design'
   projects:
   - bimpossible
-  status: landed
+  status: live
   claim: null
   owner_gate: false
   unblocks: []
@@ -2605,14 +2605,11 @@ items:
       within a firm (check list-endpoint behavior: if personal rows of colleagues already appear in any
       same-firm listing, the ''oracle'' discloses nothing new and this item should be closed as by-design).
       Only if BOTH establish it is unintended does the fix shape apply (personal-scope deny branch returns
-      404 like the cross-firm branch, with a paired-status regression test).'
-    at: '2026-08-07'
+      404 like the cross-firm branch, with a paired-status regression test). || 2026-09-16 unattended run (docs/ops/2026-09-16-unattended/ on lane claude/unattended-run-20260916): the store premise (oracle open / probe manual) is STALE. PR #450 (c66d656a, merged 2026-08-22) closed the oracle with 404 parity for colleagues personal groups AND views and shipped its own pin, backend/tests/test_groups_views_personal_samefirm_existence_oracle.py (fixtures colleague_personal_group / colleague_personal_view; 4 parity tests; DB lane). docker-backend-1 was recreated 2026-09-15 from main, so the fix is the running code. Residual, audited, not an HTTP route: the assistant write-tool path still returns the distinguishing message (backend/aec/assistant_write_tools.py:255-270). Promoted to live.'
+    at: '2026-09-16'
   live_check:
-  - 'As same-firm user B: PATCH /data/groups/<user-A-personal-group-id> (currently 403 ''You can only
-    edit your own personal groups.'') vs PATCH /data/groups/<random-uuid> (404) -- if both return the
-    same status, this has been addressed'
-  - 'Contract check first: do colleagues'' personal groups/views appear in the same-firm list endpoints?
-    If yes, existence is already visible by design and this is not a defect'
+  - 'python -m pytest backend/tests/test_groups_views_personal_samefirm_existence_oracle.py -q  # DB lane (skips without DATABASE_URL); expect 4 passed'
+  - 'git -C F:/BIMpossible merge-base --is-ancestor c66d656a origin/main  # PR #450 on main'
   source: 'backend-endpoint-reviewer gate on PR #317, 2026-08-07 (non-blocking Left-Flag, promoted to
     queue on user instruction)'
   notes_url: null
@@ -3237,8 +3234,9 @@ items:
       reconciliation audit that were not individually itemized elsewhere. This does not reopen or change
       AUTHZ-SHADOW-ACTIVATE/AUTHZ-SHADOW-WINDOW-VALIDITY -- that arc stays deferred to pre-pilot re-entry
       per owner closeout PR#370; this item only accounts for these 4 PRs as landed and verified.
-    at: '2026-08-23'
-  live_check: []
+    at: '2026-09-16'
+  live_check:
+  - 'git -C F:/BIMpossible merge-base --is-ancestor <each PR squash SHA in evidence> origin/main  # all four on main; re-confirmed 2026-09-16 (unattended run)'
   source: gh pr view 354/351/353/458 --repo YourBIMpossible/BIMpossible; 2026-08-14 audit remediation
     tracker
   notes_url: null
@@ -3727,8 +3725,9 @@ items:
       now shows 7429d25/23a55d9/c8e60a1); replaced with a commit-existence check. Not a contradiction.'
     at: '2026-09-07'
   live_check:
-  - 'git -C F:/BIMpossible-Workspace cat-file -e 6dfc9e1 && git -C F:/BIMpossible-Workspace cat-file -e
-    c29de81 && git -C F:/BIMpossible-Workspace cat-file -e d48a808  # closure commits reachable on main'
+  - 'git -C F:/BIMpossible-Workspace merge-base --is-ancestor cd8bd7e origin/main && git -C F:/BIMpossible-Workspace
+    merge-base --is-ancestor d7d3e6f origin/main && git -C F:/BIMpossible-Workspace merge-base --is-ancestor
+    11635f8 origin/main  # closure commits on main; post-2026-09-01 filter-repo SHAs (were 6dfc9e1/c29de81/d48a808, tree-identical)'
   - 'gh pr view 107 -R YourBIMpossible/BIMpossible-AddIns --json state,mergedAt  # expect MERGED 2026-08-26'
   - 'Next full audit run: none of the 56 closed findings should resurface -- recurrence is the proof.'
   source: workspace PR#93-#96; audit-closure-COMPLETE_2026-08-26.md; audit-acceptance-records_2026-08-25.md
@@ -5510,7 +5509,7 @@ items:
   title: G1 SDK-shaped per-model Viewer proxy — viewer-token containment, staging-validated (flag OFF)
   projects:
   - bimpossible
-  status: landed
+  status: live
   owner_gate: true
   unblocks:
   - SEC-PDP-G1-TEXTURE-BINDING
@@ -5554,10 +5553,11 @@ items:
       record: BIMpossible_Workspace/03_Audits/closeout-evidence-ledger_2026-08-27.md. || Sync 2026-09-13:
       the "production stack DOWN" precondition is stale -- stack is up and healthy (docker ps, backend
       restarted 2026-09-13T06:19Z). Flag probe itself was classifier-blocked this pass (probe failed, not
-      a negative). Unblock (1) is met; only (2) the owner product decision remains.'
-    at: '2026-09-13'
+      a negative). Unblock (1) is met; only (2) the owner product decision remains. || 2026-09-16 unattended run (docs/ops/2026-09-16-unattended/ on lane claude/unattended-run-20260916): PROBE CONTRADICTED the stored expect-off reading: docker-backend-1 env BIMPOSSIBLE_DERIVATIVE_PROXY_MODE=true (from untracked .env:74, set 2026-09-13T02:19Z during the R18 rollout), in-container proxy_enabled()=True, /aps/proxy mounted. RESOLVED at the evidence layer, not by preference: R18 cross-firm sharing (#654/#655, backend/main.py sharing guard) made the proxy a BOOT PREREQUISITE of CROSS_FIRM_SHARING_ENABLED=1, so the live value is required, not accidental. Promoted to live on runtime evidence. Stale docs (pdp-* plans, docker/staging/README.md, .env.example) truthed-up and proxy_mode() default-off pinned by test on the lane. OWNER: ratify PDP-G1 proxy ON in shared-dev as the recorded decision (consequence of R18) -- one line; no flag change either way.'
+    at: '2026-09-16'
   live_check:
-  - 'docker exec <backend> printenv BIMPOSSIBLE_DERIVATIVE_PROXY_MODE  # expect unset/off'
+  - 'docker exec docker-backend-1 printenv BIMPOSSIBLE_DERIVATIVE_PROXY_MODE  # expect a truthy value (1|true|yes|on): required while CROSS_FIRM_SHARING_ENABLED=1 (R18 boot guard, #654/#655)'
+  - 'docker exec docker-backend-1 python -c "from aps.derivative_proxy import proxy_enabled;print(proxy_enabled())"  # expect True'
   source: gh pr view 456/459/460/461/462 --repo YourBIMpossible/BIMpossible; docs/plans/active/pdp-g1-sdk-viewer-proxy.md
   notes_url: docs/plans/active/pdp-g1-sdk-viewer-proxy.md
 - id: SEC-PDP-MODEL-INDEX-PAIRING
@@ -7592,8 +7592,8 @@ items:
     window OPEN from c015e6cc; promote only after >=20 runs AND >=14 days'
   projects:
   - bimpossible
-  status: landed
-  owner_gate: false
+  status: blocked_owner
+  owner_gate: true
   owner: null
   unblocks: []
   blocked_by: []
@@ -7651,15 +7651,17 @@ items:
       gate reports 2 serial-green/shadow-red runs 33596335151 + 33595981124 -- both precede the #546 sample
       run 33602350451, i.e. the root-caused test_datatab_warm divergence fixed by #546; the report does
       not yet exclude explained pre-fix runs. 11 pre-marker runs uncounted. State OBSERVING, 3/20.'
+  - kind: run
+    ref: '2026-09-16 gate re-evaluation (scripts/ci/xdist_shadow_report.py --runs 400 --since 2026-09-02, all 231 ci.yml runs): 57 green post-marker samples over 9.6 days -- count>=20 MET, >=14 days UNMET, median gain +22s (>=15s MET), divergence UNMET (3 flagged: 2 = documented #543/#546 anomaly, 1 undocumented: run 33903827531 2026-09-04 test_identity_link_flow::test_tampered_state_fails_signature_not_silently_accepted on gw1 -- random-tamper flake, 8/8 local reruns pass). SAMPLING SOURCE IS DEAD: ci.yml (shadow/marker/summary steps + XDIST_SHADOW switch) deleted at a3d32a92 on 2026-09-11 (Actions reduction); Verify-Local-CI has no xdist lane. Window frozen at 9.6 days; the 14-day criterion is structurally unsatisfiable and the promotion target (ci.yml -n workers) no longer exists. Full report: docs/ops/2026-09-16-unattended/xdist-perf-gate-report.md on the lane.'
   verification:
     level: verified
     by: 'xdist_shadow_report.py --runs 60 on 2026-09-02 07:5xZ: 1 qualifying post-marker sample (#546
       run 33602350451, marker skipped = shadow passed); no backend-touching run since. Landed not live:
       promotion is time-gated (>=20 runs AND >=14 days).'
-    at: '2026-09-02'
+    at: '2026-09-16'
+  blocked_on: 'OWNER DECISION: (a) re-scope the xdist promotion to Verify-Local-CI.ps1 (add an xdist lane + a local sample window), or (b) retire the item -- drop the xdist pin, keep the conftest isolation fixes (they stand on their own). Remote sampling cannot resume: ci.yml is gone by design (2026-09-11 Actions reduction).'
   live_check:
-  - 'python F:/BIMpossible/scripts/ci/xdist_shadow_report.py --since 2026-09-02  # samples gate >=20 runs
-    AND >=14 days'
+  - 'python F:/BIMpossible/scripts/ci/xdist_shadow_report.py --runs 400 --since 2026-09-02  # frozen at 57 samples / 9.6 days; no new samples possible since a3d32a92'
   source: Delta scan 2026-09-02; memory phase4-xdist-promotion-gate; docs/CI-GATES.md.
   notes_url: null
 - id: OPS-PAV-GITLEAKS-PS51-EXIT
@@ -8643,12 +8645,12 @@ items:
     note: 'runtime evidence packet referenced by #606.'
   verification:
     level: verified
-    at: '2026-09-07'
+    at: '2026-09-16'
     by: 'Merge facts machine-verified 2026-09-07 (gh pr view, squash SHAs on origin/main; local main fast-forwarded
       to 3a9dab64). landed, not live: #609 is a frontend deploy record only; no backend redeploy record
       for #605/#615/#617 was found in this pass and the R12 telemetry probe script (ops/foundation-validation/r12_lifecycle_telemetry_validation.py)
       is mid-edit in another live session. Promote to live only on a backend deploy record + a telemetry
-      row with authority_source=bimpossible_cross_firm_share.'
+      row with authority_source=bimpossible_cross_firm_share. || 2026-09-16 unattended run (docs/ops/2026-09-16-unattended/ on lane claude/unattended-run-20260916): backend redeploy evidence NOW EXISTS: docker-backend-1 created 2026-09-15T02:03Z > #617 merge 2026-09-07, so #605/#615/#617 are the running code. NOT promoted: the item own runtime control (r12_lifecycle_telemetry_validation.py) asserts BIMPOSSIBLE_AUTHZ_ENFORCEMENT_MODE=enforce + sharing on and exits 2 (Blocked) otherwise; live mode is off (see AUTHZ-SHADOW-WINDOW-VALIDITY, owner). Landed until the enforce flip lets the probe run.'
   live_check:
   - 'git -C F:/BIMpossible log --oneline origin/main -3 -- docs/ops/  # look for a backend deploy record
     after 3a9dab64 before promoting'
@@ -9460,7 +9462,7 @@ items:
     EntitlementCache, user/token-scoped, no firm-wide positive cache) -- draft PR #666, NOT merged, NOT live'
   projects:
   - bimpossible
-  status: in_flight
+  status: blocked_owner
   owner_gate: true
   unblocks:
   - AUTHZ-OPTION-B-B2-DISCOVERY
@@ -9478,8 +9480,9 @@ items:
     by: 'DB lane Verify-Local-CI.ps1 -BaseRef origin/main -SkipFrontend green on the stacked branch at 1b92e51f
       (2026-09-13); pure lane + semgrep + gitleaks clean.'
     at: '2026-09-13'
+  blocked_on: 'owner review + un-draft + merge of PR #666 (B1, base main); first in the stack #666 -> #667 -> #668. No session work remains: code complete, DB-lane Verify-Local-CI green on the stack (2026-09-13). Re-classified in_flight -> blocked_owner 2026-09-16 (unattended run) because the only remaining step is the owner merge decision.'
   live_check:
-  - 'gh pr view 666 --repo YourBIMpossible/BIMpossible --json state,isDraft --jq ".state+\" draft=\"+(.isDraft|tostring)"  # OPEN draft while in_flight'
+  - 'gh pr view 666 --repo YourBIMpossible/BIMpossible --json state,isDraft --jq ".state+\" draft=\"+(.isDraft|tostring)"  # OPEN draft until the owner merges; MERGED flips this item to landed'
   source: owner mandate 2026-09-13 (Autodesk-first access program, Option B); merge order #666 -> #667 -> #668
 - id: AUTHZ-OPTION-B-B2-DISCOVERY
   title: 'Autodesk-first access (Option B) B2: discovery under BIMPOSSIBLE_AUTODESK_FIRST_ACCESS (default off)
@@ -9487,7 +9490,7 @@ items:
     rows -- draft PR #667 stacked on #666, NOT merged, NOT live, flag NOT set'
   projects:
   - bimpossible
-  status: in_flight
+  status: blocked_owner
   owner_gate: true
   unblocks:
   - AUTHZ-OPTION-B-B3-CAPABILITY-ENROLLMENT
@@ -9505,8 +9508,9 @@ items:
     by: 'DB lane green at stacked 1b92e51f (2026-09-13) incl. tests/test_autodesk_first_routes.py + test_autodesk_first_unit.py;
       endpoint reviewer + security review, findings remediated.'
     at: '2026-09-13'
+  blocked_on: 'owner review + merge of PR #667 (B2), stacked on #666 (B1) -- #667 cannot merge before #666. No session work remains: code complete, DB-lane Verify-Local-CI green on the stack (2026-09-13). Re-classified in_flight -> blocked_owner 2026-09-16 (unattended run) because the only remaining step is the owner merge decision.'
   live_check:
-  - 'gh pr view 667 --repo YourBIMpossible/BIMpossible --json state,isDraft --jq ".state+\" draft=\"+(.isDraft|tostring)"  # OPEN draft while in_flight'
+  - 'gh pr view 667 --repo YourBIMpossible/BIMpossible --json state,isDraft --jq ".state+\" draft=\"+(.isDraft|tostring)"  # OPEN draft until the owner merges; MERGED flips this item to landed'
   source: owner mandate 2026-09-13 (Autodesk-first access program, Option B)
 - id: AUTHZ-OPTION-B-B3-CAPABILITY-ENROLLMENT
   title: 'Autodesk-first access (Option B) B3: firm_allowed_* reclassified as firm capability enrollment under the
@@ -9515,7 +9519,7 @@ items:
     owner-gated and flag must stay off until B4'
   projects:
   - bimpossible
-  status: in_flight
+  status: blocked_owner
   owner_gate: true
   unblocks: []
   blocked_by:
@@ -9534,8 +9538,9 @@ items:
     by: 'Verify-Local-CI.ps1 -BaseRef origin/main -SkipFrontend LOCAL CI GREEN at 1b92e51f (7044 passed DB,
       4702 pure); backend-endpoint-reviewer PASS; adversarial security review F1-F4 remediated.'
     at: '2026-09-13'
+  blocked_on: 'owner review + merge of PR #668 (B3), stacked on #667 (B2) on #666 (B1) -- last in the stack; #665 is the design/decision record. No session work remains: code complete, DB-lane Verify-Local-CI green on the stack (2026-09-13). Re-classified in_flight -> blocked_owner 2026-09-16 (unattended run) because the only remaining step is the owner merge decision.'
   live_check:
-  - 'gh pr view 668 --repo YourBIMpossible/BIMpossible --json state,isDraft --jq ".state+\" draft=\"+(.isDraft|tostring)"  # OPEN draft while in_flight'
+  - 'gh pr view 668 --repo YourBIMpossible/BIMpossible --json state,isDraft --jq ".state+\" draft=\"+(.isDraft|tostring)"  # OPEN draft until the owner merges; MERGED flips this item to landed'
   source: owner mandate 2026-09-13 (Autodesk-first access program, Option B)
 - id: FIX-INHERITED-DOCS-REVITLINK-RECEIPT-662
   title: 'Fix: inherited docs + Revit Link receipt test failures cleared (conftest + decision-log ref) -- #662'
