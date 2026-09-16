@@ -941,15 +941,15 @@ items:
       The correct discriminator is the origin_absent column itself, which cleanly splits mv 1323 36/554.
       NOT confirmed via an authenticated live HTTP response (dev stack requires a real Autodesk sign-in;
       declined unattended) -- code-trace + pinned-suite evidence only. Separate anomaly spun off, NOT
-      this item: mvs 1329/1335/1336/1343/1347/1353 show 100% origin_absent across all doors -- see WARM-ORIGIN-ALLABSENT-ANOMALY.'
-    at: '2026-08-24'
+      this item: mvs 1329/1335/1336/1343/1347/1353 show 100% origin_absent across all doors -- see WARM-ORIGIN-ALLABSENT-ANOMALY. || 2026-09-16 unattended re-probe: pinned suite test_cross_model_join_doors.py 19 passed (suite grew from 3). SQL discriminator on docker-db-1: current mvs are 100% origin_absent (mv 1364 1/1, mv 1353 27/27, mv 1347 1/1) -> WARM-ORIGIN-ALLABSENT-ANOMALY territory per the live_check''s own rule; no mixed-split mv exists to prove the served label live. Stays landed; label code unchanged since 2026-08-24.'
+    at: '2026-09-16'
   live_check:
   - 'Discriminator (use origin_absent, NEVER the Level-param proxy -- proven invalid 2026-08-24): SELECT
     count(*) FILTER (WHERE origin_absent), count(*) FROM element_cache WHERE category=''Doors'' AND model_version_id=<current
     mv>; expect a mixed split (e.g. 36/590 on mv 1323); 100%-absent means the mv is in WARM-ORIGIN-ALLABSENT-ANOMALY
     territory, not a label question.'
   - python -m pytest tests/test_cross_model_join_doors.py in BIMpossible backend -- pinned served-label
-    suite, expect 3/3 pass.
+    suite, expect all pass (19 as of 2026-09-16; was 3/3 on 2026-08-24).
   source: Doors Increment-1 build session 2026-08-04; diagnostic + owner decision 2026-08-05; false contradiction
     2026-08-23 (invalid Level-param proxy) resolved verified 2026-08-24 overnight closeout
   notes_url: null
@@ -3500,8 +3500,8 @@ items:
       paired account identity on redeem (SEC-PAIR-1, a tenancy-adjacent identity surface). LANDED not
       LIVE: no post-deploy end-to-end pairing round-trip has been observed (pair token -> Revit redeem
       -> identity echo). unblocks: [] -- product feature. The dormant Revit-side handler is intentional
-      dead-but-present code, not a defect.'
-    at: '2026-08-17'
+      dead-but-present code, not a defect. || 2026-09-16 unattended re-probe: live_check needs a Revit-side redeem (owner at the desk) -- not unattended-runnable, not manufactured. Deterministic pins present and green: frontend PairRevitCard.test.tsx (Copy is the primary action, no bimpossible:// launch), openInRevit.test.ts, backend test_pane_pairing.py / test_pane_pairing_endpoints.py / test_identity_link_flow.py. Stays landed until the owner redeems once in Revit.'
+    at: '2026-09-16'
   live_check:
   - Generate a pair token in the web UI, redeem it Revit-side, confirm the redeem surfaces the correct
     paired account identity (SEC-PAIR-1) and no bimpossible:// launch is attempted.
@@ -4201,7 +4201,7 @@ items:
   title: Add versioned QA snapshots (Phase 11 AC7)
   projects:
   - bimpossible
-  status: landed
+  status: live
   owner_gate: true
   owner: null
   unblocks: []
@@ -4237,8 +4237,8 @@ items:
       applied, full stack rebuilt+deployed, smoke green (tables live, unauth 401 on both history endpoints,
       bundle carries the history UI). Plan: BIMpossible docs/plans/active/model-history-qa-regression-intelligence.md.
       Owner decisions resolved: versionNumber authoritative + (project,model,version,rules_fingerprint)
-      uniqueness; retention newest-50 env-tunable; Option A full-row scope.'
-    at: '2026-08-24'
+      uniqueness; retention newest-50 env-tunable; Option A full-row scope. || 2026-09-16 unattended re-probe: live_check pass: backend/aec/qa/history.py present on origin/main; migration e3f4a5b6c7d8_add_qa_history_tables.py (qa_analysis_runs/qa_finding_snapshots) present. Shipped implementation confirmed; follow-ups stay on P11-QA-HISTORY-* -> promoted.'
+    at: '2026-09-16'
   live_check:
   - backend/aec/qa/history.py + qa_analysis_runs/qa_finding_snapshots tables are the shipped implementation;
     follow-ups tracked as P11-QA-HISTORY-* items.
@@ -5956,7 +5956,7 @@ items:
   title: E25_Nudge live tip-probe failure leaves receptacle_schedule perpetually preparing
   projects:
   - bimpossible
-  status: landed
+  status: live
   owner_gate: false
   owner: null
   unblocks: []
@@ -5984,8 +5984,8 @@ items:
       rejects non-canonical lineage URNs before APS; new AecUpstreamError kind not_found (404, actionable
       detail); GraphQL NOT_FOUND / HTTP 404 classify terminal; warm probes (relationships_fetch, cache)
       swallow only network/http/extracting -- terminal kinds propagate, no enqueue; 29 pins in backend/tests/test_aec_urn_canonical.py;
-      Verify-Local-CI GREEN at 232cdd23.'
-    at: '2026-08-31'
+      Verify-Local-CI GREEN at 232cdd23. || 2026-09-16 unattended re-probe: live_check pass: PR #506 MERGED 2026-08-31; relationships_fetch.py has no bare swallow returning (None,"") in _load_warm_relationships -- the only except at :221 is the documented tip-version fallback, :375 comment records the incident fix. Durable on main -> promoted.'
+    at: '2026-09-16'
   live_check:
   - gh pr view 506 --repo YourBIMpossible/BIMpossible --json state,mergedAt -- merged = remediation durable
   - grep -n "except Exception" F:/BIMpossible/backend/aec/relationships_fetch.py -- must NOT show a bare
@@ -8024,7 +8024,7 @@ items:
     (ETL PT4H / exhausted-window record already on main)'
   projects:
   - bimpossible
-  status: landed
+  status: live
   owner_gate: false
   owner: null
   unblocks: []
@@ -8041,8 +8041,8 @@ items:
       on main via #595 c8131efd. Worktree and branch were already retired by their owner.'
   verification:
     level: verified
-    by: 'git -C F:/BIMpossible worktree list; git branch -a --list *exactly-once* -> empty (2026-09-12)'
-    at: '2026-09-12'
+    by: 'git -C F:/BIMpossible worktree list; git branch -a --list *exactly-once* -> empty (2026-09-12) || 2026-09-16 unattended re-probe: live_check pass: git worktree list | grep audit-reliability -> 0 rows; the overlapping worktree is gone. Nothing left to observe -> promoted.'
+    at: '2026-09-16'
   live_check:
   - git -C F:\BIMpossible worktree list | findstr audit-reliability
   source: Session 2026-09-06 bounded closeout pass (wander, not acted on).
@@ -9000,7 +9000,7 @@ items:
   projects:
   - bimpossible
   - addins
-  status: landed
+  status: live
   owner_gate: false
   owner: null
   unblocks: []
@@ -9070,8 +9070,8 @@ items:
       Add-in half MERGED but NOT deployed (Revit open with unsaved changes) -- item stays landed per the cross-repo
       rule: both halves verified before live. Remaining: close Revit (owner), Deploy-Local.ps1 -Year 2026, verify
       the deployed RevitLink DLL hash, then promote. Caveat: element_cache rows warmed before the migration carry
-      type_unique_id NULL until the next category warm (type edits 422 "Refresh the model data" until then).'
-    at: '2026-09-12'
+      type_unique_id NULL until the next category warm (type edits 422 "Refresh the model data" until then). || 2026-09-16 unattended re-probe: live_check: #643 MERGED 2026-09-12T06:04Z, AddIns #138 MERGED 2026-09-12T05:52Z. Add-in half now DEPLOYED: installed BIMpossible.RevitLink.dll for Revit 2024-2027 has mtime 2026-09-16 08:19 (Deploy-Local from the F:/BIMpossible-AddIns main checkout at 482a2be = #151, which contains f0a41c2/#138). Caveat: that checkout carried uncommitted theme edits at deploy time (see docs/ops/2026-09-16-unattended/worktree-drift-review.md), so the binary is main+WIP; the UniqueId gate itself is merged code. Both halves live -> promoted.'
+    at: '2026-09-16'
   live_check:
   - gh pr list --repo YourBIMpossible/BIMpossible --head fix/family-type-uniqueid-contract --state all
     --json number,state,mergedAt

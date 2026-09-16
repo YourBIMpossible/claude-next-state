@@ -112,9 +112,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 [UX-RECENTLY-OPENED-EPOCH-DATE] UX: Recently opened rendered 12/31/1969 for discovery-only models -- backend emits null for the 1970 sentinel, timeAgo guards non-positive/invalid timestamps
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-14 · Observed 2026-09-13 ~22:30Z in the S&L grantee view: Recently opened…
 
-[AEC-PREWARM-TIP-PROBE-EMPTY-VERSION] E25_Nudge live tip-probe failure leaves receptacle_schedule perpetually preparing
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-31 · 2026-08-30 backend log, repeated on every poll for E25_Nudge-1800_Ow…
-
 [CKA-DOC-MODEL-PR534] CKA project/private/multi-project/firm-library document model on AUTH-INH MERGED (#534); migration b7c8d9e0f1a2 applied locally; project scopes dark while gate is not ENFORCE
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · BIMpossible#534 MERGED 2026-09-02T02:58Z (squash 1f59bcf8): aec/firm…
 
@@ -124,9 +121,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 [SLACK-GATEWAY-W1] Read-only Slack assistant gateway merged, flag-off; migration 9329a1e7be85 now on main
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · BIMpossible #262 MERGED 2026-08-07T04:20:29Z, squash commit dd898899…
 
-[WRITE-ENGINE-INC2-UID] Enforce ElementType UniqueId contract for family-type staged writes
-       unblocks 0 · S · bimpossible+addins · VERIFIED 2026-09-12 · Root cause + failed value: hosted change set 9c46b1f0-81a7-4d68-98d2…
-
 [ADDINS-PIPE-BUSY-BACKOFF] PipeServer pipe-busy listen backoff
        unblocks 0 · S · addins · VERIFIED 2026-09-10 · BIMpossible-AddIns#117
 
@@ -134,7 +128,7 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · BIMpossible#530 OPEN, READY, head 6d64390f, opened 2026-09-02T00:40Z…
 
 [FEAT-REVIT-PAIRING-COPY] Revit pairing SHIPPED as Copy/paste-only -- protocol-launch button removed after reliability rework
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · BIMpossible #391 (Send-to-Revit protocol handoff + ?pair=revit deep …
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-16 · BIMpossible #391 (Send-to-Revit protocol handoff + ?pair=revit deep …
 
 [FIX-SHARE-LINK-VIEWER] Public share-link viewer page added -- every /share/<token> URL used to 404
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-08 · BIMpossible #321 (66d09f2, merged 2026-08-08) -- adds frontend/app/s…
@@ -239,10 +233,7 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-31 · IMPLEMENTED + MERGED 2026-08-31T00:59:17Z (PR#507 -> 91822e70). Owne…
 
 [WARM-ORIGIN-DOORGAP] Curtain-panel/unhosted doors have no origin: label them 'no location (curtain panel)' instead of deriving one
-       unblocks 0 · M · bimpossible · VERIFIED 2026-08-24 · 01_BuildLog/2026-08-04__doors-join-increment1_RESULTS.md, 'Follow-up…
-
-[EXACTLY-ONCE-AUDIT-RELIABILITY-WORKTREE-OVERLAP] Foreign worktree .claude/worktrees/audit-reliability (branch claude/synthetic-audit-exactly-once-completion, at c8131efd) appeared 2026-09-06 after #595 merged -- confirm its owner is not re-doing the #579 closeout (ETL PT4H / exhausted-window record already on main)
-       unblocks 0 · XS · bimpossible · VERIFIED 2026-09-12 · Seen in git worktree list during the 2026-09-06 closeout pass integr…
+       unblocks 0 · M · bimpossible · VERIFIED 2026-09-16 · 01_BuildLog/2026-08-04__doors-join-increment1_RESULTS.md, 'Follow-up…
 
 [R5-AECDM-PUSHDOWN] R5 AECDM query-pushdown lane MERGED -- flag-gated, read-only (PR #363)
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-17 · BIMpossible #363 MERGED (d56bd14, 2026-08-16T19:47:59Z, branch feat/…
@@ -264,9 +255,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 
 [P17-0-CONTROL-PLANE] Build Integration Control Plane foundation (17.0), gates 17c+ expansion
        unblocks 0 · L · bimpossible · VERIFIED 2026-08-30 · BIMpossible#500
-
-[P11-AC7-VERSIONED-SNAPSHOTS] Add versioned QA snapshots (Phase 11 AC7)
-       unblocks 0 · L · bimpossible · VERIFIED 2026-08-24 · BIMpossible_PHASE-STATUS.md, Phase 11 -- AC7 (versioned QA snapshots…
 
 ## Next up
 
@@ -466,6 +454,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 [SEC-VIEWS-PERSONAL-LISTING] list_views' personal-views query has the same missing-firm_id gap as the fixed list_groups bug
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · backend/aec/views.py:207-218 (list_views, GET /data/views) -- person…
 
+[AEC-PREWARM-TIP-PROBE-EMPTY-VERSION] E25_Nudge live tip-probe failure leaves receptacle_schedule perpetually preparing
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-16 · 2026-08-30 backend log, repeated on every poll for E25_Nudge-1800_Ow…
+
 [BUG-GITLEAKS-HITS-COLLAPSE] Invoke-GitleaksScan collapses the whole findings array into one hit under PowerShell 5.1 - every multi-finding scan prints one System.Object[] line and HITS: 1
        unblocks 0 · S · workspace · VERIFIED 2026-08-31 · Observed 2026-08-31 while running the helper by hand before the main…
 
@@ -495,6 +486,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 
 [TEST-PYTEST-COLLECTS-NOTHING] pytest collects ZERO tests in Claude-Profile/hooks/tests and Claude-Tools/ctxcheck - green means nothing ran
        unblocks 0 · S · workspace · VERIFIED 2026-09-07 · `python -m pytest` in F:/Claude-Tools/ctxcheck reports `no tests ran…
+
+[WRITE-ENGINE-INC2-UID] Enforce ElementType UniqueId contract for family-type staged writes
+       unblocks 0 · S · bimpossible+addins · VERIFIED 2026-09-16 · Root cause + failed value: hosted change set 9c46b1f0-81a7-4d68-98d2…
 
 [WSR-SECSCAN-LAUNCHGUARD] Run-Security-Scan.ps1 reports a stale report as a fresh one when a scanner fails to launch
        unblocks 0 · S · workspace · VERIFIED 2026-08-31 · F:/BIMpossible-Workspace/system/Run-Security-Scan.ps1 - four sequent…
@@ -719,6 +713,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 [DOCS-HYGIENE-ENFORCED] docs-hygiene enforced as a required check on main in both repos; the recurring Monday sweep failure is closed
        unblocks 0 · M · bimpossible+workspace · VERIFIED 2026-09-06 · BIMpossible #600 MERGED -> 0c6e2f02. docs-hygiene added to required …
 
+[EXACTLY-ONCE-AUDIT-RELIABILITY-WORKTREE-OVERLAP] Foreign worktree .claude/worktrees/audit-reliability (branch claude/synthetic-audit-exactly-once-completion, at c8131efd) appeared 2026-09-06 after #595 merged -- confirm its owner is not re-doing the #579 closeout (ETL PT4H / exhausted-window record already on main)
+       unblocks 0 · XS · bimpossible · VERIFIED 2026-09-16 · Seen in git worktree list during the 2026-09-06 closeout pass integr…
+
 [P15-15B-EXTERNAL-DOC-INGEST] Firm-document retrieval in the Revit Assistant Pane (15b)
        unblocks 0 · M · bimpossible+addins · VERIFIED 2026-09-01 · BOTH HALVES MERGED 2026-08-31T04:22Z -- AddIns #113 (squash d09204e,…
 
@@ -752,3 +749,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 [EC-HOOKSAFE-1] Python-native hook-safe launcher shipped to EC core; Node wrapper migrated out of BIMpossible/AddIns/Workspace/Families
        unblocks 0 · L · evidence-compiler+bimpossible+addins+workspace+families · PARTIAL 2026-08-24 · evidence-compiler#5
        ⏸ dormant leg (families) suspended — evidence-compiler+bimpossible+addins+workspace leg tracked live; dormant leg unverifiable until whole-repo reassessment, so the item is not fully verified
+
+[P11-AC7-VERSIONED-SNAPSHOTS] Add versioned QA snapshots (Phase 11 AC7)
+       unblocks 0 · L · bimpossible · VERIFIED 2026-09-16 · BIMpossible_PHASE-STATUS.md, Phase 11 -- AC7 (versioned QA snapshots…
