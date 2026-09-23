@@ -10282,3 +10282,30 @@ items:
   live_check:
   - 'git -C F:/BIMpossible log -1 --format=%h  # expect >= 67c4cd48'
   source: 2026-09-23 delivery pass
+- id: ADMIN-HOST-ROOT-404
+  title: 'Admin Console 404 at admin.yourbimpossible.com/ (host gate serves only /admin*); PR #706 redirects root -> /admin'
+  projects:
+  - bimpossible
+  status: in_flight
+  owner_gate: false
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: run
+    ref: 2026-09-23 local origin probe 127.0.0.1:3000 with Host header
+    note: 'admin host: / 404, /admin 307->/admin/signin, /admin/signin 200, /api/auth/providers 200; app host:
+      /admin 404 (intended). Public unauth /admin -> 302 Cloudflare Access redirect_url=/admin. Cause is
+      repo-owned (adminHostGate.ts), not tunnel/Access/DNS. #688/#700/#702 deployed, NOT live-verified'
+  - kind: pr
+    ref: bimpossible#706
+    note: draft, commit aad734a6; vitest 6/6, tsc 0, eslint 0
+  verification:
+    level: verified
+    by: curl local origin + public unauth probe
+    at: '2026-09-23'
+  live_check:
+  - 'gh pr view 706 --repo YourBIMpossible/BIMpossible --json state -q .state'
+  source: 2026-09-23 admin routing reconciliation
