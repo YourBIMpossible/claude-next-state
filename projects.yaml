@@ -118,6 +118,26 @@ projects:
     active: true
     companions: []
 
+  - key: bim-site
+    name: BIMpossible Site (marketing site)
+    aliases: [site, marketing-site, bimp-site]
+    path: F:\BIMpossible-Site\site
+    origin: https://github.com/YourBIMpossible/bimpossible-site.git
+    active: true
+    companions: []
+    audit_dir: F:\BIMpossible-Site\audits
+    notes: >
+      Astro + Cloudflare Pages. Code repo is the `site\` subfolder; the parent
+      F:\BIMpossible-Site holds planning docs (00_README.md + three role-split
+      roadmaps: PM/Dev/UI-UX) and a shared M0-M6 milestone framework — M4 =
+      hardening, M5 = commerce-ready foundation. Reported M4->M5 as of a prior
+      note; last repo commit 2026-08-31, last slop-audit 2026-09-07 -- re-verify
+      current phase live rather than trusting that. Migrated 2026-08-22 from a
+      quarantine copy at F:\AI-Dev\BIMpossible Site\ (still present there,
+      explicitly marked FROZEN-DO-NOT-USE, burn-in window closed 2026-09-05) --
+      F:\BIMpossible-Site is the sole canonical location; the AI-Dev copy is
+      out of scope per this profile's AI-Dev deferred-legacy rule.
+
   # ---- known, not tracked ----------------------------------------------------
 
   - key: ai-brain-data
@@ -142,9 +162,3 @@ projects:
     origin: null
     active: false
     notes: Not a repo. Evaluated as a selective tool, not a pipeline.
-
-  - key: bim-site
-    name: BIMpossible Site
-    path: F:\BIMpossible-Site
-    origin: null
-    active: false

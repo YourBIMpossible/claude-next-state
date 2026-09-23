@@ -5,20 +5,17 @@ This is a repo-local read model, not a definition of /next behavior. -->
 
 # /next — work-item queue
 
-Generated 2026-09-16 (synced). Anchor-first, leverage-ranked (per item-model.md). The single #1 move is chosen live by the skill from the anchor (stated focus, else roadmap order) and finalization leverage — not from dependency cone. This board is a status-grouped snapshot; within each section it orders by owner-gated+S, then effort, risk, id, with `cone` leading (deep graph). Full algorithm: `~/.claude/skills/next/reference/item-model.md`.
+Generated 2026-09-22 (synced). Anchor-first, leverage-ranked (per item-model.md). The single #1 move is chosen live by the skill from the anchor (stated focus, else roadmap order) and finalization leverage — not from dependency cone. This board is a status-grouped snapshot; within each section it orders by owner-gated+S, then effort, risk, id, with `cone` leading (deep graph). Full algorithm: `~/.claude/skills/next/reference/item-model.md`.
 
-Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `addins` = 2026-09-10 @ `320e63a` PR#124 · `workspace` = 2026-09-14 @ `735c779` PR#154 · `evidence-compiler` = 2026-08-24 @ `0ef747e7533c7cf714888076f3df6f06dd028b84` PR#5 · `dashboard` = 2026-09-06 @ `efdcba1` PR#22.
-(pc-monitor: no items yet — run `init` to derive.)
+Scope: `all`. Watermarks: `bimpossible` = 2026-09-22 @ `d3eeca10` PR#687 · `addins` = 2026-09-21 @ `baa9efe` PR#155 · `workspace` = 2026-09-21 @ `647c6b1` PR#154 · `evidence-compiler` = 2026-09-16 @ `a6977c8` PR#17 · `dashboard` = 2026-09-06 @ `efdcba1` PR#22.
+(pc-monitor/bim-site: no items yet — run `init` to derive.)
 
 > **Dormant project(s):** `families` — reassessment-bound. Items scoped to them are parked; their probes are suspended (non-executable metadata) and render **SUSPENDED**, never verified. `/next` will not run or propose a command against a dormant repo.
 
 ## Blocked on you
 
-[AUTHZ-OPTION-B-B1-ENTITLEMENT-FOUNDATION] Autodesk-first access (Option B) B1: per-user Autodesk entitlement foundation (aec/entitlement.py EntitlementCache, user/token-scoped, no firm-wide positive cache) -- draft PR #666, NOT merged, NOT live
-       unblocks 2 · M · bimpossible · VERIFIED 2026-09-13 · BIMpossible #666 (draft, base main), branch feat/autodesk-entitlemen…
-
-[AUTHZ-OPTION-B-B2-DISCOVERY] Autodesk-first access (Option B) B2: discovery under BIMPOSSIBLE_AUTODESK_FIRST_ACCESS (default off) uses the signed-in user's own Autodesk entitlement, per-user APS caches, 401/403 invalidation, no enrollment rows -- draft PR #667 stacked on #666, NOT merged, NOT live, flag NOT set
-       unblocks 1 · L · bimpossible · VERIFIED 2026-09-13 · BIMpossible #667 (draft, base feat/autodesk-entitlement-foundation),…
+[OPS-LOCAL-BACKEND-BOOT-SEPARATE-APPROVER] Local backend crash-loops: set BIMPOSSIBLE_CHANGE_SET_REQUIRE_SEPARATE_APPROVER=1 in .env, restart
+       unblocks 1 · S · bimpossible · VERIFIED 2026-09-22 · docker logs docker-backend-1 2026-09-22 21:20 PDT
 
 [OPS-DEPLOY-RUNBOOK] Deploy/rollback runbook: read-only VERIFY items closed; live drill needs owner approval
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-31 · Carried-open finding across multiple audit cycles, per BIMpossible_P…
@@ -26,17 +23,29 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 [OPS-CLIENTDATA-REMEDIATION] Client-data remediation: quarantine delete, PDF triage, de-ID pass, DB audit
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-31 · decision-log/2026-08-05__client-data-remediation.md -- Open Items ch…
 
+[AI-ADDINS-GLASS-APPROVE-1] Uncommitted GlassButtonProfile.Approve change breaks pinned test GlassButtonProfileTests.NonErrorConfirmsStayCobaltPrimary (3 cases) -- owner call: update the test or revert ConfirmPrimaryFor
+       unblocks 0 · S · addins · VERIFIED 2026-09-21 · F:/BIMpossible-AddIns/BIMpossible.RevitLink/Shared/GlassButtonProfil…
+
 [CHAT-GATEWAY-291-OWNER-DECISIONS] Issue #291 owner decisions: binding lifecycle after denial, persisted identity bridge, cross-firm alerting threshold (decision package prepared, awaiting three sign-offs)
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-06 · BIMpossible #582 docs(#291) -- squash 5f275baa, docs-only. Adds the …
 
 [ONBOARDING-574-FRONTEND-REBUILD] PR #574 onboarding-flag frontend rebuild (owner-gated): backend fix already live; #574 needs NO rebuild; only the separate NEXT_PUBLIC onboarding-flag flip does
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-06 · BIMpossible #584 docs(#574) -- squash 29b46518, docs-only. Checklist…
 
+[ADDINS-LINKPDF-OPEN-DOCS-PRS-145-148] Add-Ins open LinkPDF docs/hold PRs #145-#148: #145 acceptance review (clean docs), #146 B1/B2 policy (draft), #147 Feature E proposal (needs decision), #148 B2 packer HOLD -- none touch APS writes
+       unblocks 0 · S · addins · CLAIMED 2026-09-21 · BIMpossible-AddIns#145
+
 [CI-RUNTIME-P4P5-XDIST-SHADOW] CI runtime reduction phases 4/5 MERGED (#533 #536 #538 #539 #541 #543): xdist shadow evidence window OPEN from c015e6cc; promote only after >=20 runs AND >=14 days
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-16 · #533 08aa845c vitest 2 workers + happy-dom off network; #536 00ca052…
 
+[DECIDE-WS-MIRROR-PR-146-STALE] Workspace draft PR #146 (/next mirror publish, AddIns delta 64a8a6b->320e63a) is stale vs newer mirror publishes -- close, do not merge
+       unblocks 0 · S · workspace · CLAIMED 2026-09-21 · BIMpossible_Workspace#146
+
 [OPS-1-ADDINS-AUDIT-GAP] Add-Ins/RevitLink audit dashboard card stuck stale: newer report has no severity/ID scheme to ingest
        unblocks 0 · S · workspace+addins · CLAIMED 2026-09-14 · workspace 00_Strategy/Dashboard/strategy_decisions_ledger.md row ops…
+
+[OWNER-RELEASE-W1-9-RESIDUALS] Release W1-9 owner residuals: branch/worktree cleanup, FU1 flag-strictness, pin-split disposition
+       unblocks 0 · S · bimpossible · CLAIMED 2026-09-22 · decisions/2026-09-22__release-closeout-verification-waves1-9.md
 
 [PROD-DERIV-3] Discharge the DERIV-3 prod verification -- needs a mid-translation model and an APS upload
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-28 · 01_BuildLog/2026-08-05__hub-tenancy-migration-BLOCKED_HANDOFF.md -- …
@@ -71,14 +80,14 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 [DECIDE-WS-STALE-MIRROR-PUBLISH-PR146] Decide: draft PR #146 (state: publish /next sync mirror, addins delta 64a8a6b->320e63a) has sat open since 2026-09-11 -- update to the current canonical snapshot and merge, or close as superseded
        unblocks 0 · XS · workspace · CLAIMED 2026-09-14 · gh pr view 146 --repo YourBIMpossible/BIMpossible_Workspace (checked…
 
+[EC-DOGFOOD-2] Continue Evidence Compiler dogfooding toward the next North Star review window
+       unblocks 0 · M · evidence-compiler · VERIFIED 2026-09-16 · F:/Evidence Compiler/NORTHSTAR.md
+
 [EC-RELEASE-1] First release PR — versioning, changelog, build verification, PyPI publish
        unblocks 0 · M · evidence-compiler · VERIFIED 2026-08-24 · Maintainer deferred first release until after real dogfooding (WORKL…
 
 [P5-7-ELEMENT-VISUAL-PREVIEW] Run 2 feasibility spikes then build Element Visual Preview (5.7)
        unblocks 0 · M · bimpossible · CLAIMED 2026-08-18 · BIMpossible_PHASE-STATUS.md, Phase 5 row 5.7 -- proposed, unratified…
-
-[AUTHZ-OPTION-B-B3-CAPABILITY-ENROLLMENT] Autodesk-first access (Option B) B3: firm_allowed_* reclassified as firm capability enrollment under the flag (write=True only), enroll needs no hub-grant row, discover/available routes member-readable (own Autodesk resources), Account/Hubs UX capability wording -- draft PR #668 stacked on #667, NOT merged, NOT live; B4+ owner-gated and flag must stay off until B4
-       unblocks 0 · L · bimpossible · VERIFIED 2026-09-13 · BIMpossible #668 (draft, base feat/autodesk-first-discovery), branch…
 
 [P15-15D-MODEL-WRITES] Build AI-assisted model writes (15d), gated on Phase 7 go-live
        unblocks 0 · L · bimpossible+addins · CLAIMED 2026-08-30 · BIMpossible_PHASE-STATUS.md, Phase 15 row 15d -- ledger states this …
@@ -88,6 +97,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 
 ## Landed — not verified live
 
+[AUTHZ-OPTION-B-B1-ENTITLEMENT-FOUNDATION] Autodesk-first access (Option B) B1: per-user Autodesk entitlement foundation (aec/entitlement.py EntitlementCache, user/token-scoped, no firm-wide positive cache) -- PR #666 MERGED 2026-09-16, foundation only, NOT live
+       unblocks 2 · M · bimpossible · VERIFIED 2026-09-21 · BIMpossible#666
+
 [PHASE9-REOPENED-SCOPE] Phase 9 link-target RULED: cutsheets anchor to individual element (by family type)
        unblocks 1 · S · bimpossible · VERIFIED 2026-09-16 · BIMpossible_PHASE-STATUS.md row 9 (Product Data Ingestion) -- 'Reope…
 
@@ -96,6 +108,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 
 [MODEL-INDEX-DELETION-RECONCILE] model_index_sync has no reconcile/tombstone pass -- index_discovered_models only ADDS rows from all-rvts; a lineage that becomes deleted/renamed in APS is never demoted, so /search/models can keep returning a model the Files view no longer lists
        unblocks 1 · M · bimpossible · VERIFIED 2026-08-24 · Surfaced 2026-08-22 by the Explore agent while root-causing WINCHEST…
+
+[AUTHZ-OPTION-B-B2-DISCOVERY] Autodesk-first access (Option B) B2: discovery under BIMPOSSIBLE_AUTODESK_FIRST_ACCESS (default off) uses the signed-in user's own Autodesk entitlement, per-user APS caches, 401/403 invalidation, no enrollment rows -- PR #674 MERGED 2026-09-16 (supersedes #667), NOT live, flag NOT set
+       unblocks 1 · L · bimpossible · VERIFIED 2026-09-21 · BIMpossible#674
 
 [AUTHZ-INHERITANCE-P1] Authorization-Inheritance Phase 1: permission-projection foundation (spine)
        unblocks 1 · L · bimpossible · VERIFIED 2026-08-23 · BIMpossible #337 MERGED (squash b4515ba) 2026-08-15T00:06:40Z -- Pha…
@@ -141,6 +156,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 
 [SEC-GROUPS-EDIT-PERM-ALIGN] Align firm-group edit-permission gating in the frontend (GRP-1, GRP-2)
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-13 · BIMpossible #329 (c311e0d, merged 2026-08-08) -- GRP-1/GRP-2 firm-gr…
+
+[ADDINS-2026-09-11-14-MERGE-COVERAGE] Add-Ins + BIMpossible + Workspace merges 2026-09-07..16 not previously indexed (dedup coverage): AddIns #123/#139/#142/#143/#144/#150/#151, BIMpossible #658, Workspace docs/remediation -- all landed, none deployed
+       unblocks 0 · S · addins+bimpossible+workspace · CLAIMED 2026-09-21 · BIMpossible-AddIns#123
 
 [ADDINS-AUDIT-0817-HARDENING] Audit-0817 hardening closeout -- pairing identity + installer/write-guard fixes (AddIns #68, #69)
        unblocks 0 · S · addins · VERIFIED 2026-08-23 · AddIns #68 'fix/audit-0817-pane-identity' MERGED 2026-08-23 -> fcfa4…
@@ -193,6 +211,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 [WINCHESTER-STALE-LINEAGE-LINK] Winchester - TEST project file list still links one TEST_Winchester_ELEC_R25.rvt entry to a dead item lineage (urn n53a4yy6RJu5fBMjDppI8A) -- Autodesk 'couldn't find this item', bounces to Autodesk sign-in
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-22 · Two links with an identical file_name in the project's file list res…
 
+[COVERAGE-2026-09-22-BIMPOSSIBLE-PRS] Dedup coverage: BIMpossible PRs 679-683, 686, 687 (docs, superseded, gitleaks)
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-22 · BIMpossible#679
+
 [DEP-JSYAML-282] Dependabot js-yaml bumped to 4.3.2 (4.3.0->4.3.1
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-07 · BIMpossible #282 MERGED 2026-08-07T02:30:12Z, squash commit 5d0379d3…
 
@@ -201,6 +222,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 
 [TEAMS-GATEWAY-W1] Microsoft Teams assistant gateway MERGED (#276) flag-gated off -- carries the firm-membership + hub-isolation fix
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-07 · BIMpossible #276 MERGED 2026-08-08T02:18:43Z as 879e857 'feat(teams)…
+
+[WFA-2026-09-14-L3-ASSISTANT-AI-CONTEXT] WFA 2026-09-14 L3: firm-scoped assistant AI-context policy -- ported into release #685 (#671 closed)
+       unblocks 0 · M · bimpossible · VERIFIED 2026-09-22 · BIMpossible#685
 
 [APS-DISCOVERY-PAGINATE-FOLDER-CONTENTS] APS discovery: paginate folder contents before model-index tombstone reconciliation -- list_all_rvts folder-contents walk reads child.get('data') without following links.next (APS pages at 200), so a >200-item folder yields a successful-but-partial discovery set; the #466 reconcile pass then tombstones the omitted later-page models and hides them from search until re-discovered
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-24 · MERGED 2026-08-24T23:23Z: BIMpossible#474 -> squash 6a327f72 on main…
@@ -244,11 +268,20 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 [SEC-PDP-SLICE0] PDP Slice 0 no-migration containment bundle MERGED -- Redis blob encryption, conversation tenancy re-check, worker fail-closed on revoked grant, ElementCache hub-key pin
        unblocks 0 · M · bimpossible · VERIFIED date-unknown · BIMpossible#448
 
+[AUTHZ-OPTION-B-B3-CAPABILITY-ENROLLMENT] Autodesk-first access (Option B) B3: firm_allowed_* reclassified as firm capability enrollment under the flag (write=True only), enroll needs no hub-grant row, discover/available routes member-readable (own Autodesk resources), Account/Hubs UX capability wording -- PR #675 MERGED 2026-09-16 (supersedes #668), NOT live; B4+ owner-gated and flag must stay off until B4
+       unblocks 0 · L · bimpossible · VERIFIED 2026-09-21 · BIMpossible#675
+
+[AUTHZ-OPTION-B-B4-B6-WAVES-3-5-OPEN] Autodesk-first access (Option B) B4-B6 + authority policy -- merged via release #685, flag OFF
+       unblocks 0 · L · bimpossible · VERIFIED 2026-09-22 · BIMpossible#685
+
 [CKA-PILLAR2-FIRM-DOCS] Client Knowledge Assistant Pillar 2: per-firm client documents (upload, extraction, BM25 retrieval, assistant tool)
        unblocks 0 · L · bimpossible · VERIFIED 2026-08-13 · BIMpossible #327 (46520a7, merged 2026-08-08) -- Pillar 2 v1: per-fi…
 
 [R12-SHARE-AUTHORITY-CLOSURE] R12 cross-firm share authority: telemetry, lifecycle holes H1-H3, share-aware projection read gate
        unblocks 0 · L · bimpossible+workspace · VERIFIED 2026-09-16 · BIMpossible#605
+
+[WFA-2026-09-14-REMEDIATION] WFA 2026-09-14 remediation: MERGED lanes only (L2 ci-docs #669, sharing #670/#672, AddIns #153 OOM hotfix + #155 L5 reliability). L3 assistant AI-context policy (#671, OPEN) split out to WFA-2026-09-14-L3-ASSISTANT-AI-CONTEXT
+       unblocks 0 · L · bimpossible+addins · CLAIMED 2026-09-21 · BIMpossible#669
 
 [CKA-PILLAR3-EXPLAINABILITY] Client Knowledge Assistant Pillar 3: client explainability (change sets, help handoff, model-health remedies, alert next-steps, Groups read parity)
        unblocks 0 · L · bimpossible · VERIFIED 2026-08-13 · BIMpossible #326 (686b064, merged 2026-08-08) -- Pillar 3: change se…
@@ -258,8 +291,8 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 
 ## Next up
 
-[EC-DOGFOOD-2] Continue Evidence Compiler dogfooding toward the next North Star review window
-       unblocks 1 · M · evidence-compiler · VERIFIED 2026-08-24 · F:/Evidence Compiler/DOGFOOD_LOG.md
+[AIS-RE-2-WIRE-EXTEND] Wire budget_reservation.extend() heartbeat into the assistant turn loop (AIS-RE-2 follow-up)
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-22 · BIMpossible#684
 
 [ADDINS-SLOT-LEDGER] Runtime-slot handoff ledger is stale: deploys are landing without a ledger entry
        unblocks 0 · S · addins · VERIFIED 2026-08-23 · Add-Ins decision-log/2026-07-25__runtime-slot-handoff.md -- last mod…
@@ -270,8 +303,8 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 [DASH-STALENESS-BACKSLASH-ESCAPE] Sync-GraphStalenessReminder backslash-escape quadruples instead of doubles (latent, not live)
        unblocks 0 · S · dashboard · UNVERIFIED 2026-09-07 · Refresh-Dashboard.ps1 line 316, the backslash-escape replace inside …
 
-[EC-HYGIENE-1] Pull main checkout master to 345e1c7; delete merged lane branches (#1, #2 heads)
-       unblocks 0 · S · evidence-compiler · VERIFIED 2026-08-24 · Live probe 2026-08-24: local master at 8bc555b, origin/master at 345…
+[RECONCILE-RESIDUAL-DASHBOARD-EC-WATERMARKS] Unreconciled watermark scope: dashboard efdcba1..origin/HEAD (77 commits since 2026-09-06) and evidence-compiler a6977c8..origin/master (7 commits since 2026-09-16); watermarks deliberately NOT advanced
+       unblocks 0 · S · dashboard+evidence-compiler · CLAIMED 2026-09-21 · YourBIMpossible/ai-dev-dashboard
 
 [ADDINS-HYGIENE] Add-Ins hygiene: finish Glass rollout (conformance-PR dedup DONE 2026-08-04)
        unblocks 0 · M · addins · VERIFIED 2026-08-23 · Add-Ins #10 MERGED 2026-08-04 (squash, main 94b21ab -- Plans 1+2 con…
@@ -282,6 +315,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 [P7-REVITLINK-MULTIUSER] Scale RevitLink to multi-user (RE-1 defect now fixed; RE-2 capacity limit remains)
        unblocks 0 · M · bimpossible+addins · VERIFIED 2026-08-23 · Verification Checklist item RL_P0_10 (single-pipe/single-secret cons…
 
+[AUTODESK-FIRST-ROLLOUT-DELIVERY] Autodesk-first rollout: complete authority model, wire FE canDownload, then enable flag
+       unblocks 0 · L · bimpossible · CLAIMED 2026-09-22 · decisions/2026-09-22__autodesk-first-rollout-and-download-capability…
+
 ## In flight
 
 [AUDIT-2026-09-07-REMEDIATION] 2026-09-07 weekly audit remediation wave: Revit write-integrity + fail-open QA reads + pipe-kill-switch CI guard -- 3 merged, 2 open drafts
@@ -291,6 +327,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
        unblocks 0 · L · addins · CLAIMED 2026-09-12 · BIMpossible-AddIns #127 MERGED 2026-09-11 (merge commit 64a8a6b) und…
 
 ## Blocked elsewhere
+
+[RELEASE-W1-9-DEPLOY] Deploy Waves 1-9 release #685 locally: backend-migrate job, restart, smoke
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-22 · BIMpossible#685
 
 [SHARED-PARAM-REGISTRY] Canonical shared-parameter registry landed (PR#174+hardening) -- generator only, nothing imports it yet
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-17 · BIMpossible #174 (41c716c, merged 2026-07-06) -- feat(shared-paramet…
@@ -305,6 +344,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 
 [OPS-DIST] Add-Ins signed installer distribution -- installer pipeline proven; release package intentionally not frozen (product-timing park, owner 2026-08-31)
        unblocks 1 · L · bimpossible+addins · VERIFIED 2026-08-31 · BIMpossible_PHASE-STATUS.md §Open-in-Revit; BIMpossible_ProductionRo…
+
+[AI-ADDINS-DEPLOY-EVIDENCE-1] 26MB untracked deploy-evidence/glass-smoke-baseline-20260913-120604/ in BIMpossible-AddIns -- decide keep/gitignore/delete
+       unblocks 0 · S · addins · CLAIMED 2026-09-21 · F:/BIMpossible-AddIns/deploy-evidence/glass-smoke-baseline-20260913-…
 
 [OPS-AIDEV-ORPHAN-TRANSCRIPTS] Delete orphan CLI transcripts under ~/.claude/projects/F--AI-Dev-BIMpossible-Workspace once the frozen-clone burn-in ends
        unblocks 0 · S · workspace · VERIFIED 2026-09-01 · Session "Workspace root path mismatch" 2026-09-01: 122 transcripts t…
@@ -364,32 +406,17 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 [BIMP-RESOLVE-BINDING] Verify durable model-resolve binding (RESOLVE-BIND-1) live after next backend deploy
        unblocks 3 · S · bimpossible · VERIFIED 2026-08-30 · BIMpossible#496 MERGED 2026-08-30 -> bf49d97e: durable firm-scoped m…
 
-[P3-12-TENANCY-REVISIT] Re-rule 3.12 tenancy row-isolation call for multi-firm project sharing
-       unblocks 2 · S · bimpossible · VERIFIED 2026-08-20 · BIMpossible_PHASE-STATUS.md, Phase 3 row 3.12 -- RATIFIED 2026-08-18…
-
-[SEC-ASSIST-FIRMVIEW] Merge #278 -- scope the assistant briefing's firm-view count to the caller's firm
-       unblocks 2 · S · bimpossible · VERIFIED 2026-08-17 · BIMpossible #278 MERGED 2026-08-07T04:44:03Z, squash commit 5190a4a4…
-
 [ADDINS-RESOLVE-HINT-PROJECT] RevitLink relay: send hint_project_id on GET /aps/model/resolve first resolves
        unblocks 2 · S · addins · VERIFIED 2026-08-30 · BIMpossible#496
 
 [CKA-DOCS-UI-PR540] CKA Documents placement + management UI (BIMpossible#540, follow-up #545): merged and deployed on the dev stack
        unblocks 2 · S · bimpossible · VERIFIED 2026-09-02 · https://github.com/YourBIMpossible/BIMpossible/pull/540 (draft, 4 co…
 
-[POST-268-FOLLOWUPS] Merge the three post-#268 follow-up PRs -- reviewed, three-lane green, awaiting checks
-       unblocks 2 · S · bimpossible · VERIFIED 2026-08-18 · BIMpossible #269 (1887583), #270 (f6f0044), #271 (428889c) -- all ME…
-
 [ADDINS-SYNC-TOKEN-HANDSHAKE] Build in-process sync-token handshake in RevitLink add-in so EventDispatcher can safely allow sync_with_central over the pipe
        unblocks 2 · M · addins+bimpossible · VERIFIED 2026-08-30 · SyncWithCentralCommand.cs header comment (2026-07-16/2026-07-27 audi…
 
-[OPS-BACKUP-RESTORE-DRILL] -VerifyRestore proven live (147/147 rows); RPO/RTO table + named restore operator still open
-       unblocks 1 · S · bimpossible+workspace · VERIFIED 2026-08-17 · 01_BuildLog/2026-08-05__product-risk-assessment.md finding W4/W5 (or…
-
 [OPS-RESIDENCY-SITE-DEPLOY] Deploy data-policy page to yourbimpossible.com -- DEPLOYED + VERIFIED LIVE 2026-08-27
        unblocks 1 · S · bimpossible · VERIFIED 2026-08-23 · F:\BIMpossible-Site\site\dist\data-policy\index.html -- astro build …
-
-[OPS-TENANCY-DOC] Write the multi-tenant data-isolation strategy doc (audit's required TEST already shipped in PR#243)
-       unblocks 1 · S · bimpossible · VERIFIED 2026-08-17 · BIMpossible_ProgramPlan_2026-05-25.md, Commercial Launch Prerequisit…
 
 [P7-SYNC-GOLIVE] Supervised owner flag-flip: go-live Revit Link sync re-enable (Phase 7 step 2)
        unblocks 1 · S · bimpossible+addins · VERIFIED 2026-08-23 · CUTOVER PASS 2026-08-25 -- LIVE and verified, stays on (unlike pilot…
@@ -415,9 +442,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 [P3-8-SLICE2-DRAFT-GATING] Build slice-2 draft reader gating: owner-only visibility for is_draft memberships (owner ruling 2026-08-27)
        unblocks 1 · M · bimpossible · VERIFIED 2026-08-31 · MERGED 2026-08-30T23:12:46Z (owner-authorized squash merge): BIMposs…
 
-[ENROLL-TENANCY-LAYER] Client/project enrollment tenancy layer (E1-E5) — enforcement LIVE (flag ON)
-       unblocks 1 · L · bimpossible · VERIFIED 2026-08-17 · BIMpossible #333 MERGED (squash 593a4fb) 2026-08-14T23:33:38Z -- cli…
-
 [P6-CLIENTMGMT-F] Build cross-firm project sharing (Client-Mgmt F), gated on 3.12
        unblocks 1 · L · bimpossible · VERIFIED 2026-08-30 · BIMpossible_PHASE-STATUS.md, Phase 6 row Client-Mgmt F -- PLACED not…
 
@@ -427,32 +451,17 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 [DOC-PHASESTATUS-191] PHASE-STATUS.md Phase 7 row already corrected -- sole #191 reference reads 'MERGED 2026-07-23'; no stale 'open' wording remains
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-31 · BIMpossible #191 'Phase 7 Gate G2: SSA cloud-open spike (hand-run)' …
 
-[P3-DUCTS-PIPES-DECISION] Decide ducts/pipes parameter-write scope for Phase 3 write-back
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-20 · BIMpossible_PHASE-STATUS.md, Phase 3.10b sub-note -- DECIDED 2026-08…
-
 [BIMP-RELAY-ERROR-MAP-GAP] Backend _RELAY_ERROR_MAP lacks relay codes TIMEOUT / PIPE_BUSY / METHOD_NOT_ALLOWED -- they collapse to opaque 500s instead of typed 4xx/503 responses
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-01 · Observed 2026-08-25 during P7-RELAY-SESSION-LIFECYCLE discovery: bac…
 
 [NL-FILTER-EVAL-QUALITY] NL-filter intent-fidelity eval harness built and RUNNING WEEKLY IN CI with a live key
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-27 · BIMpossible #375 MERGED (989a2fb, 23:25Z) -- implements the BUILD NO…
 
-[OD-DECISIONS] Decide OD3 (fire-alarm schedule owner) and OD4 (OSS reuse triage)
-       unblocks 0 · S · bimpossible · CLAIMED 2026-08-18 · 02_Reference/Audit and Scan Info/BIMpossible_Verification_Checklist.…
-
 [P7-SYNC-COMMENT-CRYPTO-BINDING] Sync comment crypto-binding: CLOSED BY OWNER RULING -- comment is non-authoritative collaboration metadata, no special binding required
        unblocks 0 · S · bimpossible+addins · VERIFIED 2026-08-27 · Today the token binds firm/user/document_title only (backend/revit_l…
 
 [SEC-ASSIST-TOOLS-PERSONAL-VIEWS] FIXED+MERGED: assistant _visible_saved_view_clause personal branch now pins firm_id (PR #416)
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · backend/aec/assistant_tools.py:295-309 _visible_saved_view_clause: f…
-
-[SEC-GROUPS-DELIVERABLE-FIRM] Cross-firm NamedDeliverable IDOR in groups.py category derivation -- fixed and merged
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · backend/aec/groups.py:195-231 (_validate_members_and_compute_categor…
-
-[SEC-GROUPS-PERSONAL-LISTING] list_groups personal-group cross-firm leak -- CONFIRMED and LANDED via PR #290 (independent parallel session won the race; see verification.by)
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · backend/aec/groups.py:318-329 (list_groups, personal query) filtered…
-
-[SEC-VIEWS-PERSONAL-LISTING] list_views' personal-views query has the same missing-firm_id gap as the fixed list_groups bug
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · backend/aec/views.py:207-218 (list_views, GET /data/views) -- person…
 
 [AEC-PREWARM-TIP-PROBE-EMPTY-VERSION] E25_Nudge live tip-probe failure leaves receptacle_schedule perpetually preparing
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-16 · 2026-08-30 backend log, repeated on every poll for E25_Nudge-1800_Ow…
@@ -481,9 +490,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 [SEC-20260831-TEMP-CLONE-TOKEN-EXPOSURE] OWNER ATTENTION: live GitHub temp_clone_token committed to Workspace evidence JSON, redacted-in-tree only -- rotation/history-scrub decision needed
        unblocks 0 · S · workspace · VERIFIED 2026-09-01 · Workspace commit ecd6072 (2026-08-31, "security: redact live temp_cl…
 
-[SEC-ASSIST-PERSONAL-VIEWCOUNT] Assistant briefing's personal_views count is the unfixed half of the SEC-ASSIST-FIRMVIEW function
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · backend/aec/assistant_context.py:172-178 (_assemble_project_context)…
-
 [TEST-PYTEST-COLLECTS-NOTHING] pytest collects ZERO tests in Claude-Profile/hooks/tests and Claude-Tools/ctxcheck - green means nothing ran
        unblocks 0 · S · workspace · VERIFIED 2026-09-07 · `python -m pytest` in F:/Claude-Tools/ctxcheck reports `no tests ran…
 
@@ -495,9 +501,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 
 [ADDINS-JTI-REPLAY-PERSIST] Persist (or TTL-bound) the add-in's process-local syncAuth jti replay cache so an add-in restart inside the 600s attestation TTL cannot re-enable a consumed attestation
        unblocks 0 · S · addins+bimpossible · VERIFIED 2026-08-31 · BIMpossible decision-log/2026-08-21__p7-hardening-followons-queued.m…
-
-[APS-TOKEN-REFRESH-CLASSIFY] Classify APS/auth token-refresh failures instead of leaking 500s (_authed_get, remaining paths, AEC worker)
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · BIMpossible #334 (e0577ad) -- token-refresh failures in _authed_get …
 
 [AUTHZ-AUDIT-POISON-BATCH-FLOOD] authz shadow-audit poison row (firm_id='', principal 'service', reason 'wizard.account_read') fails UUID cast and re-queues the whole ~500-row batch every ~2s, flooding backend logs
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · aec/authz/audit.py flush_pending -- batch insert fails with psycopg2…
@@ -511,17 +514,11 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 [DATA-EMPTY-PERSIST-GUARD] Never persist empty categories/property/spec data version-immutably
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · BIMpossible #362 MERGED (0b314d8, 2026-08-16) -- never persist an em…
 
-[DEP-TRIAGE-2026-08] Dependabot triage: CLOSED BY OWNER RULING 2026-08-21 -- all 6 held PRs closed under the dependency-update policy
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-18 · STILL OPEN as of 2026-08-17 (gh pr view, live): github-actions -- #3…
-
 [EXACTLY-ONCE-579-OWNER-POLICY] PR #579 closeout DONE 2026-09-06: owner decisions applied (PT2H/PT12H kept, Weekly ExecutionTimeLimit PT4H, exhausted-window record) via PR #595 c8131efd; host tasks re-registered, zero drift
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-06 · BIMpossible #583 docs(#579) -- squash 64d95bae, docs-only. Readiness…
 
 [OPS-AIMR1B-GITLEAKS-FIXTURE] Token-shaped model-routing fixtures cleaned up: 1b-branch fixture de-flagged (#548), #537 fixture renamed + dead fingerprint dropped (#553)
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · Push-And-Verify.ps1 -GitleaksScope AllRefs 2026-09-02: POSSIBLE LEAK…
-
-[OPS-DEPLOY-STACK-REFRESH-20260817] Deploy tonight's merged main to the local stack -- images/DB stale vs main 130ba49
-       unblocks 0 · S · bimpossible · CLAIMED 2026-08-17 · BIMpossible#415 #416 #417 #418 #419 (+#273 #275) all MERGED; main ti…
 
 [OPS-SYNTH-AUDIT-HARDEN] Harden synthetic-concurrency-audit tooling: env-guard seeding, loopback-check host, fix schedule
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-07 · weekly-full-audit_2026-08-04.md SEC-SCRIPTS-PERF-1, CQ-SYNTH-HOST-EN…
@@ -531,24 +528,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 
 [PUSH-SELFCHECK-BOOTSTRAP] Push-And-Verify self-check bootstrap: committed outgoing self-edits pass without -SkipSelfCheck
        unblocks 0 · S · workspace · VERIFIED 2026-08-31 · workspace 44ccf8d -- ancestor-aware stale-copy guard: on blob mismat…
-
-[RAIL-RETIRE-FINAL] ALLOWED_PROJECT_IDS / guard.py allowlist subsystem retired end-to-end (PRs #371, #374)
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · BIMpossible #371 MERGED (9b851ff, 2026-08-16T20:24:50Z) -- migrates …
-
-[SEC-GROUPS-PERSONAL-INDEX-FIRMID] uix_named_deliverables_personal_name_group unique index omits firm_id -- confirmed write-path only, not data corruption
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · Source: named-deliverable-personal-scope-firm-gaps.md finding #4, pr…
-
-[SEC-VIEWS-PERSONAL-INDEX-FIRMID] uix_saved_views_personal_name (personal views/leaves unique index) omits firm_id -- same reassigned-user 409 dead-end as the groups sibling
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · CONFIRMED by direct read 2026-08-07 while fixing SEC-GROUPS-PERSONAL…
-
-[SHARE-V2-CELL-FREEZE] Share v2 snapshots freeze display-formatted cell values, not raw metric values (SHARE-V2-DEF-1)
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · BIMpossible #336 (22b6f4e, merged 2026-08-08) -- SHARE-V2-DEF-1: the…
-
-[TAILWIND-V4-VERIFY] Verify Tailwind v4 migration (#284) live in prod -- Docker image is baked, merge alone doesn't ship it
-       unblocks 0 · S · bimpossible · CLAIMED 2026-08-18 · BIMpossible #284 (89f1222, merged 2026-08-07T04:51:18Z) -- replaces …
-
-[TENANCY-PROBE-281] Tenancy invariant now covers flag-gated routers; /probe hub isolation fixed, 41 routes triaged
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · BIMpossible #281 MERGED 2026-08-07T02:48:19Z, squash commit 36412c9c…
 
 [TENANCY-RAIL-SEARCH-RESOLVE] /search/models + /aps/model/resolve migrated off the ALLOWED_PROJECT_IDS rail
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · BIMpossible #366 MERGED (e585862, 2026-08-16) -- migrates /search/mo…
@@ -595,6 +574,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 [DOORS-SINGLE-ROOM-BLANK-REASON] Phase 3.10b Doors: single-room door gets an explicit "(no second room)" blank reason
        unblocks 0 · S · bimpossible · CLAIMED 2026-09-07 · BIMpossible#611
 
+[EC-HYGIENE-1] Delete merged lane branch safety/pre-sync-2026-09-06; master already synced to origin
+       unblocks 0 · S · evidence-compiler · VERIFIED 2026-09-16 · evidence-compiler#17
+
 [FIX-INHERITED-DOCS-REVITLINK-RECEIPT-662] Fix: inherited docs + Revit Link receipt test failures cleared (conftest + decision-log ref) -- #662
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-16 · BIMpossible#662 squash-MERGED 2026-09-13T18:48Z -> main 651b692a (ba…
 
@@ -607,12 +589,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 [OPS-CACHE-RECONCILE-V1] Quarantine-first cache-reconciliation worker, report-only v1
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · BIMpossible #364 MERGED (ed6ad70, 2026-08-16) -- cache reconciliatio…
 
-[OPS-CF-RECORD-CONSOLIDATION] Option C session ended: both CF Access docs committed to main; Access-memory fold is the residual
-       unblocks 0 · S · workspace · VERIFIED 2026-08-17 · Two untracked docs in the workspace main tree (2026-08-16): 00_Strat…
-
-[OPS-CLOSEOUT-WANDER-20260817] Closeout wander triage: stale CLAUDE.md backend-mount note; REVIT_LINK_SYNC env=1 confirm; leaked bk-localci pairs
-       unblocks 0 · S · bimpossible · CLAIMED 2026-08-17 · observed 2026-08-17 closeout session 67df33a5
-
 [OPS-P7-CLOSEOUT-DOCS-PR529] Merge BIMpossible#529: land the 3 P7 relay closeout docs missing from main
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-01 · BIMpossible#529 OPEN, READY (not draft), head 21766e6a, opened 2026-…
 
@@ -623,7 +599,7 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-13 · deploy closed live at alembic c4e7a2b91d38, 2026-08-17 ~22:00 PDT
 
 [OPS-SLOPAUDIT-UNPUSHED] 8 slop-audit remediation commits are local-only across 5 repos - push or discard
-       unblocks 0 · S · workspace+dashboard+families · PARTIAL 2026-08-31 · F:/AI-Dev/slop-audit-remediation_2026-08-31.md section 5 (full commi…
+       unblocks 0 · S · workspace+dashboard+families · CLAIMED 2026-08-31 · F:/AI-Dev/slop-audit-remediation_2026-08-31.md section 5 (full commi…
        ⏸ dormant leg (families) suspended — workspace+dashboard leg tracked live; dormant leg unverifiable until whole-repo reassessment, so the item is not fully verified
 
 [P11-QA-HISTORY-CAPTURE-PATHS] Snapshot QA history from digest/assistant/coordination-report paths (today only warm model-health serves capture)
@@ -653,9 +629,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 [ROUTER-SUPPORT-INDEX-KEY-MISMATCH] RESOLVED by PR #485: support fast-path now keys ModelIndex on the file_urn COLUMN (not item_id); regression tests pin item_id != file_urn
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-31 · Found by Explore agent during P11 QA-history follow-ups session 2026…
 
-[SEC-GROUPS-VIEWS-404-EXISTENCE-ORACLE] PATCH/DELETE groups+views: nonexistent id returns 404 but cross-firm id returns 403 -- status-code existence oracle
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · Surfaced by the backend-endpoint-reviewer gate during SEC-GROUPS-403…
-
 [SEC-GROUPS-VIEWS-PERSONAL-SAMEFIRM-EXISTENCE-ORACLE] PATCH/DELETE groups+views: same-firm personal-scope 403 lets a colleague infer a personal group/view id exists -- possibly by design
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-16 · Surfaced by the backend-endpoint-reviewer gate during SEC-GROUPS-VIE…
 
@@ -664,9 +637,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 
 [TEST-FLAKY-TEAMS-BIND-999] Flaky test de-flaked: test_bind_to_another_firms_project_is_refused no longer collides "999" with the echoed project id (FIXED #554)
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · Verify-Local-CI backend DB lane 2026-09-02: FAILED tests/test_teams_…
-
-[TEST-OPS-HYGIENE] Test/ops hygiene: app-boot tripwire, post-deploy identity smoke script, flaky prefs test fixed
-       unblocks 0 · S · bimpossible · VERIFIED 2026-08-17 · BIMpossible #339 (e516a0d) -- app-boot smoke tripwire that fails CI …
 
 [WAVESTATUS-CHECK-DEPLOY] Wave-Status PR-body-check MERGED live in BIMpossible + AddIns (advisory-only)
        unblocks 0 · S · bimpossible+addins · VERIFIED 2026-08-31 · BIMpossible #494 'ci: add advisory Wave-Status PR-body check' -- MER…
@@ -695,20 +665,11 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 [R18-SHARE-READ-VS-BYTES] Build the explicit per-share download scope: read share is view-only, download opt-in (owner ruling 2026-09-07)
        unblocks 0 · M · bimpossible · CLAIMED 2026-09-12 · BIMpossible#654 (MERGED squash f50ccb6e 2026-09-12)
 
-[SEC-GROUPS-VIEWS-HUB-ISOLATION] groups.py + views.py routes check only the global project allowlist, never per-firm hub isolation
-       unblocks 0 · M · bimpossible · VERIFIED 2026-08-17 · Source: parallel session's memory record named-deliverable-personal-…
-
 [SEC-WORKSPACE-GITLEAKS-EVIDENCE-HITS] Workspace gitleaks scan is NOT clean: 18 findings in three migration-evidence artifacts already published on origin - needs triage or an allowlist decision
        unblocks 0 · M · workspace · VERIFIED 2026-08-31 · gitleaks --source . on F:/BIMpossible-Workspace, 2026-08-31: 18 find…
 
 [CI-POSTURE-LEAN-2026-09-11] CI cost-reduction posture (2026-09-11): heavy GitHub Actions removed; secret-scan once/PR, clean-room-ci deleted, wiring retired; enforcement moved to Verify-Local-CI.ps1
        unblocks 0 · M · bimpossible · VERIFIED 2026-09-12 · BIMpossible #637 (secret-scan once/PR, retire wiring), #652 (delete …
-
-[CKA-PILLAR1-HELP-CORPUS] Client Knowledge Assistant Pillar 1: BM25 help ranker + how-to corpus, waves 1-4 shipped
-       unblocks 0 · M · bimpossible+workspace · VERIFIED 2026-08-17 · BIMpossible #320 (f8791ec) -- ports the docindex BM25 ranker into ba…
-
-[WIZARD-NEWPROJECT-SETUP] New-Project-Setup wizard hardened -- keep-alive-safe provision (#387) + approved fixes wave (#388: combobox, address/client, dup-number advisory, schedule/value/timezone, Option A session-cached consent)
-       unblocks 0 · M · bimpossible · VERIFIED 2026-08-17 · BIMpossible #387 (squash b12ef36, merged 2026-08-17) -- fix(wizard):…
 
 [DOCS-HYGIENE-ENFORCED] docs-hygiene enforced as a required check on main in both repos; the recurring Monday sweep failure is closed
        unblocks 0 · M · bimpossible+workspace · VERIFIED 2026-09-06 · BIMpossible #600 MERGED -> 0c6e2f02. docs-hygiene added to required …
@@ -728,9 +689,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
 [WSCLOSEOUT-20260831-RECORDS] 2026-08-31 workspace closeout: review, authz, weekly-audit, PHASE-STATUS and slop-audit records published
        unblocks 0 · M · workspace · VERIFIED 2026-08-31 · One coherent publication wave, all ancestors of origin/main 1360a66:…
 
-[SEC-APSISO-TESTS-ENROLLMENT-EXPLICIT] Make /aps + /data hub-isolation test suites enrollment-explicit (no flag-lane dependence)
-       unblocks 0 · M · bimpossible · VERIFIED 2026-08-17 · BIMpossible #390 (e9a424e, merged 2026-08-17) -- enrollment-explicit…
-
 [ASSISTANT-AI-CONTEXT-POLICY] Assistant fail-closed project AI-context policy: project_configs.ai_context_policy + opaque navigation handles, Slack/Teams coverage (PR #661, MERGED + deployed 2026-09-13)
        unblocks 0 · L · bimpossible · VERIFIED 2026-09-13 · BIMpossible#661 (branch feat/assistant-ai-context-policy, head 0eb24…
 
@@ -747,7 +705,7 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-16 @ `f14dbf4c` PR#668 · `add
        unblocks 0 · L · dashboard · VERIFIED 2026-09-06 · ai-dev-dashboard #22 SHIPPED -- squash-merged efdcba1 on origin/main…
 
 [EC-HOOKSAFE-1] Python-native hook-safe launcher shipped to EC core; Node wrapper migrated out of BIMpossible/AddIns/Workspace/Families
-       unblocks 0 · L · evidence-compiler+bimpossible+addins+workspace+families · PARTIAL 2026-08-24 · evidence-compiler#5
+       unblocks 0 · L · evidence-compiler+bimpossible+addins+workspace+families · CLAIMED 2026-08-24 · evidence-compiler#5
        ⏸ dormant leg (families) suspended — evidence-compiler+bimpossible+addins+workspace leg tracked live; dormant leg unverifiable until whole-repo reassessment, so the item is not fully verified
 
 [P11-AC7-VERSIONED-SNAPSHOTS] Add versioned QA snapshots (Phase 11 AC7)
