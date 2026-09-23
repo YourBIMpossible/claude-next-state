@@ -10314,7 +10314,7 @@ items:
   title: 'Admin Console 404 at admin.yourbimpossible.com/ (host gate serves only /admin*); PR #706 redirects root -> /admin'
   projects:
   - bimpossible
-  status: in_flight
+  status: live
   owner_gate: false
   owner: null
   unblocks: []
@@ -10330,9 +10330,14 @@ items:
   - kind: pr
     ref: bimpossible#706
     note: draft, commit aad734a6; vitest 6/6, tsc 0, eslint 0
+  - kind: run
+    ref: 2026-09-23 #706 merged 0c993473; shared checkout ff to 0c993473; Refresh-Frontend image 17:49:46Z, frontend healthy
+    note: 'LIVE-VERIFIED in owner Chrome: https://admin.yourbimpossible.com/ -> /admin, Admin Console renders
+      (Overview, firm list, firm detail panel incl. domains/memberships/hub grants = #688); visible keyboard focus ring.
+      #700/#702 focus-fallback mutation NOT exercised (no safe fixture; no access mutation performed)'
   verification:
     level: verified
-    by: curl local origin + public unauth probe
+    by: gh mergeCommit 0c993473 + Chrome live load
     at: '2026-09-23'
   live_check:
   - 'gh pr view 706 --repo YourBIMpossible/BIMpossible --json state -q .state'

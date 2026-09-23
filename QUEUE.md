@@ -332,9 +332,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-23 @ `3ea5fc9a` PR#697 · `add
 
 ## In flight
 
-[ADMIN-HOST-ROOT-404] Admin Console 404 at admin.yourbimpossible.com/ (host gate serves only /admin*); PR #706 redirects root -> /admin
-       unblocks 0 · S · bimpossible · VERIFIED 2026-09-23 · 2026-09-23 local origin probe 127.0.0.1:3000 with Host header
-
 [AUDIT-2026-09-07-REMEDIATION] 2026-09-07 weekly audit remediation wave: Revit write-integrity + fail-open QA reads + pipe-kill-switch CI guard -- 3 merged, 2 open drafts
        unblocks 0 · L · addins · CLAIMED 2026-09-10 · Program root: Weekly Full Audit 2026-09-07. Ledger BIMpossible-Works…
 
@@ -555,6 +552,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-23 @ `3ea5fc9a` PR#697 · `add
 
 [ADMIN-DOMAIN-UNKNOWN-FIRM-404] Admin domain registration: return typed 404 for unknown firm instead of 409
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-13 · BIMpossible#657 (squash 3404e85a, MERGED 2026-09-13): add_domain als…
+
+[ADMIN-HOST-ROOT-404] Admin Console 404 at admin.yourbimpossible.com/ (host gate serves only /admin*); PR #706 redirects root -> /admin
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-23 · 2026-09-23 local origin probe 127.0.0.1:3000 with Host header
 
 [AUDIT-20260831-CI-HYGIENE] 2026-08-31 audit closeout batch: CI/CQ/FE hygiene findings (SEC-CI-LOCAL-1, ARCH-CI-1, CQ-DOC-1, FE-2, FE-3) -- merged, live
        unblocks 0 · S · bimpossible+addins · VERIFIED 2026-09-01 · BIMpossible PR #522 (squash d27d9ef5, MERGED 2026-09-01) body -- clo…
