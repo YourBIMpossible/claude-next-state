@@ -14,6 +14,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-23 @ `67c4cd48` PR#693 · `add
 
 ## Blocked on you
 
+[OPS-DEPLOY-2026-09-23-MERGES] Deploy merged #694 (backend restart) + #690/#688 (Refresh-Frontend) from shared checkout; verify 405 gone
+       unblocks 2 · S · bimpossible · VERIFIED 2026-09-23 · 2026-09-23 delivery pass
+
 [OPS-DEPLOY-RUNBOOK] Deploy/rollback runbook: read-only VERIFY items closed; live drill needs owner approval
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-31 · Carried-open finding across multiple audit cycles, per BIMpossible_P…
 
@@ -306,9 +309,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-23 @ `67c4cd48` PR#693 · `add
 [ADDINS-SLOT-LEDGER] Runtime-slot handoff ledger is stale: deploys are landing without a ledger entry
        unblocks 0 · S · addins · VERIFIED 2026-08-23 · Add-Ins decision-log/2026-07-25__runtime-slot-handoff.md -- last mod…
 
-[FE-UPLOAD-EXPORT-ERROR-UX] FE: firm-docs upload shows raw backend detail for 413/415/409; SheetComposer silently skips failed sheets
-       unblocks 0 · S · bimpossible · CLAIMED 2026-09-23 · frontend/app/components/SheetComposer.tsx:~74
-
 [OPS-WORKTREE-DRIFT-REVIEW] Recurring per-repo drift review: workspace local behind-6/ahead-1 with dirty ledgers + untracked audit docs
        unblocks 0 · S · workspace+bimpossible · VERIFIED 2026-09-14 · 2026-08-07 (original): workspace carried 2 untracked docs (revitlink…
 
@@ -328,6 +328,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-23 @ `67c4cd48` PR#693 · `add
        unblocks 0 · L · bimpossible · CLAIMED 2026-09-22 · decisions/2026-09-22__autodesk-first-rollout-and-download-capability…
 
 ## In flight
+
+[FE-UPLOAD-EXPORT-ERROR-UX] FE: SheetComposer silently skipped failed sheets -- draft PR #697 (upload-error half dropped: live 415/409 messages already user-readable)
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-23 · BIMpossible#697
 
 [AUDIT-2026-09-07-REMEDIATION] 2026-09-07 weekly audit remediation wave: Revit write-integrity + fail-open QA reads + pipe-kill-switch CI guard -- 3 merged, 2 open drafts
        unblocks 0 · L · addins · CLAIMED 2026-09-10 · Program root: Weekly Full Audit 2026-09-07. Ledger BIMpossible-Works…

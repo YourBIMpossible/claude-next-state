@@ -10193,6 +10193,13 @@ items:
     note: DRAFT 24432d0d tests+docs only; dblane 126 passed/0 skipped on throwaway
       PG; no bugs found; sheet-pdf export still uncovered (needs APS fake); runbook
       docs/ops/2026-09-23-upload-download-smoke-runbook.md
+  - kind: run
+    ref: prod smoke 2026-09-23 app.yourbimpossible.com (Chrome, owner session, Private
+      scope)
+    note: POST /firm-docs .exe 415; smoke.md 201 indexed; duplicate 409; POST /firm-docs/search
+      200 hit; DELETE /firm-docs/73a97c54-... 200, gone from list. Download routes
+      (xlsx/spec/model-health/coordination/sheet-pdf) NOT smoked -- model-page navigation
+      blocked by auto-mode classifier.
   verification:
     level: verified
     by: gh pr view 693 MERGED 67c4cd48.
@@ -10202,11 +10209,11 @@ items:
     MERGED'
   source: overnight 2026-09-23 (workstream C)
 - id: FE-UPLOAD-EXPORT-ERROR-UX
-  title: 'FE: firm-docs upload shows raw backend detail for 413/415/409; SheetComposer
-    silently skips failed sheets'
+  title: 'FE: SheetComposer silently skipped failed sheets -- draft PR #697 (upload-error
+    half dropped: live 415/409 messages already user-readable)'
   projects:
   - bimpossible
-  status: ready
+  status: in_flight
   owner_gate: false
   owner: null
   unblocks: []
@@ -10214,15 +10221,50 @@ items:
   effort: S
   risk: 2
   evidence:
+  - kind: pr
+    ref: BIMpossible#697
+    note: 'DRAFT: 4xx/non-PDF sheets named, all-fail = no download, 401 no error flash;
+      vitest 8 passed, tsc/eslint 0, typescript-api-reviewer findings fixed'
   - kind: doc
     ref: frontend/app/components/SheetComposer.tsx:~74
     note: if (!res.ok) continue -> merged PDF short with no message
   - kind: doc
     ref: frontend/app/documents/page.tsx onUpload
     note: only 404 mapped; others raw detail
+  - kind: run
+    ref: prod smoke 2026-09-23
+    note: '415 -> "Unsupported file type. Accepted: .docx, .md, .pdf, .txt, .xlsx.";
+      409 -> "An identical document is already uploaded (name)." -- no fix needed'
   verification:
-    level: claimed
-    by: FE caller map 2026-09-23 (agent read, not re-verified)
+    level: verified
+    by: gh pr 697 draft; live UI messages observed 2026-09-23
     at: '2026-09-23'
-  live_check: []
+  live_check:
+  - gh pr view 697 --repo YourBIMpossible/BIMpossible --json state --jq .state
   source: overnight 2026-09-23 (workstream C FE map)
+- id: OPS-DEPLOY-2026-09-23-MERGES
+  title: 'Deploy merged #694 (backend restart) + #690/#688 (Refresh-Frontend) from
+    shared checkout; verify 405 gone'
+  projects:
+  - bimpossible
+  status: blocked_owner
+  owner_gate: true
+  owner: null
+  unblocks:
+  - AIS-RE-2-RENEW-FAIL-OPEN
+  - REVIT-OPEN-DOCS-POST-FIX
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: run
+    ref: 2026-09-23 delivery pass
+    note: git pull on F:/BIMpossible and docker restart both denied by auto-mode classifier
+      (Production Deploy); shared checkout still 9ea74c7c
+  verification:
+    level: verified
+    by: git log F:/BIMpossible HEAD 9ea74c7c < origin/main 67c4cd48
+    at: '2026-09-23'
+  live_check:
+  - 'git -C F:/BIMpossible log -1 --format=%h  # expect >= 67c4cd48'
+  source: 2026-09-23 delivery pass
