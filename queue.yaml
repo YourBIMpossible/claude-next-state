@@ -8430,6 +8430,34 @@ items:
   - 'grep -rn "CrossFirmSharingDialog" F:/BIMpossible/frontend/app --include=*.tsx  # entry point + dialog present'
   source: 2026-09-12 R18 build (owner-directed; split from DECIDE-R18-FRONTEND-AFFORDANCES)
   notes_url: null
+- id: R18-UI-REVIEW-REMEDIATION
+  title: 'Remediate the 2026-09-16 /review-all of the R18 owner sharing UI (#660): relationship-scoped
+    recipient discovery, backend grantee_firm_name, create/refresh split, per-row a11y names, stale-load guard.'
+  projects:
+  - bimpossible
+  status: live
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: 'BIMpossible#701 (squash 529125f7, MERGED): remediation commit b12169d3, Verify-Local-CI GREEN;
+      backend-endpoint-reviewer PASS; typescript-api-reviewer PASS. BLOCKER (platform-wide roster) NOT ratified:
+      discovery is relationship-scoped / exact verified-domain (SEC-2).'
+  - kind: run
+    ref: 'DEPLOYED + SMOKED 2026-09-23: temp dev flag-on (SHARING=1, PROXY=true) owner-admin smoke 9/9 PASS;
+      CSRF-less mutation -> 403; flag restored (SHARING=0) -> all 5 routes bare 404 unauth+auth, entry point
+      absent, 0 active grants. Closure receipt: BIMpossible@2c0fcded reviews/2026-09-16__review-all__r18-owner-sharing-ui.md.'
+  verification:
+    level: verified
+    by: '#701 merged 529125f7; deployed; live smoke 9/9 PASS + dark-state receipt 2026-09-23; review archived RESOLVED in 2c0fcded'
+    at: '2026-09-23'
+  live_check:
+  - 'grep -n "Status: RESOLVED" F:/BIMpossible/reviews/2026-09-16__review-all__r18-owner-sharing-ui.md'
+  source: reviews/2026-09-16__review-all__r18-owner-sharing-ui.md (owner-authorized remediation 2026-09-22)
+  notes_url: null
 - id: R18-UI-GATE-DOWNLOAD-ON-CANDOWNLOAD
   title: 'Build (R18 UI b): gate the Download PDF / export / thumbnail controls on useSharedProject().canDownload,
     with explanatory text for view-only shares. Clarity/workflow only -- backend 404 share_view_only remains

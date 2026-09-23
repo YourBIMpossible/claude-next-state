@@ -635,6 +635,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-23 @ `3ea5fc9a` PR#697 · `add
 [R18-UI-OWNER-SHARE-SCOPE-SELECT] Build (R18 UI a): owner share dialog gains a share-scope selection -- read (default) vs download (explicit opt-in) -- posting scope to the share-create/PATCH endpoints. Backend stays authoritative.
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-13 · PROMOTED blocked_owner -> in-flight 2026-09-13 under explicit owner …
 
+[R18-UI-REVIEW-REMEDIATION] Remediate the 2026-09-16 /review-all of the R18 owner sharing UI (#660): relationship-scoped recipient discovery, backend grantee_firm_name, create/refresh split, per-row a11y names, stale-load guard.
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-23 · BIMpossible#701 (squash 529125f7, MERGED): remediation commit b12169…
+
 [R19-INHERITANCE-PLAN-LANE] Confirm the superseded 2026-08-08 Authorization-Inheritance plan lane is dead
        unblocks 0 · S · workspace+bimpossible · VERIFIED 2026-09-07 · F:/BIMpossible-Workspace/00_Strategy/2026-09-04__Phase3-Phase4-Needs…
 
