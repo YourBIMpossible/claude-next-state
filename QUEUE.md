@@ -14,9 +14,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-22 @ `d3eeca10` PR#687 · `add
 
 ## Blocked on you
 
-[OPS-LOCAL-BACKEND-BOOT-SEPARATE-APPROVER] Local backend crash-loops: set BIMPOSSIBLE_CHANGE_SET_REQUIRE_SEPARATE_APPROVER=1 in .env, restart
-       unblocks 1 · S · bimpossible · VERIFIED 2026-09-22 · docker logs docker-backend-1 2026-09-22 21:20 PDT
-
 [OPS-DEPLOY-RUNBOOK] Deploy/rollback runbook: read-only VERIFY items closed; live drill needs owner approval
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-31 · Carried-open finding across multiple audit cycles, per BIMpossible_P…
 
@@ -328,9 +325,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-22 @ `d3eeca10` PR#687 · `add
 
 ## Blocked elsewhere
 
-[RELEASE-W1-9-DEPLOY] Deploy Waves 1-9 release #685 locally: backend-migrate job, restart, smoke
-       unblocks 0 · S · bimpossible · VERIFIED 2026-09-22 · BIMpossible#685
-
 [SHARED-PARAM-REGISTRY] Canonical shared-parameter registry landed (PR#174+hardening) -- generator only, nothing imports it yet
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-17 · BIMpossible #174 (41c716c, merged 2026-07-06) -- feat(shared-paramet…
 
@@ -415,6 +409,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-22 @ `d3eeca10` PR#687 · `add
 [ADDINS-SYNC-TOKEN-HANDSHAKE] Build in-process sync-token handshake in RevitLink add-in so EventDispatcher can safely allow sync_with_central over the pipe
        unblocks 2 · M · addins+bimpossible · VERIFIED 2026-08-30 · SyncWithCentralCommand.cs header comment (2026-07-16/2026-07-27 audi…
 
+[OPS-LOCAL-BACKEND-BOOT-SEPARATE-APPROVER] Local backend crash-loops: set BIMPOSSIBLE_CHANGE_SET_REQUIRE_SEPARATE_APPROVER=1 in .env, restart
+       unblocks 1 · S · bimpossible · VERIFIED 2026-09-22 · docker logs docker-backend-1 2026-09-22 21:20 PDT
+
 [OPS-RESIDENCY-SITE-DEPLOY] Deploy data-policy page to yourbimpossible.com -- DEPLOYED + VERIFIED LIVE 2026-08-27
        unblocks 1 · S · bimpossible · VERIFIED 2026-08-23 · F:\BIMpossible-Site\site\dist\data-policy\index.html -- astro build …
 
@@ -444,6 +441,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-22 @ `d3eeca10` PR#687 · `add
 
 [P6-CLIENTMGMT-F] Build cross-firm project sharing (Client-Mgmt F), gated on 3.12
        unblocks 1 · L · bimpossible · VERIFIED 2026-08-30 · BIMpossible_PHASE-STATUS.md, Phase 6 row Client-Mgmt F -- PLACED not…
+
+[RELEASE-W1-9-DEPLOY] Deploy Waves 1-9 release #685 locally: backend-migrate job, restart, smoke
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-22 · BIMpossible#685
 
 [CHAT-GATEWAY-MEMBERSHIP-291-VERIFY] Issue #291 Slack/Teams firm-membership contract re-verified on main; #577 documents the per-turn re-check transaction boundary; #291 stays open for owner policy decisions
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-05 · BIMpossible #577 docs(chat gateways) -- squash addfcedb, docstring-o…

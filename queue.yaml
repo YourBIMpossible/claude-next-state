@@ -9863,7 +9863,7 @@ items:
     in .env, restart'
   projects:
   - bimpossible
-  status: blocked_owner
+  status: live
   owner_gate: true
   owner: null
   unblocks:
@@ -9879,10 +9879,22 @@ items:
   - kind: doc
     ref: docs/ops/2026-09-21-release/FINAL-ACTIVATION-CARD.md:21
     note: lists REQUIRE_SEPARATE_APPROVER=on as an activation step
+  - kind: run
+    ref: local stack deploy 2026-09-22
+    note: '2026-09-22 21:30 PDT: owner set BIMPOSSIBLE_CHANGE_SET_REQUIRE_SEPARATE_APPROVER=1
+      in .env; docker compose run --rm backend-migrate applied d4e5f6a7b8c0 -> e5f6a7b8c9d1
+      -> aadf3ce41b1c -> d1b7e2a9c4f0 -> 80af6ebc3df5 -> c7d2e9f4a1b6 (head); backend
+      recreated (--no-deps --force-recreate) Up (healthy), 0 error/traceback lines;
+      Refresh-Frontend.ps1 image 2026-09-23T04:29Z healthy; app.yourbimpossible.com
+      200. No signed-in feature smoke run.'
   verification:
     level: verified
-    by: 'docker ps 2026-09-22: docker-backend-1 Restarting (3); logs show D2 separate-approver
-      interlock refusing boot. .env is human-only (CLAUDE.md protected files).'
+    by: '2026-09-22 21:30 PDT: owner set BIMPOSSIBLE_CHANGE_SET_REQUIRE_SEPARATE_APPROVER=1
+      in .env; docker compose run --rm backend-migrate applied d4e5f6a7b8c0 -> e5f6a7b8c9d1
+      -> aadf3ce41b1c -> d1b7e2a9c4f0 -> 80af6ebc3df5 -> c7d2e9f4a1b6 (head); backend
+      recreated (--no-deps --force-recreate) Up (healthy), 0 error/traceback lines;
+      Refresh-Frontend.ps1 image 2026-09-23T04:29Z healthy; app.yourbimpossible.com
+      200. No signed-in feature smoke run.'
     at: '2026-09-22'
   live_check:
   - 'docker ps --filter name=docker-backend-1 --format {{.Status}}  # expect Up, not
@@ -9892,12 +9904,11 @@ items:
   title: 'Deploy Waves 1-9 release #685 locally: backend-migrate job, restart, smoke'
   projects:
   - bimpossible
-  status: blocked_dep
+  status: live
   owner_gate: true
   owner: null
   unblocks: []
-  blocked_by:
-  - OPS-LOCAL-BACKEND-BOOT-SEPARATE-APPROVER
+  blocked_by: []
   effort: S
   risk: 4
   evidence:
@@ -9910,10 +9921,22 @@ items:
   - kind: doc
     ref: decisions/2026-09-22__release-closeout-verification-waves1-9.md
     note: 's9.4: no deploy/migration/restart performed; rollout is an owner action'
+  - kind: run
+    ref: local stack deploy 2026-09-22
+    note: '2026-09-22 21:30 PDT: owner set BIMPOSSIBLE_CHANGE_SET_REQUIRE_SEPARATE_APPROVER=1
+      in .env; docker compose run --rm backend-migrate applied d4e5f6a7b8c0 -> e5f6a7b8c9d1
+      -> aadf3ce41b1c -> d1b7e2a9c4f0 -> 80af6ebc3df5 -> c7d2e9f4a1b6 (head); backend
+      recreated (--no-deps --force-recreate) Up (healthy), 0 error/traceback lines;
+      Refresh-Frontend.ps1 image 2026-09-23T04:29Z healthy; app.yourbimpossible.com
+      200. No signed-in feature smoke run.'
   verification:
     level: verified
-    by: merged per gh; closeout doc s9.4 states no deploy executed; backend currently
-      not booting.
+    by: '2026-09-22 21:30 PDT: owner set BIMPOSSIBLE_CHANGE_SET_REQUIRE_SEPARATE_APPROVER=1
+      in .env; docker compose run --rm backend-migrate applied d4e5f6a7b8c0 -> e5f6a7b8c9d1
+      -> aadf3ce41b1c -> d1b7e2a9c4f0 -> 80af6ebc3df5 -> c7d2e9f4a1b6 (head); backend
+      recreated (--no-deps --force-recreate) Up (healthy), 0 error/traceback lines;
+      Refresh-Frontend.ps1 image 2026-09-23T04:29Z healthy; app.yourbimpossible.com
+      200. No signed-in feature smoke run.'
     at: '2026-09-22'
   live_check:
   - 'gh pr view 685 --repo YourBIMpossible/BIMpossible --json state --jq .state  #
