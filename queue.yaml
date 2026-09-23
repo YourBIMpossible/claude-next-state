@@ -2,8 +2,8 @@ schema_version: 1
 reconciled:
   bimpossible:
     at: '2026-09-23'
-    commit: 67c4cd48
-    pr: 693
+    commit: 3ea5fc9a
+    pr: 697
   addins:
     at: '2026-09-21'
     commit: baa9efe
@@ -10209,11 +10209,11 @@ items:
     MERGED'
   source: overnight 2026-09-23 (workstream C)
 - id: FE-UPLOAD-EXPORT-ERROR-UX
-  title: 'FE: SheetComposer silently skipped failed sheets -- draft PR #697 (upload-error
-    half dropped: live 415/409 messages already user-readable)'
+  title: 'FE: SheetComposer silently skipped failed sheets -- #697 MERGED 3ea5fc9a, not
+    yet refreshed into frontend (upload-error half dropped: live 415/409 readable)'
   projects:
   - bimpossible
-  status: in_flight
+  status: landed
   owner_gate: false
   owner: null
   unblocks: []
@@ -10223,7 +10223,7 @@ items:
   evidence:
   - kind: pr
     ref: BIMpossible#697
-    note: 'DRAFT: 4xx/non-PDF sheets named, all-fail = no download, 401 no error flash;
+    note: 'MERGED 2026-09-23 squash 3ea5fc9a; 4xx/non-PDF sheets named, all-fail = no download, 401 no error flash;
       vitest 8 passed, tsc/eslint 0, typescript-api-reviewer findings fixed'
   - kind: doc
     ref: frontend/app/components/SheetComposer.tsx:~74
@@ -10237,7 +10237,7 @@ items:
       409 -> "An identical document is already uploaded (name)." -- no fix needed'
   verification:
     level: verified
-    by: gh pr 697 draft; live UI messages observed 2026-09-23
+    by: gh pr 697 MERGED 3ea5fc9a; frontend container predates it (Refresh-Frontend owed)
     at: '2026-09-23'
   live_check:
   - gh pr view 697 --repo YourBIMpossible/BIMpossible --json state --jq .state
@@ -10247,8 +10247,8 @@ items:
     shared checkout; verify 405 gone'
   projects:
   - bimpossible
-  status: blocked_owner
-  owner_gate: true
+  status: landed
+  owner_gate: false
   owner: null
   unblocks:
   - AIS-RE-2-RENEW-FAIL-OPEN
@@ -10261,9 +10261,14 @@ items:
     ref: 2026-09-23 delivery pass
     note: git pull on F:/BIMpossible and docker restart both denied by auto-mode classifier
       (Production Deploy); shared checkout still 9ea74c7c
+  - kind: run
+    ref: 2026-09-23 owner pull + backend restart; later recreates by concurrent admin-focus session
+    note: 'shared checkout 37cd0c2d (#702); backend created 06:42:38Z (after #701 06:41Z), /health
+      200; frontend created 06:47:08Z (after #702 06:46Z) -> #694/#690/#688/#700/#701/#702 built.
+      405 still not live-checked (model-page load classifier-blocked)'
   verification:
     level: verified
-    by: git log F:/BIMpossible HEAD 9ea74c7c < origin/main 67c4cd48
+    by: docker inspect Created times vs gh mergedAt; git -C F:/BIMpossible log -1 = 37cd0c2d
     at: '2026-09-23'
   live_check:
   - 'git -C F:/BIMpossible log -1 --format=%h  # expect >= 67c4cd48'

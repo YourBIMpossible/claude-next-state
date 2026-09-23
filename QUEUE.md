@@ -5,17 +5,14 @@ This is a repo-local read model, not a definition of /next behavior. -->
 
 # /next — work-item queue
 
-Generated 2026-09-22 (synced). Anchor-first, leverage-ranked (per item-model.md). The single #1 move is chosen live by the skill from the anchor (stated focus, else roadmap order) and finalization leverage — not from dependency cone. This board is a status-grouped snapshot; within each section it orders by owner-gated+S, then effort, risk, id, with `cone` leading (deep graph). Full algorithm: `~/.claude/skills/next/reference/item-model.md`.
+Generated 2026-09-23 (synced). Anchor-first, leverage-ranked (per item-model.md). The single #1 move is chosen live by the skill from the anchor (stated focus, else roadmap order) and finalization leverage — not from dependency cone. This board is a status-grouped snapshot; within each section it orders by owner-gated+S, then effort, risk, id, with `cone` leading (deep graph). Full algorithm: `~/.claude/skills/next/reference/item-model.md`.
 
-Scope: `all`. Watermarks: `bimpossible` = 2026-09-23 @ `67c4cd48` PR#693 · `addins` = 2026-09-21 @ `baa9efe` PR#155 · `workspace` = 2026-09-21 @ `647c6b1` PR#154 · `evidence-compiler` = 2026-09-16 @ `a6977c8` PR#17 · `dashboard` = 2026-09-06 @ `efdcba1` PR#22.
+Scope: `all`. Watermarks: `bimpossible` = 2026-09-23 @ `3ea5fc9a` PR#697 · `addins` = 2026-09-21 @ `baa9efe` PR#155 · `workspace` = 2026-09-21 @ `647c6b1` PR#154 · `evidence-compiler` = 2026-09-16 @ `a6977c8` PR#17 · `dashboard` = 2026-09-06 @ `efdcba1` PR#22.
 (pc-monitor/bim-site: no items yet — run `init` to derive.)
 
 > **Dormant project(s):** `families` — reassessment-bound. Items scoped to them are parked; their probes are suspended (non-executable metadata) and render **SUSPENDED**, never verified. `/next` will not run or propose a command against a dormant repo.
 
 ## Blocked on you
-
-[OPS-DEPLOY-2026-09-23-MERGES] Deploy merged #694 (backend restart) + #690/#688 (Refresh-Frontend) from shared checkout; verify 405 gone
-       unblocks 2 · S · bimpossible · VERIFIED 2026-09-23 · 2026-09-23 delivery pass
 
 [OPS-DEPLOY-RUNBOOK] Deploy/rollback runbook: read-only VERIFY items closed; live drill needs owner approval
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-31 · Carried-open finding across multiple audit cycles, per BIMpossible_P…
@@ -97,6 +94,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-23 @ `67c4cd48` PR#693 · `add
 
 ## Landed — not verified live
 
+[OPS-DEPLOY-2026-09-23-MERGES] Deploy merged #694 (backend restart) + #690/#688 (Refresh-Frontend) from shared checkout; verify 405 gone
+       unblocks 2 · S · bimpossible · VERIFIED 2026-09-23 · 2026-09-23 delivery pass
+
 [AUTHZ-OPTION-B-B1-ENTITLEMENT-FOUNDATION] Autodesk-first access (Option B) B1: per-user Autodesk entitlement foundation (aec/entitlement.py EntitlementCache, user/token-scoped, no firm-wide positive cache) -- PR #666 MERGED 2026-09-16, foundation only, NOT live
        unblocks 2 · M · bimpossible · VERIFIED 2026-09-21 · BIMpossible#666
 
@@ -153,6 +153,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-23 @ `67c4cd48` PR#693 · `add
 
 [AUTHZ-ENFORCE-KEYSTONE-PR530] Merged BIMpossible#530: AUTH-INH ENFORCE keystone + Phase 15c T5 end-to-end test (CKA Phase 18 step 1)
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · BIMpossible#530 OPEN, READY, head 6d64390f, opened 2026-09-02T00:40Z…
+
+[FE-UPLOAD-EXPORT-ERROR-UX] FE: SheetComposer silently skipped failed sheets -- #697 MERGED 3ea5fc9a, not yet refreshed into frontend (upload-error half dropped: live 415/409 readable)
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-23 · BIMpossible#697
 
 [FEAT-REVIT-PAIRING-COPY] Revit pairing SHIPPED as Copy/paste-only -- protocol-launch button removed after reliability rework
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-16 · BIMpossible #391 (Send-to-Revit protocol handoff + ?pair=revit deep …
@@ -329,9 +332,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-23 @ `67c4cd48` PR#693 · `add
 
 ## In flight
 
-[FE-UPLOAD-EXPORT-ERROR-UX] FE: SheetComposer silently skipped failed sheets -- draft PR #697 (upload-error half dropped: live 415/409 messages already user-readable)
-       unblocks 0 · S · bimpossible · VERIFIED 2026-09-23 · BIMpossible#697
-
 [AUDIT-2026-09-07-REMEDIATION] 2026-09-07 weekly audit remediation wave: Revit write-integrity + fail-open QA reads + pipe-kill-switch CI guard -- 3 merged, 2 open drafts
        unblocks 0 · L · addins · CLAIMED 2026-09-10 · Program root: Weekly Full Audit 2026-09-07. Ledger BIMpossible-Works…
 
@@ -426,12 +426,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-23 @ `67c4cd48` PR#693 · `add
 
 [OPS-LOCAL-BACKEND-BOOT-SEPARATE-APPROVER] Local backend crash-loops: set BIMPOSSIBLE_CHANGE_SET_REQUIRE_SEPARATE_APPROVER=1 in .env, restart
        unblocks 1 · S · bimpossible · VERIFIED 2026-09-22 · docker logs docker-backend-1 2026-09-22 21:20 PDT
-
-[OPS-RESIDENCY-SITE-DEPLOY] Deploy data-policy page to yourbimpossible.com -- DEPLOYED + VERIFIED LIVE 2026-08-27
-       unblocks 1 · S · bimpossible · VERIFIED 2026-08-23 · F:\BIMpossible-Site\site\dist\data-policy\index.html -- astro build …
-
-[P7-SYNC-GOLIVE] Supervised owner flag-flip: go-live Revit Link sync re-enable (Phase 7 step 2)
-       unblocks 1 · S · bimpossible+addins · VERIFIED 2026-08-23 · CUTOVER PASS 2026-08-25 -- LIVE and verified, stays on (unlike pilot…
 
 [ARCH-FIRM-ALIAS-BACKEND] Firm-alias layer SHIPPED -- BIMpossible firm-literal baseline now ZERO (126 -> 21 -> 0), Add-Ins 29 -> 5
        unblocks 1 · S · bimpossible+addins · VERIFIED 2026-08-30 · BIMpossible #257 (85c3fff, MERGED 2026-08-05T23:43:21Z) -- backend/a…
