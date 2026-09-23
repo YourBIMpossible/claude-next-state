@@ -23,6 +23,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-22 @ `d3eeca10` PR#687 · `add
 [AI-ADDINS-GLASS-APPROVE-1] Uncommitted GlassButtonProfile.Approve change breaks pinned test GlassButtonProfileTests.NonErrorConfirmsStayCobaltPrimary (3 cases) -- owner call: update the test or revert ConfirmPrimaryFor
        unblocks 0 · S · addins · VERIFIED 2026-09-21 · F:/BIMpossible-AddIns/BIMpossible.RevitLink/Shared/GlassButtonProfil…
 
+[AIS-RE-2-RENEW-FAIL-OPEN] Decide: assistant turn continues when hold renewal fails (renew_in_background swallows) -- abort-on-lost-hold?
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-22 · 5689c9db
+
 [CHAT-GATEWAY-291-OWNER-DECISIONS] Issue #291 owner decisions: binding lifecycle after denial, persisted identity bridge, cross-firm alerting threshold (decision package prepared, awaiting three sign-offs)
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-06 · BIMpossible #582 docs(#291) -- squash 5f275baa, docs-only. Adds the …
 
@@ -123,6 +126,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-22 @ `d3eeca10` PR#687 · `add
 
 [UX-RECENTLY-OPENED-EPOCH-DATE] UX: Recently opened rendered 12/31/1969 for discovery-only models -- backend emits null for the 1970 sentinel, timeAgo guards non-positive/invalid timestamps
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-14 · Observed 2026-09-13 ~22:30Z in the S&L grantee view: Recently opened…
+
+[AIS-RE-2-WIRE-EXTEND] AIS-RE-2 heartbeat extend() wired into assistant turn -- already merged in #684 (PR body stale)
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-22 · 5689c9db
 
 [CKA-DOC-MODEL-PR534] CKA project/private/multi-project/firm-library document model on AUTH-INH MERGED (#534); migration b7c8d9e0f1a2 applied locally; project scopes dark while gate is not ENFORCE
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · BIMpossible#534 MERGED 2026-09-02T02:58Z (squash 1f59bcf8): aec/firm…
@@ -288,9 +294,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-22 @ `d3eeca10` PR#687 · `add
 
 ## Next up
 
-[AIS-RE-2-WIRE-EXTEND] Wire budget_reservation.extend() heartbeat into the assistant turn loop (AIS-RE-2 follow-up)
-       unblocks 0 · S · bimpossible · VERIFIED 2026-09-22 · BIMpossible#684
-
 [ADDINS-SLOT-LEDGER] Runtime-slot handoff ledger is stale: deploys are landing without a ledger entry
        unblocks 0 · S · addins · VERIFIED 2026-08-23 · Add-Ins decision-log/2026-07-25__runtime-slot-handoff.md -- last mod…
 
@@ -316,6 +319,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-22 @ `d3eeca10` PR#687 · `add
        unblocks 0 · L · bimpossible · CLAIMED 2026-09-22 · decisions/2026-09-22__autodesk-first-rollout-and-download-capability…
 
 ## In flight
+
+[REVIT-OPEN-DOCS-POST-FIX] FE useRevitLink probe sends GET to POST-only /revit/list_open_documents (405, docs list always empty)
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-22 · prod smoke 2026-09-22
 
 [AUDIT-2026-09-07-REMEDIATION] 2026-09-07 weekly audit remediation wave: Revit write-integrity + fail-open QA reads + pipe-kill-switch CI guard -- 3 merged, 2 open drafts
        unblocks 0 · L · addins · CLAIMED 2026-09-10 · Program root: Weekly Full Audit 2026-09-07. Ledger BIMpossible-Works…

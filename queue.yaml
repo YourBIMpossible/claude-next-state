@@ -9955,11 +9955,11 @@ items:
     MERGED'
   source: /next sync 2026-09-22
 - id: AIS-RE-2-WIRE-EXTEND
-  title: Wire budget_reservation.extend() heartbeat into the assistant turn loop (AIS-RE-2
-    follow-up)
+  title: 'AIS-RE-2 heartbeat extend() wired into assistant turn -- already merged
+    in #684 (PR body stale)'
   projects:
   - bimpossible
-  status: ready
+  status: landed
   owner_gate: false
   owner: null
   unblocks: []
@@ -9967,18 +9967,24 @@ items:
   effort: S
   risk: 3
   evidence:
+  - kind: commit
+    ref: 5689c9db
+    note: 'origin/main assistant.py:143 RESERVATION_RENEW_SECS=TTL//3; :791-800 _renew_loop
+      -> renew_in_background -> extend(); :808-818 finally cancels renew before settle.
+      #684 squash included a 2nd "wire heartbeat" commit its body omits.'
   - kind: pr
     ref: BIMpossible#684
     note: 'MERGED 5689c9db; mechanism + DB-lane tests only; call-site wiring in backend/aec/assistant.py
       deferred until the Autodesk-first swarm reconciled (now done via #685)'
   verification:
     level: verified
-    by: 'PR#684 merged 5689c9db 2026-09-22; body states wiring deliberately out of
-      scope. Unwired, the #642 overshoot window stays open mid-turn.'
+    by: git grep origin/main 6b54fb5f 2026-09-22; pytest test_assistant_loop.py+test_budget_reservation_dblane.py
+      14 passed/26 skipped(PG)/0 failed. Stack restarted on d3eeca10 (includes 5689c9db)
+      but no long (>15min) turn exercised -> landed, not live-verified.
     at: '2026-09-22'
   live_check:
-  - 'git -C F:/BIMpossible grep -c "extend(" origin/main -- backend/aec/assistant.py  #
-    rises once wired'
+  - 'git -C F:/BIMpossible grep -c "_renew_loop" origin/main -- backend/aec/assistant.py  #
+    >=1'
   source: /next sync 2026-09-22 (PR#684 deferred scope)
 - id: AUTODESK-FIRST-ROLLOUT-DELIVERY
   title: 'Autodesk-first rollout: complete authority model, wire FE canDownload, then
@@ -10068,12 +10074,67 @@ items:
   - kind: pr
     ref: BIMpossible#687
     note: MERGED 088f6d16 docs hygiene package
+  - kind: run
+    ref: actions run 35820801807
+    note: secret-scan.yml workflow_dispatch on main 6b54fb5f (post-#686) = success
+      2026-09-22
   verification:
     level: verified
-    by: 'gh pr list 2026-09-22 states as noted. landed only because #686 has no green
-      post-merge main secret-scan run yet.'
+    by: 'gh pr list 2026-09-22; #686 fresh main secret-scan run 35820801807 success
+      at 6b54fb5f'
     at: '2026-09-22'
   live_check:
   - 'gh run list --repo YourBIMpossible/BIMpossible --branch main --workflow secret-scan.yml
     --limit 1 --json conclusion,headSha  # expect success at >=93af2017'
   source: /next sync 2026-09-22
+- id: REVIT-OPEN-DOCS-POST-FIX
+  title: FE useRevitLink probe sends GET to POST-only /revit/list_open_documents (405,
+    docs list always empty)
+  projects:
+  - bimpossible
+  status: in_flight
+  owner_gate: true
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: run
+    ref: prod smoke 2026-09-22
+    note: GET /revit/list_open_documents 405 on every model-page load
+  - kind: pr
+    ref: BIMpossible#690
+    note: 'DRAFT e09bd204: POST + {} body; vitest 2449 passed, tsc 0, lint 0; next
+      build not run; needs merge + Refresh-Frontend.ps1'
+  verification:
+    level: verified
+    by: gh pr view 690 2026-09-22 OPEN draft head e09bd204
+    at: '2026-09-22'
+  live_check:
+  - 'gh pr view 690 --repo YourBIMpossible/BIMpossible --json state --jq .state  #
+    OPEN until merged'
+  source: overnight run 2026-09-22 (workstream B)
+- id: AIS-RE-2-RENEW-FAIL-OPEN
+  title: 'Decide: assistant turn continues when hold renewal fails (renew_in_background
+    swallows) -- abort-on-lost-hold?'
+  projects:
+  - bimpossible
+  status: blocked_owner
+  owner_gate: true
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: commit
+    ref: 5689c9db
+    note: budget_reservation.py:346-360 renew_in_background logs+swallows; repeated
+      failure => hold lapses at 15min TTL mid-turn (pre-#684 behavior, no limit weakened)
+  verification:
+    level: verified
+    by: code read origin/main 6b54fb5f 2026-09-22
+    at: '2026-09-22'
+  live_check: []
+  source: overnight run 2026-09-22 (workstream A finding)
