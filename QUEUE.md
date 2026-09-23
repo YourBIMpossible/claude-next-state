@@ -7,7 +7,7 @@ This is a repo-local read model, not a definition of /next behavior. -->
 
 Generated 2026-09-22 (synced). Anchor-first, leverage-ranked (per item-model.md). The single #1 move is chosen live by the skill from the anchor (stated focus, else roadmap order) and finalization leverage — not from dependency cone. This board is a status-grouped snapshot; within each section it orders by owner-gated+S, then effort, risk, id, with `cone` leading (deep graph). Full algorithm: `~/.claude/skills/next/reference/item-model.md`.
 
-Scope: `all`. Watermarks: `bimpossible` = 2026-09-23 @ `6b54fb5f` PR#688 · `addins` = 2026-09-21 @ `baa9efe` PR#155 · `workspace` = 2026-09-21 @ `647c6b1` PR#154 · `evidence-compiler` = 2026-09-16 @ `a6977c8` PR#17 · `dashboard` = 2026-09-06 @ `efdcba1` PR#22.
+Scope: `all`. Watermarks: `bimpossible` = 2026-09-23 @ `67c4cd48` PR#693 · `addins` = 2026-09-21 @ `baa9efe` PR#155 · `workspace` = 2026-09-21 @ `647c6b1` PR#154 · `evidence-compiler` = 2026-09-16 @ `a6977c8` PR#17 · `dashboard` = 2026-09-06 @ `efdcba1` PR#22.
 (pc-monitor/bim-site: no items yet — run `init` to derive.)
 
 > **Dormant project(s):** `families` — reassessment-bound. Items scoped to them are parked; their probes are suspended (non-executable metadata) and render **SUSPENDED**, never verified. `/next` will not run or propose a command against a dormant repo.
@@ -115,11 +115,20 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-23 @ `6b54fb5f` PR#688 · `add
 [AUTHZ-SHADOW-ACTIVATE] AUTH-INH arc CLOSED 2026-08-16: foundation complete, enforcement deferred to pre-pilot validation (runbook Sec 6)
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-13 · 2026-09-13 owner-run probe: `docker exec docker-backend-1 printenv B…
 
+[AIS-RE-2-RENEW-FAIL-OPEN] AIS-RE-2 renewal fail-closed: stop assistant turn when hold renewal fails -- draft PR #694
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-23 · BIMpossible#694
+
 [REVITLINK-OPAQUE-500-MAPPING] revit_link error mapping collapses distinct add-in refusals (NOT_SUPPORTED, DOC_NOT_FOUND, AMBIGUOUS_DOCUMENT, SYNC_FAILED) into one opaque INTERNAL_ERROR 500 with no detail
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-19 · backend/revit_link/native_adapter.py _COMMAND_ERROR_MAP (unknown cod…
 
 [UX-SHARED-WITH-YOU-TITLE-IS-SHARE-LABEL] UX: Shared-with-you row titled with the owner's share label instead of the project name -- project_name now on the wire, label demoted to secondary metadata
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-14 · Observed 2026-09-13 ~22:30Z in the S&L grantee view: the row read "h…
+
+[REVIT-OPEN-DOCS-POST-FIX] FE useRevitLink probe sends GET to POST-only /revit/list_open_documents (405, docs list always empty)
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-23 · BIMpossible#690
+
+[UPLOAD-DOWNLOAD-COVERAGE] Upload/download gap tests (firm-docs 413/quota/commit-cleanup/cross-firm dup, export deny) + manual smoke runbook -- draft PR #693
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-23 · BIMpossible#693
 
 [UX-RECENTLY-OPENED-EPOCH-DATE] UX: Recently opened rendered 12/31/1969 for discovery-only models -- backend emits null for the 1970 sentinel, timeAgo guards non-positive/invalid timestamps
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-14 · Observed 2026-09-13 ~22:30Z in the S&L grantee view: Recently opened…
@@ -319,15 +328,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-23 @ `6b54fb5f` PR#688 · `add
        unblocks 0 · L · bimpossible · CLAIMED 2026-09-22 · decisions/2026-09-22__autodesk-first-rollout-and-download-capability…
 
 ## In flight
-
-[AIS-RE-2-RENEW-FAIL-OPEN] AIS-RE-2 renewal fail-closed: stop assistant turn when hold renewal fails -- draft PR #694
-       unblocks 0 · S · bimpossible · VERIFIED 2026-09-23 · 5689c9db
-
-[REVIT-OPEN-DOCS-POST-FIX] FE useRevitLink probe sends GET to POST-only /revit/list_open_documents (405, docs list always empty)
-       unblocks 0 · S · bimpossible · VERIFIED 2026-09-22 · prod smoke 2026-09-22
-
-[UPLOAD-DOWNLOAD-COVERAGE] Upload/download gap tests (firm-docs 413/quota/commit-cleanup/cross-firm dup, export deny) + manual smoke runbook -- draft PR #693
-       unblocks 0 · S · bimpossible · VERIFIED 2026-09-23 · BIMpossible#693
 
 [AUDIT-2026-09-07-REMEDIATION] 2026-09-07 weekly audit remediation wave: Revit write-integrity + fail-open QA reads + pipe-kill-switch CI guard -- 3 merged, 2 open drafts
        unblocks 0 · L · addins · CLAIMED 2026-09-10 · Program root: Weekly Full Audit 2026-09-07. Ledger BIMpossible-Works…

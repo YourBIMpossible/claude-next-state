@@ -2,8 +2,8 @@ schema_version: 1
 reconciled:
   bimpossible:
     at: '2026-09-23'
-    commit: 6b54fb5f
-    pr: 688
+    commit: 67c4cd48
+    pr: 693
   addins:
     at: '2026-09-21'
     commit: baa9efe
@@ -10105,7 +10105,7 @@ items:
     docs list always empty)
   projects:
   - bimpossible
-  status: in_flight
+  status: landed
   owner_gate: true
   owner: null
   unblocks: []
@@ -10113,6 +10113,9 @@ items:
   effort: S
   risk: 1
   evidence:
+  - kind: pr
+    ref: BIMpossible#690
+    note: MERGED 2ff008b3 2026-09-23; vitest/tsc/lint green at e09bd204.
   - kind: run
     ref: prod smoke 2026-09-22
     note: GET /revit/list_open_documents 405 on every model-page load
@@ -10122,18 +10125,20 @@ items:
       build not run; needs merge + Refresh-Frontend.ps1'
   verification:
     level: verified
-    by: gh pr view 690 2026-09-22 OPEN draft head e09bd204
-    at: '2026-09-22'
+    by: 'gh pr view 690 MERGED 2ff008b3. NOT live: shared checkout not pulled, backend
+      not restarted / frontend not refreshed (deploy step blocked by auto-mode classifier;
+      owner action).'
+    at: '2026-09-23'
   live_check:
   - 'gh pr view 690 --repo YourBIMpossible/BIMpossible --json state --jq .state  #
-    OPEN until merged'
+    MERGED'
   source: overnight run 2026-09-22 (workstream B)
 - id: AIS-RE-2-RENEW-FAIL-OPEN
   title: 'AIS-RE-2 renewal fail-closed: stop assistant turn when hold renewal fails
     -- draft PR #694'
   projects:
   - bimpossible
-  status: in_flight
+  status: landed
   owner_gate: true
   owner: null
   unblocks: []
@@ -10141,6 +10146,11 @@ items:
   effort: S
   risk: 2
   evidence:
+  - kind: pr
+    ref: BIMpossible#694
+    note: 'MERGED 5a9fcbd8 2026-09-23; DB lane on throwaway postgres:16 (db.migrate
+      -> c7d2e9f4a1b6): dblane+loop 47 passed; assistant/budget/ledger suites 644
+      passed 0 failed.'
   - kind: commit
     ref: 5689c9db
     note: budget_reservation.py:346-360 renew_in_background logs+swallows; repeated
@@ -10153,19 +10163,20 @@ items:
       x3; no-DB full suite 6156 passed/582 skipped; dblane NOT run (no DATABASE_URL).'
   verification:
     level: verified
-    by: gh pr view 694 OPEN draft 2026-09-23; three-dot diff = assistant.py, budget_reservation.py,
-      test_assistant_loop.py only
+    by: 'gh pr view 694 MERGED 5a9fcbd8. NOT live: shared checkout not pulled, backend
+      not restarted / frontend not refreshed (deploy step blocked by auto-mode classifier;
+      owner action).'
     at: '2026-09-23'
   live_check:
   - 'gh pr view 694 --repo YourBIMpossible/BIMpossible --json state --jq .state  #
-    OPEN until merged'
+    MERGED'
   source: overnight run 2026-09-22 (workstream A finding)
 - id: UPLOAD-DOWNLOAD-COVERAGE
   title: 'Upload/download gap tests (firm-docs 413/quota/commit-cleanup/cross-firm
     dup, export deny) + manual smoke runbook -- draft PR #693'
   projects:
   - bimpossible
-  status: in_flight
+  status: landed
   owner_gate: true
   owner: null
   unblocks: []
@@ -10175,16 +10186,20 @@ items:
   evidence:
   - kind: pr
     ref: BIMpossible#693
+    note: 'MERGED 67c4cd48 2026-09-23; re-run 2026-09-23 on throwaway PG: 93 passed.
+      Prod upload/download smoke NOT run.'
+  - kind: pr
+    ref: BIMpossible#693
     note: DRAFT 24432d0d tests+docs only; dblane 126 passed/0 skipped on throwaway
       PG; no bugs found; sheet-pdf export still uncovered (needs APS fake); runbook
       docs/ops/2026-09-23-upload-download-smoke-runbook.md
   verification:
     level: verified
-    by: gh pr view 693 OPEN draft; three-dot diff 4 files +248. Prod upload/download
-      still NOT smoke-tested.
+    by: gh pr view 693 MERGED 67c4cd48.
     at: '2026-09-23'
   live_check:
-  - gh pr view 693 --repo YourBIMpossible/BIMpossible --json state --jq .state
+  - 'gh pr view 693 --repo YourBIMpossible/BIMpossible --json state --jq .state  #
+    MERGED'
   source: overnight 2026-09-23 (workstream C)
 - id: FE-UPLOAD-EXPORT-ERROR-UX
   title: 'FE: firm-docs upload shows raw backend detail for 413/415/409; SheetComposer
