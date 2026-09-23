@@ -9929,6 +9929,13 @@ items:
       recreated (--no-deps --force-recreate) Up (healthy), 0 error/traceback lines;
       Refresh-Frontend.ps1 image 2026-09-23T04:29Z healthy; app.yourbimpossible.com
       200. No signed-in feature smoke run.'
+  - kind: run
+    ref: prod smoke 2026-09-22
+    note: '2026-09-22 Chrome smoke app.yourbimpossible.com: signed in, dashboard 16
+      projects; Stanford ES3 model page loaded (APS manifest/views/elements 200);
+      Cable Tray Fittings 6 rows; assistant answered 6 (matches table); clean reload
+      0 console errors, 48/49 app requests 200, sole 405 = pre-existing GET /revit/list_open_documents
+      (POST-only route, useRevitLink.ts:84). Uploads/downloads NOT tested.'
   verification:
     level: verified
     by: '2026-09-22 21:30 PDT: owner set BIMPOSSIBLE_CHANGE_SET_REQUIRE_SEPARATE_APPROVER=1
@@ -9936,7 +9943,12 @@ items:
       -> aadf3ce41b1c -> d1b7e2a9c4f0 -> 80af6ebc3df5 -> c7d2e9f4a1b6 (head); backend
       recreated (--no-deps --force-recreate) Up (healthy), 0 error/traceback lines;
       Refresh-Frontend.ps1 image 2026-09-23T04:29Z healthy; app.yourbimpossible.com
-      200. No signed-in feature smoke run.'
+      200. No signed-in feature smoke run. | 2026-09-22 Chrome smoke app.yourbimpossible.com:
+      signed in, dashboard 16 projects; Stanford ES3 model page loaded (APS manifest/views/elements
+      200); Cable Tray Fittings 6 rows; assistant answered 6 (matches table); clean
+      reload 0 console errors, 48/49 app requests 200, sole 405 = pre-existing GET
+      /revit/list_open_documents (POST-only route, useRevitLink.ts:84). Uploads/downloads
+      NOT tested.'
     at: '2026-09-22'
   live_check:
   - 'gh pr view 685 --repo YourBIMpossible/BIMpossible --json state --jq .state  #
