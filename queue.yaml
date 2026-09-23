@@ -10184,6 +10184,10 @@ items:
   effort: S
   risk: 1
   evidence:
+  - kind: run
+    ref: 2026-09-23 ~15:40Z Chrome, app.yourbimpossible.com, TEST_ACCC_D_EL_SL.rvt Cable Tray Fittings
+    note: 'DOWNLOAD live-smoked: GET /data/elements/xlsx 200 (table Export XLSX). Other 4 download routes
+      (spec_draft, model-health export, coordination-report export, sheet-pdf) still NOT live-smoked'
   - kind: pr
     ref: BIMpossible#693
     note: 'MERGED 67c4cd48 2026-09-23; re-run 2026-09-23 on throwaway PG: 93 passed.
@@ -10266,6 +10270,11 @@ items:
     note: 'shared checkout 37cd0c2d (#702); backend created 06:42:38Z (after #701 06:41Z), /health
       200; frontend created 06:47:08Z (after #702 06:46Z) -> #694/#690/#688/#700/#701/#702 built.
       405 still not live-checked (model-page load classifier-blocked)'
+  - kind: run
+    ref: 2026-09-23 ~15:40Z owner force-recreate backend + Refresh-Frontend at 3ea5fc9a (image 15:24:23Z); Chrome smoke on app.yourbimpossible.com
+    note: 'LIVE-VERIFIED: POST /revit/list_open_documents 200 (no 405, #690); assistant/chat POST 200 answered
+      2 Cable Tray Fittings = grid row count (#694 normal path); GET /data/elements/xlsx 200 (first live download
+      route). Admin console NOT checked: /admin and admin.yourbimpossible.com show a Chrome error page'
   verification:
     level: verified
     by: docker inspect Created times vs gh mergedAt; git -C F:/BIMpossible log -1 = 37cd0c2d

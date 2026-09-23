@@ -131,7 +131,7 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-23 @ `3ea5fc9a` PR#697 · `add
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-23 · BIMpossible#690
 
 [UPLOAD-DOWNLOAD-COVERAGE] Upload/download gap tests (firm-docs 413/quota/commit-cleanup/cross-firm dup, export deny) + manual smoke runbook -- draft PR #693
-       unblocks 0 · S · bimpossible · VERIFIED 2026-09-23 · BIMpossible#693
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-23 · 2026-09-23 ~15:40Z Chrome, app.yourbimpossible.com, TEST_ACCC_D_EL_S…
 
 [UX-RECENTLY-OPENED-EPOCH-DATE] UX: Recently opened rendered 12/31/1969 for discovery-only models -- backend emits null for the 1970 sentinel, timeAgo guards non-positive/invalid timestamps
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-14 · Observed 2026-09-13 ~22:30Z in the S&L grantee view: Recently opened…
