@@ -7,7 +7,7 @@ This is a repo-local read model, not a definition of /next behavior. -->
 
 Generated 2026-09-22 (synced). Anchor-first, leverage-ranked (per item-model.md). The single #1 move is chosen live by the skill from the anchor (stated focus, else roadmap order) and finalization leverage — not from dependency cone. This board is a status-grouped snapshot; within each section it orders by owner-gated+S, then effort, risk, id, with `cone` leading (deep graph). Full algorithm: `~/.claude/skills/next/reference/item-model.md`.
 
-Scope: `all`. Watermarks: `bimpossible` = 2026-09-22 @ `d3eeca10` PR#687 · `addins` = 2026-09-21 @ `baa9efe` PR#155 · `workspace` = 2026-09-21 @ `647c6b1` PR#154 · `evidence-compiler` = 2026-09-16 @ `a6977c8` PR#17 · `dashboard` = 2026-09-06 @ `efdcba1` PR#22.
+Scope: `all`. Watermarks: `bimpossible` = 2026-09-23 @ `6b54fb5f` PR#688 · `addins` = 2026-09-21 @ `baa9efe` PR#155 · `workspace` = 2026-09-21 @ `647c6b1` PR#154 · `evidence-compiler` = 2026-09-16 @ `a6977c8` PR#17 · `dashboard` = 2026-09-06 @ `efdcba1` PR#22.
 (pc-monitor/bim-site: no items yet — run `init` to derive.)
 
 > **Dormant project(s):** `families` — reassessment-bound. Items scoped to them are parked; their probes are suspended (non-executable metadata) and render **SUSPENDED**, never verified. `/next` will not run or propose a command against a dormant repo.
@@ -22,9 +22,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-22 @ `d3eeca10` PR#687 · `add
 
 [AI-ADDINS-GLASS-APPROVE-1] Uncommitted GlassButtonProfile.Approve change breaks pinned test GlassButtonProfileTests.NonErrorConfirmsStayCobaltPrimary (3 cases) -- owner call: update the test or revert ConfirmPrimaryFor
        unblocks 0 · S · addins · VERIFIED 2026-09-21 · F:/BIMpossible-AddIns/BIMpossible.RevitLink/Shared/GlassButtonProfil…
-
-[AIS-RE-2-RENEW-FAIL-OPEN] Decide: assistant turn continues when hold renewal fails (renew_in_background swallows) -- abort-on-lost-hold?
-       unblocks 0 · S · bimpossible · VERIFIED 2026-09-22 · 5689c9db
 
 [CHAT-GATEWAY-291-OWNER-DECISIONS] Issue #291 owner decisions: binding lifecycle after denial, persisted identity bridge, cross-firm alerting threshold (decision package prepared, awaiting three sign-offs)
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-06 · BIMpossible #582 docs(#291) -- squash 5f275baa, docs-only. Adds the …
@@ -142,7 +139,7 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-22 @ `d3eeca10` PR#687 · `add
 [ADDINS-PIPE-BUSY-BACKOFF] PipeServer pipe-busy listen backoff
        unblocks 0 · S · addins · VERIFIED 2026-09-10 · BIMpossible-AddIns#117
 
-[AUTHZ-ENFORCE-KEYSTONE-PR530] Merge BIMpossible#530: AUTH-INH ENFORCE keystone + Phase 15c T5 end-to-end test (CKA Phase 18 step 1)
+[AUTHZ-ENFORCE-KEYSTONE-PR530] Merged BIMpossible#530: AUTH-INH ENFORCE keystone + Phase 15c T5 end-to-end test (CKA Phase 18 step 1)
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · BIMpossible#530 OPEN, READY, head 6d64390f, opened 2026-09-02T00:40Z…
 
 [FEAT-REVIT-PAIRING-COPY] Revit pairing SHIPPED as Copy/paste-only -- protocol-launch button removed after reliability rework
@@ -229,6 +226,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-22 @ `d3eeca10` PR#687 · `add
 [WFA-2026-09-14-L3-ASSISTANT-AI-CONTEXT] WFA 2026-09-14 L3: firm-scoped assistant AI-context policy -- ported into release #685 (#671 closed)
        unblocks 0 · M · bimpossible · VERIFIED 2026-09-22 · BIMpossible#685
 
+[ADMIN-CONSOLE-NO-DOMAIN-OR-MEMBERSHIP-CONTROLS] Gap: the platform admin console cannot add a firm email domain or activate/reassign a membership -- a new client firm's first login can never link without a raw admin API call
+       unblocks 0 · M · bimpossible · VERIFIED 2026-09-23 · BIMpossible#688
+
 [APS-DISCOVERY-PAGINATE-FOLDER-CONTENTS] APS discovery: paginate folder contents before model-index tombstone reconciliation -- list_all_rvts folder-contents walk reads child.get('data') without following links.next (APS pages at 200), so a >200-item folder yields a successful-but-partial discovery set; the #466 reconcile pass then tombstones the omitted later-page models and hides them from search until re-discovered
        unblocks 0 · M · bimpossible · VERIFIED 2026-08-24 · MERGED 2026-08-24T23:23Z: BIMpossible#474 -> squash 6a327f72 on main…
 
@@ -297,6 +297,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-22 @ `d3eeca10` PR#687 · `add
 [ADDINS-SLOT-LEDGER] Runtime-slot handoff ledger is stale: deploys are landing without a ledger entry
        unblocks 0 · S · addins · VERIFIED 2026-08-23 · Add-Ins decision-log/2026-07-25__runtime-slot-handoff.md -- last mod…
 
+[FE-UPLOAD-EXPORT-ERROR-UX] FE: firm-docs upload shows raw backend detail for 413/415/409; SheetComposer silently skips failed sheets
+       unblocks 0 · S · bimpossible · CLAIMED 2026-09-23 · frontend/app/components/SheetComposer.tsx:~74
+
 [OPS-WORKTREE-DRIFT-REVIEW] Recurring per-repo drift review: workspace local behind-6/ahead-1 with dirty ledgers + untracked audit docs
        unblocks 0 · S · workspace+bimpossible · VERIFIED 2026-09-14 · 2026-08-07 (original): workspace carried 2 untracked docs (revitlink…
 
@@ -309,9 +312,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-22 @ `d3eeca10` PR#687 · `add
 [ADDINS-HYGIENE] Add-Ins hygiene: finish Glass rollout (conformance-PR dedup DONE 2026-08-04)
        unblocks 0 · M · addins · VERIFIED 2026-08-23 · Add-Ins #10 MERGED 2026-08-04 (squash, main 94b21ab -- Plans 1+2 con…
 
-[ADMIN-CONSOLE-NO-DOMAIN-OR-MEMBERSHIP-CONTROLS] Gap: the platform admin console cannot add a firm email domain or activate/reassign a membership -- a new client firm's first login can never link without a raw admin API call
-       unblocks 0 · M · bimpossible · VERIFIED 2026-09-13 · Observed 2026-09-13 during the cross-firm test. Silverman & Light ex…
-
 [P7-REVITLINK-MULTIUSER] Scale RevitLink to multi-user (RE-1 defect now fixed; RE-2 capacity limit remains)
        unblocks 0 · M · bimpossible+addins · VERIFIED 2026-08-23 · Verification Checklist item RL_P0_10 (single-pipe/single-secret cons…
 
@@ -320,8 +320,14 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-22 @ `d3eeca10` PR#687 · `add
 
 ## In flight
 
+[AIS-RE-2-RENEW-FAIL-OPEN] AIS-RE-2 renewal fail-closed: stop assistant turn when hold renewal fails -- draft PR #694
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-23 · 5689c9db
+
 [REVIT-OPEN-DOCS-POST-FIX] FE useRevitLink probe sends GET to POST-only /revit/list_open_documents (405, docs list always empty)
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-22 · prod smoke 2026-09-22
+
+[UPLOAD-DOWNLOAD-COVERAGE] Upload/download gap tests (firm-docs 413/quota/commit-cleanup/cross-firm dup, export deny) + manual smoke runbook -- draft PR #693
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-23 · BIMpossible#693
 
 [AUDIT-2026-09-07-REMEDIATION] 2026-09-07 weekly audit remediation wave: Revit write-integrity + fail-open QA reads + pipe-kill-switch CI guard -- 3 merged, 2 open drafts
        unblocks 0 · L · addins · CLAIMED 2026-09-10 · Program root: Weekly Full Audit 2026-09-07. Ledger BIMpossible-Works…

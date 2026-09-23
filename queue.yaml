@@ -1,9 +1,9 @@
 schema_version: 1
 reconciled:
   bimpossible:
-    at: '2026-09-22'
-    commit: d3eeca10
-    pr: 687
+    at: '2026-09-23'
+    commit: 6b54fb5f
+    pr: 688
   addins:
     at: '2026-09-21'
     commit: baa9efe
@@ -7099,8 +7099,8 @@ items:
     three P7 docs were still missing from main).'
   notes_url: null
 - id: AUTHZ-ENFORCE-KEYSTONE-PR530
-  title: 'Merge BIMpossible#530: AUTH-INH ENFORCE keystone + Phase 15c T5 end-to-end test (CKA Phase 18
-    step 1)'
+  title: 'Merged BIMpossible#530: AUTH-INH ENFORCE keystone + Phase 15c T5 end-to-end
+    test (CKA Phase 18 step 1)'
   projects:
   - bimpossible
   status: landed
@@ -7112,28 +7112,32 @@ items:
   risk: 2
   evidence:
   - kind: pr
-    ref: 'BIMpossible#530 OPEN, READY, head 6d64390f, opened 2026-09-02T00:40Z, required checks SUCCESS.
-      Test-only: proves the shared enforced authz path on /data/change-sets, /data/change-sets/{id}, /data/views
-      with a real permission_projection row; enforcement mode forced per-request in the test process only,
-      no deployed flag touched. PR body claims Verify-Local-CI GREEN at b706ef6d (5411/3593/26) -- claimed,
+    ref: 'BIMpossible#530 OPEN, READY, head 6d64390f, opened 2026-09-02T00:40Z, required
+      checks SUCCESS. Test-only: proves the shared enforced authz path on /data/change-sets,
+      /data/change-sets/{id}, /data/views with a real permission_projection row; enforcement
+      mode forced per-request in the test process only, no deployed flag touched.
+      PR body claims Verify-Local-CI GREEN at b706ef6d (5411/3593/26) -- claimed,
       not re-run here.'
     url: https://github.com/YourBIMpossible/BIMpossible/pull/530
   - kind: doc
-    ref: 'Workspace ab49443 (2026-09-01) docs(strategy): CKA Decision-0=0A integration plan, WIP gate
-      + reconciliation/closure record -- names this as CKA Completion Program Phase 18, step 1.'
+    ref: 'Workspace ab49443 (2026-09-01) docs(strategy): CKA Decision-0=0A integration
+      plan, WIP gate + reconciliation/closure record -- names this as CKA Completion
+      Program Phase 18, step 1.'
   - kind: pr
-    ref: 'BIMpossible#530 MERGED 2026-09-01 (squash) -> b7158ed8 on main (branch updated twice; main moved
-      under it via #531 5c247a53 and #532 2cbfcd02 from another lane). Test-only change: landed, not live
-      -- deployed BIMPOSSIBLE_AUTHZ_ENFORCEMENT_MODE unchanged; promotion to live tracks AUTHZ-SHADOW-WINDOW-VALIDITY
-      / the .env flip.'
+    ref: 'BIMpossible#530 MERGED 2026-09-01 (squash) -> b7158ed8 on main (branch updated
+      twice; main moved under it via #531 5c247a53 and #532 2cbfcd02 from another
+      lane). Test-only change: landed, not live -- deployed BIMPOSSIBLE_AUTHZ_ENFORCEMENT_MODE
+      unchanged; promotion to live tracks AUTHZ-SHADOW-WINDOW-VALIDITY / the .env
+      flip.'
   verification:
     level: verified
     by: 'gh pr view 530 2026-09-01: MERGED, mergeCommit b7158ed8.'
     at: '2026-09-02'
   live_check:
-  - cd F:/BIMpossible && git merge-base --is-ancestor b7158ed8 origin/main && echo LANDED
-  source: Delta scan 2026-09-01; PR body + Workspace 00_Strategy CKA Decision-0=0A plan (ab49443). Phase
-    18 (Client Knowledge Assistant) row in BIMpossible_PHASE-STATUS.md.
+  - cd F:/BIMpossible && git merge-base --is-ancestor b7158ed8 origin/main && echo
+    LANDED
+  source: Delta scan 2026-09-01; PR body + Workspace 00_Strategy CKA Decision-0=0A
+    plan (ab49443). Phase 18 (Client Knowledge Assistant) row in BIMpossible_PHASE-STATUS.md.
   notes_url: null
 - id: CKA-DOCS-UI-PR540
   title: 'CKA Documents placement + management UI (BIMpossible#540, follow-up #545): merged and deployed
@@ -9434,37 +9438,46 @@ items:
     (not 12/31/1969) for a discovered-but-never-opened model. Then set this item live.'
   source: S&L grantee live smoke 2026-09-13 (hub_id lane Left-Flag) -> PR #664
 - id: ADMIN-CONSOLE-NO-DOMAIN-OR-MEMBERSHIP-CONTROLS
-  title: 'Gap: the platform admin console cannot add a firm email domain or activate/reassign a membership --
-    a new client firm''s first login can never link without a raw admin API call'
+  title: 'Gap: the platform admin console cannot add a firm email domain or activate/reassign
+    a membership -- a new client firm''s first login can never link without a raw
+    admin API call'
   projects:
   - bimpossible
-  status: ready
+  status: landed
   owner_gate: false
   unblocks: []
   blocked_by: []
   effort: M
   risk: 2
   evidence:
+  - kind: pr
+    ref: BIMpossible#688
+    note: MERGED 6b54fb5f 2026-09-23 (FE-only; not live until Refresh-Frontend.ps1)
   - kind: live-smoke
-    ref: 'Observed 2026-09-13 during the cross-firm test. Silverman & Light existed as a firm (admin console
-      Firms list) but firm_domains was empty, so sign-in as zeriah@silvermanlight.com created no membership
-      (aec/membership.link_user_on_login: no domain match -> None). The console FirmDetailPanel / FirmEditDrawer
-      / OnboardingWizard expose website + hub grants + API key only -- no email-domain add, no membership
-      list, no activate/revoke/reassign (backend has POST /admin/domains/{firm_id}, GET /admin/memberships/{firm_id},
-      PATCH /admin/memberships/{id} actions activate|revoke|reassign|set_role). Second trap hit the same run:
-      the S&L Autodesk identity KAKJ5MM3JMXTNCPY already held a manual_seed BIMpossible membership (id 928,
-      2026-07-25), and link_user_on_login returns an existing membership unchanged, so it could never become
-      an S&L member until reassigned via the API. Both steps had to be done by Claude with the owner''s
-      Google id token from the admin session. Fix shape: Firm detail panel gets an Email domains section
-      (add/primary/verified) and a Memberships section (pending -> activate, reassign firm, set role),
-      wired to the existing admin routes; onboarding wizard asks for the primary email domain.'
+    ref: 'Observed 2026-09-13 during the cross-firm test. Silverman & Light existed
+      as a firm (admin console Firms list) but firm_domains was empty, so sign-in
+      as zeriah@silvermanlight.com created no membership (aec/membership.link_user_on_login:
+      no domain match -> None). The console FirmDetailPanel / FirmEditDrawer / OnboardingWizard
+      expose website + hub grants + API key only -- no email-domain add, no membership
+      list, no activate/revoke/reassign (backend has POST /admin/domains/{firm_id},
+      GET /admin/memberships/{firm_id}, PATCH /admin/memberships/{id} actions activate|revoke|reassign|set_role).
+      Second trap hit the same run: the S&L Autodesk identity KAKJ5MM3JMXTNCPY already
+      held a manual_seed BIMpossible membership (id 928, 2026-07-25), and link_user_on_login
+      returns an existing membership unchanged, so it could never become an S&L member
+      until reassigned via the API. Both steps had to be done by Claude with the owner''s
+      Google id token from the admin session. Fix shape: Firm detail panel gets an
+      Email domains section (add/primary/verified) and a Memberships section (pending
+      -> activate, reassign firm, set role), wired to the existing admin routes; onboarding
+      wizard asks for the primary email domain.'
   verification:
     level: verified
-    by: 'Code read of frontend/app/admin/_components/*.tsx (grep domain -> website only) + live run 2026-09-13.'
-    at: '2026-09-13'
+    by: gh pr view 688 MERGED 6b54fb5f
+    at: '2026-09-23'
   live_check:
-  - 'git -C F:/BIMpossible grep -l -i "memberships" origin/main -- frontend/app/admin/  # empty while open'
-  source: cross-firm Smart Filter denial live test 2026-09-13 (owner + Claude, Chrome MCP)
+  - 'git -C F:/BIMpossible grep -l -i "memberships" origin/main -- frontend/app/admin/  #
+    empty while open'
+  source: cross-firm Smart Filter denial live test 2026-09-13 (owner + Claude, Chrome
+    MCP)
 - id: AUTHZ-OPTION-B-B1-ENTITLEMENT-FOUNDATION
   title: 'Autodesk-first access (Option B) B1: per-user Autodesk entitlement foundation (aec/entitlement.py
     EntitlementCache, user/token-scoped, no firm-wide positive cache) -- PR #666 MERGED 2026-09-16, foundation only, NOT live'
@@ -10116,11 +10129,11 @@ items:
     OPEN until merged'
   source: overnight run 2026-09-22 (workstream B)
 - id: AIS-RE-2-RENEW-FAIL-OPEN
-  title: 'Decide: assistant turn continues when hold renewal fails (renew_in_background
-    swallows) -- abort-on-lost-hold?'
+  title: 'AIS-RE-2 renewal fail-closed: stop assistant turn when hold renewal fails
+    -- draft PR #694'
   projects:
   - bimpossible
-  status: blocked_owner
+  status: in_flight
   owner_gate: true
   owner: null
   unblocks: []
@@ -10132,9 +10145,69 @@ items:
     ref: 5689c9db
     note: budget_reservation.py:346-360 renew_in_background logs+swallows; repeated
       failure => hold lapses at 15min TTL mid-turn (pre-#684 behavior, no limit weakened)
+  - kind: pr
+    ref: BIMpossible#694
+    note: 'DRAFT c071881f: owner-approved policy 2026-09-22; awaited renew() via to_thread,
+      3 attempts 1s/2s backoff on DB error, lost hold = immediate stop; SSE error_code
+      renew_failed; settle once reason renew_failed. test_assistant_loop 19 passed
+      x3; no-DB full suite 6156 passed/582 skipped; dblane NOT run (no DATABASE_URL).'
   verification:
     level: verified
-    by: code read origin/main 6b54fb5f 2026-09-22
-    at: '2026-09-22'
-  live_check: []
+    by: gh pr view 694 OPEN draft 2026-09-23; three-dot diff = assistant.py, budget_reservation.py,
+      test_assistant_loop.py only
+    at: '2026-09-23'
+  live_check:
+  - 'gh pr view 694 --repo YourBIMpossible/BIMpossible --json state --jq .state  #
+    OPEN until merged'
   source: overnight run 2026-09-22 (workstream A finding)
+- id: UPLOAD-DOWNLOAD-COVERAGE
+  title: 'Upload/download gap tests (firm-docs 413/quota/commit-cleanup/cross-firm
+    dup, export deny) + manual smoke runbook -- draft PR #693'
+  projects:
+  - bimpossible
+  status: in_flight
+  owner_gate: true
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: BIMpossible#693
+    note: DRAFT 24432d0d tests+docs only; dblane 126 passed/0 skipped on throwaway
+      PG; no bugs found; sheet-pdf export still uncovered (needs APS fake); runbook
+      docs/ops/2026-09-23-upload-download-smoke-runbook.md
+  verification:
+    level: verified
+    by: gh pr view 693 OPEN draft; three-dot diff 4 files +248. Prod upload/download
+      still NOT smoke-tested.
+    at: '2026-09-23'
+  live_check:
+  - gh pr view 693 --repo YourBIMpossible/BIMpossible --json state --jq .state
+  source: overnight 2026-09-23 (workstream C)
+- id: FE-UPLOAD-EXPORT-ERROR-UX
+  title: 'FE: firm-docs upload shows raw backend detail for 413/415/409; SheetComposer
+    silently skips failed sheets'
+  projects:
+  - bimpossible
+  status: ready
+  owner_gate: false
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: doc
+    ref: frontend/app/components/SheetComposer.tsx:~74
+    note: if (!res.ok) continue -> merged PDF short with no message
+  - kind: doc
+    ref: frontend/app/documents/page.tsx onUpload
+    note: only 404 mapped; others raw detail
+  verification:
+    level: claimed
+    by: FE caller map 2026-09-23 (agent read, not re-verified)
+    at: '2026-09-23'
+  live_check: []
+  source: overnight 2026-09-23 (workstream C FE map)
