@@ -117,6 +117,31 @@ items:
     at: '2026-09-24'
   live_check: []
   source: 2026-09-24 closure sweep
+- id: REVIT-END-USER-WORKFLOW-VERIFY
+  title: 'End-user Revit workflow verification of the 2026-09-23 deploy (#690 open-docs list, #694 assistant
+    turn from the pane, #688) -- needs a live Revit session; separate from the infrastructure smoke'
+  projects:
+  - bimpossible
+  status: blocked_owner
+  owner_gate: true
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: doc
+    ref: docs/ops/revit-end-user-live-verification-checklist.md
+    note: 'Split out 2026-09-24 (overnight tranche mandate): OPS-DEPLOY-2026-09-23-MERGES, REVIT-OPEN-DOCS-POST-FIX
+      and AIS-RE-2-RENEW-FAIL-OPEN are deployed + infrastructure-verified (web smoke), NOT end-user verified.
+      This item is that pending gate. Requires Revit running with the pane paired -- owner only.'
+  verification:
+    level: unverified
+    by: 'No Revit session available to the overnight run; nothing observed. Deployed state confirmed by the
+      three landed items above.'
+    at: '2026-09-24'
+  live_check:
+  - 'docker inspect docker-frontend-1 --format {{.Created}}  # postdates 2026-09-24T02:12Z'
+  source: 2026-09-24 overnight tranche (queue normalization)
 - id: EC-DOGFOOD-2
   title: Continue Evidence Compiler dogfooding toward the next North Star review window
   projects:
@@ -1630,7 +1655,7 @@ items:
   source: 02_Reference/2026-08-04__SL-Parameter-Coupling-MAP.md; ARCH-FIRM-PARAM-NEUTRALITY split 2026-08-06
   notes_url: null
 - id: PHASE9-REOPENED-SCOPE
-  title: 'Phase 9 link-target RULED: cutsheets anchor to individual element (by family type)'
+  title: 'Phase 9 link-target RULED and RECORDED in ledger row 9: cutsheet binds to individual element; family type is grouping context (Workspace ea0dbc3 / PR #160); build slice open BIMpossible#713'
   projects:
   - bimpossible
   status: landed
@@ -1644,6 +1669,17 @@ items:
   - kind: doc
     ref: BIMpossible_PHASE-STATUS.md row 9 (Product Data Ingestion) -- 'Reopened ACTIVE 2026-08-17 (owner)
       -- not a pivot, a scope growth'
+  - kind: commit
+    ref: ea0dbc3
+    note: 'Workspace claude/phase9-ledger-ruling (PR #160, open): ledger row 9 now reads the ruling
+      verbatim (owner-authorized edit, 2026-09-24 overnight tranche); no status/pct change.'
+  - kind: pr
+    ref: BIMpossible#713
+    note: 'DRAFT claude/phase9-element-identity (4 commits e1582492..baf0829f): migration 9e1c7f3a2b5d
+      (category_field_mappings / product_records / element_product_bindings keyed on element_unique_id,
+      type as snapshot), aec/product_bindings.py behind BIMPOSSIBLE_PRODUCT_INGESTION_ENABLED (off),
+      18 tests green both lanes, surface audit docs/audits/2026-09-24__phase9-surface-audit.md.
+      MERGED: no. DEPLOYED: no (by mandate).'
   verification:
     level: verified
     by: 'OWNER RULING 2026-08-17 (chat, session 67df33a5): extracted cutsheet data links to the INDIVIDUAL
@@ -1661,7 +1697,8 @@ items:
     at: '2026-09-16'
   live_check:
   - 'grep -A6 ''^| 9 '' "F:\BIMpossible-Workspace\00_Strategy\BIMpossible_PHASE-STATUS.md"  # ledger
-    row 9 -- check whether the owner has recorded the element/type ruling yet'
+    row 9 -- ruling text present once PR #160 merges'
+  - 'gh pr view 713 --repo YourBIMpossible/BIMpossible --json state,isDraft  # draft until owner review'
   source: Owner ruling in chat 2026-08-17; BIMpossible_PHASE-STATUS.md row 9
   notes_url: null
 - id: SHARED-PARAM-REGISTRY
