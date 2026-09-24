@@ -7,7 +7,7 @@ This is a repo-local read model, not a definition of /next behavior. -->
 
 Generated 2026-09-24 (synced). Anchor-first, leverage-ranked (per item-model.md). The single #1 move is chosen live by the skill from the anchor (stated focus, else roadmap order) and finalization leverage — not from dependency cone. This board is a status-grouped snapshot; within each section it orders by owner-gated+S, then effort, risk, id, with `cone` leading (deep graph). Full algorithm: `~/.claude/skills/next/reference/item-model.md`.
 
-Scope: `all`. Watermarks: `bimpossible` = 2026-09-23 @ `3ea5fc9a` PR#697 · `addins` = 2026-09-21 @ `baa9efe` PR#155 · `workspace` = 2026-09-21 @ `647c6b1` PR#154 · `evidence-compiler` = 2026-09-16 @ `a6977c8` PR#17 · `dashboard` = 2026-09-06 @ `efdcba1` PR#22.
+Scope: `all`. Watermarks: `bimpossible` = 2026-09-24 @ `57bc3445` PR#710 · `addins` = 2026-09-21 @ `baa9efe` PR#155 · `workspace` = 2026-09-21 @ `647c6b1` PR#154 · `evidence-compiler` = 2026-09-16 @ `a6977c8` PR#17 · `dashboard` = 2026-09-06 @ `efdcba1` PR#22.
 (pc-monitor/bim-site: no items yet — run `init` to derive.)
 
 > **Dormant project(s):** `families` — reassessment-bound. Items scoped to them are parked; their probes are suspended (non-executable metadata) and render **SUSPENDED**, never verified. `/next` will not run or propose a command against a dormant repo.

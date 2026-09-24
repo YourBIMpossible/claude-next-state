@@ -1,9 +1,9 @@
 schema_version: 1
 reconciled:
   bimpossible:
-    at: '2026-09-23'
-    commit: 3ea5fc9a
-    pr: 697
+    at: '2026-09-24'
+    commit: 57bc3445
+    pr: 710
   addins:
     at: '2026-09-21'
     commit: baa9efe
@@ -77,6 +77,18 @@ items:
   evidence:
   - kind: doc
     ref: BIMpossible#702
+    note: 'focus series all MERGED: #696 2a998061, #698 a6fc9b5b, #700 329f3abf, #702 37cd0c2d, #705 e4cc3467 (in frontend image 57bc3445); unit-tested only'
+  - kind: pr
+    ref: BIMpossible#705
+    note: MERGED e4cc3467 -- prove and preserve firm-access focus reconciliation
+  - kind: pr
+    ref: BIMpossible#700
+    note: MERGED 329f3abf -- refetch-aware focus fallback
+  - kind: pr
+    ref: BIMpossible#698
+    note: MERGED a6fc9b5b -- panel focus fallback and heading semantics
+  - kind: doc
+    ref: F:/Claude-Tools/reports/2026-09-24__closure-sweep.md
     note: 'PREREQUISITE: a non-customer test firm with one disposable domain or membership (none pre-existing/confirmed; must not be created by an agent) | ACCEPTANCE: add then remove via Admin Console; after the causal refetch focus lands on the panel heading or next row and stays visible; cleanup removes the disposable fixture | WHY NOT NOW: no safe fixture exists; creating one is a firm/DB mutation'
   verification:
     level: claimed
