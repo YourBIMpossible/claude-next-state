@@ -10346,7 +10346,7 @@ items:
   title: '#706 review follow-up: admin-host root prefetch redirect, stale comments, tests (F2-F5) + Option C spec 5c reconcile (F1)'
   projects:
   - bimpossible
-  status: in_flight
+  status: live
   owner_gate: false
   owner: null
   unblocks: []
@@ -10362,9 +10362,14 @@ items:
   - kind: pr
     ref: workspace#158
     note: draft; Option C proposal section 2.2 dated reconciliation + row 5c -> 307 /admin; doc-references/docs-budget OK
+  - kind: run
+    ref: 2026-09-24 #158 merged 44177fec; #709 merged 57bc3445 (gitleaks pass); shared checkout ff; Refresh-Frontend image 02:12:58Z healthy
+    note: 'public curl admin / (plain + prefetch) -> 302 Cloudflare Access (outer gate intact); app / -> 200 no Location;
+      local origin Host admin / (plain + prefetch) -> 307 location /admin; LIVE-VERIFIED owner Chrome: admin.yourbimpossible.com/
+      -> /admin, Admin Console Overview renders. Both worktrees removed via git worktree remove'
   verification:
-    level: claimed
-    by: local tests + draft PRs (not live)
+    level: verified
+    by: gh mergeCommit 57bc3445 + 44177fec, curl, Chrome live load
     at: '2026-09-23'
   live_check:
   - 'gh pr view 709 --repo YourBIMpossible/BIMpossible --json state -q .state'
