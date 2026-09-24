@@ -321,6 +321,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-23 @ `3ea5fc9a` PR#697 · `add
 [P7-REVITLINK-MULTIUSER] Scale RevitLink to multi-user (RE-1 defect now fixed; RE-2 capacity limit remains)
        unblocks 0 · M · bimpossible+addins · VERIFIED 2026-08-23 · Verification Checklist item RL_P0_10 (single-pipe/single-secret cons…
 
+[WS-QUEUE-STALE-ARCHIVE-PATHS] Workspace .tools/state/queue.yaml still cites docs/ops/2026-09-16-unattended/* and 2026-09-21-release/ paths moved to docs/ops/_archive/ by bimpossible#710
+       unblocks 0 · XS · workspace · CLAIMED 2026-09-23 · bimpossible#710
+
 [AUTODESK-FIRST-ROLLOUT-DELIVERY] Autodesk-first rollout: complete authority model, wire FE canDownload, then enable flag
        unblocks 0 · L · bimpossible · CLAIMED 2026-09-22 · decisions/2026-09-22__autodesk-first-rollout-and-download-capability…
 
@@ -400,6 +403,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-23 @ `3ea5fc9a` PR#697 · `add
 
 [P5-6-VISUAL-MODEL-GRAPH] Build Visual Model Graph frontend view (5.6, design doc ready)
        unblocks 0 · M · bimpossible · CLAIMED 2026-08-18 · BIMpossible_PHASE-STATUS.md, Phase 5 row 5.6 -- ledger's own wording…
+
+[W5-P1F4-LANE-CONFLICT-NOTE] Dormant lane w5/p1f4 (worktree agent-ab8b81a8795047506, 208 non-ancestor commits) would rename/modify-conflict on 26 files archived by bimpossible#710 if ever rebased; superseded by
+       unblocks 0 · XS · bimpossible · CLAIMED 2026-09-23 · bimpossible#710
 
 [P9-SOURCEPARSER] Build firm design-standards SourceParser when real demand appears
        unblocks 0 · M · bimpossible · CLAIMED 2026-08-18 · BIMpossible_PHASE-STATUS.md, Phase 9 -- PLACED not ratified; ledger …

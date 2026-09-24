@@ -10470,3 +10470,46 @@ items:
   - 'gh pr view 709 --repo YourBIMpossible/BIMpossible --json state -q .state'
   - 'gh pr view 158 --repo YourBIMpossible/BIMpossible_Workspace --json state -q .state'
   source: 2026-09-23 /review-all of #706
+- id: WS-QUEUE-STALE-ARCHIVE-PATHS
+  title: Workspace .tools/state/queue.yaml still cites docs/ops/2026-09-16-unattended/* and 2026-09-21-release/ paths moved to docs/ops/_archive/ by bimpossible#710
+  projects:
+  - workspace
+  status: ready
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: XS
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: bimpossible#710
+    note: merged 5aca9eb5; cosmetic evidence refs on closed items only (queue.yaml:808,821,2932,7671,9089,9897)
+  verification:
+    level: claimed
+    by: reviewer grep during #710
+    at: '2026-09-23'
+  live_check: []
+  source: 2026-09-23 docs-budget closeout /close wander
+  notes_url: null
+- id: W5-P1F4-LANE-CONFLICT-NOTE
+  title: Dormant lane w5/p1f4 (worktree agent-ab8b81a8795047506, 208 non-ancestor commits) would rename/modify-conflict on 26 files archived by bimpossible#710 if ever rebased; superseded by #685
+  projects:
+  - bimpossible
+  status: parked
+  owner_gate: true
+  unblocks: []
+  blocked_by: []
+  effort: XS
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: bimpossible#710
+    note: merge-tree dry run vs HEAD = 85 conflict hunks; owner call is drop vs revive, no action taken
+  verification:
+    level: claimed
+    by: reviewer merge-tree during #710
+    at: '2026-09-23'
+  live_check:
+  - git -C F:/BIMpossible log --oneline origin/main..w5/p1f4 | wc -l
+  source: 2026-09-23 docs-budget closeout /close wander
+  notes_url: null
