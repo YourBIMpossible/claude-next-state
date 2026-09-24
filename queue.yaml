@@ -21,6 +21,90 @@ reconciled:
     commit: efdcba1
     pr: 22
 items:
+- id: VERIFY-SHEETS-ACTIVATION
+  title: 'Sheets activation live verification: sheet-pdf download + #697 SheetComposer ordinary export (incl. failed-sheet naming)'
+  projects:
+  - bimpossible
+  status: parked
+  owner_gate: true
+  owner: owner
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: doc
+    ref: docker/docker-compose.yml:26
+    note: 'PREREQUISITE: owner decides to ship Sheets, sets NEXT_PUBLIC_BIMPOSSIBLE_SHEETS_ENABLED=1 and runs Refresh-Frontend.ps1 | ACCEPTANCE: Sheets tab renders; GET sheet-pdf 200 application/pdf opens; SheetComposer ordinary export downloads merged PDF; a forced 4xx sheet is named and all-fail yields no download | WHY NOT NOW: flag defaults 0 (docker/docker-compose.yml:26); enabling is a feature-gate change outside this release'
+  verification:
+    level: claimed
+    by: 2026-09-24 closure sweep (parked future verification; no live run)
+    at: '2026-09-24'
+  live_check: []
+  source: 2026-09-24 closure sweep
+- id: VERIFY-R18-REACTIVATION-GRANTEE
+  title: 'R18 reactivation: cross-firm grantee download/read/no-share/revoked legs per #693 runbook'
+  projects:
+  - bimpossible
+  status: parked
+  owner_gate: true
+  owner: owner
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: doc
+    ref: docs/ops/2026-09-23-upload-download-smoke-runbook.md
+    note: 'PREREQUISITE: owner decision to turn BIMPOSSIBLE_CROSS_FIRM_SHARING_ENABLED on, plus a non-customer grantee firm with a disposable grant | ACCEPTANCE: grantee with download grant 200; read-only grant -> download denied; no-share 403/404; after revoke denied; cleanup removes the grant | WHY NOT NOW: R18 is dark by design (flag 0); current R18-off verification is closed'
+  verification:
+    level: claimed
+    by: 2026-09-24 closure sweep (parked future verification; no live run)
+    at: '2026-09-24'
+  live_check: []
+  source: 2026-09-24 closure sweep
+- id: VERIFY-ADMIN-FOCUS-LIVE
+  title: 'Admin Console focus-after-mutation live check (#688/#700/#702)'
+  projects:
+  - bimpossible
+  status: parked
+  owner_gate: true
+  owner: owner
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: doc
+    ref: BIMpossible#702
+    note: 'PREREQUISITE: a non-customer test firm with one disposable domain or membership (none pre-existing/confirmed; must not be created by an agent) | ACCEPTANCE: add then remove via Admin Console; after the causal refetch focus lands on the panel heading or next row and stays visible; cleanup removes the disposable fixture | WHY NOT NOW: no safe fixture exists; creating one is a firm/DB mutation'
+  verification:
+    level: claimed
+    by: 2026-09-24 closure sweep (parked future verification; no live run)
+    at: '2026-09-24'
+  live_check: []
+  source: 2026-09-24 closure sweep
+- id: VERIFY-708-TOKEN-REFRESH-LIVE
+  title: 'Admin firm-access across Google ID token refresh (#708) live smoke'
+  projects:
+  - bimpossible
+  status: parked
+  owner_gate: true
+  owner: owner
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: doc
+    ref: BIMpossible#708
+    note: 'PREREQUISITE: admin session with a firm detail panel open, drafts/dialog open, left across a natural session token refresh (~1h); no read-only trigger exists | ACCEPTANCE: after refresh: lists, notices, open dialogs and drafts persist; the four loads relaunch; no Could-not-load/reselect notice | WHY NOT NOW: no non-mutating way to force a same-firm token refresh; unit tests 52/52 + 6/6 cover it'
+  verification:
+    level: claimed
+    by: 2026-09-24 closure sweep (parked future verification; no live run)
+    at: '2026-09-24'
+  live_check: []
+  source: 2026-09-24 closure sweep
 - id: EC-DOGFOOD-2
   title: Continue Evidence Compiler dogfooding toward the next North Star review window
   projects:
@@ -10203,10 +10287,10 @@ items:
   source: overnight run 2026-09-22 (workstream A finding)
 - id: UPLOAD-DOWNLOAD-COVERAGE
   title: 'Upload/download gap tests (firm-docs 413/quota/commit-cleanup/cross-firm
-    dup, export deny) + manual smoke runbook -- #693 merged; owner-leg live-verified on 4/5 download routes; sheet-pdf blocked (Sheets UI build-flag off)'
+    dup, export deny) + manual smoke runbook -- #693 merged; owner-leg live-verified on 4/5 download routes; sheet-pdf blocked     Sheets UI build-flag off) -- CLOSED 2026-09-24: owner leg live on all applicable routes; sheet-pdf -> VERIFY-SHEETS-ACTIVATION, grantee legs -> VERIFY-R18-REACTIVATION-GRANTEE'
   projects:
   - bimpossible
-  status: landed
+  status: live
   owner_gate: true
   owner: null
   unblocks: []
@@ -10250,10 +10334,10 @@ items:
   source: overnight 2026-09-23 (workstream C)
 - id: FE-UPLOAD-EXPORT-ERROR-UX
   title: 'FE: SheetComposer silently skipped failed sheets -- #697 MERGED 3ea5fc9a, deployed
-    (frontend image from 57bc3445); live run BLOCKED: Sheets UI build-flag off (upload-error half dropped: live 415/409 readable)'
+    (frontend image from 57bc3445); live run BLOCKED: Sheets UI build-flag off (upload-error half dropped: live 415/409 readable) -- PARKED 2026-09-24: not applicable while Sheets dark; live run owned by VERIFY-SHEETS-ACTIVATION'
   projects:
   - bimpossible
-  status: landed
+  status: parked
   owner_gate: false
   owner: null
   unblocks: []

@@ -130,9 +130,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-23 @ `3ea5fc9a` PR#697 · `add
 [REVIT-OPEN-DOCS-POST-FIX] FE useRevitLink probe sends GET to POST-only /revit/list_open_documents (405, docs list always empty)
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-23 · BIMpossible#690
 
-[UPLOAD-DOWNLOAD-COVERAGE] Upload/download gap tests (firm-docs 413/quota/commit-cleanup/cross-firm dup, export deny) + manual smoke runbook -- #693 merged; owner-leg live-verified on 4/5 download routes; sheet-pdf blocked (Sheets UI build-flag off)
-       unblocks 0 · S · bimpossible · VERIFIED 2026-09-24 · 2026-09-23 ~15:40Z Chrome, app.yourbimpossible.com, TEST_ACCC_D_EL_S…
-
 [UX-RECENTLY-OPENED-EPOCH-DATE] UX: Recently opened rendered 12/31/1969 for discovery-only models -- backend emits null for the 1970 sentinel, timeAgo guards non-positive/invalid timestamps
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-14 · Observed 2026-09-13 ~22:30Z in the S&L grantee view: Recently opened…
 
@@ -153,9 +150,6 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-23 @ `3ea5fc9a` PR#697 · `add
 
 [AUTHZ-ENFORCE-KEYSTONE-PR530] Merged BIMpossible#530: AUTH-INH ENFORCE keystone + Phase 15c T5 end-to-end test (CKA Phase 18 step 1)
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · BIMpossible#530 OPEN, READY, head 6d64390f, opened 2026-09-02T00:40Z…
-
-[FE-UPLOAD-EXPORT-ERROR-UX] FE: SheetComposer silently skipped failed sheets -- #697 MERGED 3ea5fc9a, deployed (frontend image from 57bc3445); live run BLOCKED: Sheets UI build-flag off (upload-error half dropped: live 415/409 readable)
-       unblocks 0 · S · bimpossible · VERIFIED 2026-09-24 · BIMpossible#697
 
 [FEAT-REVIT-PAIRING-COPY] Revit pairing SHIPPED as Copy/paste-only -- protocol-launch button removed after reliability rework
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-16 · BIMpossible #391 (Send-to-Revit protocol handoff + ?pair=revit deep …
@@ -360,9 +354,24 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-23 @ `3ea5fc9a` PR#697 · `add
 [OPS-AIDEV-ORPHAN-TRANSCRIPTS] Delete orphan CLI transcripts under ~/.claude/projects/F--AI-Dev-BIMpossible-Workspace once the frozen-clone burn-in ends
        unblocks 0 · S · workspace · VERIFIED 2026-09-01 · Session "Workspace root path mismatch" 2026-09-01: 122 transcripts t…
 
+[VERIFY-708-TOKEN-REFRESH-LIVE] Admin firm-access across Google ID token refresh (#708) live smoke
+       unblocks 0 · S · bimpossible · CLAIMED 2026-09-24 · BIMpossible#708
+
+[VERIFY-ADMIN-FOCUS-LIVE] Admin Console focus-after-mutation live check (#688/#700/#702)
+       unblocks 0 · S · bimpossible · CLAIMED 2026-09-24 · BIMpossible#702
+
+[VERIFY-R18-REACTIVATION-GRANTEE] R18 reactivation: cross-firm grantee download/read/no-share/revoked legs per #693 runbook
+       unblocks 0 · S · bimpossible · CLAIMED 2026-09-24 · docs/ops/2026-09-23-upload-download-smoke-runbook.md
+
+[VERIFY-SHEETS-ACTIVATION] Sheets activation live verification: sheet-pdf download + #697 SheetComposer ordinary export (incl. failed-sheet naming)
+       unblocks 0 · S · bimpossible · CLAIMED 2026-09-24 · docker/docker-compose.yml:26
+
 [FAM-PREEXISTING-RED] Families has 1 failing test and 13 ruff errors already on HEAD
        unblocks 0 · S · families · SUSPENDED 2026-08-31 · tool/tests/test_revitlink_pipe_adapter.py::test_handle_reports_missi…
        ⏸ dormant project (families) — probes suspended (non-executable); state unverifiable until whole-repo reassessment
+
+[FE-UPLOAD-EXPORT-ERROR-UX] FE: SheetComposer silently skipped failed sheets -- #697 MERGED 3ea5fc9a, deployed (frontend image from 57bc3445); live run BLOCKED: Sheets UI build-flag off (upload-error half dropped: live 415/409 readable) -- PARKED 2026-09-24: not applicable while Sheets dark; live run owned by VERIFY-SHEETS-ACTIVATION
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-24 · BIMpossible#697
 
 [OPS-REDIS-P5] Flip WEB_CONCURRENCY>1 with redis leader-lock (Wave C-1 Phase 5)
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-04 · docker/REDIS-CUTOVER.md §Next -- confirmed exists on origin/main 202…
@@ -468,6 +477,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-23 @ `3ea5fc9a` PR#697 · `add
 
 [P7-SYNC-COMMENT-CRYPTO-BINDING] Sync comment crypto-binding: CLOSED BY OWNER RULING -- comment is non-authoritative collaboration metadata, no special binding required
        unblocks 0 · S · bimpossible+addins · VERIFIED 2026-08-27 · Today the token binds firm/user/document_title only (backend/revit_l…
+
+[UPLOAD-DOWNLOAD-COVERAGE] Upload/download gap tests (firm-docs 413/quota/commit-cleanup/cross-firm dup, export deny) + manual smoke runbook -- #693 merged; owner-leg live-verified on 4/5 download routes; sheet-pdf blocked     Sheets UI build-flag off) -- CLOSED 2026-09-24: owner leg live on all applicable routes; sheet-pdf -> VERIFY-SHEETS-ACTIVATION, grantee legs -> VERIFY-R18-REACTIVATION-GRANTEE
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-24 · 2026-09-23 ~15:40Z Chrome, app.yourbimpossible.com, TEST_ACCC_D_EL_S…
 
 [SEC-ASSIST-TOOLS-PERSONAL-VIEWS] FIXED+MERGED: assistant _visible_saved_view_clause personal branch now pins firm_id (PR #416)
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · backend/aec/assistant_tools.py:295-309 _visible_saved_view_clause: f…
