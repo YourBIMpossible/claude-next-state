@@ -1675,12 +1675,13 @@ items:
       verbatim (owner-authorized edit, 2026-09-24 overnight tranche); no status/pct change.'
   - kind: pr
     ref: BIMpossible#713
-    note: 'claude/phase9-element-identity (8 commits e1582492..d4dcf60f): migration 9e1c7f3a2b5d
+    note: 'claude/phase9-element-identity (e1582492..2d0c86d8 + handoff v3): migration 9e1c7f3a2b5d
       (category_field_mappings / product_records / element_product_bindings keyed on element_unique_id,
       type as snapshot), aec/product_bindings.py service + read side + set_binding_status, first
       router /projects/{id}/product-bindings (GET/POST/PATCH) under project-access + server-side hub +
       _own_doc_or_404 proof, flag BIMPOSSIBLE_PRODUCT_INGESTION_ENABLED (off, 404 before auth),
-      193 targeted tests green, backend-endpoint-reviewer finding fixed. Living handoff
+      197 targeted tests green, backend-endpoint-reviewer + security-engineer findings fixed (own-reach
+      gate, upsert race, paged list; F3 model_urn oracle = owner call), refresh unwarmed guard. Living handoff
       docs/audits/2026-09-24__phase9-overnight-tranche-report.md + ...phase9-handoff.json.
       MERGED: no. DEPLOYED: no (by mandate). Spec §4 amendment: Workspace PR #161 (ready).'
   verification:
