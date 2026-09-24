@@ -10225,8 +10225,9 @@ items:
     --limit 1 --json conclusion,headSha  # expect success at >=93af2017'
   source: /next sync 2026-09-22
 - id: REVIT-OPEN-DOCS-POST-FIX
-  title: FE useRevitLink probe sends GET to POST-only /revit/list_open_documents (405,
-    docs list always empty)
+  title: 'FE useRevitLink probe sends GET to POST-only /revit/list_open_documents (405,
+    docs list always empty) -- deployed/infrastructure verified; end-user Revit workflow
+    verification pending'
   projects:
   - bimpossible
   status: landed
@@ -10249,9 +10250,12 @@ items:
       build not run; needs merge + Refresh-Frontend.ps1'
   verification:
     level: verified
-    by: 'gh pr view 690 MERGED 2ff008b3. NOT live: shared checkout not pulled, backend
-      not restarted / frontend not refreshed (deploy step blocked by auto-mode classifier;
-      owner action).'
+    by: 'gh pr view 690 MERGED 2ff008b3. DEPLOYED/infrastructure verified: frontend image
+      2026-09-24T02:12:58Z postdates every frontend/ commit (Get-DeployEvidence.ps1 CURRENT);
+      web smoke 2026-09-23 ~15:40Z POST /revit/list_open_documents 200. End-user Revit
+      workflow verification PENDING (open docs listed in the model page with Revit running,
+      checklist docs/ops/revit-end-user-live-verification-checklist.md). Supersedes the
+      earlier NOT-live note (checkout since pulled, stack redeployed).'
     at: '2026-09-23'
   live_check:
   - 'gh pr view 690 --repo YourBIMpossible/BIMpossible --json state --jq .state  #
@@ -10259,7 +10263,8 @@ items:
   source: overnight run 2026-09-22 (workstream B)
 - id: AIS-RE-2-RENEW-FAIL-OPEN
   title: 'AIS-RE-2 renewal fail-closed: stop assistant turn when hold renewal fails
-    -- #694 merged + backend restarted; renew-failure branch DB-tested, not live-forced by design'
+    -- #694 merged + backend restarted; renew-failure branch DB-tested, not live-forced by design
+    -- deployed/infrastructure verified; end-user Revit workflow verification pending'
   projects:
   - bimpossible
   status: landed
@@ -10291,7 +10296,8 @@ items:
       2026-09-23T17:07Z (postdates merge) and healthy => DEPLOYED. Persistent renew-failure
       branch covered by DB-lane tests only; no runtime fault-injection seam exists
       (budget_reservation.py has none), so NOT live-forced by design. 2026-09-24 verification
-      inventory.'
+      inventory. End-user Revit workflow verification PENDING (normal-path assistant turn from
+      the Revit pane, checklist docs/ops/revit-end-user-live-verification-checklist.md).'
     at: '2026-09-24'
   live_check:
   - 'gh pr view 694 --repo YourBIMpossible/BIMpossible --json state --jq .state  #
@@ -10383,7 +10389,8 @@ items:
   source: overnight 2026-09-23 (workstream C FE map)
 - id: OPS-DEPLOY-2026-09-23-MERGES
   title: 'Deploy merged #694 (backend restart) + #690/#688 (Refresh-Frontend) from
-    shared checkout; verify 405 gone'
+    shared checkout; verify 405 gone -- deployed/infrastructure verified; end-user Revit
+    workflow verification pending'
   projects:
   - bimpossible
   status: landed
@@ -10407,7 +10414,7 @@ items:
       405 still not live-checked (model-page load classifier-blocked)'
   - kind: run
     ref: 2026-09-23 ~15:40Z owner force-recreate backend + Refresh-Frontend at 3ea5fc9a (image 15:24:23Z); Chrome smoke on app.yourbimpossible.com
-    note: 'LIVE-VERIFIED: POST /revit/list_open_documents 200 (no 405, #690); assistant/chat POST 200 answered
+    note: 'DEPLOYED + INFRASTRUCTURE-VERIFIED (web smoke, not an end-user Revit workflow): POST /revit/list_open_documents 200 (no 405, #690); assistant/chat POST 200 answered
       2 Cable Tray Fittings = grid row count (#694 normal path); GET /data/elements/xlsx 200 (first live download
       route). Admin console NOT checked: /admin and admin.yourbimpossible.com show a Chrome error page'
   verification:

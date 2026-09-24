@@ -5,7 +5,7 @@ This is a repo-local read model, not a definition of /next behavior. -->
 
 # /next — work-item queue
 
-Generated 2026-09-24 (synced). Anchor-first, leverage-ranked (per item-model.md). The single #1 move is chosen live by the skill from the anchor (stated focus, else roadmap order) and finalization leverage — not from dependency cone. This board is a status-grouped snapshot; within each section it orders by owner-gated+S, then effort, risk, id, with `cone` leading (deep graph). Full algorithm: `~/.claude/skills/next/reference/item-model.md`.
+Generated 2026-09-23 (synced). Anchor-first, leverage-ranked (per item-model.md). The single #1 move is chosen live by the skill from the anchor (stated focus, else roadmap order) and finalization leverage — not from dependency cone. This board is a status-grouped snapshot; within each section it orders by owner-gated+S, then effort, risk, id, with `cone` leading (deep graph). Full algorithm: `~/.claude/skills/next/reference/item-model.md`.
 
 Scope: `all`. Watermarks: `bimpossible` = 2026-09-24 @ `57bc3445` PR#710 · `addins` = 2026-09-21 @ `baa9efe` PR#155 · `workspace` = 2026-09-21 @ `647c6b1` PR#154 · `evidence-compiler` = 2026-09-16 @ `a6977c8` PR#17 · `dashboard` = 2026-09-06 @ `efdcba1` PR#22.
 (pc-monitor/bim-site: no items yet — run `init` to derive.)
@@ -94,7 +94,7 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-24 @ `57bc3445` PR#710 · `add
 
 ## Landed — not verified live
 
-[OPS-DEPLOY-2026-09-23-MERGES] Deploy merged #694 (backend restart) + #690/#688 (Refresh-Frontend) from shared checkout; verify 405 gone
+[OPS-DEPLOY-2026-09-23-MERGES] Deploy merged #694 (backend restart) + #690/#688 (Refresh-Frontend) from shared checkout; verify 405 gone -- deployed/infrastructure verified; end-user Revit workflow verification pending
        unblocks 2 · S · bimpossible · VERIFIED 2026-09-23 · 2026-09-23 delivery pass
 
 [AUTHZ-OPTION-B-B1-ENTITLEMENT-FOUNDATION] Autodesk-first access (Option B) B1: per-user Autodesk entitlement foundation (aec/entitlement.py EntitlementCache, user/token-scoped, no firm-wide positive cache) -- PR #666 MERGED 2026-09-16, foundation only, NOT live
@@ -118,7 +118,7 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-24 @ `57bc3445` PR#710 · `add
 [AUTHZ-SHADOW-ACTIVATE] AUTH-INH arc CLOSED 2026-08-16: foundation complete, enforcement deferred to pre-pilot validation (runbook Sec 6)
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-13 · 2026-09-13 owner-run probe: `docker exec docker-backend-1 printenv B…
 
-[AIS-RE-2-RENEW-FAIL-OPEN] AIS-RE-2 renewal fail-closed: stop assistant turn when hold renewal fails -- #694 merged + backend restarted; renew-failure branch DB-tested, not live-forced by design
+[AIS-RE-2-RENEW-FAIL-OPEN] AIS-RE-2 renewal fail-closed: stop assistant turn when hold renewal fails -- #694 merged + backend restarted; renew-failure branch DB-tested, not live-forced by design -- deployed/infrastructure verified; end-user Revit workflow verification pending
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-24 · BIMpossible#694
 
 [REVITLINK-OPAQUE-500-MAPPING] revit_link error mapping collapses distinct add-in refusals (NOT_SUPPORTED, DOC_NOT_FOUND, AMBIGUOUS_DOCUMENT, SYNC_FAILED) into one opaque INTERNAL_ERROR 500 with no detail
@@ -127,7 +127,7 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-24 @ `57bc3445` PR#710 · `add
 [UX-SHARED-WITH-YOU-TITLE-IS-SHARE-LABEL] UX: Shared-with-you row titled with the owner's share label instead of the project name -- project_name now on the wire, label demoted to secondary metadata
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-14 · Observed 2026-09-13 ~22:30Z in the S&L grantee view: the row read "h…
 
-[REVIT-OPEN-DOCS-POST-FIX] FE useRevitLink probe sends GET to POST-only /revit/list_open_documents (405, docs list always empty)
+[REVIT-OPEN-DOCS-POST-FIX] FE useRevitLink probe sends GET to POST-only /revit/list_open_documents (405, docs list always empty) -- deployed/infrastructure verified; end-user Revit workflow verification pending
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-23 · BIMpossible#690
 
 [UX-RECENTLY-OPENED-EPOCH-DATE] UX: Recently opened rendered 12/31/1969 for discovery-only models -- backend emits null for the 1970 sentinel, timeAgo guards non-positive/invalid timestamps
@@ -739,6 +739,10 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-24 @ `57bc3445` PR#710 · `add
 
 [DASH-CHECKIN-CONSOLIDATION] AI-Dev dashboard daily check-in consolidation: reliable landing, delta triage, pulse, data-health, one home
        unblocks 0 · L · dashboard · VERIFIED 2026-09-06 · ai-dev-dashboard #22 SHIPPED -- squash-merged efdcba1 on origin/main…
+
+[EC-HOOKSAFE-1] Python-native hook-safe launcher shipped to EC core; Node wrapper migrated out of BIMpossible/AddIns/Workspace/Families
+       unblocks 0 · L · evidence-compiler+bimpossible+addins+workspace+families · CLAIMED 2026-08-24 · evidence-compiler#5
+       ⏸ dormant leg (families) suspended — evidence-compiler+bimpossible+addins+workspace leg tracked live; dormant leg unverifiable until whole-repo reassessment, so the item is not fully verified
 
 [P11-AC7-VERSIONED-SNAPSHOTS] Add versioned QA snapshots (Phase 11 AC7)
        unblocks 0 · L · bimpossible · VERIFIED 2026-09-16 · BIMpossible_PHASE-STATUS.md, Phase 11 -- AC7 (versioned QA snapshots…
