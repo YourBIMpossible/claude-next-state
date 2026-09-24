@@ -10163,7 +10163,7 @@ items:
   source: overnight run 2026-09-22 (workstream B)
 - id: AIS-RE-2-RENEW-FAIL-OPEN
   title: 'AIS-RE-2 renewal fail-closed: stop assistant turn when hold renewal fails
-    -- draft PR #694'
+    -- #694 merged + backend restarted; renew-failure branch DB-tested, not live-forced by design'
   projects:
   - bimpossible
   status: landed
@@ -10191,17 +10191,19 @@ items:
       x3; no-DB full suite 6156 passed/582 skipped; dblane NOT run (no DATABASE_URL).'
   verification:
     level: verified
-    by: 'gh pr view 694 MERGED 5a9fcbd8. NOT live: shared checkout not pulled, backend
-      not restarted / frontend not refreshed (deploy step blocked by auto-mode classifier;
-      owner action).'
-    at: '2026-09-23'
+    by: 'gh pr view 694 MERGED 5a9fcbd8 at 2026-09-23T05:31Z; docker-backend-1 Created
+      2026-09-23T17:07Z (postdates merge) and healthy => DEPLOYED. Persistent renew-failure
+      branch covered by DB-lane tests only; no runtime fault-injection seam exists
+      (budget_reservation.py has none), so NOT live-forced by design. 2026-09-24 verification
+      inventory.'
+    at: '2026-09-24'
   live_check:
   - 'gh pr view 694 --repo YourBIMpossible/BIMpossible --json state --jq .state  #
     MERGED'
   source: overnight run 2026-09-22 (workstream A finding)
 - id: UPLOAD-DOWNLOAD-COVERAGE
   title: 'Upload/download gap tests (firm-docs 413/quota/commit-cleanup/cross-firm
-    dup, export deny) + manual smoke runbook -- draft PR #693'
+    dup, export deny) + manual smoke runbook -- #693 merged; upload + xlsx live-smoked, 4 download routes owner-smoke owed'
   projects:
   - bimpossible
   status: landed
@@ -10234,15 +10236,18 @@ items:
       blocked by auto-mode classifier.
   verification:
     level: verified
-    by: gh pr view 693 MERGED 67c4cd48.
-    at: '2026-09-23'
+    by: 'gh pr view 693 MERGED 67c4cd48. Live: upload 415/201/409/search/delete + GET
+      /data/elements/xlsx 200 (2026-09-23 smoke). NOT live-verified: spec_draft, model-health
+      export, coordination-report export, sheet-pdf (need owner-approved file downloads);
+      grantee legs need BIMPOSSIBLE_CROSS_FIRM_SHARING_ENABLED (read 0 on 2026-09-24).'
+    at: '2026-09-24'
   live_check:
   - 'gh pr view 693 --repo YourBIMpossible/BIMpossible --json state --jq .state  #
     MERGED'
   source: overnight 2026-09-23 (workstream C)
 - id: FE-UPLOAD-EXPORT-ERROR-UX
-  title: 'FE: SheetComposer silently skipped failed sheets -- #697 MERGED 3ea5fc9a, not
-    yet refreshed into frontend (upload-error half dropped: live 415/409 readable)'
+  title: 'FE: SheetComposer silently skipped failed sheets -- #697 MERGED 3ea5fc9a, deployed
+    (frontend image from 57bc3445); ordinary-path live smoke owed (upload-error half dropped: live 415/409 readable)'
   projects:
   - bimpossible
   status: landed
@@ -10269,8 +10274,10 @@ items:
       409 -> "An identical document is already uploaded (name)." -- no fix needed'
   verification:
     level: verified
-    by: gh pr 697 MERGED 3ea5fc9a; frontend container predates it (Refresh-Frontend owed)
-    at: '2026-09-23'
+    by: 'gh pr 697 MERGED 3ea5fc9a 2026-09-23T14:49Z; frontend image built 2026-09-24T02:12Z
+      from 57bc3445 (descends from 3ea5fc9a) => DEPLOYED. Ordinary-path SheetComposer live
+      run NOT done (produces a PDF download; needs owner approval). 2026-09-24 inventory.'
+    at: '2026-09-24'
   live_check:
   - gh pr view 697 --repo YourBIMpossible/BIMpossible --json state --jq .state
   source: overnight 2026-09-23 (workstream C FE map)

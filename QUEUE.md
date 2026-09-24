@@ -118,8 +118,8 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-23 @ `3ea5fc9a` PR#697 · `add
 [AUTHZ-SHADOW-ACTIVATE] AUTH-INH arc CLOSED 2026-08-16: foundation complete, enforcement deferred to pre-pilot validation (runbook Sec 6)
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-13 · 2026-09-13 owner-run probe: `docker exec docker-backend-1 printenv B…
 
-[AIS-RE-2-RENEW-FAIL-OPEN] AIS-RE-2 renewal fail-closed: stop assistant turn when hold renewal fails -- draft PR #694
-       unblocks 0 · S · bimpossible · VERIFIED 2026-09-23 · BIMpossible#694
+[AIS-RE-2-RENEW-FAIL-OPEN] AIS-RE-2 renewal fail-closed: stop assistant turn when hold renewal fails -- #694 merged + backend restarted; renew-failure branch DB-tested, not live-forced by design
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-24 · BIMpossible#694
 
 [REVITLINK-OPAQUE-500-MAPPING] revit_link error mapping collapses distinct add-in refusals (NOT_SUPPORTED, DOC_NOT_FOUND, AMBIGUOUS_DOCUMENT, SYNC_FAILED) into one opaque INTERNAL_ERROR 500 with no detail
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-19 · backend/revit_link/native_adapter.py _COMMAND_ERROR_MAP (unknown cod…
@@ -130,8 +130,8 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-23 @ `3ea5fc9a` PR#697 · `add
 [REVIT-OPEN-DOCS-POST-FIX] FE useRevitLink probe sends GET to POST-only /revit/list_open_documents (405, docs list always empty)
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-23 · BIMpossible#690
 
-[UPLOAD-DOWNLOAD-COVERAGE] Upload/download gap tests (firm-docs 413/quota/commit-cleanup/cross-firm dup, export deny) + manual smoke runbook -- draft PR #693
-       unblocks 0 · S · bimpossible · VERIFIED 2026-09-23 · 2026-09-23 ~15:40Z Chrome, app.yourbimpossible.com, TEST_ACCC_D_EL_S…
+[UPLOAD-DOWNLOAD-COVERAGE] Upload/download gap tests (firm-docs 413/quota/commit-cleanup/cross-firm dup, export deny) + manual smoke runbook -- #693 merged; upload + xlsx live-smoked, 4 download routes owner-smoke owed
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-24 · 2026-09-23 ~15:40Z Chrome, app.yourbimpossible.com, TEST_ACCC_D_EL_S…
 
 [UX-RECENTLY-OPENED-EPOCH-DATE] UX: Recently opened rendered 12/31/1969 for discovery-only models -- backend emits null for the 1970 sentinel, timeAgo guards non-positive/invalid timestamps
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-14 · Observed 2026-09-13 ~22:30Z in the S&L grantee view: Recently opened…
@@ -154,8 +154,8 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-23 @ `3ea5fc9a` PR#697 · `add
 [AUTHZ-ENFORCE-KEYSTONE-PR530] Merged BIMpossible#530: AUTH-INH ENFORCE keystone + Phase 15c T5 end-to-end test (CKA Phase 18 step 1)
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · BIMpossible#530 OPEN, READY, head 6d64390f, opened 2026-09-02T00:40Z…
 
-[FE-UPLOAD-EXPORT-ERROR-UX] FE: SheetComposer silently skipped failed sheets -- #697 MERGED 3ea5fc9a, not yet refreshed into frontend (upload-error half dropped: live 415/409 readable)
-       unblocks 0 · S · bimpossible · VERIFIED 2026-09-23 · BIMpossible#697
+[FE-UPLOAD-EXPORT-ERROR-UX] FE: SheetComposer silently skipped failed sheets -- #697 MERGED 3ea5fc9a, deployed (frontend image from 57bc3445); ordinary-path live smoke owed (upload-error half dropped: live 415/409 readable)
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-24 · BIMpossible#697
 
 [FEAT-REVIT-PAIRING-COPY] Revit pairing SHIPPED as Copy/paste-only -- protocol-launch button removed after reliability rework
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-16 · BIMpossible #391 (Send-to-Revit protocol handoff + ?pair=revit deep …
