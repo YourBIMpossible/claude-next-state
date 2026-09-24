@@ -332,6 +332,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-23 @ `3ea5fc9a` PR#697 · `add
 
 ## In flight
 
+[ADMIN-HOST-ROOT-706-REVIEW-FOLLOWUP] #706 review follow-up: admin-host root prefetch redirect, stale comments, tests (F2-F5) + Option C spec 5c reconcile (F1)
+       unblocks 0 · S · bimpossible · CLAIMED 2026-09-23 · bimpossible#709
+
 [AUDIT-2026-09-07-REMEDIATION] 2026-09-07 weekly audit remediation wave: Revit write-integrity + fail-open QA reads + pipe-kill-switch CI guard -- 3 merged, 2 open drafts
        unblocks 0 · L · addins · CLAIMED 2026-09-10 · Program root: Weekly Full Audit 2026-09-07. Ledger BIMpossible-Works…
 
