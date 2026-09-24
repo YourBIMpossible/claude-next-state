@@ -130,7 +130,7 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-23 @ `3ea5fc9a` PR#697 · `add
 [REVIT-OPEN-DOCS-POST-FIX] FE useRevitLink probe sends GET to POST-only /revit/list_open_documents (405, docs list always empty)
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-23 · BIMpossible#690
 
-[UPLOAD-DOWNLOAD-COVERAGE] Upload/download gap tests (firm-docs 413/quota/commit-cleanup/cross-firm dup, export deny) + manual smoke runbook -- #693 merged; upload + xlsx live-smoked, 4 download routes owner-smoke owed
+[UPLOAD-DOWNLOAD-COVERAGE] Upload/download gap tests (firm-docs 413/quota/commit-cleanup/cross-firm dup, export deny) + manual smoke runbook -- #693 merged; owner-leg live-verified on 4/5 download routes; sheet-pdf blocked (Sheets UI build-flag off)
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-24 · 2026-09-23 ~15:40Z Chrome, app.yourbimpossible.com, TEST_ACCC_D_EL_S…
 
 [UX-RECENTLY-OPENED-EPOCH-DATE] UX: Recently opened rendered 12/31/1969 for discovery-only models -- backend emits null for the 1970 sentinel, timeAgo guards non-positive/invalid timestamps
@@ -154,7 +154,7 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-23 @ `3ea5fc9a` PR#697 · `add
 [AUTHZ-ENFORCE-KEYSTONE-PR530] Merged BIMpossible#530: AUTH-INH ENFORCE keystone + Phase 15c T5 end-to-end test (CKA Phase 18 step 1)
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · BIMpossible#530 OPEN, READY, head 6d64390f, opened 2026-09-02T00:40Z…
 
-[FE-UPLOAD-EXPORT-ERROR-UX] FE: SheetComposer silently skipped failed sheets -- #697 MERGED 3ea5fc9a, deployed (frontend image from 57bc3445); ordinary-path live smoke owed (upload-error half dropped: live 415/409 readable)
+[FE-UPLOAD-EXPORT-ERROR-UX] FE: SheetComposer silently skipped failed sheets -- #697 MERGED 3ea5fc9a, deployed (frontend image from 57bc3445); live run BLOCKED: Sheets UI build-flag off (upload-error half dropped: live 415/409 readable)
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-24 · BIMpossible#697
 
 [FEAT-REVIT-PAIRING-COPY] Revit pairing SHIPPED as Copy/paste-only -- protocol-launch button removed after reliability rework
