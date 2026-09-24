@@ -103,7 +103,7 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-24 @ `57bc3445` PR#710 · `add
 [AUTHZ-OPTION-B-B1-ENTITLEMENT-FOUNDATION] Autodesk-first access (Option B) B1: per-user Autodesk entitlement foundation (aec/entitlement.py EntitlementCache, user/token-scoped, no firm-wide positive cache) -- PR #666 MERGED 2026-09-16, foundation only, NOT live
        unblocks 2 · M · bimpossible · VERIFIED 2026-09-21 · BIMpossible#666
 
-[PHASE9-REOPENED-SCOPE] Phase 9 link-target RULED and RECORDED in ledger row 9: cutsheet binds to individual element; family type is grouping context (Workspace ea0dbc3 / PR #160); build slice open BIMpossible#713
+[PHASE9-REOPENED-SCOPE] Phase 9 link-target RULED and RECORDED in ledger row 9: cutsheet binds to individual element; family type is grouping context (Workspace ea0dbc3 / PR #160, spec #161); build slice open BIMpossible#713
        unblocks 1 · S · bimpossible · VERIFIED 2026-09-16 · BIMpossible_PHASE-STATUS.md row 9 (Product Data Ingestion) -- 'Reope…
 
 [OBS-APS-PAIRING-BLOCK-METRIC] Measure background jobs blocked by the foreground-verdict-only pairing policy (demand evidence for the deferred APS service-context spike)

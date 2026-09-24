@@ -1655,7 +1655,7 @@ items:
   source: 02_Reference/2026-08-04__SL-Parameter-Coupling-MAP.md; ARCH-FIRM-PARAM-NEUTRALITY split 2026-08-06
   notes_url: null
 - id: PHASE9-REOPENED-SCOPE
-  title: 'Phase 9 link-target RULED and RECORDED in ledger row 9: cutsheet binds to individual element; family type is grouping context (Workspace ea0dbc3 / PR #160); build slice open BIMpossible#713'
+  title: 'Phase 9 link-target RULED and RECORDED in ledger row 9: cutsheet binds to individual element; family type is grouping context (Workspace ea0dbc3 / PR #160, spec #161); build slice open BIMpossible#713'
   projects:
   - bimpossible
   status: landed
@@ -1675,11 +1675,14 @@ items:
       verbatim (owner-authorized edit, 2026-09-24 overnight tranche); no status/pct change.'
   - kind: pr
     ref: BIMpossible#713
-    note: 'DRAFT claude/phase9-element-identity (4 commits e1582492..baf0829f): migration 9e1c7f3a2b5d
+    note: 'claude/phase9-element-identity (8 commits e1582492..d4dcf60f): migration 9e1c7f3a2b5d
       (category_field_mappings / product_records / element_product_bindings keyed on element_unique_id,
-      type as snapshot), aec/product_bindings.py behind BIMPOSSIBLE_PRODUCT_INGESTION_ENABLED (off),
-      18 tests green both lanes, surface audit docs/audits/2026-09-24__phase9-surface-audit.md.
-      MERGED: no. DEPLOYED: no (by mandate).'
+      type as snapshot), aec/product_bindings.py service + read side + set_binding_status, first
+      router /projects/{id}/product-bindings (GET/POST/PATCH) under project-access + server-side hub +
+      _own_doc_or_404 proof, flag BIMPOSSIBLE_PRODUCT_INGESTION_ENABLED (off, 404 before auth),
+      193 targeted tests green, backend-endpoint-reviewer finding fixed. Living handoff
+      docs/audits/2026-09-24__phase9-overnight-tranche-report.md + ...phase9-handoff.json.
+      MERGED: no. DEPLOYED: no (by mandate). Spec §4 amendment: Workspace PR #161 (ready).'
   verification:
     level: verified
     by: 'OWNER RULING 2026-08-17 (chat, session 67df33a5): extracted cutsheet data links to the INDIVIDUAL
