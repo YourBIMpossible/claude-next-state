@@ -10573,3 +10573,24 @@ items:
   - git -C F:/BIMpossible log --oneline origin/main..w5/p1f4 | wc -l
   source: 2026-09-23 docs-budget closeout /close wander
   notes_url: null
+- id: BIMP-SESSIONS-MOUNTPOINT
+  title: Fresh checkout must provide backend/.sessions so backend-migrate/backend can mount backend_sessions inside the :ro /app bind
+  projects:
+  - bimpossible
+  status: parked
+  owner_gate: false
+  owner: owner
+  unblocks: []
+  blocked_by: []
+  effort: XS
+  risk: 1
+  evidence:
+  - kind: doc
+    ref: docker/docker-compose.yml:221
+    note: 'FAILURE: backend_sessions:/app/.sessions nests in ../backend:/app:ro; with no host backend/.sessions (gitignored) Docker errors "make mountpoint /app/.sessions: read-only file system" (owner run 2026-09-25) | ACCEPTANCE: a fresh checkout creates the directory automatically before migration/startup needs it (e.g. tracked backend/.sessions/.gitkeep + .gitignore negation), proven by clone -> backend-migrate succeeding | NOT BLOCKING: local dev already migrated to c3f5a8d1e7b2 via manual mkdir; Phase 9 state unaffected; setup maintenance only'
+  verification:
+    level: verified
+    by: 2026-09-25 owner migrate run + session diagnosis
+    at: '2026-09-25'
+  live_check: []
+  source: 2026-09-25 phase9 #748 reconciliation /close wander
