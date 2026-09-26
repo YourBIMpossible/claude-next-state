@@ -47,8 +47,8 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-24 @ `57bc3445` PR#710 · `add
 [PROD-DERIV-3] Discharge the DERIV-3 prod verification -- needs a mid-translation model and an APS upload
        unblocks 0 · S · bimpossible · CLAIMED 2026-08-28 · 01_BuildLog/2026-08-05__hub-tenancy-migration-BLOCKED_HANDOFF.md -- …
 
-[REVIT-END-USER-WORKFLOW-VERIFY] End-user Revit workflow verification of the 2026-09-23 deploy (#690 open-docs list, #694 assistant turn from the pane, #688) -- needs a live Revit session; separate from the infrastructure smoke
-       unblocks 0 · S · bimpossible · UNVERIFIED 2026-09-24 · docs/ops/revit-end-user-live-verification-checklist.md
+[REVIT-END-USER-WORKFLOW-VERIFY] End-user Revit workflow + Phase E launch-readiness verification -- live session pending on env-candidates cleanup (elsewhere) and an installed-build decision
+       unblocks 0 · S · bimpossible · UNVERIFIED 2026-09-26 · docs/ops/revit-end-user-live-verification-checklist.md
 
 [AUTHZ-SHADOW-WINDOW-VALIDITY] DEFERRED to pre-pilot re-entry (runbook Sec 6): shadow-window validity work only when a real pilot is prepared
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-16 · 2026-08-16 prod probe with SHADOW live: authz_decision_log holds onl…
@@ -376,8 +376,8 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-24 @ `57bc3445` PR#710 · `add
        unblocks 0 · S · families · SUSPENDED 2026-08-31 · tool/tests/test_revitlink_pipe_adapter.py::test_handle_reports_missi…
        ⏸ dormant project (families) — probes suspended (non-executable); state unverifiable until whole-repo reassessment
 
-[FE-UPLOAD-EXPORT-ERROR-UX] FE: SheetComposer silently skipped failed sheets -- #697 MERGED 3ea5fc9a, deployed (frontend image from 57bc3445); live run BLOCKED: Sheets UI build-flag off (upload-error half dropped: live 415/409 readable) -- PARKED 2026-09-24: not applicable while Sheets dark; live run owned by VERIFY-SHEETS-ACTIVATION
-       unblocks 0 · S · bimpossible · VERIFIED 2026-09-24 · BIMpossible#697
+[FE-UPLOAD-EXPORT-ERROR-UX] FE: SheetComposer silently skipped failed sheets -- #697 MERGED 3ea5fc9a, DEPLOYED FLAG-DARK at 57bc3445 (Sheets UI compile-time disabled: NEXT_PUBLIC_BIMPOSSIBLE_SHEETS_ENABLED=0); ordinary/partial/all-fail paths unit-tested only, no live browser proof. Activation: enable Sheets intentionally -> Refresh-Frontend -> composer smoke matrix (VERIFY-SHEETS-ACTIVATION)
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-25 · BIMpossible#697
 
 [OPS-REDIS-P5] Flip WEB_CONCURRENCY>1 with redis leader-lock (Wave C-1 Phase 5)
        unblocks 0 · S · bimpossible · VERIFIED 2026-08-04 · docker/REDIS-CUTOVER.md §Next -- confirmed exists on origin/main 202…
@@ -496,8 +496,8 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-24 @ `57bc3445` PR#710 · `add
 [P7-SYNC-COMMENT-CRYPTO-BINDING] Sync comment crypto-binding: CLOSED BY OWNER RULING -- comment is non-authoritative collaboration metadata, no special binding required
        unblocks 0 · S · bimpossible+addins · VERIFIED 2026-08-27 · Today the token binds firm/user/document_title only (backend/revit_l…
 
-[UPLOAD-DOWNLOAD-COVERAGE] Upload/download gap tests (firm-docs 413/quota/commit-cleanup/cross-firm dup, export deny) + manual smoke runbook -- #693 merged; owner-leg live-verified on 4/5 download routes; sheet-pdf blocked     Sheets UI build-flag off) -- CLOSED 2026-09-24: owner leg live on all applicable routes; sheet-pdf -> VERIFY-SHEETS-ACTIVATION, grantee legs -> VERIFY-R18-REACTIVATION-GRANTEE
-       unblocks 0 · S · bimpossible · VERIFIED 2026-09-24 · 2026-09-23 ~15:40Z Chrome, app.yourbimpossible.com, TEST_ACCC_D_EL_S…
+[UPLOAD-DOWNLOAD-COVERAGE] Upload/download gap tests (firm-docs 413/quota/commit-cleanup/cross-firm dup, export deny) + manual smoke runbook -- #693 merged; OWNER-PATH LIVE-VERIFIED on all 5 download routes (xlsx 2026-09-23 + spec_draft/model-health/coordination-report/sheet-pdf per 2026-09-23 owner verification report); share-principal (grantee) rows deferred while R18 dark -> VERIFY-R18-REACTIVATION-GRANTEE
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-25 · F:\Claude-Tools\reports\2026-09-23__owner-download-export-verificati…
 
 [SEC-ASSIST-TOOLS-PERSONAL-VIEWS] FIXED+MERGED: assistant _visible_saved_view_clause personal branch now pins firm_id (PR #416)
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-02 · backend/aec/assistant_tools.py:295-309 _visible_saved_view_clause: f…

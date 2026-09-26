@@ -8161,8 +8161,8 @@ items:
   - 'gh pr view 694 --repo YourBIMpossible/BIMpossible --json state --jq .state  # MERGED'
   source: overnight run 2026-09-22 (workstream A finding)
 - id: UPLOAD-DOWNLOAD-COVERAGE
-  title: 'Upload/download gap tests (firm-docs 413/quota/commit-cleanup/cross-firm dup, export deny) + manual smoke runbook -- #693 merged; owner-leg live-verified on 4/5 download routes; sheet-pdf blocked     Sheets
-    UI build-flag off) -- CLOSED 2026-09-24: owner leg live on all applicable routes; sheet-pdf -> VERIFY-SHEETS-ACTIVATION, grantee legs -> VERIFY-R18-REACTIVATION-GRANTEE'
+  title: 'Upload/download gap tests (firm-docs 413/quota/commit-cleanup/cross-firm dup, export deny) + manual smoke runbook -- #693 merged; OWNER-PATH LIVE-VERIFIED on all 5 download routes (xlsx 2026-09-23
+    + spec_draft/model-health/coordination-report/sheet-pdf per 2026-09-23 owner verification report); share-principal (grantee) rows deferred while R18 dark -> VERIFY-R18-REACTIVATION-GRANTEE'
   projects:
   - bimpossible
   status: live
@@ -8173,6 +8173,10 @@ items:
   effort: S
   risk: 1
   evidence:
+  - kind: doc
+    ref: F:\Claude-Tools\reports\2026-09-23__owner-download-export-verification.md
+    note: 'Owner route matrix PASS: spec_draft doc/json, model-health/export csv/json, coordination-report/export html/doc, aps/model/sheet-pdf x2 (200 application/pdf, valid 1-page PDFs); with the prior /data/elements/xlsx
+      200 all 5 owner download routes have live evidence. Share-principal rows out of scope (need R18 flag; not a defect).'
   - kind: run
     ref: 2026-09-23 ~15:40Z Chrome, app.yourbimpossible.com, TEST_ACCC_D_EL_SL.rvt Cable Tray Fittings
     note: 'DOWNLOAD live-smoked: GET /data/elements/xlsx 200 (table Export XLSX). Other 4 download routes (spec_draft, model-health export, coordination-report export, sheet-pdf) still NOT live-smoked'
@@ -8190,14 +8194,15 @@ items:
     level: verified
     by: 'gh pr view 693 MERGED 67c4cd48. Live: upload 415/201/409/search/delete + GET /data/elements/xlsx 200 (2026-09-23 smoke). 2026-09-24 owner-authorized sweep, Chrome, TEST_ACCC_D_EL_SL.rvt: UI Generate
       Spec Draft -> Word GET spec_draft 200 application/msword (HTML doc, 4.7KB); model-health/export csv 200 (35KB "# Report: BIMpossible Model Health"); coordination-report/export doc 200 application/msword
-      (47KB). sheet-pdf NOT tested: Sheets tab absent -- NEXT_PUBLIC_BIMPOSSIBLE_SHEETS_ENABLED defaults 0 in docker-compose.yml. Grantee legs need BIMPOSSIBLE_CROSS_FIRM_SHARING_ENABLED (0, by design).'
-    at: '2026-09-24'
+      (47KB). Owner verification report F:\Claude-Tools\reports\2026-09-23__owner-download-export-verification.md: /aps/model/sheet-pdf owner 200 application/pdf (2 sheets, valid 1-page PDFs) => owner path
+      live-verified on all 5 download routes. Share-principal (grantee) rows deferred while R18 is dark (BIMPOSSIBLE_CROSS_FIRM_SHARING_ENABLED 0, by design).'
+    at: '2026-09-25'
   live_check:
   - 'gh pr view 693 --repo YourBIMpossible/BIMpossible --json state --jq .state  # MERGED'
   source: overnight 2026-09-23 (workstream C)
 - id: FE-UPLOAD-EXPORT-ERROR-UX
-  title: 'FE: SheetComposer silently skipped failed sheets -- #697 MERGED 3ea5fc9a, deployed (frontend image from 57bc3445); live run BLOCKED: Sheets UI build-flag off (upload-error half dropped: live 415/409
-    readable) -- PARKED 2026-09-24: not applicable while Sheets dark; live run owned by VERIFY-SHEETS-ACTIVATION'
+  title: 'FE: SheetComposer silently skipped failed sheets -- #697 MERGED 3ea5fc9a, DEPLOYED FLAG-DARK at 57bc3445 (Sheets UI compile-time disabled: NEXT_PUBLIC_BIMPOSSIBLE_SHEETS_ENABLED=0); ordinary/partial/all-fail
+    paths unit-tested only, no live browser proof. Activation: enable Sheets intentionally -> Refresh-Frontend -> composer smoke matrix (VERIFY-SHEETS-ACTIVATION)'
   projects:
   - bimpossible
   status: parked
@@ -8222,9 +8227,10 @@ items:
     note: '415 -> "Unsupported file type. Accepted: .docx, .md, .pdf, .txt, .xlsx."; 409 -> "An identical document is already uploaded (name)." -- no fix needed'
   verification:
     level: verified
-    by: 'gh pr 697 MERGED 3ea5fc9a 2026-09-23T14:49Z; frontend image built 2026-09-24T02:12Z from 57bc3445 (descends from 3ea5fc9a) => DEPLOYED. Ordinary-path SheetComposer live run NOT possible 2026-09-24:
-      Sheets tab not rendered (NEXT_PUBLIC_BIMPOSSIBLE_SHEETS_ENABLED default 0 at build); enabling is a flag change (owner). Unit tests remain the only evidence.'
-    at: '2026-09-24'
+    by: 'gh pr 697 MERGED 3ea5fc9a 2026-09-23T14:49Z; frontend image built 2026-09-24T02:12Z from 57bc3445 (descends from 3ea5fc9a) => deployed flag-dark: Sheets UI compile-time disabled (NEXT_PUBLIC_BIMPOSSIBLE_SHEETS_ENABLED=0).
+      Ordinary, partial and all-fail composer paths unit-tested only; no live browser proof (F:\Claude-Tools\reports\2026-09-23__owner-download-export-verification.md s.2). Activation path: enable Sheets intentionally
+      -> Refresh-Frontend -> composer smoke matrix.'
+    at: '2026-09-25'
   live_check:
   - gh pr view 697 --repo YourBIMpossible/BIMpossible --json state --jq .state
   source: overnight 2026-09-23 (workstream C FE map)
