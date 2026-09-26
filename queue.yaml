@@ -205,11 +205,12 @@ items:
   live_check: []
   source: 2026-09-24 closure sweep
 - id: REVIT-END-USER-WORKFLOW-VERIFY
-  title: 'End-user Revit workflow verification of the 2026-09-23 deploy (#690 open-docs list, #694 assistant turn from the pane, #688) -- needs a live Revit session; separate from the infrastructure smoke'
+  title: 'End-user Revit workflow + Phase E launch-readiness verification -- live session pending on env-candidates cleanup (elsewhere) and an installed-build decision'
   projects:
   - bimpossible
   status: blocked_owner
   owner_gate: true
+  owner: null
   unblocks: []
   blocked_by: []
   effort: S
@@ -219,13 +220,23 @@ items:
     ref: docs/ops/revit-end-user-live-verification-checklist.md
     note: 'Split out 2026-09-24 (overnight tranche mandate): OPS-DEPLOY-2026-09-23-MERGES, REVIT-OPEN-DOCS-POST-FIX and AIS-RE-2-RENEW-FAIL-OPEN are deployed + infrastructure-verified (web smoke), NOT end-user
       verified. This item is that pending gate. Requires Revit running with the pane paired -- owner only.'
+  - kind: doc
+    ref: reviews/_archive/2026-09-26__distribution-verification-retrospective.md
+    note: 'Independent read-only retrospective (2026-09-26) folds the Phase E launch-readiness closeout into this same gate -- same checklist, same script (Invoke-RevitLiveVerification.ps1),
+      which self-gates on the evidence exit code. Confirmed live: backend/frontend/schema CURRENT, both anchors PINNED (main 3162e751, PR #758 merged -- Graphify-output evidence-tool fix). Three
+      things stand between here and a valid Revit run: (1) untracked reviews/env-candidates-2026-09-24/ folder in F:/BIMpossible keeps Get-DeployEvidence.ps1 at exit 3 instead of 0 -- owned by a
+      different lane, explicitly not to be opened or inventoried by this item; (2) once clean, Invoke-RevitLiveVerification.ps1 runs (owner-only, self-gating, already proven to fail closed
+      correctly); (3) an owner decision on which installed add-in build the run should certify -- the DLL actually installed today (hash 6EADFCA69D3F1710 for 2025-2027, 1C0130559F194D2F for 2024)
+      is from the unmerged AddIns branch claude/glass-linkpdf-deploy, not a clean pipe-on build of merged main; that decision belongs to the Glass-theme/AddIns lane, not this one.'
   verification:
     level: unverified
-    by: No Revit session available to the overnight run; nothing observed. Deployed state confirmed by the three landed items above.
-    at: '2026-09-24'
+    by: 'No Revit session has occurred (retrospective''s own finding, corroborated across every document reviewed). Deploy-side state independently re-verified live 2026-09-26T04:30:06Z via
+      Get-DeployEvidence.ps1 -NoFetch: exit 3, backend/frontend/schema CURRENT, anchors PINNED; sole exit-3 cause is the other lane''s untracked folder.'
+    at: '2026-09-26'
   live_check:
-  - 'docker inspect docker-frontend-1 --format {{.Created}}  # postdates 2026-09-24T02:12Z'
-  source: 2026-09-24 overnight tranche (queue normalization)
+  - 'Set-Location F:\BIMpossible; .\Get-DeployEvidence.ps1 -NoFetch  # expect exit 0 once env-candidates folder is resolved; currently exit 3 (deploy checkout not clean)'
+  - 'gh pr view 758 --repo YourBIMpossible/BIMpossible --json state,mergedAt'
+  source: 2026-09-24 overnight tranche (queue normalization); folded forward 2026-09-26 by an independent distribution-and-verification retrospective (reviews/_archive/2026-09-26__distribution-verification-retrospective.md)
 - id: EC-DOGFOOD-2
   title: 'Window 3 owner audit: label 10 packets from the prepared worksheet (provisional triage of 139 done; not owner labels)'
   projects:
