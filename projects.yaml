@@ -138,6 +138,18 @@ projects:
       F:\BIMpossible-Site is the sole canonical location; the AI-Dev copy is
       out of scope per this profile's AI-Dev deferred-legacy rule.
 
+  - key: claude-tools
+    name: Claude-Tools (local toolbelt, public repo)
+    aliases: [tools, ct, toolbelt]
+    path: F:\Claude-Tools
+    origin: https://github.com/YourBIMpossible/claude-tools.git
+    active: true
+    companions: []
+    audit_dir: F:\Claude-Tools\audits
+    notes: >
+      PUBLIC repo; main requires PR. Hosts the /next store itself (state/ is gitignored).
+      graphify runtime evidence: graphify\health.json + alerts.json (scheduled refresh task).
+
   # ---- known, not tracked ----------------------------------------------------
 
   - key: ai-brain-data
