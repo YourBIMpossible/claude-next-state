@@ -9,9 +9,9 @@ reconciled:
     commit: baa9efe
     pr: 155
   workspace:
-    at: '2026-09-21'
-    commit: 647c6b1
-    pr: 154
+    at: '2026-09-28'
+    commit: 307dbc1
+    pr: 162
   evidence-compiler:
     at: '2026-09-24'
     commit: 479571e
@@ -25,6 +25,51 @@ reconciled:
     commit: 4f92b5b
     pr: 9
 items:
+- id: CT-GRAPHIFY-ROUTING-BYPASS
+  title: Investigate pre-hint graphify routing bypasses (0/27, 2026-09-23..28) — NOT evidence the 2026-09-29 hint failed; post-hint routing is 0/0 = unknown
+  projects:
+  - claude-tools
+  status: ready
+  owner_gate: false
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 2
+  evidence:
+  - kind: run
+    ref: F:\Claude-Tools\reports\graphify-funnel-2026-09-29.md
+    note: 'all 27 bypasses predate hint go-live 2026-09-29T00:00Z (after_hint_live.bypassed = []); they show pre-hint skill/subagent routing, not hook efficacy. Top: c1ab1ba5, ae897aa9, df01e35b, c516dc0e (BIMpossible main threads); 12/269 Explore prompts carried the graph; Skill selected graphify 0x; 1 bare-CLI call. Hint efficacy needs post-go-live exploration units in a later weekly run.'
+  verification:
+    level: claimed
+    by: 'funnel report 2026-09-29 routing FAIL (whole window 0/27; after go-live 0/0)'
+    at: '2026-09-29'
+  live_check:
+  - python F:\Claude-Tools\graphify\graphify_funnel.py --days 7 --out <scratch>.md
+  source: scheduled graphify-rerank-usage-check 2026-09-29
+  notes_url: null
+- id: CT-GRAPHIFY-FUNNEL-TRANSCRIPTS
+  title: graphify_funnel.py — emit transcript paths for bypassed units (task spec expects them; report has ids only)
+  projects:
+  - claude-tools
+  status: ready
+  owner_gate: false
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: run
+    ref: F:\Claude-Tools\reports\graphify-funnel-2026-09-29.json
+    note: 'routing.bypassed is plain strings; ae897aa9 transcript lives under strange-sutherland-940055 project dir while report cwd says phase-13-governed-writeback-aeeb93 — resolve by session id, not cwd'
+  verification:
+    level: claimed
+    by: 'funnel JSON 2026-09-29: routing.bypassed entries carry no transcript field'
+    at: '2026-09-29'
+  live_check: []
+  source: scheduled graphify-rerank-usage-check 2026-09-29
+  notes_url: null
 - id: CT-GRAPHIFY-LOCALCFG-LIVE
   title: Verify first scheduled graphify refresh on merged local-config code succeeds
   projects:
@@ -311,7 +356,30 @@ items:
       Parked under frozen policy (no EC code change). Two parts: (a) now-able, no EC change: external dry-run-default evacuate-worktree helper or
       closeout step -- copy .evidence-compiler/packets/ to F:/Evidence-Archive, dedupe by packet id+sha256, write receipt, fail loud, never delete originals;
       (b) later EC change: immutable packet output to a stable store keyed repo/worktree/revision/session/packet id. Both need owner go.
-      2026-09-25: part (a) owner-approved and MERGED as claude-tools#10 (0167545, evidence-archive/evacuate_worktree.py). Part (b) stays parked.'
+      2026-09-25: part (a) owner-approved and MERGED as claude-tools#10 (0167545, evidence-archive/evacuate_worktree.py). Part (b) stays parked.
+      2026-09-29 close: 350 packets in 7 BIMpossible worktree stores still NOT evacuated (largest ultrareview-quota-check-358602, 123); running the
+      helper with --apply is an owner call. The 07:15Z cleanup that lost the 43 remains unattributed (capture session 92c8d2 says it touched no worktrees).
+      2026-09-30: prospective capture (live since 2026-09-26) links episodes to packets from the repo/worktree store first, then EC-LIVE; a worktree
+      deleted before evacuation leaves that episode unlinked and replay-ineligible (never silently accepted). Evacuation state now also bounds capture
+      linkage yield.'
+- id: EC-STEP5-NAMING
+  title: Confirm the "Step-5 capture-enablement" lane (session 92c8d2, 2026-09-26__step5-*.md) is not the frozen EC Step 5
+  projects:
+  - evidence-compiler
+  status: dropped
+  owner_gate: false
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 2
+  source: F:/Claude-Tools/reports/2026-09-29__ec-observer-session-closeout.md
+  verification:
+    level: verified
+    at: '2026-09-30'
+    by: 'Name clash, not a breach. Frozen "Step 5" = word filtering / term extraction inside EC (W3 decision record 2026-09-24, lines 41/51/80).
+      Capture "Step 5" = step 5 of the prospective-capture plan (register capture hooks); it lives in Claude-Tools evidence-capture, changes no EC
+      code, ranking, retrieval, injection or packet generation (EC hook 479571e / 0.3.1 unchanged; settings diff = two appended capture hooks only).
+      Owner explicitly approved capture Step 5 on 2026-09-26 in session 92c8d2. Owner delegated resolution of EC-session overlap on 2026-09-30.'
 - id: EC-HYGIENE-1
   title: Delete merged lane branch safety/pre-sync-2026-09-06; master already synced to origin
   projects:
@@ -1422,6 +1490,10 @@ items:
       proof, flag BIMPOSSIBLE_PRODUCT_INGESTION_ENABLED (off, 404 before auth), 197 targeted tests green, backend-endpoint-reviewer + security-engineer findings fixed (own-reach gate, upsert race, paged
       list; F3 model_urn oracle = owner call), refresh unwarmed guard. Living handoff docs/audits/2026-09-24__phase9-overnight-tranche-report.md + ...phase9-handoff.json. MERGED: no. DEPLOYED: no (by mandate).
       Spec §4 amendment: Workspace PR #161 (ready).'
+  - kind: pr
+    ref: BIMpossible_Workspace#160
+    note: '76e4cbf merged 2026-09-24: owner ledger row 9 now records the link-target ruling (cutsheet binds to individual element, family type is grouping context). #161 33b810c adopts element_product_bindings
+      (amendment #6). Build started: BIMpossible #713/#745/#748 merged.'
   verification:
     level: verified
     by: 'OWNER RULING 2026-08-17 (chat, session 67df33a5): extracted cutsheet data links to the INDIVIDUAL ELEMENT, anchored by family type -- not category, not named deliverable, not schedule row. Rationale
@@ -1431,8 +1503,10 @@ items:
       "Open design question to settle first thing in the reopened phase (flagged, not decided)" -- the gap between the chat ruling and the written ledger persists unchanged. RECONFIRMED 2026-08-30: ledger
       row 9 still reads "flagged, not decided" -- chat ruling of 2026-08-17 still not written back by owner close-out. || 2026-09-16 unattended run (docs/ops/2026-09-16-unattended/ on lane claude/unattended-run-20260916):
       probe re-run with the corrected ledger path (the stored path pointed at the retired F:/AI-Dev root -- probe failed, not a negative). Ledger row 9 unchanged: element/type-scope decision still flagged,
-      not decided. Store reading AGREES -- landed, not live. Verified.'
-    at: '2026-09-16'
+      not decided. Store reading AGREES -- landed, not live. Verified. || 2026-09-29 (catch-up pass): ledger write-back gap CLOSED -- WS#160 76e4cbf records the ruling in PHASE-STATUS row 9; WS#161 33b810c
+      adopts element_product_bindings. Build merged: BIMpossible #713 (schema/service), #745 (review UI), #748 (ingest trigger, flag-gated); ledger 09c101b says #713+#745 run on LOCAL DEV with the flag
+      OFF. No production deployment proof and no ingest writer live -> stays landed, NOT live/deployed.'
+    at: '2026-09-29'
   live_check:
   - 'grep -A6 ''^| 9 '' "F:\BIMpossible-Workspace\00_Strategy\BIMpossible_PHASE-STATUS.md"  # ledger row 9 -- ruling text present once PR #160 merges'
   - 'gh pr view 713 --repo YourBIMpossible/BIMpossible --json state,isDraft  # draft until owner review'
@@ -2363,12 +2437,17 @@ items:
     ref: 'Seventh reading 2026-09-14 (scheduled workspace sync): all three main checkouts behind-0/ahead-0, clean of tracked drift. BIMpossible: 0 untracked. AddIns: 2 untracked (deploy-evidence/, reviews/2026-09-13__panel-schedules-sheet-index-architecture.md
       -- foreign in-progress review work, left untouched). Workspace: 1 untracked (audits/2026-09-13__slop-audit.md -- deliberately left uncommitted by the 2026-09-14 weekly-full-audit run per its own log).
       Best reading on record: no dirty tracked files anywhere, all three repos level with origin.'
+  - kind: probe
+    ref: 'Eighth reading 2026-09-28 (scheduled workspace sync, after git fetch): Workspace main ahead-1/behind-1 -- local 674876f (weekly full audit 2026-09-28, unpushed) vs origin #162 307dbc1; tree clean.
+      BIMpossible canonical checkout on DETACHED HEAD 943af02c (#768), 5 behind origin/main, untracked reviews/env-candidates-2026-09-24/. AddIns main behind-2, clean. Nothing pulled/committed, per standing
+      owner direction.'
   verification:
     level: verified
     by: 'Re-probed 2026-09-07: BIMpossible main behind 1; BIMpossible-AddIns main behind 19 AND dirty (.evidence-compiler/config.yaml, CLAUDE.md); BIMpossible-Workspace main clean and level. Drift condition
       still real. | 2026-09-07 later pass: BIMpossible resolved (level, clean). AddIns drift is now precisely classified (see evidence): it needs a supervised per-file merge of CLAUDE.md/TOOL_BACKLOG.md/WORKLOG.md,
-      not a pull. | 2026-09-14: git status -sb x3, all level/clean; only untracked (non-tracked-drift) foreign docs remain, named above.'
-    at: '2026-09-14'
+      not a pull. | 2026-09-14: git status -sb x3, all level/clean; only untracked (non-tracked-drift) foreign docs remain, named above. | 2026-09-28: re-probed (git status -sb x3 + rev-list); drift real
+      again -- WS diverged 1/1, BIMpossible detached+behind-5+untracked, AddIns behind-2.'
+    at: '2026-09-28'
   live_check:
   - 'git -C F:/BIMpossible status -sb; git -C F:/BIMpossible-AddIns status -sb; git -C F:/BIMpossible-Workspace status -sb  # expect all behind-0/ahead-0, clean'
   source: 2026-08-07 /next sync Left-Flags; refreshed 2026-08-17 reconcile; owner instruction 'Do not clean up automatically'; re-verified clean 2026-08-23 overnight review
@@ -6573,8 +6652,9 @@ items:
   verification:
     level: verified
     by: 'git -C F:/BIMpossible-Workspace worktree list; git log origin/main..docs/review-all-gatea-canonical-filing. RE-CHECKED 2026-09-14 (workspace sync): still exactly 1 unpushed commit (5312cfd), no
-      upstream, no PR -- unchanged, still awaiting the owner push-or-drop call.'
-    at: '2026-09-14'
+      upstream, no PR -- unchanged, still awaiting the owner push-or-drop call. | RE-CHECKED 2026-09-28: worktree .claude/worktrees/review-artifact-gatea no longer registered (git worktree list), but local
+      branch docs/review-all-gatea-canonical-filing still holds unpushed 5312cfd, no remote branch. Decision still open: push+PR or delete branch.'
+    at: '2026-09-28'
   live_check:
   - git -C F:/BIMpossible-Workspace log --oneline origin/main..docs/review-all-gatea-canonical-filing
   source: 2026-09-12 workspace drift review (owner-directed)
@@ -6583,8 +6663,8 @@ items:
   title: 'Decide: draft PR #146 (state: publish /next sync mirror, addins delta 64a8a6b->320e63a) has sat open since 2026-09-11 -- update to the current canonical snapshot and merge, or close as superseded'
   projects:
   - workspace
-  status: blocked_owner
-  owner_gate: true
+  status: dropped
+  owner_gate: false
   owner: null
   unblocks: []
   blocked_by: []
@@ -6599,13 +6679,17 @@ items:
   - kind: log
     ref: At least 5 canonical queue.yaml syncs have landed on main since this branch was cut (queue commits 6a8df67, 00d92c1, 06f8c86, 24fe85a and this run's own edits) -- the branch's mirror snapshot is
       almost certainly stale against the current canonical store, so mergeable is likely a real conflict, not just an unresolved GitHub check.
+  - kind: pr
+    ref: BIMpossible_Workspace#146
+    note: 'CLOSED (not merged) 2026-09-22T01:43:26Z per gh pr view; superseded by mirror publishes #156/#159.'
   verification:
-    level: claimed
-    by: 'PR metadata read live via gh pr view; not merged or closed by this sync (owner_gate: true, /next never pushes/merges/closes PRs).'
-    at: '2026-09-14'
+    level: verified
+    by: 'OWNER DECISION RESOLVED: gh pr view 146 -> state CLOSED, mergedAt null, closedAt 2026-09-22T01:43:26Z. The PR contents were NOT merged and are NOT live; its stale mirror snapshot was superseded
+      by mirror publishes #156/#159. Dropped (superseded), re-read 2026-09-29.'
+    at: '2026-09-29'
   live_check:
-  - gh pr view 146 --repo YourBIMpossible/BIMpossible_Workspace --json state,isDraft,mergeable
-  source: 2026-09-14 workspace sync (this run) -- new item, no prior tracking
+  - 'gh pr view 146 --repo YourBIMpossible/BIMpossible_Workspace --json state --jq .state  # expect CLOSED'
+  source: '2026-09-14 workspace sync (this run) -- new item, no prior tracking | dropped 2026-09-29: PR #146 closed unmerged (owner decision executed)'
   notes_url: null
 - id: R18-PROXY-MODE-FAIL-CLOSED
   title: 'Harden R18: if cross-firm sharing is ON while derivative proxy mode is OFF, the byte scope is unenforced (Viewer runs on the app-level viewables:read token Autodesk serves directly). Make the
@@ -7822,8 +7906,8 @@ items:
   title: 'Workspace draft PR #146 (/next mirror publish, AddIns delta 64a8a6b->320e63a) is stale vs newer mirror publishes -- close, do not merge'
   projects:
   - workspace
-  status: blocked_owner
-  owner_gate: true
+  status: dropped
+  owner_gate: false
   unblocks: []
   blocked_by: []
   effort: S
@@ -7832,14 +7916,17 @@ items:
   - kind: pr
     ref: BIMpossible_Workspace#146
     note: OPEN draft since 2026-09-10; 2 files; docs-hygiene SUCCESS; mergeable UNKNOWN. Superseded by later mirror commits 05f8a20, 647c6b1 and this closeout.
+  - kind: pr
+    ref: BIMpossible_Workspace#146
+    note: 'CLOSED (not merged) 2026-09-22T01:43:26Z per gh pr view; superseded by mirror publishes #156/#159.'
   verification:
-    level: claimed
-    by: gh read 2026-09-21; supersession from workspace main history (mirror commits 05f8a20, 647c6b1).
-    at: '2026-09-21'
-  blocked_on: 'owner decision: close PR #146 as superseded (outward-facing action, not done by sync).'
+    level: verified
+    by: 'OWNER DECISION RESOLVED: gh pr view 146 -> state CLOSED, mergedAt null, closedAt 2026-09-22T01:43:26Z. The PR contents were NOT merged and are NOT live; its stale mirror snapshot was superseded
+      by mirror publishes #156/#159. Dropped (superseded), re-read 2026-09-29. Duplicate of DECIDE-WS-STALE-MIRROR-PUBLISH-PR146.'
+    at: '2026-09-29'
   live_check:
-  - 'gh pr view 146 --repo YourBIMpossible/BIMpossible_Workspace --json state --jq .state  # OPEN until closed'
-  source: /next sync 2026-09-21
+  - 'gh pr view 146 --repo YourBIMpossible/BIMpossible_Workspace --json state --jq .state  # expect CLOSED'
+  source: '/next sync 2026-09-21 | dropped 2026-09-29: PR #146 closed unmerged (owner decision executed)'
 - id: RECONCILE-RESIDUAL-DASHBOARD-EC-WATERMARKS
   title: 'Unreconciled watermark scope: dashboard efdcba1..origin/HEAD (77 commits since 2026-09-06); watermark deliberately NOT advanced'
   projects:
@@ -8342,10 +8429,11 @@ items:
     ref: bimpossible#710
     note: merged 5aca9eb5; cosmetic evidence refs on closed items only (queue.yaml:808,821,2932,7671,9089,9897)
   verification:
-    level: claimed
-    by: reviewer grep during
-    at: '2026-09-23'
-  live_check: []
+    level: verified
+    by: grep -c "2026-09-16-unattended|2026-09-21-release" -> 11 hits in both canonical F:/Claude-Tools/state/queue.yaml and mirror .tools/state/queue.yaml (2026-09-28). Condition still real.
+    at: '2026-09-28'
+  live_check:
+  - 'grep -c "2026-09-16-unattended\|2026-09-21-release" F:/Claude-Tools/state/queue.yaml  # expect 0 when fixed'
   source: 2026-09-23 docs-budget closeout /close wander
   notes_url: null
 - id: W5-P1F4-LANE-CONFLICT-NOTE
@@ -8420,3 +8508,73 @@ items:
     at: '2026-09-25'
   live_check: []
   source: 2026-09-25 phase9 #748 reconciliation /close wander
+- id: WS-2026-09-22-28-MERGE-COVERAGE
+  title: 'Workspace merges #155-#162 (2026-09-22..26) not previously indexed (dedup coverage): audit closeout, mirror publishes, xref fixes, Phase 9 ruling + amendment #6, receipt schema 3'
+  projects:
+  - workspace
+  status: live
+  owner_gate: false
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: XS
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: BIMpossible_Workspace#155
+    note: 6a6d3ff WFA 2026-09-21 closure-wave preflight + ledger states
+  - kind: pr
+    ref: BIMpossible_Workspace#156
+    note: 0d4a901 mirror catch-up through 2026-09-22
+  - kind: pr
+    ref: BIMpossible_Workspace#157
+    note: 74c4eb2 breach-chain xref qualification (G3)
+  - kind: pr
+    ref: BIMpossible_Workspace#159
+    note: fd1b2fe mirror catch-up through 2026-09-24
+  - kind: pr
+    ref: BIMpossible_Workspace#160
+    note: 76e4cbf Phase 9 link-target ruling in PHASE-STATUS row 9
+  - kind: pr
+    ref: BIMpossible_Workspace#161
+    note: '33b810c Phase 9 amendment #6 element_product_bindings'
+  - kind: pr
+    ref: BIMpossible_Workspace#162
+    note: '307dbc1 receipt schema 3 + Merge Evidence block (Workspace half; code half BIMpossible #755)'
+  verification:
+    level: verified
+    by: 'gh pr list --state all --search updated:>=2026-09-21 (2026-09-28): all 7 MERGED; git log 647c6b1..origin/main shows each SHA. Docs/state repo -- merge on main is the live state. #158 already tracked.'
+    at: '2026-09-28'
+  live_check: []
+  source: /next workspace sync 2026-09-28
+  notes_url: null
+- id: LEDGER-WAVE-STATUS-STALE-20260928
+  title: 'WAVE-STATUS stale since 2026-09-21: ~75 BIMpossible merges (#683-#769) + AddIns #145/#152/#156-#163 unrecorded; PHASE-STATUS (2026-09-25) misses #748/#755/#762/#764/#765/#767 + AddIns #152/#157/#158/#162/#163'
+  projects:
+  - workspace
+  - bimpossible
+  - addins
+  status: landed
+  owner_gate: false
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 2
+  evidence:
+  - kind: probe
+    ref: 'origin/main 00_Strategy/BIMpossible_WAVE-STATUS.md Updated: 2026-09-21; grep #683/#685/#688/#713/#715/#721/#725/#748/#762 -> 0 hits each'
+  - kind: probe
+    ref: 'origin/main BIMpossible_PHASE-STATUS.md Updated: 2026-09-25; grep #748/#755/#762/#764/#765/#767 -> 0 hits'
+  - kind: run
+    ref: gh pr list --state merged --search merged:>=2026-09-21 on BIMpossible + BIMpossible-AddIns (2026-09-28)
+  verification:
+    level: verified
+    by: 'Owner-mandated catch-up 2026-09-29: WAVE-STATUS rows 42-48 + PHASE-STATUS rows 5/9/13/17 notes cover BIMpossible #683-#769 and AddIns #152/#157/#158/#162/#163, published in the same Workspace PR
+      as this mirror snapshot. Coverage evidence: F:/Claude-Tools/reports/2026-09-29__ledger-coverage-683-771.md. All rows BUILT; no deploy claims. RESOLVED 2026-09-29: Workspace PR #164 MERGED (merge commit ec172a47, head 83f45537); verified on origin/main: WAVE-STATUS rows 42-48 present, PHASE-STATUS 2026-09-29 notes present, 674876f/307dbc1/76ba410 ancestors. Rows 45/48 record owner-stack rollout / AddIns #152 pipe-ON deploy as owner-stack observed, not production verified.'
+    at: '2026-09-29'
+  blocked_on: null
+  live_check:
+  - git -C F:/BIMpossible-Workspace show origin/main:00_Strategy/BIMpossible_WAVE-STATUS.md | grep -m1 "Updated:"
+  source: /next workspace sync 2026-09-28
+  notes_url: null
