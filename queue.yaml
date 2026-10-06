@@ -9,9 +9,9 @@ reconciled:
     commit: baa9efe
     pr: 155
   workspace:
-    at: '2026-09-28'
-    commit: 307dbc1
-    pr: 162
+    at: '2026-10-05'
+    commit: c05aa33
+    pr: 169
   evidence-compiler:
     at: '2026-09-24'
     commit: 479571e
@@ -39,10 +39,11 @@ items:
   evidence:
   - kind: run
     ref: F:\Claude-Tools\reports\graphify-funnel-2026-09-29.md
-    note: 'all 27 bypasses predate hint go-live 2026-09-29T00:00Z (after_hint_live.bypassed = []); they show pre-hint skill/subagent routing, not hook efficacy. Top: c1ab1ba5, ae897aa9, df01e35b, c516dc0e (BIMpossible main threads); 12/269 Explore prompts carried the graph; Skill selected graphify 0x; 1 bare-CLI call. Hint efficacy needs post-go-live exploration units in a later weekly run.'
+    note: 'all 27 bypasses predate hint go-live 2026-09-29T00:00Z (after_hint_live.bypassed = []); they show pre-hint skill/subagent routing, not hook efficacy. Top: c1ab1ba5, ae897aa9, df01e35b, c516dc0e
+      (BIMpossible main threads); 12/269 Explore prompts carried the graph; Skill selected graphify 0x; 1 bare-CLI call. Hint efficacy needs post-go-live exploration units in a later weekly run.'
   verification:
     level: claimed
-    by: 'funnel report 2026-09-29 routing FAIL (whole window 0/27; after go-live 0/0)'
+    by: funnel report 2026-09-29 routing FAIL (whole window 0/27; after go-live 0/0)
     at: '2026-09-29'
   live_check:
   - python F:\Claude-Tools\graphify\graphify_funnel.py --days 7 --out <scratch>.md
@@ -62,7 +63,7 @@ items:
   evidence:
   - kind: run
     ref: F:\Claude-Tools\reports\graphify-funnel-2026-09-29.json
-    note: 'routing.bypassed is plain strings; ae897aa9 transcript lives under strange-sutherland-940055 project dir while report cwd says phase-13-governed-writeback-aeeb93 — resolve by session id, not cwd'
+    note: routing.bypassed is plain strings; ae897aa9 transcript lives under strange-sutherland-940055 project dir while report cwd says phase-13-governed-writeback-aeeb93 — resolve by session id, not cwd
   verification:
     level: claimed
     by: 'funnel JSON 2026-09-29: routing.bypassed entries carry no transcript field'
@@ -250,7 +251,7 @@ items:
   live_check: []
   source: 2026-09-24 closure sweep
 - id: REVIT-END-USER-WORKFLOW-VERIFY
-  title: 'End-user Revit workflow + Phase E launch-readiness verification -- live session pending on env-candidates cleanup (elsewhere) and an installed-build decision'
+  title: End-user Revit workflow + Phase E launch-readiness verification -- live session pending on env-candidates cleanup (elsewhere) and an installed-build decision
   projects:
   - bimpossible
   status: blocked_owner
@@ -267,20 +268,20 @@ items:
       verified. This item is that pending gate. Requires Revit running with the pane paired -- owner only.'
   - kind: doc
     ref: reviews/_archive/2026-09-26__distribution-verification-retrospective.md
-    note: 'Independent read-only retrospective (2026-09-26) folds the Phase E launch-readiness closeout into this same gate -- same checklist, same script (Invoke-RevitLiveVerification.ps1),
-      which self-gates on the evidence exit code. Confirmed live: backend/frontend/schema CURRENT, both anchors PINNED (main 3162e751, PR #758 merged -- Graphify-output evidence-tool fix). Three
-      things stand between here and a valid Revit run: (1) untracked reviews/env-candidates-2026-09-24/ folder in F:/BIMpossible keeps Get-DeployEvidence.ps1 at exit 3 instead of 0 -- owned by a
-      different lane, explicitly not to be opened or inventoried by this item; (2) once clean, Invoke-RevitLiveVerification.ps1 runs (owner-only, self-gating, already proven to fail closed
-      correctly); (3) an owner decision on which installed add-in build the run should certify -- the DLL actually installed today (hash 6EADFCA69D3F1710 for 2025-2027, 1C0130559F194D2F for 2024)
-      is from the unmerged AddIns branch claude/glass-linkpdf-deploy, not a clean pipe-on build of merged main; that decision belongs to the Glass-theme/AddIns lane, not this one.'
+    note: 'Independent read-only retrospective (2026-09-26) folds the Phase E launch-readiness closeout into this same gate -- same checklist, same script (Invoke-RevitLiveVerification.ps1), which self-gates
+      on the evidence exit code. Confirmed live: backend/frontend/schema CURRENT, both anchors PINNED (main 3162e751, PR #758 merged -- Graphify-output evidence-tool fix). Three things stand between here
+      and a valid Revit run: (1) untracked reviews/env-candidates-2026-09-24/ folder in F:/BIMpossible keeps Get-DeployEvidence.ps1 at exit 3 instead of 0 -- owned by a different lane, explicitly not to
+      be opened or inventoried by this item; (2) once clean, Invoke-RevitLiveVerification.ps1 runs (owner-only, self-gating, already proven to fail closed correctly); (3) an owner decision on which installed
+      add-in build the run should certify -- the DLL actually installed today (hash 6EADFCA69D3F1710 for 2025-2027, 1C0130559F194D2F for 2024) is from the unmerged AddIns branch claude/glass-linkpdf-deploy,
+      not a clean pipe-on build of merged main; that decision belongs to the Glass-theme/AddIns lane, not this one.'
   verification:
     level: unverified
-    by: 'No Revit session has occurred (retrospective''s own finding, corroborated across every document reviewed). Deploy-side state independently re-verified live 2026-09-26T04:30:06Z via
-      Get-DeployEvidence.ps1 -NoFetch: exit 3, backend/frontend/schema CURRENT, anchors PINNED; sole exit-3 cause is the other lane''s untracked folder.'
+    by: 'No Revit session has occurred (retrospective''s own finding, corroborated across every document reviewed). Deploy-side state independently re-verified live 2026-09-26T04:30:06Z via Get-DeployEvidence.ps1
+      -NoFetch: exit 3, backend/frontend/schema CURRENT, anchors PINNED; sole exit-3 cause is the other lane''s untracked folder.'
     at: '2026-09-26'
   live_check:
   - 'Set-Location F:\BIMpossible; .\Get-DeployEvidence.ps1 -NoFetch  # expect exit 0 once env-candidates folder is resolved; currently exit 3 (deploy checkout not clean)'
-  - 'gh pr view 758 --repo YourBIMpossible/BIMpossible --json state,mergedAt'
+  - gh pr view 758 --repo YourBIMpossible/BIMpossible --json state,mergedAt
   source: 2026-09-24 overnight tranche (queue normalization); folded forward 2026-09-26 by an independent distribution-and-verification retrospective (reviews/_archive/2026-09-26__distribution-verification-retrospective.md)
 - id: EC-DOGFOOD-2
   title: 'Window 3 owner audit: label 10 packets from the prepared worksheet (provisional triage of 139 done; not owner labels)'
@@ -298,12 +299,11 @@ items:
     level: verified
     at: '2026-09-24'
     by: 'evidence review status in F:/BIMpossible 2026-09-24: window W3 since 2026-09-06, 250 packets (candidate 78, nosym 40, harness 132), labels helped/neutral/hurt/insufficient all 0. Incidents on candidates:
-      cap_hit 32, degraded:ripgrep 25, rg_stall 20 -> NORTHSTAR 3-shared-incident trigger also fired. Labeling is human-only.
-      ADDENDUM 2026-09-24 (decision record): the 78 is the F:/BIMpossible main-store W3 window since 09-06 (tool labels it v0.2.1 = window-start
-      label). The live cohort is commit 479571e (version string 0.3.1, unbumped) activated ~2026-09-21T19:57Z: 139 candidate packets across stores
-      (cap 61, stall 28). Agent provisional triage of all 139: helped 19 / neutral 42 / hurt-noise 78 -- triage only, NOT imported, must not be
-      bulk-imported. Next HUMAN action: audit the 10 packets in F:/Claude-Tools/reports/2026-09-24__evidence-compiler-window3-owner-audit.md (gate: 0-2 material helped<->hurt disagreements -> replay-only
-      anchor-gate spec; 3+ -> stop). Next AGENT action: none beyond audit prep/closeout; no implementation.'
+      cap_hit 32, degraded:ripgrep 25, rg_stall 20 -> NORTHSTAR 3-shared-incident trigger also fired. Labeling is human-only. ADDENDUM 2026-09-24 (decision record): the 78 is the F:/BIMpossible main-store
+      W3 window since 09-06 (tool labels it v0.2.1 = window-start label). The live cohort is commit 479571e (version string 0.3.1, unbumped) activated ~2026-09-21T19:57Z: 139 candidate packets across stores
+      (cap 61, stall 28). Agent provisional triage of all 139: helped 19 / neutral 42 / hurt-noise 78 -- triage only, NOT imported, must not be bulk-imported. Next HUMAN action: audit the 10 packets in
+      F:/Claude-Tools/reports/2026-09-24__evidence-compiler-window3-owner-audit.md (gate: 0-2 material helped<->hurt disagreements -> replay-only anchor-gate spec; 3+ -> stop). Next AGENT action: none beyond
+      audit prep/closeout; no implementation.'
   live_check:
   - cd F:/BIMpossible && evidence review status
   source: NORTHSTAR.md 'Review windows'; WORKLOG.md
@@ -334,7 +334,8 @@ items:
   risk: 3
   verification:
     level: verified
-    by: "Boundary disclosed in PR#2 'Known Follow-up'; human ruled it a separate parked follow-up at Phase 1B approval (2026-08-24). Full draft (repro requirements, candidate fixes) in WORKLOG.md Roadmap. 2026-09-24 W3 decision record: confirmed and measured (61 capped of 139 W3 candidates), deferred, NOT the next work item and not reopened from this cohort."
+    by: 'Boundary disclosed in PR#2 ''Known Follow-up''; human ruled it a separate parked follow-up at Phase 1B approval (2026-08-24). Full draft (repro requirements, candidate fixes) in WORKLOG.md Roadmap.
+      2026-09-24 W3 decision record: confirmed and measured (61 capped of 139 W3 candidates), deferred, NOT the next work item and not reopened from this cohort.'
     at: '2026-08-24'
   source: WORKLOG.md Roadmap; PR evidence-compiler#2
 - id: EC-DURABILITY
@@ -351,17 +352,17 @@ items:
   verification:
     level: verified
     at: '2026-09-25'
-    by: 'Stores under F:/BIMpossible/.claude/worktrees/{bimpossible-heavy-lifts-309f3e,bimpossible-effort-estimate-c7d70e,mystifying-fermi-3b2e07,floating-work-items-ae2aeb}
-      emptied/removed ~2026-09-25T07:15-07:18Z; packet JSON unrecoverable, transcripts survived (cleanupPeriodDays now 365, which does not cover packets).
-      Parked under frozen policy (no EC code change). Two parts: (a) now-able, no EC change: external dry-run-default evacuate-worktree helper or
-      closeout step -- copy .evidence-compiler/packets/ to F:/Evidence-Archive, dedupe by packet id+sha256, write receipt, fail loud, never delete originals;
-      (b) later EC change: immutable packet output to a stable store keyed repo/worktree/revision/session/packet id. Both need owner go.
-      2026-09-25: part (a) owner-approved and MERGED as claude-tools#10 (0167545, evidence-archive/evacuate_worktree.py). Part (b) stays parked.
-      2026-09-29 close: 350 packets in 7 BIMpossible worktree stores still NOT evacuated (largest ultrareview-quota-check-358602, 123); running the
-      helper with --apply is an owner call. The 07:15Z cleanup that lost the 43 remains unattributed (capture session 92c8d2 says it touched no worktrees).
-      2026-09-30: prospective capture (live since 2026-09-26) links episodes to packets from the repo/worktree store first, then EC-LIVE; a worktree
-      deleted before evacuation leaves that episode unlinked and replay-ineligible (never silently accepted). Evacuation state now also bounds capture
-      linkage yield.'
+    by: 'Stores under F:/BIMpossible/.claude/worktrees/{bimpossible-heavy-lifts-309f3e,bimpossible-effort-estimate-c7d70e,mystifying-fermi-3b2e07,floating-work-items-ae2aeb} emptied/removed ~2026-09-25T07:15-07:18Z;
+      packet JSON unrecoverable, transcripts survived (cleanupPeriodDays now 365, which does not cover packets). Parked under frozen policy (no EC code change). Two parts: (a) now-able, no EC change: external
+      dry-run-default evacuate-worktree helper or closeout step -- copy .evidence-compiler/packets/ to F:/Evidence-Archive, dedupe by packet id+sha256, write receipt, fail loud, never delete originals;
+      (b) later EC change: immutable packet output to a stable store keyed repo/worktree/revision/session/packet id. Both need owner go. 2026-09-25: part (a) owner-approved and MERGED as claude-tools#10
+      (0167545, evidence-archive/evacuate_worktree.py). Part (b) stays parked. Observed 2026-09-29 (dated observation, not a current backlog): 350 packets in 7 BIMpossible worktree stores were not yet evacuated
+      (largest ultrareview-quota-check-358602, 123). 2026-09-30: the stores of ultrareview-quota-check-358602, phase-13-governed-writeback-aeeb93 and phase-17-app-integrations-1ddd7e were found deleted
+      (unattributed, no receipts); the 1 still-reachable packet was evacuated with --apply. 2026-10-01 inventory: every surviving worktree store fully archived (0 unarchived, 0 hash conflicts); the 203
+      byte-exact W3 raw copies from those three stores were backfilled into EC-LIVE (hash-verified, no overwrite, W3 unchanged); EC-LIVE 1095 packets. Confirmed missing: the 43 W3 lost_packets IDs. Estimated
+      unitemizable loss from the 2026-09-29 backlog: about 10 to 130 packets (IDs never recorded). The 07:15Z cleanup that lost the 43 remains unattributed (capture session 92c8d2 says it touched no worktrees).
+      2026-09-30: prospective capture (live since 2026-09-26) links episodes to packets from the repo/worktree store first, then EC-LIVE; a worktree deleted before evacuation leaves that episode unlinked
+      and replay-ineligible (never silently accepted). Evacuation state now also bounds capture linkage yield.'
 - id: EC-STEP5-NAMING
   title: Confirm the "Step-5 capture-enablement" lane (session 92c8d2, 2026-09-26__step5-*.md) is not the frozen EC Step 5
   projects:
@@ -376,10 +377,9 @@ items:
   verification:
     level: verified
     at: '2026-09-30'
-    by: 'Name clash, not a breach. Frozen "Step 5" = word filtering / term extraction inside EC (W3 decision record 2026-09-24, lines 41/51/80).
-      Capture "Step 5" = step 5 of the prospective-capture plan (register capture hooks); it lives in Claude-Tools evidence-capture, changes no EC
-      code, ranking, retrieval, injection or packet generation (EC hook 479571e / 0.3.1 unchanged; settings diff = two appended capture hooks only).
-      Owner explicitly approved capture Step 5 on 2026-09-26 in session 92c8d2. Owner delegated resolution of EC-session overlap on 2026-09-30.'
+    by: Name clash, not a breach. Frozen "Step 5" = word filtering / term extraction inside EC (W3 decision record 2026-09-24, lines 41/51/80). Capture "Step 5" = step 5 of the prospective-capture plan
+      (register capture hooks); it lives in Claude-Tools evidence-capture, changes no EC code, ranking, retrieval, injection or packet generation (EC hook 479571e / 0.3.1 unchanged; settings diff = two
+      appended capture hooks only). Owner explicitly approved capture Step 5 on 2026-09-26 in session 92c8d2. Owner delegated resolution of EC-session overlap on 2026-09-30.
 - id: EC-HYGIENE-1
   title: Delete merged lane branch safety/pre-sync-2026-09-06; master already synced to origin
   projects:
@@ -2441,13 +2441,17 @@ items:
     ref: 'Eighth reading 2026-09-28 (scheduled workspace sync, after git fetch): Workspace main ahead-1/behind-1 -- local 674876f (weekly full audit 2026-09-28, unpushed) vs origin #162 307dbc1; tree clean.
       BIMpossible canonical checkout on DETACHED HEAD 943af02c (#768), 5 behind origin/main, untracked reviews/env-candidates-2026-09-24/. AddIns main behind-2, clean. Nothing pulled/committed, per standing
       owner direction.'
+  - kind: run
+    ref: '2026-10-05 workspace sync: F:/BIMpossible-Workspace main ahead 2 / behind 0 (unpushed c622e85 weekly full audit 2026-10-05 + 1da8c10 handoff-pending record), tree clean. 2026-10-05 audit HYG-41:
+      merged wfa0928 worktrees in all three repos still registered, clean -- prune candidates. Owner action: push the 2 audit commits; prune.'
   verification:
     level: verified
     by: 'Re-probed 2026-09-07: BIMpossible main behind 1; BIMpossible-AddIns main behind 19 AND dirty (.evidence-compiler/config.yaml, CLAUDE.md); BIMpossible-Workspace main clean and level. Drift condition
       still real. | 2026-09-07 later pass: BIMpossible resolved (level, clean). AddIns drift is now precisely classified (see evidence): it needs a supervised per-file merge of CLAUDE.md/TOOL_BACKLOG.md/WORKLOG.md,
       not a pull. | 2026-09-14: git status -sb x3, all level/clean; only untracked (non-tracked-drift) foreign docs remain, named above. | 2026-09-28: re-probed (git status -sb x3 + rev-list); drift real
-      again -- WS diverged 1/1, BIMpossible detached+behind-5+untracked, AddIns behind-2.'
-    at: '2026-09-28'
+      again -- WS diverged 1/1, BIMpossible detached+behind-5+untracked, AddIns behind-2. | RE-CHECKED 2026-10-05: git status -sb -> main...origin/main [ahead 2]; closure audit lists clean merged wfa0928
+      worktrees.'
+    at: '2026-10-05'
   live_check:
   - 'git -C F:/BIMpossible status -sb; git -C F:/BIMpossible-AddIns status -sb; git -C F:/BIMpossible-Workspace status -sb  # expect all behind-0/ahead-0, clean'
   source: 2026-08-07 /next sync Left-Flags; refreshed 2026-08-17 reconcile; owner instruction 'Do not clean up automatically'; re-verified clean 2026-08-23 overnight review
@@ -6653,8 +6657,9 @@ items:
     level: verified
     by: 'git -C F:/BIMpossible-Workspace worktree list; git log origin/main..docs/review-all-gatea-canonical-filing. RE-CHECKED 2026-09-14 (workspace sync): still exactly 1 unpushed commit (5312cfd), no
       upstream, no PR -- unchanged, still awaiting the owner push-or-drop call. | RE-CHECKED 2026-09-28: worktree .claude/worktrees/review-artifact-gatea no longer registered (git worktree list), but local
-      branch docs/review-all-gatea-canonical-filing still holds unpushed 5312cfd, no remote branch. Decision still open: push+PR or delete branch.'
-    at: '2026-09-28'
+      branch docs/review-all-gatea-canonical-filing still holds unpushed 5312cfd, no remote branch. Decision still open: push+PR or delete branch. | RE-CHECKED 2026-10-05: git log origin/main..docs/review-all-gatea-canonical-filing
+      -> 5312cfd still unpushed, no remote. Owner call open.'
+    at: '2026-10-05'
   live_check:
   - git -C F:/BIMpossible-Workspace log --oneline origin/main..docs/review-all-gatea-canonical-filing
   source: 2026-09-12 workspace drift review (owner-directed)
@@ -8262,8 +8267,8 @@ items:
   evidence:
   - kind: doc
     ref: F:\Claude-Tools\reports\2026-09-23__owner-download-export-verification.md
-    note: 'Owner route matrix PASS: spec_draft doc/json, model-health/export csv/json, coordination-report/export html/doc, aps/model/sheet-pdf x2 (200 application/pdf, valid 1-page PDFs); with the prior /data/elements/xlsx
-      200 all 5 owner download routes have live evidence. Share-principal rows out of scope (need R18 flag; not a defect).'
+    note: 'Owner route matrix PASS: spec_draft doc/json, model-health/export csv/json, coordination-report/export html/doc, aps/model/sheet-pdf x2 (200 application/pdf, valid 1-page PDFs); with the prior
+      /data/elements/xlsx 200 all 5 owner download routes have live evidence. Share-principal rows out of scope (need R18 flag; not a defect).'
   - kind: run
     ref: 2026-09-23 ~15:40Z Chrome, app.yourbimpossible.com, TEST_ACCC_D_EL_SL.rvt Cable Tray Fittings
     note: 'DOWNLOAD live-smoked: GET /data/elements/xlsx 200 (table Export XLSX). Other 4 download routes (spec_draft, model-health export, coordination-report export, sheet-pdf) still NOT live-smoked'
@@ -8315,8 +8320,8 @@ items:
   verification:
     level: verified
     by: 'gh pr 697 MERGED 3ea5fc9a 2026-09-23T14:49Z; frontend image built 2026-09-24T02:12Z from 57bc3445 (descends from 3ea5fc9a) => deployed flag-dark: Sheets UI compile-time disabled (NEXT_PUBLIC_BIMPOSSIBLE_SHEETS_ENABLED=0).
-      Ordinary, partial and all-fail composer paths unit-tested only; no live browser proof (F:\Claude-Tools\reports\2026-09-23__owner-download-export-verification.md s.2). Activation path: enable Sheets intentionally
-      -> Refresh-Frontend -> composer smoke matrix.'
+      Ordinary, partial and all-fail composer paths unit-tested only; no live browser proof (F:\Claude-Tools\reports\2026-09-23__owner-download-export-verification.md s.2). Activation path: enable Sheets
+      intentionally -> Refresh-Frontend -> composer smoke matrix.'
     at: '2026-09-25'
   live_check:
   - gh pr view 697 --repo YourBIMpossible/BIMpossible --json state --jq .state
@@ -8430,8 +8435,9 @@ items:
     note: merged 5aca9eb5; cosmetic evidence refs on closed items only (queue.yaml:808,821,2932,7671,9089,9897)
   verification:
     level: verified
-    by: grep -c "2026-09-16-unattended|2026-09-21-release" -> 11 hits in both canonical F:/Claude-Tools/state/queue.yaml and mirror .tools/state/queue.yaml (2026-09-28). Condition still real.
-    at: '2026-09-28'
+    by: 'grep -c "2026-09-16-unattended|2026-09-21-release" -> 11 hits in both canonical F:/Claude-Tools/state/queue.yaml and mirror .tools/state/queue.yaml (2026-09-28). Condition still real. | RE-CHECKED
+      2026-10-05: grep -c on canonical queue.yaml -> 13 (was 11; added refs are verification prose). Condition still real.'
+    at: '2026-10-05'
   live_check:
   - 'grep -c "2026-09-16-unattended\|2026-09-21-release" F:/Claude-Tools/state/queue.yaml  # expect 0 when fixed'
   source: 2026-09-23 docs-budget closeout /close wander
@@ -8482,11 +8488,9 @@ items:
     level: verified
     at: '2026-09-24'
     by: 'Steps 1,3,4 merged: #18 batched rg (2026-09-17), #19 filename-stem evidence + equal-score tie-break (2026-09-17), #20 stem lookup respects deadline (479571e, 2026-09-21). No replay-harness or word-filter
-      code on origin/master (grep of src). Step 6 requires replay numbers back to owner before anything else.
-      CORRECTION 2026-09-24: step 2 is NOT unbuilt -- replay harness exists at F:/Claude-Tools/evidence-relevance/replay_relevance.py. Step 5 is
-      PAUSED by owner: design spike kept dormant/uncommitted in F:/Evidence Compiler/.claude/worktrees/relevance-v3 (branch
-      feat/relevance-v3-replay-wordfilter, no commits, no remote). Reopen only after the W3 owner audit shows term extraction is the dominant
-      repeated avoidable failure. Frozen policy: F:/Claude-Tools/reports/2026-09-24__evidence-compiler-window3-decision-record.md'
+      code on origin/master (grep of src). Step 6 requires replay numbers back to owner before anything else. CORRECTION 2026-09-24: step 2 is NOT unbuilt -- replay harness exists at F:/Claude-Tools/evidence-relevance/replay_relevance.py.
+      Step 5 is PAUSED by owner: design spike kept dormant/uncommitted in F:/Evidence Compiler/.claude/worktrees/relevance-v3 (branch feat/relevance-v3-replay-wordfilter, no commits, no remote). Reopen
+      only after the W3 owner audit shows term extraction is the dominant repeated avoidable failure. Frozen policy: F:/Claude-Tools/reports/2026-09-24__evidence-compiler-window3-decision-record.md'
 - id: BIMP-SESSIONS-MOUNTPOINT
   title: Fresh checkout must provide backend/.sessions so backend-migrate/backend can mount backend_sessions inside the :ro /app bind
   projects:
@@ -8501,13 +8505,15 @@ items:
   evidence:
   - kind: doc
     ref: docker/docker-compose.yml:221
-    note: 'FAILURE: backend_sessions:/app/.sessions nests in ../backend:/app:ro; with no host backend/.sessions (gitignored) Docker errors "make mountpoint /app/.sessions: read-only file system" (owner run 2026-09-25) | ACCEPTANCE: a fresh checkout creates the directory automatically before migration/startup needs it (e.g. tracked backend/.sessions/.gitkeep + .gitignore negation), proven by clone -> backend-migrate succeeding | NOT BLOCKING: local dev already migrated to c3f5a8d1e7b2 via manual mkdir; Phase 9 state unaffected; setup maintenance only'
+    note: 'FAILURE: backend_sessions:/app/.sessions nests in ../backend:/app:ro; with no host backend/.sessions (gitignored) Docker errors "make mountpoint /app/.sessions: read-only file system" (owner
+      run 2026-09-25) | ACCEPTANCE: a fresh checkout creates the directory automatically before migration/startup needs it (e.g. tracked backend/.sessions/.gitkeep + .gitignore negation), proven by clone
+      -> backend-migrate succeeding | NOT BLOCKING: local dev already migrated to c3f5a8d1e7b2 via manual mkdir; Phase 9 state unaffected; setup maintenance only'
   verification:
     level: verified
     by: 2026-09-25 owner migrate run + session diagnosis
     at: '2026-09-25'
   live_check: []
-  source: 2026-09-25 phase9 #748 reconciliation /close wander
+  source: 2026-09-25 phase9
 - id: WS-2026-09-22-28-MERGE-COVERAGE
   title: 'Workspace merges #155-#162 (2026-09-22..26) not previously indexed (dedup coverage): audit closeout, mirror publishes, xref fixes, Phase 9 ruling + amendment #6, receipt schema 3'
   projects:
@@ -8554,7 +8560,7 @@ items:
   - workspace
   - bimpossible
   - addins
-  status: landed
+  status: live
   owner_gate: false
   owner: null
   unblocks: []
@@ -8571,10 +8577,353 @@ items:
   verification:
     level: verified
     by: 'Owner-mandated catch-up 2026-09-29: WAVE-STATUS rows 42-48 + PHASE-STATUS rows 5/9/13/17 notes cover BIMpossible #683-#769 and AddIns #152/#157/#158/#162/#163, published in the same Workspace PR
-      as this mirror snapshot. Coverage evidence: F:/Claude-Tools/reports/2026-09-29__ledger-coverage-683-771.md. All rows BUILT; no deploy claims. RESOLVED 2026-09-29: Workspace PR #164 MERGED (merge commit ec172a47, head 83f45537); verified on origin/main: WAVE-STATUS rows 42-48 present, PHASE-STATUS 2026-09-29 notes present, 674876f/307dbc1/76ba410 ancestors. Rows 45/48 record owner-stack rollout / AddIns #152 pipe-ON deploy as owner-stack observed, not production verified.'
-    at: '2026-09-29'
+      as this mirror snapshot. Coverage evidence: F:/Claude-Tools/reports/2026-09-29__ledger-coverage-683-771.md. All rows BUILT; no deploy claims. RESOLVED 2026-09-29: Workspace PR #164 MERGED (merge commit
+      ec172a47, head 83f45537); verified on origin/main: WAVE-STATUS rows 42-48 present, PHASE-STATUS 2026-09-29 notes present, 674876f/307dbc1/76ba410 ancestors. Rows 45/48 record owner-stack rollout /
+      AddIns #152 pipe-ON deploy as owner-stack observed, not production verified. | CLOSED 2026-10-05 (workspace sync): origin/main WAVE-STATUS Updated: 2026-09-29 and PHASE-STATUS Updated: 2026-09-29
+      read live; catch-up merged via WS #164 (ec172a47). Docs ledger merged on main = live. Successor staleness: LEDGER-WAVE-STATUS-STALE-20261005.'
+    at: '2026-10-05'
   blocked_on: null
   live_check:
   - git -C F:/BIMpossible-Workspace show origin/main:00_Strategy/BIMpossible_WAVE-STATUS.md | grep -m1 "Updated:"
   source: /next workspace sync 2026-09-28
+  notes_url: null
+- id: WFA-2026-09-28-CLOSURE
+  title: WFA 2026-09-28 audit remediation deployed live; AddIns CAND-2 secret-scan verification still pending
+  projects:
+  - workspace
+  - bimpossible
+  - addins
+  status: landed
+  owner_gate: false
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: workspace#165
+    url: https://github.com/YourBIMpossible/BIMpossible_Workspace/pull/165
+    note: MERGED 2026-09-30 closeout
+  - kind: pr
+    ref: workspace#169
+    url: https://github.com/YourBIMpossible/BIMpossible_Workspace/pull/169
+    note: MERGED 2026-10-01 c05aa33 -- live deploy pass record
+  - kind: pr
+    ref: bimpossible#773
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/773
+    note: MERGED 2026-09-30
+  - kind: pr
+    ref: bimpossible#774
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/774
+    note: MERGED 2026-09-30
+  - kind: pr
+    ref: bimpossible#775
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/775
+    note: MERGED 2026-09-30
+  - kind: pr
+    ref: bimpossible#776
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/776
+    note: MERGED 2026-09-30
+  - kind: pr
+    ref: bimpossible#777
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/777
+    note: MERGED 2026-09-30
+  - kind: pr
+    ref: bimpossible#778
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/778
+    note: MERGED 2026-09-30
+  - kind: pr
+    ref: bimpossible#779
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/779
+    note: MERGED 2026-10-01
+  - kind: pr
+    ref: addins#166
+    url: https://github.com/YourBIMpossible/BIMpossible-AddIns/pull/166
+    note: MERGED 2026-09-30
+  - kind: pr
+    ref: addins#167
+    url: https://github.com/YourBIMpossible/BIMpossible-AddIns/pull/167
+    note: MERGED 2026-09-30
+  - kind: doc
+    ref: '02_Reference/Audit and Scan Info/remediation_2026-09-28/CLOSEOUT_2026-09-29.md -- Verdict (2026-09-30, authoritative): CLOSED except one named item'
+  verification:
+    level: verified
+    by: 'gh pr list merged (2026-10-05) for all listed PRs. CLOSEOUT verdict: LIVE backend/frontend d2904486 (health, /resume, share-link probes), AddIns 976c7ef installed==build hashes, HYG-C11 cold start;
+      change-set locking + FE permissions CI-only; CQ-C10 live test WAIVED by owner. Gap keeping this landed: CAND-2 verification on BIMpossible-AddIns pending its next real PR secret-scan.'
+    at: '2026-10-05'
+  live_check:
+  - gh pr list --repo YourBIMpossible/BIMpossible-AddIns --state merged --search "merged:>=2026-10-01" --json number,title
+  source: 'Workspace #169 CLOSEOUT_2026-09-29.md (2026-09-30 live pass); /next workspace sync 2026-10-05'
+  notes_url: null
+- id: DECIDE-AUDIT-2026-10-05-OWNER-CALLS
+  title: 'Decide 2026-10-05 audit owner calls: SEC-A40 token visibility, SEC-A43, Link-PDF ownership, G4 trim, auto-fix lane'
+  projects:
+  - bimpossible
+  - addins
+  - workspace
+  status: blocked_owner
+  owner_gate: true
+  owner: null
+  unblocks:
+  - AUDIT-2026-10-05-RESOLUTION
+  blocked_by: []
+  effort: S
+  risk: 3
+  evidence:
+  - kind: commit
+    ref: c622e85
+    note: workspace main, UNPUSHED -- weekly-full-audit_2026-10-05.md section 11 Owner actions
+  verification:
+    level: claimed
+    by: 'Audit report section 11 (C0/H0/M7/L24): SEC-A40 GET /data/share returns raw tokens to every member (new CHAIN-1 Medium); SEC-A43 member revoke scope; SEC-C50/CQ-C50 Link-PDF ownership binding +
+      partial-import assimilation (AddIns #164); HYG-G4-TRIM restore evidence trimmed by #770 (G4 at 5 words headroom); HYG-42 verifiable auto-fix lane; AUTHZ enforcement mode. DOC/REALITY MISMATCH: audit
+      lists CHAIN-2 as open owner action (6th run) but CLOSEOUT_2026-09-29 records CHAIN-2 accepted (time-bounded) 2026-09-30.'
+    at: '2026-10-05'
+  live_check: []
+  source: 02_Reference/Audit and Scan Info/weekly-full-audit_2026-10-05.md section 11
+  notes_url: null
+- id: AUDIT-2026-10-05-RESOLUTION
+  title: Resolve 2026-10-05 audit Mediums via /audit-resolution in a code worktree once owner picks IDs
+  projects:
+  - bimpossible
+  - addins
+  status: blocked_owner
+  owner_gate: true
+  owner: null
+  unblocks: []
+  blocked_by:
+  - DECIDE-AUDIT-2026-10-05-OWNER-CALLS
+  effort: M
+  risk: 3
+  evidence:
+  - kind: commit
+    ref: 1da8c10
+    note: 'workspace main, UNPUSHED -- HANDOFF PENDING: audit-resolution stopped at Step 0 preflight (code checkout on main; no owner ID selection)'
+  verification:
+    level: claimed
+    by: 'Report section 12: create worktree claude/audit-resolution-2026-10-05 from origin/main, run /audit-resolution <IDs>. Suggested first slice SEC-A40, SEC-A42 (reviewed patch PASS), RE-A40, CQ-A40,
+      HYG-40 (Checklist backfill). Auto-fix pass applied nothing (zero-lane VLC refusal). Owner must choose IDs.'
+    at: '2026-10-05'
+  live_check: []
+  source: 02_Reference/Audit and Scan Info/weekly-full-audit_2026-10-05.md section 12
+  notes_url: null
+- id: LEDGER-WAVE-STATUS-STALE-20261005
+  title: 'WAVE-STATUS stale since 2026-09-29: BIMpossible #772-#779 and AddIns #164/#166/#167 unrecorded'
+  projects:
+  - workspace
+  - bimpossible
+  - addins
+  status: ready
+  owner_gate: false
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: probe
+    ref: 'origin/main 00_Strategy/BIMpossible_WAVE-STATUS.md Updated: 2026-09-29 (covers through #769; #770/#771 named as docs/chore)'
+  - kind: run
+    ref: 'gh pr list --state merged --search merged:>=2026-09-29 (2026-10-05): BIMpossible #772 (09-29), #773-#778 (09-30), #779 (10-01); AddIns #164/#166/#167 (09-30); non-wave: #770/#771, AddIns #165'
+  verification:
+    level: verified
+    by: 'gh merged-PR listing vs WAVE-STATUS Updated: header, 2026-10-05. Ledger is close-out maintained; /next does not write it.'
+    at: '2026-10-05'
+  live_check:
+  - git -C F:/BIMpossible-Workspace show origin/main:00_Strategy/BIMpossible_WAVE-STATUS.md | grep -m1 "Updated:"
+  source: /next workspace sync 2026-10-05
+  notes_url: null
+- id: WS-2026-09-29-30-DOC-MERGES
+  title: 'Workspace routine doc merges 2026-09-29..30 indexed: nl-filter monitor, G4 reporting, slop audit'
+  projects:
+  - workspace
+  status: live
+  owner_gate: false
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 0
+  evidence:
+  - kind: pr
+    ref: workspace#163
+    url: https://github.com/YourBIMpossible/BIMpossible_Workspace/pull/163
+    note: MERGED 2026-09-29 nl-filter weekly drift run
+  - kind: pr
+    ref: workspace#166
+    url: https://github.com/YourBIMpossible/BIMpossible_Workspace/pull/166
+    note: 'CLOSED unmerged (superseded by #164)'
+  - kind: pr
+    ref: workspace#167
+    url: https://github.com/YourBIMpossible/BIMpossible_Workspace/pull/167
+    note: MERGED 2026-09-30 G4 docs-control reporting
+  - kind: pr
+    ref: workspace#168
+    url: https://github.com/YourBIMpossible/BIMpossible_Workspace/pull/168
+    note: MERGED 2026-09-30 slop audit 0 findings
+  verification:
+    level: verified
+    by: gh pr list --repo YourBIMpossible/BIMpossible_Workspace --state all (2026-10-05). Dedup coverage; docs merged on main.
+    at: '2026-10-05'
+  live_check: []
+  source: /next workspace sync 2026-10-05
+  notes_url: null
+- id: CP-CW-PLUGIN-ALLOWLIST
+  title: 'context-weight: decide on 4 enabled plugins not in PLUGIN_ALLOWLIST (hookify, plugin-dev, pr-review-toolkit, superpowers) — allowlist or disable'
+  projects:
+  - claude-tools
+  status: ready
+  owner_gate: true
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: YourBIMpossible/claude-profile#23
+    note: 'Post-merge smoke (31e9cb9) exit 0, VERDICT: ADVISORY; remaining WARNs are these 4 allowlist lines + enabled-plugin descriptions 6154B vs 6000B reference. Advisory only — not a blocker.'
+  verification:
+    level: claimed
+    by: python F:\Claude-Profile\tools\context_weight.py (2026-10-05, post-merge)
+    at: '2026-10-05'
+  live_check:
+  - python F:\Claude-Profile\tools\context_weight.py
+  source: context-weight-weekly closeout 2026-10-05
+  notes_url: null
+- id: CP-CW-MEMORY-LINE-BOUNDARY
+  title: 'context-weight: verify MEMORY.md 199-vs-200 line boundary against Claude Code''s actual truncation and fix with a dedicated test'
+  projects:
+  - claude-tools
+  status: ready
+  owner_gate: false
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: YourBIMpossible/claude-profile#23
+    note: 'Guard (MEMORY_FAIL_LINES = 200, tools/context_weight.py) reportedly trips one line early — conservatively strict, not unsafe. Do not patch opportunistically; red test first.'
+  verification:
+    level: claimed
+    by: PR #23 close report (off-by-one noted, not reproduced this session)
+    at: '2026-10-05'
+  live_check:
+  - cd F:\Claude-Profile && python -m pytest -q tools/tests/test_context_weight.py
+  source: context-weight-weekly closeout 2026-10-05
+  notes_url: null
+- id: CP-BOOTSTRAP-INSTALL-FROM-BLOB
+  title: 'bootstrap.ps1: install pinned hooks from `git show <rev>:hooks/<name>`, not working-tree bytes (EOL drift escapes the git-status dirty check)'
+  projects:
+  - claude-profile
+  status: ready
+  owner_gate: false
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: report
+    ref: F:\Claude-Tools\reports\2026-10-05__bootstrap-closeout.md
+    note: 'Live run 2026-10-05 @219b2a2: installed decay_reminder.py is CRLF (worktree, core.autocrlf=true despite eol=lf attr) vs LF blob; "pinned from revision" claim not byte-true. Red test first.'
+  verification:
+    level: verified
+    by: sha256 installed vs git show 219b2a2 blob, 2026-10-05
+    at: '2026-10-05'
+  live_check:
+  - cd F:\Claude-Profile && python -m pytest -q hooks/tests/test_bootstrap_install.py
+  source: slop1005 bootstrap closeout 2026-10-05
+  notes_url: null
+- id: CP-BOOTSTRAP-DECAY-REMINDER-EOL-RERUN
+  title: 'Owner: renormalize F:\Claude-Profile hooks/decay_reminder.py (rm --cached + checkout) and re-run bootstrap once so the installed copy matches the LF blob'
+  projects:
+  - claude-profile
+  status: ready
+  owner_gate: true
+  owner: owner
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: report
+    ref: F:\Claude-Tools\reports\2026-10-05__bootstrap-closeout.md
+    note: 'Second live bootstrap run deliberately not done (owner asked for one run). Better after CP-BOOTSTRAP-INSTALL-FROM-BLOB lands.'
+  verification:
+    level: verified
+    by: byte compare 2026-10-05
+    at: '2026-10-05'
+  live_check: []
+  source: slop1005 bootstrap closeout 2026-10-05
+  notes_url: null
+- id: CP-BOOTSTRAP-DESKTOP-CONFIG-NOOP-WRITE
+  title: 'bootstrap.ps1: skip rewriting claude_desktop_config.json when mcpServers already match (running desktop app writes the same file; read-modify-write race)'
+  projects:
+  - claude-profile
+  status: ready
+  owner_gate: false
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: report
+    ref: F:\Claude-Tools\reports\2026-10-05__bootstrap-closeout.md
+    note: 'Live run rewrote + backed up desktop config with identical mcpServers; app changed lastPrimaryCodeSession.id between backup and run.'
+  verification:
+    level: verified
+    by: live run log 2026-10-05
+    at: '2026-10-05'
+  live_check: []
+  source: slop1005 bootstrap closeout 2026-10-05
+  notes_url: null
+- id: WS-RECEIPT-SHARED-1005-WORKTREE-CLEANUP
+  title: 'Cleanup of merged receipt-shared-1005 / slop1005-receipt-parity worktrees and branches (BIMpossible #787, Workspace #170/#171) - CLOSED 2026-10-05'
+  projects:
+  - bimpossible
+  - bimpossible-workspace
+  status: live
+  owner_gate: false
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: YourBIMpossible/BIMpossible_Workspace#170
+    note: 'Removed both receipt-shared-1005 worktrees + local branches, slop1005-receipt-parity worktree + local branch, remote claude/receipt-shared-1005 (Workspace) and remote claude/slop1005-receipt-parity (was aaf0888 = #170 merged head; GET ref now 404). Pulling F:\BIMpossible-Workspace main is out of this item by owner instruction (another session''s dirty/unpushed work).'
+  verification:
+    level: verified
+    by: git worktree list + gh api git/ref 404, 2026-10-05
+    at: '2026-10-05'
+  live_check: []
+  source: slop1005 closeout 2026-10-05
+  notes_url: null
+- id: CT-GRAPHIFY-HARDLINK-REAL-VOLUME
+  title: 'graphify funnel: run the link-failure path once on a real volume without hard-link support (L5 pinned by test only)'
+  projects:
+  - claude-tools
+  status: ready
+  owner_gate: true
+  owner: owner
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: pr
+    ref: YourBIMpossible/claude-tools#17
+    note: 'L5 did not reproduce (fixed by #15); test_link_failure_leaves_no_part pins it. Real FAT/exFAT volume check is owner call.'
+  verification:
+    level: claimed
+    by: unit test only
+    at: '2026-10-05'
+  live_check: []
+  source: slop-audit 2026-10-05 remediation
   notes_url: null
