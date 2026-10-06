@@ -5,7 +5,7 @@ This is a repo-local read model, not a definition of /next behavior. -->
 
 # /next — work-item queue
 
-Generated 2026-10-07 (synced). Anchor-first, leverage-ranked (per item-model.md). The single #1 move is chosen live by the skill from the anchor (stated focus, else roadmap order) and finalization leverage — not from dependency cone. This board is a status-grouped snapshot; within each section it orders by owner-gated+S, then effort, risk, id, with `cone` leading (deep graph). Full algorithm: `~/.claude/skills/next/reference/item-model.md`.
+Generated 2026-10-06 (synced). Anchor-first, leverage-ranked (per item-model.md). The single #1 move is chosen live by the skill from the anchor (stated focus, else roadmap order) and finalization leverage — not from dependency cone. This board is a status-grouped snapshot; within each section it orders by owner-gated+S, then effort, risk, id, with `cone` leading (deep graph). Full algorithm: `~/.claude/skills/next/reference/item-model.md`.
 
 Scope: `all`. Watermarks: `bimpossible` = 2026-09-24 @ `57bc3445` PR#710 · `addins` = 2026-09-21 @ `baa9efe` PR#155 · `workspace` = 2026-10-05 @ `c05aa33` PR#169 · `evidence-compiler` = 2026-09-24 @ `479571e` PR#20 · `dashboard` = 2026-09-06 @ `efdcba1` PR#22 · `claude-tools` = 2026-09-24 @ `4f92b5b` PR#9.
 (pc-monitor/bim-site: no items yet — run `init` to derive.)
@@ -29,8 +29,8 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-24 @ `57bc3445` PR#710 · `add
 [ONBOARDING-574-FRONTEND-REBUILD] PR #574 onboarding-flag frontend rebuild (owner-gated): backend fix already live; #574 needs NO rebuild; only the separate NEXT_PUBLIC onboarding-flag flip does
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-06 · BIMpossible #584 docs(#574) -- squash 29b46518, docs-only. Checklist…
 
-[OWNER-ORDINARY-MEMBER-SIGNIN] Ordinary-member signed-in share-list check: needs a third Autodesk identity signed in (owner-only)
-       unblocks 0 · S · bimpossible · VERIFIED 2026-10-07 · F:/Claude-Tools/reports/2026-10-07-ordinary-member-signed-in-runbook…
+[OWNER-ORDINARY-MEMBER-SIGNIN] Ordinary-member signed-in share-list check: blocked (DB-write permission + identity already holds a firm membership)
+       unblocks 0 · S · bimpossible · VERIFIED 2026-10-06 · F:/Claude-Tools/reports/2026-10-07-ordinary-member-signed-in-runbook…
 
 [ADDINS-LINKPDF-OPEN-DOCS-PRS-145-148] Add-Ins open LinkPDF docs/hold PRs #145-#148: #145 acceptance review (clean docs), #146 B1/B2 policy (draft), #147 Feature E proposal (needs decision), #148 B2 packer HOLD -- none touch APS writes
        unblocks 0 · S · addins · CLAIMED 2026-09-21 · BIMpossible-AddIns#145
@@ -336,6 +336,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-24 @ `57bc3445` PR#710 · `add
 [RECONCILE-RESIDUAL-DASHBOARD-EC-WATERMARKS] Unreconciled watermark scope: dashboard efdcba1..origin/HEAD (77 commits since 2026-09-06); watermark deliberately NOT advanced
        unblocks 0 · S · dashboard · CLAIMED 2026-09-21 · YourBIMpossible/ai-dev-dashboard
 
+[HUB-DISCOVERY-NO-MANUAL-GRANT] Ordinary-member account sees no ACC hubs: discovery depends on manual firm hub grants (SEPARATE SESSION)
+       unblocks 0 · M · bimpossible · UNVERIFIED 2026-10-06 · F:/Claude-Tools/reports/2026-10-06-hub-discovery-handoff.md
+
 [ADDINS-HYGIENE] Add-Ins hygiene: finish Glass rollout (conformance-PR dedup DONE 2026-08-04)
        unblocks 0 · M · addins · VERIFIED 2026-08-23 · Add-Ins #10 MERGED 2026-08-04 (squash, main 94b21ab -- Plans 1+2 con…
 
@@ -511,6 +514,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-24 @ `57bc3445` PR#710 · `add
 [DASH-USAGE-AGENTS-REFRESH-REPAIR] Usage/Agents dashboard sources stale ~47d: scheduled refresh never invokes usage_sync.mjs / agents_sync.mjs
        unblocks 0 · S · dashboard · VERIFIED 2026-09-07 · ROOT CAUSE (2026-09-06): usage.js/agents.js carry generated=2026-07-…
 
+[EXACTLY-ONCE-579-OWNER-POLICY] PR #579 closeout DONE 2026-09-06: owner decisions applied (PT2H/PT12H kept, Weekly ExecutionTimeLimit PT4H, exhausted-window record) via PR #595 c8131efd; host tasks re-registered, zero drift
+       unblocks 0 · S · bimpossible · VERIFIED 2026-09-06 · BIMpossible #583 docs(#579) -- squash 64d95bae, docs-only. Readiness…
+
 [LEDGER-WAVE-STATUS-STALE-20261005] WAVE-STATUS stale since 2026-09-29: BIMpossible #772-#779 and AddIns #164/#166/#167 unrecorded
        unblocks 0 · S · workspace+bimpossible+addins · VERIFIED 2026-10-07 · origin/main 00_Strategy/BIMpossible_WAVE-STATUS.md Updated: 2026-09-…
 
@@ -583,6 +589,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-24 @ `57bc3445` PR#710 · `add
 [LEDGER-WAVE-STATUS-STALE-20260928] WAVE-STATUS stale since 2026-09-21: ~75 BIMpossible merges (#683-#769) + AddIns #145/#152/#156-#163 unrecorded; PHASE-STATUS (2026-09-25) misses #748/#755/#762/#764/#765/#767 + AddIns #152/#157/#158/#162/#163
        unblocks 0 · M · workspace+bimpossible+addins · VERIFIED 2026-10-05 · origin/main 00_Strategy/BIMpossible_WAVE-STATUS.md Updated: 2026-09-…
 
+[DOCS-HYGIENE-ENFORCED] docs-hygiene enforced as a required check on main in both repos; the recurring Monday sweep failure is closed
+       unblocks 0 · M · bimpossible+workspace · VERIFIED 2026-09-06 · BIMpossible #600 MERGED -> 0c6e2f02. docs-hygiene added to required …
+
 [EXACTLY-ONCE-AUDIT-RELIABILITY-WORKTREE-OVERLAP] Foreign worktree .claude/worktrees/audit-reliability (branch claude/synthetic-audit-exactly-once-completion, at c8131efd) appeared 2026-09-06 after #595 merged -- confirm its owner is not re-doing the #579 closeout (ETL PT4H / exhausted-window record already on main)
        unblocks 0 · XS · bimpossible · VERIFIED 2026-09-16 · Seen in git worktree list during the 2026-09-06 closeout pass integr…
 
@@ -600,6 +609,9 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-24 @ `57bc3445` PR#710 · `add
 
 [WFA-2026-09-11-CODE-REMEDIATION] WFA 2026-09-11 remediation wave (62 findings) code-repo lane: truth/logging/docs + frontend + ops/scripts + backend lanes + sessions-volume :ro migrate + SEC-1A hub fail-closed + consent multi-worker guard -- CLOSED per owner
        unblocks 0 · L · bimpossible · VERIFIED 2026-09-12 · BIMpossible #644 (audit-2026-09-11 truth/logging/docs), #645 (fronte…
+
+[DASH-CHECKIN-CONSOLIDATION] AI-Dev dashboard daily check-in consolidation: reliable landing, delta triage, pulse, data-health, one home
+       unblocks 0 · L · dashboard · VERIFIED 2026-09-06 · ai-dev-dashboard #22 SHIPPED -- squash-merged efdcba1 on origin/main…
 
 [P11-AC7-VERSIONED-SNAPSHOTS] Add versioned QA snapshots (Phase 11 AC7)
        unblocks 0 · L · bimpossible · VERIFIED 2026-09-16 · BIMpossible_PHASE-STATUS.md, Phase 11 -- AC7 (versioned QA snapshots…

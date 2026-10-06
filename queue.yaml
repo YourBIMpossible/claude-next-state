@@ -8755,7 +8755,7 @@ items:
   source: 02_Reference/Audit and Scan Info/weekly-full-audit_2026-10-05.md section 12
   notes_url: null
 - id: OWNER-ORDINARY-MEMBER-SIGNIN
-  title: 'Ordinary-member signed-in share-list check: needs a third Autodesk identity signed in (owner-only)'
+  title: 'Ordinary-member signed-in share-list check: blocked (DB-write permission + identity already holds a firm membership)'
   projects:
   - bimpossible
   status: blocked_owner
@@ -8772,14 +8772,46 @@ items:
   - kind: run
     ref: F:/Claude-Tools/reports/2026-10-07-om-selftest-guards.txt
     note: 'om_fixture prep/check/cleanup self-test (SIMULATED, not proof): check fails as negative control, residue 0, admin uid refused'
+  - kind: doc
+    ref: F:/Claude-Tools/reports/2026-10-06-hub-discovery-handoff.md
+    note: records the role change and identity facts; hub issue split out
   verification:
     level: verified
     by: 'Contract audit-resolution_2026-10-05_handoff.md Live checks 1-2. Both existing accounts (KAKJ5MM3JMXTNCPY, J86MCX345VS26DAB) are admins; demotion forbidden; ufm_one_active_per_user blocks a second
       membership. Owner action: sign in to app.yourbimpossible.com in Chrome with a third Autodesk identity and send its Autodesk user id; Claude then runs om_fixture prep -> signed-in GET/DELETE /data/share
-      -> check -> cleanup.'
-    at: '2026-10-07'
+      -> check -> cleanup. | 2026-10-06 (later): owner designated zeriah@silvermanlight.com (sub KAKJ5MM3JMXTNCPY, callback log 2026-10-06T21:59:22Z) and the owner removed its admin role in the admin console
+      (membership 928 Silverman & Light now member; audit row 145 membership.role_change actor zeriah.t@gmail.com). Check NOT run. Blockers: (1) this session''s permission policy denied writes to the live
+      DB from the backend container (om_fixture prep/cleanup are such writes); (2) the authorized context is a disposable firm, but membership 928 is active and ufm_one_active_per_user forbids a second;
+      using the real Silverman & Light firm needs explicit owner authorization for that target, and no further role/membership changes are authorized. To unblock: owner allows live-DB writes for the fixture
+      AND authorizes either Silverman & Light as the fixture firm or a temporary deactivation of membership 928.'
+    at: '2026-10-06'
   live_check: []
   source: 2026-10-07 ownership closeout (audit-resolution 2026-10-05 residual)
+  notes_url: null
+- id: HUB-DISCOVERY-NO-MANUAL-GRANT
+  title: 'Ordinary-member account sees no ACC hubs: discovery depends on manual firm hub grants (SEPARATE SESSION)'
+  projects:
+  - bimpossible
+  status: ready
+  owner_gate: true
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 3
+  evidence:
+  - kind: doc
+    ref: F:/Claude-Tools/reports/2026-10-06-hub-discovery-handoff.md
+    note: Separate session - not executed by weekly task. Observations, unverified cause, code/decision refs, owner constraints
+  verification:
+    level: unverified
+    by: 'Observed only: Silverman & Light has zero firm_allowed_hubs rows; hub b.11989fa9 labelled ''Silverman & Light'' sits on placeholder firm ''Unassigned (backfilled)''; /aps/test filters user hubs
+      by allowed_hubs_for. Cause unverified. Owner constraints: Autodesk is the access authority; discovery does not establish firm ownership; no manual hub-ID grants merely for discovery; no auto-assigning
+      every accessible hub to the firm; keep tenant/billing/saved-data/share-link boundaries; placeholder-firm associations untouched without separate scope. Amends the 2026-09-21 B5 rule (owner approval
+      needed). Related: AUTODESK-FIRST-ROLLOUT-DELIVERY.'
+    at: '2026-10-06'
+  live_check: []
+  source: 2026-10-06 weekly audit/records closeout (split out by owner scope correction)
   notes_url: null
 - id: LEDGER-WAVE-STATUS-STALE-20261005
   title: 'WAVE-STATUS stale since 2026-09-29: BIMpossible #772-#779 and AddIns #164/#166/#167 unrecorded'
