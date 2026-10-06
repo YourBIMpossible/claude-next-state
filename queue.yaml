@@ -8593,7 +8593,7 @@ items:
   - workspace
   - bimpossible
   - addins
-  status: landed
+  status: live
   owner_gate: false
   owner: null
   unblocks: []
@@ -8647,11 +8647,17 @@ items:
     note: MERGED 2026-09-30
   - kind: doc
     ref: '02_Reference/Audit and Scan Info/remediation_2026-09-28/CLOSEOUT_2026-09-29.md -- Verdict (2026-09-30, authoritative): CLOSED except one named item'
+  - kind: run
+    ref: F:/Claude-Tools/reports/2026-10-06-changeset-lock-isolated-run.log
+    note: test_change_set_stage_discard_lock.py + test_row_locks_groups_change_sets.py, 16 passed, exit 0
   verification:
     level: verified
     by: 'gh pr list merged (2026-10-05) for all listed PRs. CLOSEOUT verdict: LIVE backend/frontend d2904486 (health, /resume, share-link probes), AddIns 976c7ef installed==build hashes, HYG-C11 cold start;
-      change-set locking + FE permissions CI-only; CQ-C10 live test WAIVED by owner. Gap keeping this landed: CAND-2 verification on BIMpossible-AddIns pending its next real PR secret-scan.'
-    at: '2026-10-05'
+      change-set locking + FE permissions CI-only; CQ-C10 live test WAIVED by owner. Gap keeping this landed: CAND-2 verification on BIMpossible-AddIns pending its next real PR secret-scan. | CLOSED 2026-10-06
+      rescan: CAND-2 AddIns verified (AddIns #170 gitleaks run 37395581816 success, per audit-resolution_2026-10-05_handoff.md WS4). | 2026-10-07 change-set locking (#775) behavioral proof on an isolated
+      throwaway postgres+redis with origin/main 52f24ad (change-set code identical to deployed a7093a00): 16 passed -- concurrent stage/discard block on the row lock and get 409 once submit commits, staged
+      rows byte-identical. CLOSEOUT_2026-09-29 mandates no live test for this item; none claimed.'
+    at: '2026-10-07'
   live_check:
   - gh pr list --repo YourBIMpossible/BIMpossible-AddIns --state merged --search "merged:>=2026-10-01" --json number,title
   source: 'Workspace #169 CLOSEOUT_2026-09-29.md (2026-09-30 live pass); /next workspace sync 2026-10-05'
@@ -8662,8 +8668,8 @@ items:
   - bimpossible
   - addins
   - workspace
-  status: blocked_owner
-  owner_gate: true
+  status: live
+  owner_gate: false
   owner: null
   unblocks:
   - AUDIT-2026-10-05-RESOLUTION
@@ -8675,11 +8681,13 @@ items:
     ref: c622e85
     note: workspace main, UNPUSHED -- weekly-full-audit_2026-10-05.md section 11 Owner actions
   verification:
-    level: claimed
+    level: verified
     by: 'Audit report section 11 (C0/H0/M7/L24): SEC-A40 GET /data/share returns raw tokens to every member (new CHAIN-1 Medium); SEC-A43 member revoke scope; SEC-C50/CQ-C50 Link-PDF ownership binding +
       partial-import assimilation (AddIns #164); HYG-G4-TRIM restore evidence trimmed by #770 (G4 at 5 words headroom); HYG-42 verifiable auto-fix lane; AUTHZ enforcement mode. DOC/REALITY MISMATCH: audit
-      lists CHAIN-2 as open owner action (6th run) but CLOSEOUT_2026-09-29 records CHAIN-2 accepted (time-bounded) 2026-09-30.'
-    at: '2026-10-05'
+      lists CHAIN-2 as open owner action (6th run) but CLOSEOUT_2026-09-29 records CHAIN-2 accepted (time-bounded) 2026-09-30. | CLOSED 2026-10-06 rescan: owner decisions recorded (human turn 2026-10-05)
+      in weekly-full-audit_2026-10-05.md section 12 closeout; executed per audit-resolution_2026-10-05_handoff.md (Workspace origin/main e927374). CHAIN-2 resolved by APPLYING the ACL 2026-10-05 (evidence
+      F:/Claude-Tools/reports/2026-10-05-chain2-applied-evidence.md), superseding the 09-30 acceptance. AUTHZ recorded off via #795.'
+    at: '2026-10-06'
   live_check: []
   source: 02_Reference/Audit and Scan Info/weekly-full-audit_2026-10-05.md section 11
   notes_url: null
@@ -8688,25 +8696,90 @@ items:
   projects:
   - bimpossible
   - addins
-  status: blocked_owner
-  owner_gate: true
+  status: live
+  owner_gate: false
   owner: null
   unblocks: []
-  blocked_by:
-  - DECIDE-AUDIT-2026-10-05-OWNER-CALLS
+  blocked_by: []
   effort: M
   risk: 3
   evidence:
   - kind: commit
     ref: 1da8c10
     note: 'workspace main, UNPUSHED -- HANDOFF PENDING: audit-resolution stopped at Step 0 preflight (code checkout on main; no owner ID selection)'
+  - kind: pr
+    ref: bimpossible#788
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/788
+    note: MERGED 2026-10-05 SEC-A40/A41/A42, RE-A40, CQ-A40, RE-C55; backend restarted
+  - kind: pr
+    ref: bimpossible#789
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/789
+    note: MERGED 2026-10-05 SEC-A43 creator-or-admin + admin removal/downgrade sweep
+  - kind: pr
+    ref: bimpossible#804
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/804
+    note: MERGED 2026-10-06 admin-console set_role downgrade sweep
+  - kind: pr
+    ref: bimpossible#790
+    url: https://github.com/YourBIMpossible/BIMpossible/pull/790
+    note: MERGED 2026-10-05 HYG-G4-TRIM evidence restored
+  - kind: pr
+    ref: addins#168
+    url: https://github.com/YourBIMpossible/BIMpossible-AddIns/pull/168
+    note: MERGED 2026-10-05 SEC-C50/RE-C50/CQ-C50; deployed 2024-2027 hashes verified
+  - kind: pr
+    ref: workspace#173
+    url: https://github.com/YourBIMpossible/BIMpossible_Workspace/pull/173
+    note: MERGED 2026-10-05 HYG-42 closeout
+  - kind: pr
+    ref: workspace#191
+    url: https://github.com/YourBIMpossible/BIMpossible_Workspace/pull/191
+    note: MERGED 2026-10-06 P4 live results + P5 housekeeping
+  - kind: run
+    ref: F:/Claude-Tools/reports/2026-10-07-r1b-post4.json
+    note: R1 rerun PASS, failures []
+  - kind: run
+    ref: F:/Claude-Tools/reports/2026-10-07-r1-post4.json
+    note: original R1 FAILED run, retained as history
   verification:
-    level: claimed
+    level: verified
     by: 'Report section 12: create worktree claude/audit-resolution-2026-10-05 from origin/main, run /audit-resolution <IDs>. Suggested first slice SEC-A40, SEC-A42 (reviewed patch PASS), RE-A40, CQ-A40,
-      HYG-40 (Checklist backfill). Auto-fix pass applied nothing (zero-lane VLC refusal). Owner must choose IDs.'
-    at: '2026-10-05'
+      HYG-40 (Checklist backfill). Auto-fix pass applied nothing (zero-lane VLC refusal). Owner must choose IDs. | CLOSED 2026-10-06 rescan: handoff anchor reports audit acceptance criteria satisfied; P4
+      live authz checks PASS on deployed code (injected identities) plus owner signed-in R1 console run (functional PASS; strict event-count assertion FAILED, explained by 2 extra owner requests, retained).
+      HYG-41 closed. Residuals outside this item: P3/RE-C54 transferred to PDF workstream (AddIns #178 open); ordinary-member share-list live check deferred by trigger (no ordinary-member account). | 2026-10-07
+      R1 rerun R20261007B PASS: fresh disposable firm, owner-signed-in admin console, exactly one PATCH per operation (console-requests.log), rows 142/143 role_change + 144 share_link.revoke admin_downgraded;
+      identical assertion (p4_fixture_v3 pins the retained R20261007A rows 131-138 as historical, assertions unchanged); cleanup residue 0. Original R20261007A FAILED run retained unchanged. Ordinary-member
+      signed-in check: automation prepared and self-tested (simulated); needs owner sign-in, tracked as OWNER-ORDINARY-MEMBER-SIGNIN.'
+    at: '2026-10-07'
   live_check: []
   source: 02_Reference/Audit and Scan Info/weekly-full-audit_2026-10-05.md section 12
+  notes_url: null
+- id: OWNER-ORDINARY-MEMBER-SIGNIN
+  title: 'Ordinary-member signed-in share-list check: needs a third Autodesk identity signed in (owner-only)'
+  projects:
+  - bimpossible
+  status: blocked_owner
+  owner_gate: true
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: doc
+    ref: F:/Claude-Tools/reports/2026-10-07-ordinary-member-signed-in-runbook.md
+    note: Exact owner action + unattended steps after it
+  - kind: run
+    ref: F:/Claude-Tools/reports/2026-10-07-om-selftest-guards.txt
+    note: 'om_fixture prep/check/cleanup self-test (SIMULATED, not proof): check fails as negative control, residue 0, admin uid refused'
+  verification:
+    level: verified
+    by: 'Contract audit-resolution_2026-10-05_handoff.md Live checks 1-2. Both existing accounts (KAKJ5MM3JMXTNCPY, J86MCX345VS26DAB) are admins; demotion forbidden; ufm_one_active_per_user blocks a second
+      membership. Owner action: sign in to app.yourbimpossible.com in Chrome with a third Autodesk identity and send its Autodesk user id; Claude then runs om_fixture prep -> signed-in GET/DELETE /data/share
+      -> check -> cleanup.'
+    at: '2026-10-07'
+  live_check: []
+  source: 2026-10-07 ownership closeout (audit-resolution 2026-10-05 residual)
   notes_url: null
 - id: LEDGER-WAVE-STATUS-STALE-20261005
   title: 'WAVE-STATUS stale since 2026-09-29: BIMpossible #772-#779 and AddIns #164/#166/#167 unrecorded'
@@ -8714,7 +8787,7 @@ items:
   - workspace
   - bimpossible
   - addins
-  status: ready
+  status: live
   owner_gate: false
   owner: null
   unblocks: []
@@ -8726,10 +8799,21 @@ items:
     ref: 'origin/main 00_Strategy/BIMpossible_WAVE-STATUS.md Updated: 2026-09-29 (covers through #769; #770/#771 named as docs/chore)'
   - kind: run
     ref: 'gh pr list --state merged --search merged:>=2026-09-29 (2026-10-05): BIMpossible #772 (09-29), #773-#778 (09-30), #779 (10-01); AddIns #164/#166/#167 (09-30); non-wave: #770/#771, AddIns #165'
+  - kind: pr
+    ref: workspace branch claude/records-closeout-2026-10-06
+    note: 'Records closeout 2026-10-06: WAVE-STATUS Waves 49-52 + Updated 2026-10-06; PHASE-STATUS rows 13/17 notes (no status/% change); remediation_2026-09-28 ledger CHAIN-2 (09-30 acceptance historical,
+      10-05 ACL applied + denied probes) and CAND-2 (AddIns #170 gitleaks run 37395581816) closed'
+  - kind: pr
+    ref: workspace#196
+    url: https://github.com/YourBIMpossible/BIMpossible_Workspace/pull/196
+    note: MERGED 2026-10-06 records closeout
   verification:
     level: verified
-    by: 'gh merged-PR listing vs WAVE-STATUS Updated: header, 2026-10-05. Ledger is close-out maintained; /next does not write it.'
-    at: '2026-10-05'
+    by: 'gh merged-PR listing vs WAVE-STATUS Updated: header, 2026-10-05. Ledger is close-out maintained; /next does not write it. | RE-CHECKED 2026-10-06: WAVE-STATUS and PHASE-STATUS on origin/main e927374
+      still read Updated: 2026-09-29. Scope grew: BIMpossible #772-#779 + #787-#809 (merged through 2026-10-06), AddIns #164/#166/#167 + #168-#179. Still owner-maintained ledger. | CLOSED 2026-10-06 records
+      closeout (owner-authorized ledger edit): covers BIMpossible #772-#779, #787-#809 and AddIns #164/#166/#167, #168-#179; docs/internal and open PRs classified in the WAVE-STATUS Updated line. Watermarks
+      not advanced. | Records closeout merged as Workspace #196.'
+    at: '2026-10-07'
   live_check:
   - git -C F:/BIMpossible-Workspace show origin/main:00_Strategy/BIMpossible_WAVE-STATUS.md | grep -m1 "Updated:"
   source: /next workspace sync 2026-10-05
@@ -8806,10 +8890,10 @@ items:
   evidence:
   - kind: pr
     ref: YourBIMpossible/claude-profile#23
-    note: 'Guard (MEMORY_FAIL_LINES = 200, tools/context_weight.py) reportedly trips one line early — conservatively strict, not unsafe. Do not patch opportunistically; red test first.'
+    note: Guard (MEMORY_FAIL_LINES = 200, tools/context_weight.py) reportedly trips one line early — conservatively strict, not unsafe. Do not patch opportunistically; red test first.
   verification:
     level: claimed
-    by: PR #23 close report (off-by-one noted, not reproduced this session)
+    by: PR
     at: '2026-10-05'
   live_check:
   - cd F:\Claude-Profile && python -m pytest -q tools/tests/test_context_weight.py
@@ -8852,7 +8936,7 @@ items:
   evidence:
   - kind: report
     ref: F:\Claude-Tools\reports\2026-10-05__bootstrap-closeout.md
-    note: 'Second live bootstrap run deliberately not done (owner asked for one run). Better after CP-BOOTSTRAP-INSTALL-FROM-BLOB lands.'
+    note: Second live bootstrap run deliberately not done (owner asked for one run). Better after CP-BOOTSTRAP-INSTALL-FROM-BLOB lands.
   verification:
     level: verified
     by: byte compare 2026-10-05
@@ -8874,7 +8958,7 @@ items:
   evidence:
   - kind: report
     ref: F:\Claude-Tools\reports\2026-10-05__bootstrap-closeout.md
-    note: 'Live run rewrote + backed up desktop config with identical mcpServers; app changed lastPrimaryCodeSession.id between backup and run.'
+    note: Live run rewrote + backed up desktop config with identical mcpServers; app changed lastPrimaryCodeSession.id between backup and run.
   verification:
     level: verified
     by: live run log 2026-10-05
@@ -8897,7 +8981,8 @@ items:
   evidence:
   - kind: pr
     ref: YourBIMpossible/BIMpossible_Workspace#170
-    note: 'Removed both receipt-shared-1005 worktrees + local branches, slop1005-receipt-parity worktree + local branch, remote claude/receipt-shared-1005 (Workspace) and remote claude/slop1005-receipt-parity (was aaf0888 = #170 merged head; GET ref now 404). Pulling F:\BIMpossible-Workspace main is out of this item by owner instruction (another session''s dirty/unpushed work).'
+    note: 'Removed both receipt-shared-1005 worktrees + local branches, slop1005-receipt-parity worktree + local branch, remote claude/receipt-shared-1005 (Workspace) and remote claude/slop1005-receipt-parity
+      (was aaf0888 = #170 merged head; GET ref now 404). Pulling F:\BIMpossible-Workspace main is out of this item by owner instruction (another session''s dirty/unpushed work).'
   verification:
     level: verified
     by: git worktree list + gh api git/ref 404, 2026-10-05
