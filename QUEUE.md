@@ -7,7 +7,7 @@ This is a repo-local read model, not a definition of /next behavior. -->
 
 Generated 2026-10-08 (synced). Anchor-first, leverage-ranked (per item-model.md). The single #1 move is chosen live by the skill from the anchor (stated focus, else roadmap order) and finalization leverage — not from dependency cone. This board is a status-grouped snapshot; within each section it orders by owner-gated+S, then effort, risk, id, with `cone` leading (deep graph). Full algorithm: `~/.claude/skills/next/reference/item-model.md`.
 
-Scope: `all`. Watermarks: `bimpossible` = 2026-09-24 @ `57bc3445` PR#710 · `addins` = 2026-10-07 @ `2419022` PR#182 · `workspace` = 2026-10-05 @ `c05aa33` PR#169 · `evidence-compiler` = 2026-09-24 @ `479571e` PR#20 · `dashboard` = 2026-09-06 @ `efdcba1` PR#22 · `claude-tools` = 2026-09-24 @ `4f92b5b` PR#9.
+Scope: `all`. Watermarks: `bimpossible` = 2026-09-24 @ `57bc3445` PR#710 · `addins` = 2026-10-07 @ `2419022` PR#182 · `workspace` = 2026-10-05 @ `c05aa33` PR#169 · `evidence-compiler` = 2026-09-24 @ `479571e` PR#20 · `dashboard` = 2026-09-06 @ `efdcba1` PR#22 · `claude-tools` = 2026-10-08 @ `56b109c` PR#17 · `claude-profile` = 2026-10-08 @ `ce7c4b5` PR#28.
 (pc-monitor/bim-site: no items yet — run `init` to derive.)
 
 > **Dormant project(s):** `families` — reassessment-bound. Items scoped to them are parked; their probes are suspended (non-executable metadata) and render **SUSPENDED**, never verified. `/next` will not run or propose a command against a dormant repo.
@@ -306,20 +306,23 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-24 @ `57bc3445` PR#710 · `add
 
 ## Next up
 
-[CLAUDE-PROFILE-OFFDEVICE-DURABILITY] Claude-Profile master 21 commits (917394c) exist only on this disk
-       unblocks 0 · S · claude-profile · VERIFIED 2026-10-07 · F:\Claude-Tools\backups\claude-profile-master-2026-10-06.bundle
+[CT-CAUSAL-LANE-DURABILITY] Decide durability for 16 causal-lane commits only on local main (public repo, push publishes)
+       unblocks 0 · S · claude-tools · VERIFIED 2026-10-08 · 8a21f0a
+
+[CLAUDE-PROFILE-OFFDEVICE-DURABILITY] Claude-Profile master 22 commits (ce7c4b5) exist only on this disk; the 2026-10-06 bundle is 1 commit behind
+       unblocks 0 · S · claude-profile · VERIFIED 2026-10-08 · F:\Claude-Tools\backups\claude-profile-master-2026-10-06.bundle
 
 [CP-BOOTSTRAP-DECAY-REMINDER-EOL-RERUN] Owner: renormalize F:\Claude-Profile hooks/decay_reminder.py (rm --cached + checkout) and re-run bootstrap once so the installed copy matches the LF blob
-       unblocks 0 · S · claude-profile · VERIFIED 2026-10-05 · F:\Claude-Tools\reports\2026-10-05__bootstrap-closeout.md
+       unblocks 0 · S · claude-profile · VERIFIED 2026-10-08 · F:\Claude-Tools\reports\2026-10-05__bootstrap-closeout.md
 
 [CP-CW-PLUGIN-ALLOWLIST] context-weight: decide on 4 enabled plugins not in PLUGIN_ALLOWLIST (hookify, plugin-dev, pr-review-toolkit, superpowers) — allowlist or disable
-       unblocks 0 · S · claude-tools · CLAIMED 2026-10-05 · YourBIMpossible/claude-profile#23
+       unblocks 0 · S · claude-profile · VERIFIED 2026-10-08 · YourBIMpossible/claude-profile#23
 
 [CT-GRAPHIFY-HARDLINK-REAL-VOLUME] graphify funnel: run the link-failure path once on a real volume without hard-link support (L5 pinned by test only)
        unblocks 0 · S · claude-tools · CLAIMED 2026-10-05 · YourBIMpossible/claude-tools#17
 
 [CP-BOOTSTRAP-INSTALL-FROM-BLOB] bootstrap.ps1: install pinned hooks from `git show <rev>:hooks/<name>`, not working-tree bytes (EOL drift escapes the git-status dirty check)
-       unblocks 0 · S · claude-profile · VERIFIED 2026-10-05 · F:\Claude-Tools\reports\2026-10-05__bootstrap-closeout.md
+       unblocks 0 · S · claude-profile · VERIFIED 2026-10-08 · F:\Claude-Tools\reports\2026-10-05__bootstrap-closeout.md
 
 [OPS-WORKTREE-DRIFT-REVIEW] Recurring per-repo drift review: workspace local behind-6/ahead-1 with dirty ledgers + untracked audit docs
        unblocks 0 · S · workspace+bimpossible · VERIFIED 2026-10-05 · 2026-08-07 (original): workspace carried 2 untracked docs (revitlink…
@@ -328,7 +331,7 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-24 @ `57bc3445` PR#710 · `add
        unblocks 0 · S · claude-profile · VERIFIED 2026-10-05 · F:\Claude-Tools\reports\2026-10-05__bootstrap-closeout.md
 
 [CP-CW-MEMORY-LINE-BOUNDARY] context-weight: verify MEMORY.md 199-vs-200 line boundary against Claude Code's actual truncation and fix with a dedicated test
-       unblocks 0 · S · claude-tools · CLAIMED 2026-10-05 · YourBIMpossible/claude-profile#23
+       unblocks 0 · S · claude-profile · CLAIMED 2026-10-08 · YourBIMpossible/claude-profile#23
 
 [CT-GRAPHIFY-FUNNEL-TRANSCRIPTS] graphify_funnel.py — emit transcript paths for bypassed units (task spec expects them; report has ids only)
        unblocks 0 · S · claude-tools · CLAIMED 2026-09-29 · F:\Claude-Tools\reports\graphify-funnel-2026-09-29.json
@@ -342,14 +345,17 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-24 @ `57bc3445` PR#710 · `add
 [HUB-DISCOVERY-NO-MANUAL-GRANT] Ordinary-member account sees no ACC hubs: discovery depends on manual firm hub grants (SEPARATE SESSION)
        unblocks 0 · M · bimpossible · UNVERIFIED 2026-10-06 · F:/Claude-Tools/reports/2026-10-06-hub-discovery-handoff.md
 
-[CT-GRAPHIFY-ROUTING-BYPASS] Investigate pre-hint graphify routing bypasses (0/27, 2026-09-23..28) — NOT evidence the 2026-09-29 hint failed; post-hint routing is 0/0 = unknown
-       unblocks 0 · M · claude-tools · CLAIMED 2026-09-29 · F:\Claude-Tools\reports\graphify-funnel-2026-09-29.md
+[CT-GRAPHIFY-EXEC-LOG-GAP] Explain 11 completed graphify wrapper calls with no query-log record (funnel stage 3 FAIL 2026-10-08)
+       unblocks 0 · M · claude-tools · VERIFIED 2026-10-08 · F:\Claude-Tools\reports\graphify-funnel-2026-10-08.md
+
+[CT-GRAPHIFY-ROUTING-BYPASS] Investigate why graphify routing is 0/20 after the hint went live (funnel 2026-10-08; hint delivered 33/33)
+       unblocks 0 · M · claude-tools · VERIFIED 2026-10-08 · F:\Claude-Tools\reports\graphify-funnel-2026-09-29.md
 
 [EC-RECORD-PENDING-F13-OVERLAP] Reconcile claude/record-pending-visible (36e0d8e) with evidence remediation lock/record writes (F13)
        unblocks 0 · M · claude-tools · CLAIMED 2026-10-07 · F:\Claude-Tools\reports\grrp\2026-10-06-review-all-claude-tools-grrp…
 
 [EC-REMEDIATION-PUBLISH] Push fix/evidence-review-remediation and open PR (39 commits; NOT the 16 causal-lane commits on local main)
-       unblocks 0 · M · claude-tools · VERIFIED 2026-10-07 · F:\Claude-Tools\reports\grrp\2026-10-06-review-all-claude-tools-grrp…
+       unblocks 0 · M · claude-tools · VERIFIED 2026-10-08 · F:\Claude-Tools\reports\grrp\2026-10-06-review-all-claude-tools-grrp…
 
 [EC-REVIEW-CLONE-FOOTPRINT-HARDENING] Evidence capture: clone config injection, ls-tree hex check, containment race (N1 N2 N21)
        unblocks 0 · M · claude-tools · CLAIMED 2026-10-07 · F:\Claude-Tools\reports\grrp\2026-10-06-review-all-claude-tools-grrp…
@@ -513,10 +519,10 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-24 @ `57bc3445` PR#710 · `add
        unblocks 0 · S · addins · VERIFIED 2026-10-08 · Add-Ins decision-log/2026-07-25__runtime-slot-handoff.md -- last mod…
 
 [CT-GRAPHIFY-LOCALCFG-LIVE] Verify first scheduled graphify refresh on merged local-config code succeeds
-       unblocks 0 · S · claude-tools · VERIFIED 2026-09-25 · claude-tools#9
+       unblocks 0 · S · claude-tools · VERIFIED 2026-10-08 · claude-tools#9
 
 [CT-GRAPHIFY-UPGRADE] Deliberate graphifyy upgrade 0.9.58 -> 0.9.67, re-apply local skill customizations
-       unblocks 0 · S · claude-tools · VERIFIED 2026-09-25 · graphify/alerts.json
+       unblocks 0 · S · claude-tools · VERIFIED 2026-10-08 · graphify/alerts.json
 
 [LEDGER-WAVE-STATUS-STALE-20261005] WAVE-STATUS stale since 2026-09-29: BIMpossible #772-#779 and AddIns #164/#166/#167 unrecorded
        unblocks 0 · S · workspace+bimpossible+addins · VERIFIED 2026-10-07 · origin/main 00_Strategy/BIMpossible_WAVE-STATUS.md Updated: 2026-09-…
@@ -534,7 +540,7 @@ Scope: `all`. Watermarks: `bimpossible` = 2026-09-24 @ `57bc3445` PR#710 · `add
        unblocks 0 · S · bimpossible · VERIFIED 2026-09-23 · bimpossible#709
 
 [CT-DEPENDABOT-ACTIONS] Merge Dependabot actions bumps — checkout 7.0.1 (#3), setup-python 7.0.0 (#2)
-       unblocks 0 · S · claude-tools · VERIFIED 2026-09-24 · claude-tools#2
+       unblocks 0 · S · claude-tools · VERIFIED 2026-10-08 · claude-tools#2
 
 [EC-HYGIENE-1] Delete merged lane branch safety/pre-sync-2026-09-06; master already synced to origin
        unblocks 0 · S · evidence-compiler · VERIFIED 2026-09-16 · evidence-compiler#17

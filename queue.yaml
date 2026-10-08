@@ -21,12 +21,16 @@ reconciled:
     commit: efdcba1
     pr: 22
   claude-tools:
-    at: '2026-09-24'
-    commit: 4f92b5b
-    pr: 9
+    at: '2026-10-08'
+    commit: 56b109c
+    pr: 17
+  claude-profile:
+    at: '2026-10-08'
+    commit: ce7c4b5
+    pr: 28
 items:
 - id: CT-GRAPHIFY-ROUTING-BYPASS
-  title: Investigate pre-hint graphify routing bypasses (0/27, 2026-09-23..28) — NOT evidence the 2026-09-29 hint failed; post-hint routing is 0/0 = unknown
+  title: 'Investigate why graphify routing is 0/20 after the hint went live (funnel 2026-10-08; hint delivered 33/33)'
   projects:
   - claude-tools
   status: ready
@@ -41,13 +45,39 @@ items:
     ref: F:\Claude-Tools\reports\graphify-funnel-2026-09-29.md
     note: 'all 27 bypasses predate hint go-live 2026-09-29T00:00Z (after_hint_live.bypassed = []); they show pre-hint skill/subagent routing, not hook efficacy. Top: c1ab1ba5, ae897aa9, df01e35b, c516dc0e
       (BIMpossible main threads); 12/269 Explore prompts carried the graph; Skill selected graphify 0x; 1 bare-CLI call. Hint efficacy needs post-go-live exploration units in a later weekly run.'
+  - kind: run
+    ref: F:\Claude-Tools\reports\graphify-funnel-2026-10-08.md
+    note: 'window 2026-10-01..10-08: 212 sessions (99 organic). Hint delivery PASS 33/33 graph-backed sessions started after go-live. Routing FAIL: after go-live 0/20 exploration units queried graphify (whole window 0/23, 23 bypassed). The 2026-09-29 post-hint 0/0 unknown is now a measured miss; start from the report''s bypassed transcripts.'
   verification:
-    level: claimed
-    by: funnel report 2026-09-29 routing FAIL (whole window 0/27; after go-live 0/0)
-    at: '2026-09-29'
+    level: verified
+    by: 'graphify_funnel.py --days 7 run 2026-10-08: Routing FAIL after go-live 0/20, whole window 0/23; Hint delivery PASS 33/33; report F:\Claude-Tools\reports\graphify-funnel-2026-10-08.md'
+    at: '2026-10-08'
   live_check:
   - python F:\Claude-Tools\graphify\graphify_funnel.py --days 7 --out <scratch>.md
   source: scheduled graphify-rerank-usage-check 2026-09-29
+  notes_url: null
+- id: CT-GRAPHIFY-EXEC-LOG-GAP
+  title: 'Explain 11 completed graphify wrapper calls with no query-log record (funnel stage 3 FAIL 2026-10-08)'
+  projects:
+  - claude-tools
+  status: ready
+  owner_gate: false
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 2
+  evidence:
+  - kind: run
+    ref: F:\Claude-Tools\reports\graphify-funnel-2026-10-08.md
+    note: 'Stage 3: 13 calls, all ok, 1 logged, 11 completed wrapper calls with no log record, 1 bare CLI outside the wrapper. All 11 unlogged calls come from two general-purpose subagents of session 0d793a63 (a1c17fbeb37813c41 x5, a7dee103e58ba2ae8 x6). Stage 4 measurement stays INSUFFICIENT EVIDENCE (1 organic record) until the logging gap is explained. Cause unknown.'
+  verification:
+    level: verified
+    by: 'graphify_funnel.py --days 7 run 2026-10-08: Execution FAIL (13 calls ok, 1 logged); Measurement INSUFFICIENT EVIDENCE'
+    at: '2026-10-08'
+  live_check:
+  - python F:\Claude-Tools\graphify\graphify_funnel.py --days 7 --out <scratch>.md
+  source: claude-tools sync 2026-10-08 (graphify funnel live_check of CT-GRAPHIFY-ROUTING-BYPASS)
   notes_url: null
 - id: CT-GRAPHIFY-FUNNEL-TRANSCRIPTS
   title: graphify_funnel.py — emit transcript paths for bypassed units (task spec expects them; report has ids only)
@@ -91,8 +121,8 @@ items:
     note: last_success_at 2026-09-24T17:30:52Z predates merge 20:47Z; task_next_run 2026-09-28T12:15:00Z
   verification:
     level: verified
-    by: 'manual Refresh-Graphs.ps1 2026-09-25T17:39:07Z exit 0 on graphifyy 0.9.67 (main 4f92b5b+): bimpossible-backend ok 24638 nodes drift 12.5%, add-ins ok 9431 nodes; health.json'
-    at: '2026-09-25'
+    by: 'manual Refresh-Graphs.ps1 2026-09-25T17:39:07Z exit 0 on graphifyy 0.9.67 (main 4f92b5b+): bimpossible-backend ok 24638 nodes drift 12.5%, add-ins ok 9431 nodes; health.json; re-checked 2026-10-08: PR #9 MERGED; health.json last_success_at 2026-10-05T12:15:53Z exit_code 0'
+    at: '2026-10-08'
   live_check:
   - gh pr view 9 --repo YourBIMpossible/claude-tools --json state,mergedAt
   - py -c "import json;h=json.load(open(r'F:/Claude-Tools/graphify/health.json',encoding='utf-8-sig'));print(h['last_success_at'],h['last_run']['exit_code'])"
@@ -118,8 +148,8 @@ items:
     url: https://github.com/YourBIMpossible/claude-tools/pull/3
   verification:
     level: verified
-    by: 'merged 2026-09-24: #3 as 5002409, #2 as 825c8dc (CI config change; merge is the live state)'
-    at: '2026-09-24'
+    by: 'merged 2026-09-24: #3 as 5002409, #2 as 825c8dc (CI config change; merge is the live state); re-checked 2026-10-08: PR #2 and #3 both MERGED (gh pr view)'
+    at: '2026-10-08'
   live_check:
   - gh pr view 2 --repo YourBIMpossible/claude-tools --json state,mergeable
   - gh pr view 3 --repo YourBIMpossible/claude-tools --json state,mergeable
@@ -142,8 +172,8 @@ items:
     note: update-available info alert, checked 2026-09-24T17:31:08Z
   verification:
     level: verified
-    by: 'manual Refresh-Graphs.ps1 2026-09-25T17:39:07Z exit 0 on graphifyy 0.9.67 (main 4f92b5b+): bimpossible-backend ok 24638 nodes drift 12.5%, add-ins ok 9431 nodes; health.json'
-    at: '2026-09-25'
+    by: 'manual Refresh-Graphs.ps1 2026-09-25T17:39:07Z exit 0 on graphifyy 0.9.67 (main 4f92b5b+): bimpossible-backend ok 24638 nodes drift 12.5%, add-ins ok 9431 nodes; health.json; re-checked 2026-10-08: pip show graphifyy = 0.9.67'
+    at: '2026-10-08'
   live_check:
   - py -m pip show graphifyy
   source: claude-tools init 2026-09-24 (graphify alerts.json); install overwrites SKILL.md + references
@@ -8892,7 +8922,7 @@ items:
 - id: CP-CW-PLUGIN-ALLOWLIST
   title: 'context-weight: decide on 4 enabled plugins not in PLUGIN_ALLOWLIST (hookify, plugin-dev, pr-review-toolkit, superpowers) — allowlist or disable'
   projects:
-  - claude-tools
+  - claude-profile
   status: ready
   owner_gate: true
   owner: null
@@ -8905,9 +8935,9 @@ items:
     ref: YourBIMpossible/claude-profile#23
     note: 'Post-merge smoke (31e9cb9) exit 0, VERDICT: ADVISORY; remaining WARNs are these 4 allowlist lines + enabled-plugin descriptions 6154B vs 6000B reference. Advisory only — not a blocker.'
   verification:
-    level: claimed
-    by: python F:\Claude-Profile\tools\context_weight.py (2026-10-05, post-merge)
-    at: '2026-10-05'
+    level: verified
+    by: 'python F:\Claude-Profile\tools\context_weight.py 2026-10-08: same 4 plugin-allowlist WARNs (hookify, plugin-dev, pr-review-toolkit, superpowers); VERDICT ADVISORY exit 0'
+    at: '2026-10-08'
   live_check:
   - python F:\Claude-Profile\tools\context_weight.py
   source: context-weight-weekly closeout 2026-10-05
@@ -8915,7 +8945,7 @@ items:
 - id: CP-CW-MEMORY-LINE-BOUNDARY
   title: 'context-weight: verify MEMORY.md 199-vs-200 line boundary against Claude Code''s actual truncation and fix with a dedicated test'
   projects:
-  - claude-tools
+  - claude-profile
   status: ready
   owner_gate: false
   owner: null
@@ -8929,8 +8959,8 @@ items:
     note: Guard (MEMORY_FAIL_LINES = 200, tools/context_weight.py) reportedly trips one line early — conservatively strict, not unsafe. Do not patch opportunistically; red test first.
   verification:
     level: claimed
-    by: PR
-    at: '2026-10-05'
+    by: 'python -m pytest tools/tests/test_context_weight.py 2026-10-08: 31 passed; the 199-vs-200 boundary against Claude Code''s actual truncation is still unassessed'
+    at: '2026-10-08'
   live_check:
   - cd F:\Claude-Profile && python -m pytest -q tools/tests/test_context_weight.py
   source: context-weight-weekly closeout 2026-10-05
@@ -8952,8 +8982,8 @@ items:
     note: 'Live run 2026-10-05 @219b2a2: installed decay_reminder.py is CRLF (worktree, core.autocrlf=true despite eol=lf attr) vs LF blob; "pinned from revision" claim not byte-true. Red test first.'
   verification:
     level: verified
-    by: sha256 installed vs git show 219b2a2 blob, 2026-10-05
-    at: '2026-10-05'
+    by: 'sha256 installed vs git show 219b2a2 blob, 2026-10-05; re-checked 2026-10-08: bootstrap.ps1 still has no git-show/cat-file install path, installed decay_reminder.py has 31 CRs vs 0 in the master blob, test_bootstrap_install 24 passed'
+    at: '2026-10-08'
   live_check:
   - cd F:\Claude-Profile && python -m pytest -q hooks/tests/test_bootstrap_install.py
   source: slop1005 bootstrap closeout 2026-10-05
@@ -8975,8 +9005,8 @@ items:
     note: Second live bootstrap run deliberately not done (owner asked for one run). Better after CP-BOOTSTRAP-INSTALL-FROM-BLOB lands.
   verification:
     level: verified
-    by: byte compare 2026-10-05
-    at: '2026-10-05'
+    by: 'byte compare 2026-10-05; re-run 2026-10-08: installed ~/.claude/hooks/decay_reminder.py 31 CRs vs 0 in master blob, equal modulo CR (drift persists)'
+    at: '2026-10-08'
   live_check: []
   source: slop1005 bootstrap closeout 2026-10-05
   notes_url: null
@@ -9186,7 +9216,7 @@ items:
     at: '2026-10-07'
   source: 'F:\Claude-Tools\.claude\worktrees\brave-thompson-3db438\reports\2026-10-06-r2r-restoration.md (Independent findings)'
 - id: CLAUDE-PROFILE-OFFDEVICE-DURABILITY
-  title: 'Claude-Profile master 21 commits (917394c) exist only on this disk'
+  title: 'Claude-Profile master 22 commits (ce7c4b5) exist only on this disk; the 2026-10-06 bundle is 1 commit behind'
   projects:
   - claude-profile
   status: ready
@@ -9199,11 +9229,14 @@ items:
   evidence:
   - kind: file
     ref: 'F:\Claude-Tools\backups\claude-profile-master-2026-10-06.bundle'
-    note: 'Bundle verified (restores 917394c in isolation, fsck clean); same disk, no protection against machine/disk loss. Owner action: push Claude-Profile master or name an off-device backup destination.'
+    note: 'Bundle verified (restores 917394c in isolation, fsck clean); same disk, no protection against machine/disk loss; 2026-10-08 bundle tip 917394c lacks master tip ce7c4b5. Owner action: push Claude-Profile master or name an off-device backup destination.'
   verification:
     level: verified
-    by: 'live 2026-10-07: Claude-Profile master is 22 commits ahead of origin/master and contains 917394c; git bundle verify on the 2026-10-06 bundle reports okay'
-    at: '2026-10-07'
+    by: 'live 2026-10-08: Claude-Profile master ce7c4b5 is 22 commits ahead of origin/master (84b701c); 2026-10-06 bundle list-heads master=917394c (1 commit behind); uncommitted F:\Claude-Profile\CLAUDE.md +17 lines (Director guardrails) is in no commit or bundle'
+    at: '2026-10-08'
+  live_check:
+  - git -C F:\Claude-Profile rev-list --count origin/master..master
+  - git bundle list-heads F:\Claude-Tools\backups\claude-profile-master-2026-10-06.bundle
   source: 'F:\Claude-Tools\backups\claude-profile-master-2026-10-06.bundle (2026-10-06 R2R closeout)'
 - id: EC-REVIEW-CLONE-FOOTPRINT-HARDENING
   title: 'Evidence capture: clone config injection, ls-tree hex check, containment race (N1 N2 N21)'
@@ -9342,6 +9375,30 @@ items:
     note: 'From evidence review remediation 2026-10-07, lane fix/evidence-review-remediation f55d1b2.'
   verification:
     level: verified
-    by: 'live 2026-10-07: fix/evidence-review-remediation at f55d1b2 is 39 commits over origin/main; no such branch on origin (ls-remote empty)'
-    at: '2026-10-07'
+    by: 'live 2026-10-08: fix/evidence-review-remediation at f55d1b2 is 39 commits over origin/main (56b109c); no such branch on origin (ls-remote empty)'
+    at: '2026-10-08'
   source: 'F:\Claude-Tools\reports\grrp\2026-10-06-review-all-claude-tools-grrp-skills-integration-16b6b1.ledger.md Checkpoint next action'
+- id: CT-CAUSAL-LANE-DURABILITY
+  title: 'Decide durability for 16 causal-lane commits only on local main (public repo, push publishes)'
+  projects:
+  - claude-tools
+  status: ready
+  owner_gate: true
+  owner: null
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 3
+  evidence:
+  - kind: commit
+    ref: 8a21f0a
+    note: 'Local main 8a21f0a (= branch causal-wiring) is 54 ahead / 3 behind origin/main 56b109c. 38 of the 54 are shared with fix/evidence-review-remediation (EC-REMEDIATION-PUBLISH); the other 16 are causal-lane commits on no origin ref and in no bundle (F:\Claude-Tools\backups holds only the Claude-Profile bundle). EC-REMEDIATION-PUBLISH scopes these 16 out and no item held them. Owner call: push as a branch/PR, bundle off-device, or accept the loss risk.'
+  verification:
+    level: verified
+    by: 'live 2026-10-08: rev-list fix/evidence-review-remediation..main = 16; ls-remote origin has no causal-wiring head; main vs origin/main 54 ahead / 3 behind'
+    at: '2026-10-08'
+  live_check:
+  - git -C F:\Claude-Tools rev-list --count fix/evidence-review-remediation..main
+  - git -C F:\Claude-Tools ls-remote --heads origin causal-wiring
+  source: claude-tools sync 2026-10-08 (gap beside EC-REMEDIATION-PUBLISH)
+  notes_url: null
