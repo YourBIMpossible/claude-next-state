@@ -5,9 +5,9 @@ reconciled:
     commit: 57bc3445
     pr: 710
   addins:
-    at: '2026-09-21'
-    commit: baa9efe
-    pr: 155
+    at: '2026-10-07'
+    commit: '2419022'
+    pr: 182
   workspace:
     at: '2026-10-05'
     commit: c05aa33
@@ -963,17 +963,17 @@ items:
     by: 'RE-1 (abandoned request silently executed later against the live document, incl. real parameter writes) is CLOSED -- read the actual merged diff: PendingRequestQueue.cs (new, Revit-free, unit-testable)
       gives abandon/dispatch exactly one winner via CAS; PipeServer now abandons on EVENT_REJECTED, TIMEOUT, and EXECUTION_ERROR alike. What remains is purely the capacity question: RE-2/OPS-C1, single
       pipe instance vs. real concurrency, still ''accepted current scope'' per the 2026-07-27 audit -- and that audit notes Invoke-SyntheticConcurrencyAudit.ps1 does NOT close this gap (it load-tests HTTP-API
-      multi-tenant isolation, not pipe-instance contention). Re-confirmed 2026-08-04: no Add-Ins main commits since 2026-07-27.'
-    at: '2026-08-23'
+      multi-tenant isolation, not pipe-instance contention). Re-confirmed 2026-08-04: no Add-Ins main commits since 2026-07-27. 2026-10-08 (queue-execution run): no unattended work is defined. The compile gate is in place (csproj EnablePipeServer condition; #132 polarity assert, GREEN on main 2419022 full-lane run); the shipped 2419022 build logs pipe=OFF in Revit 2026. EnablePipeServer=true is a config gate, not acceptance. Next action: owner architecture decision on RL_P0_10 / RE-2 (paired multi-instance pipe + per-user relay secret, not a flag flip). Stays ready.'
+    at: '2026-10-08'
   live_check:
   - Confirm BIMPOSSIBLE_ENABLE_PIPE remains unset in every shipped/CI/deploy path (RE-1 fix is in; pipe path is still compiled out by default, per the audit).
   source: BIMpossible_ProductionRoadmap_2026-07-26.md §2 item 4; weekly-full-audit_2026-07-27.md RE-1/RE-2; Add-Ins PR#46
   notes_url: null
 - id: ADDINS-HYGIENE
-  title: 'Add-Ins hygiene: finish Glass rollout (conformance-PR dedup DONE 2026-08-04)'
+  title: 'Add-Ins hygiene: Glass rollout finished 2026-09-13 (conformance-PR dedup DONE 2026-08-04)'
   projects:
   - addins
-  status: ready
+  status: landed
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -998,8 +998,8 @@ items:
       PRs referenced above (#48, #17, #16, #15, setup-python) are now all CLOSED unmerged -- PR#79 ''chore(deps): disable routine Dependabot version updates'' (merged 2026-08-21) turned off the source,
       so that sub-item is resolved by policy rather than by merge. ADDINS-PANE-PR45 is not tracked as a separate active item (not found in the store) and PR#45 does not appear in the 2026-08-16+ PR list,
       so it is presumed already resolved/superseded. Glass-rollout-finish remains the only open scope; #31 (Plan 3) stays the deliberate park per the 2026-08-23 held-PR disposition memo (decision-log 2026-08-23__held-pr-disposition-memo.md)
-      -- its Plan 1/2 code is already on main via #10.'
-    at: '2026-08-23'
+      -- its Plan 1/2 code is already on main via #10. UPDATE 2026-10-08: the Glass remainder is closed by docs/glass-alerts-migration.md "Exit criteria -- met 2026-09-13" (all A+B sites Glass via #144 merge 5ee0924; remaining TaskDialog/MessageBox sites classified C or Retained; rule in CLAUDE.md; doc #150 merge 95e9fbf), both verified MERGED via gh and ancestors of main 2419022. No defined remaining work. Status landed, not live: no runtime UX check of the Glass alerts is on record. #31 Plan-3 park unchanged.'
+    at: '2026-10-08'
   live_check:
   - gh pr list --repo YourBIMpossible/BIMpossible-AddIns --search 'conformance in:title,head'
   source: BIMpossible_ProductionRoadmap_2026-07-26.md §2 item 6; weekly-full-audit_2026-07-27.md SEC-ADDINS-NOSCAN-1; Add-Ins PR#46; gh pr list (verified live)
@@ -1938,7 +1938,7 @@ items:
   title: 'Runtime-slot handoff ledger is stale: deploys are landing without a ledger entry'
   projects:
   - addins
-  status: ready
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -1952,13 +1952,13 @@ items:
       and no ledger entry exists for it.
   verification:
     level: verified
-    by: 'WANDER, found while pre-flighting P13-T4-REFUSAL on 2026-08-06 -- not fixed, queued per closeout rules. The ledger''s own standing rule 1 requires an entry per deploy; at least one deploy (2026-08-04,
+    by: 'RESOLVED 2026-10-08: entry for the 2419022 deploy merged to Add-Ins main via PR #184 (merge ac84b46); live_check run 2026-10-08: %APPDATA%/Autodesk/Revit/Addins/2026/BIMpossible.RevitLink.dll SHA-256 ABEEE4064AC528FB matches the newest ledger entry (2024 net48 06DEFFC706835ADC also matches). Docs-hygiene G3 197/197, G4 OK. Install vs load kept separate; 2024/2025/2027 load check waived (D3), not passed. History: WANDER, found while pre-flighting P13-T4-REFUSAL on 2026-08-06 -- not fixed, queued per closeout rules. The ledger''s own standing rule 1 requires an entry per deploy; at least one deploy (2026-08-04,
       almost certainly the refusal-path test build) landed in the shared 2026 slot without one. That ledger is the ONLY coordination mechanism for a single %APPDATA% slot shared by every Revit version and
       every parallel session, so a stale ledger means the next session cannot tell what is deployed without hashing it by hand. The ledger also documents two traps worth keeping: the deployed DLL''s mtime
       is NOT the deploy time, and computer-use open_application spawns a SECOND Revit instance rather than fronting the running one, after which both instances lock the deploy DLLs. Fix is one appended
       entry plus a habit, not a code change. RECONFIRMED 2026-08-23: decision-log/2026-07-25__runtime-slot-handoff.md is still the newest entry (last touched by commit 1ff1042, before the watermark) despite
-      dozens of deploy-relevant merges since (#68, #69, #90, #97 dev-pipe-loop deploy tooling, etc.) -- the ledger gap is unresolved, not stale evidence.'
-    at: '2026-08-23'
+      dozens of deploy-relevant merges since (#68, #69, #90, #97 dev-pipe-loop deploy tooling, etc.) -- the ledger gap is unresolved, not stale evidence. 2026-10-08: still open. Entry for the owner-directed 2419022 deploy (2024 net48 06DEFFC706835ADC; 2025-2027 net8 ABEEE4064AC528FB; Revit 2026 load 2026-10-07 23:35:54 pipe=OFF; 2024/2025/2027 load check waived, not passed; 2019-2023 65d3e4dc informational) was drafted, but the write was blocked by a worktree-isolation hook in the drafting session. Next action: a session cwd in its own AddIns worktree appends that entry and retires the glass sequencing constraint (#35 merged). Draft text: F:/Claude-Tools/reports/2026-10-08-slot-ledger-entry.draft.md'
+    at: '2026-10-08'
   live_check:
   - Compare (Get-FileHash "$env:APPDATA/Autodesk/Revit/Addins/2026/BIMpossible.RevitLink.dll").Hash against the newest entry in Add-Ins decision-log/*runtime-slot-handoff.md
   source: Add-Ins decision-log/2026-07-25__runtime-slot-handoff.md; direct hash probe 2026-08-06
@@ -7101,10 +7101,10 @@ items:
   source: 'AddIns PR #117 (2026-09-02); sibling of P7-RELAY-SESSION-LIFECYCLE'
   notes_url: null
 - id: AUDIT-2026-09-07-REMEDIATION
-  title: '2026-09-07 weekly audit remediation wave: Revit write-integrity + fail-open QA reads + pipe-kill-switch CI guard -- 3 merged, 2 open drafts'
+  title: '2026-09-07 weekly audit remediation wave: Revit write-integrity + fail-open QA reads + pipe-kill-switch CI guard -- all 5 merged'
   projects:
   - addins
-  status: in_flight
+  status: landed
   owner_gate: false
   owner: null
   unblocks: []
@@ -7133,35 +7133,35 @@ items:
       regen. Also cross-referenced from LINKPDF-ROADMAP-A-D (Feature D).'
     url: https://github.com/YourBIMpossible/BIMpossible-AddIns/pull/131
   - kind: pr
-    ref: 'OPEN DRAFT (not merged) -- BIMpossible-AddIns #125 [claude/rem-modelqa-failopen], updated 2026-09-08 "close fail-open reads in four discipline QA extractors (SLOP-TRD-1..4)": Electrical/FireProtection/Mechanical/Plumbing
+    ref: 'MERGED -- BIMpossible-AddIns #125 (merge 001feea, 2026-09-11T20:45:23Z; ancestor of main 2419022) [claude/rem-modelqa-failopen], updated 2026-09-08 "close fail-open reads in four discipline QA extractors (SLOP-TRD-1..4)": Electrical/FireProtection/Mechanical/Plumbing
       extractors gave a throwing Revit read a value the paired RED rule treats as healthy (0 load, connected, well-connected); fix gives each a distinct unreadable signal (NaN, UnreadableConnectorCount,
-      Unreadable record, ConnectivityReadable) + Revit-free regression tests. Draft -- claimed, not verified; no merge fact.'
+      Unreadable record, ConnectivityReadable) + Revit-free regression tests.'
     url: https://github.com/YourBIMpossible/BIMpossible-AddIns/pull/125
   - kind: pr
-    ref: 'OPEN DRAFT (not merged) -- BIMpossible-AddIns #132 [claude/rem-ci-pipe-polarity], updated 2026-09-11 "assert pipe-server kill-switch polarity (ARCH-CI-ADDINS-2 F2)": tests/pipe-polarity/Assert-PipePolarity.ps1
+    ref: 'MERGED -- BIMpossible-AddIns #132 (merge 14e5448, 2026-09-11T20:45:20Z; ancestor of main 2419022) [claude/rem-ci-pipe-polarity], updated 2026-09-11 "assert pipe-server kill-switch polarity (ARCH-CI-ADDINS-2 F2)": tests/pipe-polarity/Assert-PipePolarity.ps1
       byte-scans each compiled DLL for the guarded field _pipeServer -- ABSENT in the default (B-Off) build, PRESENT only under -p:EnablePipeServer=true, across net48 + net8.0-windows; wired into Verify-AddIns-CI.ps1
-      and ci.yml. Draft -- claimed, not verified; no merge fact.'
+      and ci.yml.'
     url: https://github.com/YourBIMpossible/BIMpossible-AddIns/pull/132
   verification:
     level: claimed
     by: 'Program-level claimed, not verified: the three merged legs (#124, #128, #131) are machine-verified as MERGED to origin/main (merge commits 1ab9b23 / 19f5b35 / 37a2f9c, all ancestors of tip 320e63a)
       -- but landed-not-live (add-in writes, not deployed to Revit slots), and the diffs were not re-read line-by-line this pass. Two legs (#125, #132) are OPEN DRAFTS, so the program is not complete. Not
       "partial" -- partial is reserved for mixed-dormant scope; this is a single live-scoped program mid-flight, honestly claimed. Promote to landed when #125 + #132 merge; to live only on runtime evidence
-      against a Revit session.'
-    at: '2026-09-10'
+      against a Revit session. UPDATE 2026-10-08 (queue-execution run): #125 and #132 verified MERGED via gh (001feea / 14e5448); all five merge commits are ancestors of main 2419022. Promoted in_flight -> landed per this item''s own criterion. Level stays claimed for the program: the 2419022 build is installed 2024-2027 and loaded in Revit 2026, but no runtime evidence exercises these write/QA paths, so not live. Outstanding for live: a Revit-session run of the fixed write and QA paths.'
+    at: '2026-10-08'
   live_check:
   - 'gh pr view 124 --repo YourBIMpossible/BIMpossible-AddIns --json state,mergeCommit  # expect MERGED 1ab9b23'
   - 'gh pr view 128 --repo YourBIMpossible/BIMpossible-AddIns --json state,mergeCommit  # expect MERGED 19f5b35'
   - 'gh pr view 131 --repo YourBIMpossible/BIMpossible-AddIns --json state,mergeCommit  # expect MERGED 37a2f9c'
-  - 'gh pr view 125 --repo YourBIMpossible/BIMpossible-AddIns --json state  # expect OPEN (draft) until merged'
-  - 'gh pr view 132 --repo YourBIMpossible/BIMpossible-AddIns --json state  # expect OPEN (draft) until merged'
+  - 'gh pr view 125 --repo YourBIMpossible/BIMpossible-AddIns --json state,mergeCommit  # expect MERGED 001feea'
+  - 'gh pr view 132 --repo YourBIMpossible/BIMpossible-AddIns --json state,mergeCommit  # expect MERGED 14e5448'
   source: 'Weekly Full Audit 2026-09-07; remediation_2026-09-07/ledger.yaml; PRs #124/#128/#131 (merged) + #125/#132 (open drafts); /next BIMpossible-Addins sync 2026-09-10 (delta 64a8a6b -> 320e63a)'
   notes_url: null
 - id: LINKPDF-ROADMAP-A-D
-  title: 'NORTHSTAR "Link PDF to Sheets" post-merge roadmap (Features A/B1/C1/D): per-feature review + live smoke, not yet accepted'
+  title: 'NORTHSTAR "Link PDF to Sheets" post-merge roadmap (Features A/B1/C1/D): code on main + owner live smoke PASSED 2026-09-25 (A5.6/H.2 unit-only); post-smoke hardening #164/#168/#171/#173/#178 landed; owner ACCEPTED 2026-10-08 under A5.6 unit-coverage exception'
   projects:
   - addins
-  status: in_flight
+  status: live
   owner_gate: false
   unblocks: []
   blocked_by: []
@@ -7205,14 +7205,19 @@ items:
       B1 acceptance. The B1/B2 policy question, the B2 packing-foundation code, and the Feature E proposal are tracked separately (PRs #146/#148/#147) and are NOT part of this item''s A/C1/D scope. This
       entry updates evidence only -- status stays in_flight, verification level stays claimed; live-Revit smoke is still outstanding.'
     url: https://github.com/YourBIMpossible/BIMpossible-AddIns/pull/145
+  - kind: run
+    ref: F:\Claude-Tools\reports\linkpdf-smoke-2026-09-22\smoke-receipt.md
+    note: 'Owner-operated live smoke of A/C1/B1/D + hardening H, 2026-09-22..25 on Revit 2026/2027 test model: A5.1-A5.5, C1.1-C1.5, B1.2-B1.5, D.1-D.9 (incl. D.6 re-smoke), H.1/H.5 PASS live after fixes (FAIL on 09-22 then fixed: C1.1 fd6602a, D.1/D.2 b3781cc, D.6 ead38ec). NOT live: A5.6 + H.2 unit-covered only; B1.1 by equivalence; H.3/H.4 success/clean path only. Closeout deploy = merged main ed27835 (hash 15B37B0F2C1BE451, pipe-ON). Supersedes the 2026-09-12 "live smoke has NOT run" reading.'
+  - kind: pr
+    ref: 'BIMpossible-AddIns #157/#158 (MERGED 2026-09-26, 677c4a1/ed27835) harden placement+reconcile, the smoked stack; #164 (d8240a1, 2026-09-29) /review-all remediation: single run group, geometry-proven reconcile, owned-only cleanup -- live smoke of #164 deferred by owner (closeout handoff 2026-09-30); #168 (fa97bc6, 2026-10-05) SEC-C50 host-bound v2 stamps + RE-C50 + CQ-C50 -- smoke WAIVED by owner (never re-queue); #171 (7e3ef51) D3 drift duplicate; #173 (1ee81bd) Low/Info; #178 (8ac3ad2, 2026-10-06) RE-C54 stamp seam test, suite 2651/2651. These landed AFTER the smoked tree and are not covered by the 09-25 smoke.'
+  - kind: doc
+    ref: 'OWNER ACCEPTANCE 2026-10-08 (zero-leftover closeout, ledger F:/Claude-Tools/reports/grrp/2026-10-07-addins-closeout-zero-leftover-20261007.ledger.md): live-test-matrix final criteria 2-5 pass per the 2026-09-25 smoke receipt; criterion 1 (A5.6 MissingSourceRepair) is UNTESTABLE live (Windows picker refuses a missing/locked file before the tool runs) and is ACCEPTED as an explicit exception on its unit coverage (pure read-resolve-report chain, tests in the full suite GREEN at 2419022). Promoted landed->live under that exception. PRESERVED unchanged: #164 live smoke owner-deferred; #168 smoke owner-waived, never re-queued; H.2 unit-only; B1.1 by equivalence; H.3/H.4 success-path only; post-smoke code #164/#168/#171/#173/#178 unsmoked. Acceptance does not turn the prose smoke receipt or unit evidence into a live pass -- verification level stays claimed.'
   verification:
     level: claimed
-    by: 'Code-merge fact machine-verified (A/B1/C1/D present on origin/main via #127, merge 64a8a6b). REVIEW COMPLETE 2026-09-12: per-feature acceptance review found NO REVIEW FAIL -- criteria are REVIEW
-      PASS (proved by code + 197/197 passing LinkPdf unit tests at 7516d36) or LIVE-REQUIRES-REVIT (only observable in a running Revit session; not upgraded to pass by inspection). Feature ACCEPTANCE still
-      NOT verified: the roadmap-required in-Revit live smoke has NOT run. Level stays claimed (not verified) precisely because code-reviewed + tests-green != feature-accepted without live smoke; stays in_flight
-      until each feature is live-smoked per the owner runbook. Decision recorded: ready for live smoke (no review-blocking failure).'
-    at: '2026-09-12'
+    by: 'Smoke receipt exists and names builds/hashes/rows (read 2026-10-07) but is a prose report, not machine-reproducible; kept claimed. Code-merge machine-verified (origin/main 8ac3ad2 contains #127/#157/#158/#164/#168). Feature ACCEPTANCE is the owner action -- not recorded anywhere; Tool-Specs/16 + docs/link-pdf-roadmap-anchor.md now record the smoke outcome and post-smoke coverage gaps (PR 181, merged 2419022, 2026-10-07). Post-smoke code (#164/#168/#171) unsmoked by owner decision.'
+    at: '2026-10-07'
   live_check:
+  - 'gh pr view 168 --repo YourBIMpossible/BIMpossible-AddIns --json state --jq .state  # expect MERGED'
   - 'gh pr view 127 --repo YourBIMpossible/BIMpossible-AddIns --json state,mergeCommit  # expect MERGED, 64a8a6b'
   - git -C F:/BIMpossible-AddIns ls-tree --name-only origin/main Tool-Specs/ | grep LinkPdfToSheets_PostMergeRoadmap
   source: 'NORTHSTAR.link-pdf-roadmap.md; Tool-Specs/16_SHEET_PRODUCTION_LinkPdfToSheets_PostMergeRoadmap.md; PR #127 phase-0 reconciliation 2026-09-10'
@@ -7877,11 +7882,11 @@ items:
     at: '2026-09-21'
   source: /next sync 2026-09-21 canonical closeout (dedup coverage so future known-pr probes stay honest)
 - id: ADDINS-LINKPDF-OPEN-DOCS-PRS-145-148
-  title: 'Add-Ins open LinkPDF docs/hold PRs #145-#148: #145 acceptance review (clean docs), #146 B1/B2 policy (draft), #147 Feature E proposal (needs decision), #148 B2 packer HOLD -- none touch APS writes'
+  title: 'Add-Ins LinkPDF docs/hold PRs #145-#148 RESOLVED: #145 merged; #146/#147/#148 closed unmerged by owner 2026-09-30 (B2 packing future-only, Feature E off roadmap)'
   projects:
   - addins
-  status: blocked_owner
-  owner_gate: true
+  status: live
+  owner_gate: false
   unblocks: []
   blocked_by: []
   effort: S
@@ -7889,24 +7894,23 @@ items:
   evidence:
   - kind: pr
     ref: BIMpossible-AddIns#145
-    note: OPEN non-draft docs-only, MERGEABLE/CLEAN, 2 files
+    note: 'MERGED 2026-09-22T01:42:51Z (110f793) -- LINKPDF A/C1/D acceptance review + owner live-smoke runbook'
   - kind: pr
     ref: BIMpossible-AddIns#146
-    note: OPEN draft docs policy record, 4 files
+    note: CLOSED unmerged 2026-09-30T17:33:14Z (draft policy record)
   - kind: pr
     ref: BIMpossible-AddIns#147
-    note: OPEN draft Feature E north-star proposal, human decision required
+    note: CLOSED unmerged 2026-09-30T17:33:17Z (Feature E proposal; image insertion off roadmap)
   - kind: pr
     ref: BIMpossible-AddIns#148
-    note: 'OPEN draft HOLD: unwired PdfPagePacker + tests, no runtime wiring; canonical roadmap activation required before merge'
+    note: CLOSED unmerged 2026-09-30T17:33:20Z (B2 packer HOLD; branches kept per F:\Claude-Tools\reports\2026-09-30-linkpdf-closeout-handoff.md fenced decisions)
   verification:
-    level: claimed
-    by: gh read 2026-09-21; all MERGEABLE/CLEAN, no reviews, no meaningful checks.
-    at: '2026-09-21'
-  blocked_on: 'owner decision: merge #145 (docs), read+ready #146, decide Feature E (#147), keep #148 on HOLD until roadmap activation.'
+    level: verified
+    by: 'gh pr view 145/146/147/148 2026-10-07: MERGED / CLOSED / CLOSED / CLOSED; gh pr list --state open = []'
+    at: '2026-10-07'
   live_check:
-  - 'gh pr list --repo YourBIMpossible/BIMpossible-AddIns --state open --json number --jq "[.[].number]|tostring"  # expect 145,146,147,148 until resolved'
-  source: /next sync 2026-09-21
+  - 'gh pr view 145 --repo YourBIMpossible/BIMpossible-AddIns --json state --jq .state  # expect MERGED'
+  source: /next sync 2026-10-07 (supersedes 2026-09-21 blocked_owner reading)
 - id: DECIDE-WS-MIRROR-PR-146-STALE
   title: 'Workspace draft PR #146 (/next mirror publish, AddIns delta 64a8a6b->320e63a) is stale vs newer mirror publishes -- close, do not merge'
   projects:
@@ -9002,7 +9006,7 @@ items:
   title: 'Cleanup of merged receipt-shared-1005 / slop1005-receipt-parity worktrees and branches (BIMpossible #787, Workspace #170/#171) - CLOSED 2026-10-05'
   projects:
   - bimpossible
-  - bimpossible-workspace
+  - workspace
   status: live
   owner_gate: false
   owner: null
@@ -9044,3 +9048,300 @@ items:
   live_check: []
   source: slop-audit 2026-10-05 remediation
   notes_url: null
+- id: WS-PUBLISH-SELF-APPROVAL-MERGE
+  title: 'Option E delivery blocker (A): owner merges Workspace PR 200 at head 16e3bd0 (agent merge denied by Self-Approval)'
+  projects:
+  - workspace
+  status: dropped
+  owner_gate: true
+  owner: owner
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 3
+  evidence:
+  - kind: report
+    ref: F:\Claude-Tools\.claude\worktrees\brave-thompson-3db438\reports\2026-10-06-option-e-final.md
+    note: 'Attached to Option E delivery. PR 200 check SUCCESS, CLEAN on 16e3bd0. Accept: PR merged; agent then runs one Push-And-Verify publication that exits 0 with origin/main verified; trigger: owner merge.'
+  verification:
+    level: verified
+    by: option-e closeout session
+    at: '2026-10-06'
+  live_check:
+  - 'WITHDRAWN 2026-10-06: owner restoration directive reverted the publication migration and F-029 remediation; direct publish and pre-migration protection restored. See F:\Claude-Tools\.claude\worktrees\brave-thompson-3db438\reports\2026-10-06-r2r-restoration.md. Do not restart.'
+  - 'PR 200 merged by owner request 2026-10-06 (56c9f2f).'
+  source: 'option-e delivery 2026-10-06 (ledger 2026-10-06-review-all-claude-profile-f029-2026-10-06.ledger.md); transfer status: queued, NOT acknowledged'
+  notes_url: null
+- id: WS-UNATTENDED-MERGE-POLICY
+  title: 'Option E delivery blocker (A): owner policy decision - may Push-And-Verify, run by an agent, merge its own publication PR (auto-merge, or ordinary merge once checks pass)?'
+  projects:
+  - workspace
+  status: dropped
+  owner_gate: true
+  owner: owner
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 3
+  evidence:
+  - kind: report
+    ref: F:\Claude-Tools\.claude\worktrees\brave-thompson-3db438\reports\2026-10-06-option-e-final.md
+    note: 'Attached to Option E delivery. Normal path: GitHub auto-merge, requested at PR open, merges after the required check. Fallback: ordinary merge of a CLEAN/UNSTABLE PR. Accept: owner yes/no recorded; trigger: next nl-filter weekly heartbeat.'
+  verification:
+    level: verified
+    by: option-e closeout session
+    at: '2026-10-06'
+  live_check:
+  - 'WITHDRAWN 2026-10-06: owner restoration directive reverted the publication migration and F-029 remediation; direct publish and pre-migration protection restored. See F:\Claude-Tools\.claude\worktrees\brave-thompson-3db438\reports\2026-10-06-r2r-restoration.md. Do not restart.'
+  - 'Owner authorized 2026-10-06; live exit-0 publication via PR 202 (26c41f5) verified on origin/main.'
+  source: 'option-e delivery 2026-10-06 (ledger 2026-10-06-review-all-claude-profile-f029-2026-10-06.ledger.md); transfer status: queued, NOT acknowledged'
+  notes_url: null
+- id: GRRP-F029-ACTIVATION
+  title: 'Option E delivery blocker (B): owner creates passphrase SSH signing key (no hardware) and adds it to GitHub; agent then activates APPROVAL_OWNER'
+  projects:
+  - claude-profile
+  status: dropped
+  owner_gate: true
+  owner: owner
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: report
+    ref: F:\Claude-Tools\.claude\worktrees\brave-thompson-3db438\reports\2026-10-06-option-e-final.md
+    note: 'Attached to Option E delivery. Verifier live in local master 476cff5 (71 tests). Both existing ~/.ssh keys are unencrypted and are rejected. Accept: one real signed approval gates verified; trigger: owner setup done.'
+  verification:
+    level: claimed
+    by: option-e closeout session
+    at: '2026-10-06'
+  live_check:
+  - 'WITHDRAWN 2026-10-06: owner restoration directive reverted the publication migration and F-029 remediation; direct publish and pre-migration protection restored. See F:\Claude-Tools\.claude\worktrees\brave-thompson-3db438\reports\2026-10-06-r2r-restoration.md. Do not restart.'
+  source: 'option-e delivery 2026-10-06 (ledger 2026-10-06-review-all-claude-profile-f029-2026-10-06.ledger.md); transfer status: queued, NOT acknowledged'
+  notes_url: null
+- id: WS-MAIN-GATE-BINDS-COMMIT
+  title: 'Workspace main: required check binds the commit, not the push path (direct push of a checked commit accepted)'
+  projects:
+  - workspace
+  status: dropped
+  owner_gate: false
+  owner: agent
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: report
+    ref: F:\Claude-Tools\.claude\worktrees\brave-thompson-3db438\reports\2026-10-06-option-e-final.md
+    note: 'INDEPENDENT. Accept: decision recorded, require-PR or accept; trigger: next protection change.'
+  verification:
+    level: claimed
+    by: option-e closeout session
+    at: '2026-10-06'
+  live_check:
+  - 'WITHDRAWN 2026-10-06: owner restoration directive reverted the publication migration and F-029 remediation; direct publish and pre-migration protection restored. See F:\Claude-Tools\.claude\worktrees\brave-thompson-3db438\reports\2026-10-06-r2r-restoration.md. Do not restart.'
+  source: 'option-e delivery 2026-10-06 (ledger 2026-10-06-review-all-claude-profile-f029-2026-10-06.ledger.md); transfer status: queued, NOT acknowledged'
+  notes_url: null
+- id: WS-PUBLISHER-TEST-BASELINE-FAILS
+  title: 'Fix pre-existing failures: test_push_and_verify_scanblock (2) and selfcheck_guard (1), red on clean origin/main'
+  projects:
+  - workspace
+  status: live
+  # 2026-10-06: fixed in Workspace b83ebf6, on origin/main af008a8 (Push-And-Verify exit 0); scanblock, selfcheck_guard, Test-AuditWatchdog pass pwsh 7 + PS 5.1.
+  owner_gate: false
+  owner: agent
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: report
+    ref: F:\Claude-Tools\.claude\worktrees\brave-thompson-3db438\reports\2026-10-06-option-e-final.md
+    note: 'INDEPENDENT; distinct from PUSH-SELFCHECK-BOOTSTRAP. Accept: both tests pass on main; trigger: next Push-And-Verify change.'
+  verification:
+    level: verified
+    by: 'away-mode closeout 2026-10-07: Workspace b83ebf6 on origin/main; test_push_and_verify_scanblock + selfcheck_guard exit 0 at faaa5dc'
+    at: '2026-10-07'
+  live_check: []
+  source: 'option-e delivery 2026-10-06 (ledger 2026-10-06-review-all-claude-profile-f029-2026-10-06.ledger.md); transfer status: queued, NOT acknowledged'
+  notes_url: null
+- id: GRRP-LEDGER-PRS-783-INVALID
+  title: 'GRRP ledger 2026-10-06-review-all-bimpossible-prs-783-784-813-814-815 gates invalid'
+  projects:
+  - bimpossible
+  status: live
+  owner_gate: false
+  owner: agent
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 1
+  evidence:
+  - kind: ledger
+    ref: 'F:\Claude-Tools\reports\grrp\2026-10-06-review-all-bimpossible-prs-783-784-813-814-815.ledger.md'
+    note: 'INDEPENDENT; found 2026-10-06 during R2R closeout check; written 20:10 by another session, not touched. Accept: grrp.py gate valid.'
+  verification:
+    level: verified
+    by: 'RESOLVED 2026-10-07 (zero-leftover closeout): acceptance was "grrp.py gate valid". Live grrp.py gate --json on the ledger: validation_errors [] (0), verdict blocked, transfers_ok true. The 20:10 invalid observation predates the ledger rewrite at 20:24 (mtime); the invalidity no longer exists. The ledger being blocked/incomplete is that review run''s own open work (owned by its session), not this item -- deliberately NOT re-scoped into a blocked-execution task.'
+    at: '2026-10-07'
+  source: 'F:\Claude-Tools\.claude\worktrees\brave-thompson-3db438\reports\2026-10-06-r2r-restoration.md (Independent findings)'
+- id: CLAUDE-PROFILE-OFFDEVICE-DURABILITY
+  title: 'Claude-Profile master 21 commits (917394c) exist only on this disk'
+  projects:
+  - claude-profile
+  status: ready
+  owner_gate: true
+  owner: owner
+  unblocks: []
+  blocked_by: []
+  effort: S
+  risk: 2
+  evidence:
+  - kind: file
+    ref: 'F:\Claude-Tools\backups\claude-profile-master-2026-10-06.bundle'
+    note: 'Bundle verified (restores 917394c in isolation, fsck clean); same disk, no protection against machine/disk loss. Owner action: push Claude-Profile master or name an off-device backup destination.'
+  verification:
+    level: verified
+    by: 'live 2026-10-07: Claude-Profile master is 22 commits ahead of origin/master and contains 917394c; git bundle verify on the 2026-10-06 bundle reports okay'
+    at: '2026-10-07'
+  source: 'F:\Claude-Tools\backups\claude-profile-master-2026-10-06.bundle (2026-10-06 R2R closeout)'
+- id: EC-REVIEW-CLONE-FOOTPRINT-HARDENING
+  title: 'Evidence capture: clone config injection, ls-tree hex check, containment race (N1 N2 N21)'
+  projects:
+  - claude-tools
+  status: ready
+  owner_gate: false
+  owner: agent
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 2
+  evidence:
+  - kind: ledger
+    ref: 'F:\Claude-Tools\reports\grrp\2026-10-06-review-all-claude-tools-grrp-skills-integration-16b6b1.ledger.md'
+    note: 'From evidence review remediation 2026-10-07, lane fix/evidence-review-remediation f55d1b2.'
+  verification:
+    level: claimed
+    by: 'GRRP ledger 16b6b1 finding records: assessment unassessed, not adversarially verified (receiver verifies)'
+    at: '2026-10-07'
+  source: 'F:\Claude-Tools\reports\grrp\2026-10-06-review-all-claude-tools-grrp-skills-integration-16b6b1.ledger.md transfer T-EC-REVIEW-CLONE-FOOTPRINT-HARDENING (N1, N2, N21)'
+- id: EC-REVIEW-TWIN-EPISODES
+  title: 'Evidence twin/episodes: verify timeout, env leak, root precedence, censored verdict, brief line (N3-N7)'
+  projects:
+  - claude-tools
+  status: ready
+  owner_gate: false
+  owner: agent
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 2
+  evidence:
+  - kind: ledger
+    ref: 'F:\Claude-Tools\reports\grrp\2026-10-06-review-all-claude-tools-grrp-skills-integration-16b6b1.ledger.md'
+    note: 'From evidence review remediation 2026-10-07, lane fix/evidence-review-remediation f55d1b2.'
+  verification:
+    level: claimed
+    by: 'GRRP ledger 16b6b1 finding records: assessment unassessed, not adversarially verified (receiver verifies)'
+    at: '2026-10-07'
+  source: 'F:\Claude-Tools\reports\grrp\2026-10-06-review-all-claude-tools-grrp-skills-integration-16b6b1.ledger.md transfer T-EC-REVIEW-TWIN-EPISODES (N3-N7)'
+- id: EC-REVIEW-SNAPSHOT-PRIVACY
+  title: 'Evidence snapshot/review: nested repo, UD entry, deny_match fail-open, non-ASCII roots (N8-N11)'
+  projects:
+  - claude-tools
+  status: ready
+  owner_gate: false
+  owner: agent
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 2
+  evidence:
+  - kind: ledger
+    ref: 'F:\Claude-Tools\reports\grrp\2026-10-06-review-all-claude-tools-grrp-skills-integration-16b6b1.ledger.md'
+    note: 'From evidence review remediation 2026-10-07, lane fix/evidence-review-remediation f55d1b2.'
+  verification:
+    level: claimed
+    by: 'GRRP ledger 16b6b1 finding records: assessment unassessed, not adversarially verified (receiver verifies)'
+    at: '2026-10-07'
+  source: 'F:\Claude-Tools\reports\grrp\2026-10-06-review-all-claude-tools-grrp-skills-integration-16b6b1.ledger.md transfer T-EC-REVIEW-SNAPSHOT-PRIVACY (N8-N11)'
+- id: EC-REVIEW-SCREEN-JOIN-STORE
+  title: 'Evidence screen/join/store/isolation defects (N12-N17)'
+  projects:
+  - claude-tools
+  status: ready
+  owner_gate: false
+  owner: agent
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 2
+  evidence:
+  - kind: ledger
+    ref: 'F:\Claude-Tools\reports\grrp\2026-10-06-review-all-claude-tools-grrp-skills-integration-16b6b1.ledger.md'
+    note: 'From evidence review remediation 2026-10-07, lane fix/evidence-review-remediation f55d1b2.'
+  verification:
+    level: claimed
+    by: 'GRRP ledger 16b6b1 finding records: assessment unassessed, not adversarially verified (receiver verifies)'
+    at: '2026-10-07'
+  source: 'F:\Claude-Tools\reports\grrp\2026-10-06-review-all-claude-tools-grrp-skills-integration-16b6b1.ledger.md transfer T-EC-REVIEW-SCREEN-JOIN-STORE (N12-N17)'
+- id: EC-TEST-TIMING-AND-LINUX
+  title: 'Evidence tests: load-sensitive start budget, intermittent backstop, Linux baseline failures (N19 N20 N22)'
+  projects:
+  - claude-tools
+  status: ready
+  owner_gate: false
+  owner: agent
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 2
+  evidence:
+  - kind: ledger
+    ref: 'F:\Claude-Tools\reports\grrp\2026-10-06-review-all-claude-tools-grrp-skills-integration-16b6b1.ledger.md'
+    note: 'From evidence review remediation 2026-10-07, lane fix/evidence-review-remediation f55d1b2.'
+  verification:
+    level: claimed
+    by: 'GRRP ledger 16b6b1 finding records: assessment unassessed, not adversarially verified (receiver verifies)'
+    at: '2026-10-07'
+  source: 'F:\Claude-Tools\reports\grrp\2026-10-06-review-all-claude-tools-grrp-skills-integration-16b6b1.ledger.md transfer T-EC-TEST-TIMING-AND-LINUX (N19, N20, N22)'
+- id: EC-RECORD-PENDING-F13-OVERLAP
+  title: 'Reconcile claude/record-pending-visible (36e0d8e) with evidence remediation lock/record writes (F13)'
+  projects:
+  - claude-tools
+  status: ready
+  owner_gate: true
+  owner: owner
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 2
+  evidence:
+  - kind: ledger
+    ref: 'F:\Claude-Tools\reports\grrp\2026-10-06-review-all-claude-tools-grrp-skills-integration-16b6b1.ledger.md'
+    note: 'From evidence review remediation 2026-10-07, lane fix/evidence-review-remediation f55d1b2.'
+  verification:
+    level: claimed
+    by: 'GRRP ledger 16b6b1 F13 record + transfer T-RP; live 2026-10-07: claude/record-pending-visible still at 36e0d8e (overlap itself not re-assessed)'
+    at: '2026-10-07'
+  source: 'F:\Claude-Tools\reports\grrp\2026-10-06-review-all-claude-tools-grrp-skills-integration-16b6b1.ledger.md transfer T-RP (F13)'
+- id: EC-REMEDIATION-PUBLISH
+  title: 'Push fix/evidence-review-remediation and open PR (39 commits; NOT the 16 causal-lane commits on local main)'
+  projects:
+  - claude-tools
+  status: ready
+  owner_gate: true
+  owner: owner
+  unblocks: []
+  blocked_by: []
+  effort: M
+  risk: 2
+  evidence:
+  - kind: ledger
+    ref: 'F:\Claude-Tools\reports\grrp\2026-10-06-review-all-claude-tools-grrp-skills-integration-16b6b1.ledger.md'
+    note: 'From evidence review remediation 2026-10-07, lane fix/evidence-review-remediation f55d1b2.'
+  verification:
+    level: verified
+    by: 'live 2026-10-07: fix/evidence-review-remediation at f55d1b2 is 39 commits over origin/main; no such branch on origin (ls-remote empty)'
+    at: '2026-10-07'
+  source: 'F:\Claude-Tools\reports\grrp\2026-10-06-review-all-claude-tools-grrp-skills-integration-16b6b1.ledger.md Checkpoint next action'

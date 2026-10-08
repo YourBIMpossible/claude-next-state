@@ -150,6 +150,17 @@ projects:
       PUBLIC repo; main requires PR. Hosts the /next store itself (state/ is gitignored).
       graphify runtime evidence: graphify\health.json + alerts.json (scheduled refresh task).
 
+  - key: claude-profile
+    name: Claude-Profile (global Claude Code config, skills, hooks)
+    aliases: [profile, cp]
+    path: F:\Claude-Profile
+    origin: https://github.com/YourBIMpossible/claude-profile.git
+    active: true
+    companions: []
+    notes: >
+      Registered 2026-10-07: 5 active + 1 archived items already carried this key; their
+      live_checks target F:\Claude-Profile, whose origin is the URL above. Default branch master.
+
   # ---- known, not tracked ----------------------------------------------------
 
   - key: ai-brain-data
